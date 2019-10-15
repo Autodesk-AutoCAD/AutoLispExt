@@ -1,0 +1,495 @@
+{
+	"defun ":
+	{
+		"prefix":"defun",
+		"body":[
+			"(defun ${1:foo} ()",
+	        "\t$2",
+			")"
+		],
+		"description":"define a lisp function"
+	},
+	"(defun ":
+	{
+		"prefix":"(defun",
+		"body":[
+			"(defun ${1:foo} ()",
+			"\t${2:}\r"
+		],
+		"description":"define a lisp function"
+	},
+	"defun c":
+	{
+		"prefix":"defun c:",
+		"body":[
+			"(defun c:${1:foo} ()",
+	        "\t$2",
+			")"
+		],
+		"description":"define a lisp function as AutoCAD command"
+	},
+	"(defun c":
+	{
+		"prefix":"(defun c:",
+		"body":[
+			"(defun c:${1:foo} ()",
+	        "\t${2:}\r"
+		],
+		"description":"define a lisp function as AutoCAD command"
+	},
+	"getvar": {
+		"prefix": "getvar",
+		"body": [
+			"(getvar \"${1:sysvar}\")"
+		],
+		"description": "Retrieves the value of an AutoCAD system variable"
+	},
+	"princ": {
+		"prefix": "princ",
+		"body": [
+			"(princ \"${1:str}\")"
+		],
+		"description": "Prints an expression to the command line, or writes an expression to an open file"
+	},
+	"print": {
+		"prefix": "print",
+		"body": [
+			"(print \"${1:str}\")"
+		],
+		"description": "Prints an expression to the command line, or writes an expression to an open file"
+	},
+	"prin1": {
+		"prefix": "prin1",
+		"body": [
+			"(prin1 ${1:str})"
+		],
+		"description": "Prints an expression to the command line, or writes an expression to an open file"
+	},
+	"polar": {
+		"prefix": "polar",
+		"body": [
+			"(polar '(${1:pt}) ${2:ang} ${3:dist})"
+		],
+		"description": "Returns the UCS 3D point at a specified angle and distance from a point"
+	},
+	"prompt": {
+		"prefix": "prompt",
+		"body": [
+			"(prompt \"${1:msg}\")"
+		],
+		"description": "Displays a string on your screen's prompt area"
+	},
+	"setq": {
+		"prefix": "setq",
+		"body": [
+			"(setq ${1:sym} ${2:expr})"
+		],
+		"description": "Sets the value of a symbol or symbols to associated expressions"
+	},
+	"setvar": {
+		"prefix": "setvar",
+		"body": [
+			"(setvar \"${1:varname}\" ${2:value})"
+		],
+		"description": "Sets an AutoCAD system variable to a specified value"
+	},
+	"strcat": {
+		"prefix": "strcat",
+		"body": [
+			"(strcat \"${1:str1}\" \"${2:str2}\")"
+		],
+		"description": "Returns a string that is the concatenation of multiple strings"
+	},
+	"ssget": {
+		"prefix": "ssget",
+		"body": [
+			"(ssget \"_${1:method}\" '((${2:list1}) (${3:list2}))"
+		],
+		"description": "Creates a selection set from the selected object"
+	},
+	"substr": {
+		"prefix": "substr",
+		"body": [
+			"(substr \"${1:str}\" ${2:start} ${3:len})"	
+		],
+		"description": "Returns a substring of a string"
+	},
+	"if": {
+		"prefix": "if",
+		"body": [
+			"(if (${1:testexpr})",
+				"\t(${2:thenexpr})",
+				"\t(${3:elseexpr})",
+			")"
+		],
+		"description": "if expression"
+	},
+	"ifprogn": {
+		"prefix": "ifp",
+		"body": [
+			"(if (${1:testexpr})",
+				"\t(progn",
+					"\t\t(${2:thenexpr})",
+				"\t)",
+			")"
+		],
+		"description": "if progn expression"
+	},
+	"itoa": {
+		"prefix": "itoa",
+		"body": [
+			"(itoa ${1:int})"	
+			
+		],
+		"description": "Returns the conversion of an integer into a string"
+	},
+	"inters": {
+		"prefix": "inters",
+		"body": [
+			"(inters ${1:pt1} ${2:pt2} ${3:pt3} ${4:pt4} ${5:[onseg]})"
+		],
+		"description": "intersect command expression"
+	},
+	"tblsearch style": {
+		"prefix": "tblsearch",
+		"body": [
+			"(tblsearch \"${1:table-name}\" \"${2:symbol}\")"
+		],
+		"description": "Searches a symbol table for a symbol name"
+	},
+	"line": {
+		"prefix": "line",
+		"body": [
+			"(command \"_line\" \"${1:pt1}\" \"${2:pt2}\" \"\")"
+		],
+		"description": "line command expression"
+	},
+	"arc": {
+		"prefix": "arc",
+		"body": [
+			"(command \"_arc\" \"${1:pt1}\" \"${2:pt2}\" \"${3:pt3}\")"
+		],
+		"description": "arc command expression"
+	},
+	"circle": {
+		"prefix": "circle",
+		"body": [
+			"(command \"_circle\" \"${1:center}\" ${2:radius})"
+		],
+		"description": "circle command expression"
+	},
+	"pline": {
+		"prefix": "pline",
+		"body": [
+			"(command \"_pline\" \"${1:pt1}\" \"${2:pt2}\" \"\")"
+		],
+		"description": "pline command expression"
+	},
+	"abs":{
+		"prefix": "abs",
+		"body":[
+			"(abs ${1:number})"
+		],
+		"description":"Returns the absolute value of a number"
+	},
+	"alert":{
+		"prefix": "alert",
+		"body":[
+			"(alert \"${1:msg}\")"
+		],
+		"description":"Displays a dialog box containing an error or warning message"
+	},
+	"alloc":{
+		"prefix": "alloc",
+		"body":[
+			"(alloc ${1:n-alloc})"
+		],
+		"description":"Sets the size of the segment to be used by the expand function"
+	},
+	"angle":{
+		"prefix": "angle",
+		"body":[
+			"(angle '(${1:pt1}) '(${2:pt2}))"
+		],
+		"description":"Returns an angle in radians of a line defined by two endpoints"
+	},	
+	"apply":{
+		"prefix": "apply",
+		"body":[
+			"(apply '${1:foo} '(${2:list}))"
+		],
+		"description":"Passes a list of arguments to, and executes, a specified function"
+	},
+	"append":{
+		"prefix": "append",
+		"body":[
+			"(append '(${1:pt1}) '(${2:pt2}))"
+		],
+		"description":"Takes any number of lists and appends them together as one list"
+	},
+	"ascii":{
+		"prefix": "ascii",
+		"body":[
+			"(ascii \"${1:str}\")"
+		],
+		"description":"Returns the conversion of the first character of a string into its ASCII character code (an integer)"
+	},
+	"asciiu":{
+		"prefix": "asciiu",
+		"body":[
+			"(asciiu \"${1:str}\")"
+		],
+		"description":"Returns the conversion of the first character of a unicode string into its ASCII character code (an integer)"
+	},
+	"assoc":{
+		"prefix": "assoc",
+		"body":[
+			"(assoc '${1:element} ${2:alist})"
+		],
+		"description":"Searches an association list for an element and returns that association list entry"
+	},
+	"atan":{
+		"prefix": "atan",
+		"body":[
+			"(atan '${1:num1} ${2:[num2]})"
+		],
+		"description":"Returns the arctangent of a number in radians"
+	},
+	"atof":{
+		"prefix": "atof",
+		"body":[
+			"(atof \"${1:str}\")"
+		],
+		"description":"Converts a string into a real number"
+	},
+	"atoi":{
+		"prefix": "atoi",
+		"body":[
+			"(atoi \"${1:str}\")"
+		],
+		"description":"Converts a string into an integer"
+	},
+	"atoms-family":{
+		"prefix": "atomsfamily",
+		"body":[
+			"(atoms-family ${1:format} ${2:[symlist]})"
+		],
+		"description":"Returns a list of the currently defined symbols"
+	},
+	"boundp":{
+		"prefix": "boundp",
+		"body":[
+			"(boundp ${1:sym})"
+		],
+		"description":"Verifies if a value is bound to a symbol"
+	},
+	"car":{
+		"prefix": "car",
+		"body":[
+			"(car '(${1:pt1} ${2:pt2} ${3:pt3}))"
+		],
+		"description":"Returns the first element of a list"
+	},
+	"caddr":{
+		"prefix": "caddr",
+		"body":[
+			"(caddr '(${1:pt1} ${2:pt2} ${3:pt3}))"
+		],
+		"description":"Verifies if a value is bound to a symbol"
+	},
+	"cons":{
+		"prefix": "cons",
+		"body":[
+			"(cons '${1:element} '(${2:atom}))"
+		],
+		"description":"Adds an element to the beginning of a list, or constructs a dotted list"
+	},
+	"chr":{
+		"prefix": "chr",
+		"body":[
+			"(chr ${1:int})"
+		],
+		"description":"Converts an integer representing an ASCII character code into a single-character string"
+	},
+	"chru":{
+		"prefix": "chru",
+		"body":[
+			"(chru ${1:int})"
+		],
+		"description":"Converts an integer representing an ASCII character code into a single-character string"
+	},
+	"open":{
+		"prefix": "open",
+		"body":[
+			"(setq ${1:fp} \"${2:fname.txt}\")",
+			"(setq ${3:f} (open ${1:fp} \"${5:mode}\"))",
+			"${6: }",
+			"(close ${3:f})"
+		],
+		"description":"Closes an open file"
+	},
+	"entmake":{
+		"prefix": "entmake",
+		"body":[
+			"(entmake ${1:[elist]})"
+		],
+		"description":"Creates a new entity in the drawing"
+	},
+	"entmod":{
+		"prefix": "entmod",
+		"body":[
+			"(entmod ${1:elist})"
+		],
+		"description":"Modifies the definition data of an object (entity)"
+	},
+	"eq":{
+		"prefix": "eq",
+		"body":[
+			"(setq ${1:f1} '(${2:expr1} ${3:expr2} ${4:expr3}))",
+			"(setq ${8:f2} '(${5:expr4} ${6:expr5} ${7:expr6}))",
+			"(eq ${1:f1} ${8:f2})"
+		],
+		"description":"Determines whether two expressions are identical"
+	},
+	"equal":{
+		"prefix": "equal",
+		"body":[
+			"(equal ${1:expr1} ${2:expr2} ${3:[fuzz]})"
+		],
+		"description":"Determines whether two expressions are equal"
+	},
+	"expt":{
+		"prefix": "expt",
+		"body":[
+			"(expt ${1:number} ${2:power})"
+		],
+		"description":"Returns a number raised to a specified power"
+	},
+	"while": {
+		"prefix": "while",
+		"body": [
+			"(while ${1:testexpr} ${2:[expr ...]})"	
+		],
+		"description": "Evaluates a test expression, and if it is not nil, evaluates other expressions; repeats this process until the test expression evaluates to nil"
+	},
+	"write-line": {
+		"prefix": "writeline",
+		"body": [
+			"(setq ${1:f} (open \"${2:fp\" \"${3:mode}\"))",
+			"(write-line \"${4:str}\" \"${1:f}\")"	
+		],
+		"description": "Writes a string to the screen or to an open file"
+	},
+	"foreach": {
+		"prefix": "foreach",
+		"body": [
+			"(foreach ${1:item} '(${2:lst}))"		
+		],
+		"description": "Evaluates expressions for all members of a list"
+	},
+	"repeat": {
+		"prefix": "repeat",
+		"body": [
+			"(repeat ${1:num} (${2:foo1}) (${3:foo2}))"	
+		],
+		"description": "Evaluates each expression a specified number of times, and returns the value of the last expression"
+	},
+	"read-line": {
+		"prefix": "readline",
+		"body": [
+			"(setq ${1:f} (open \"${2:fp}\" \"${3:mode}\"))",
+			"(read-line \"${1:f}\")"	
+		],
+		"description": "Reads a string from the keyboard or from an open file, until an end-of-line marker is encountered"
+	},
+	"reverse": {
+		"prefix": "reverse",
+		"body": [
+			"(reverse '(${1:lst}))"	
+		],
+		"description": "Returns a copy of a list with its elements reversed"
+	},
+	"distance": {
+		"prefix": "distance",
+		"body": [
+			"(distance '(${1:pt1}) '(${2:pt2}))"
+		],
+		"description": "distance command expression"
+	},
+	"nth": {
+		"prefix": "nth",
+		"body": [
+			"(nth ${1:n} '(${2:lst}))"	
+			
+		],
+		"description": "Evaluates each expression a specified number of times, and returns the value of the last expression"
+	},
+	"vl-string-left-trim": {
+		"prefix": "lefttrim",
+		"body": [
+			"(vl-string-left-trim \"${1:str1}\" \"${2:str2}\")"	
+	
+		],
+		"description": "Removes the specified characters from the beginning of a string"
+	},
+	"vl-string-trim": {
+		"prefix": "trim",
+		"body": [
+			"(vl-string-trim \"${1:str1}\" \"${2:str2}\")"	
+		],
+		"description": "Removes the specified characters from the beginning and end of a string"
+	},
+	"vl-string-search": {
+		"prefix": "search",
+		"body": [
+			"(vl-string-search \"${1:fun1}\" \"${2:fun2}\")"	
+		],
+		"description": "Searches for the specified pattern in a string"
+	},
+	"dcl": {
+		"prefix": "dcl",
+		"body": [
+			"(setq ${1:fname} \"${2:dclfile}.dcl\")",
+				"\t(setq ${3:id} (load_dialog ${1:fname}))",
+				"\t(if (not (new_dialog \"${4:hello}\" ${3:id}))",
+				"\t(${5:exit})",	  
+			")"
+		],
+		"description": "DCL expression"
+	},
+	"get entity color": {
+        "prefix": "getcolor",
+        "body": [
+            "(setq color (cdr (assoc 62 ${1:entname})))",
+            "(if (= color nil)",
+              "\t(progn",
+                "\t\t(setq layer (cdr (assoc 8 ${1:entname})))",
+                "\t\t(setq layerinf (tblsearch \"layer\" layer))",
+                "\t\t(setq color (cdr (assoc 62 layerinf)))",
+              "\t)",
+            ")"
+        ],
+        "description": "get entity color"
+    },
+    "get entity layer": {
+        "prefix": "getlayer",
+        "body": [
+            "(setq layer (cdr (assoc 8 ${1:entname})))"
+        ],
+        "description": "get entity layer"
+    }
+
+
+}
+	
+ 
+
+
+
+
+
+
+
+	
+	
+

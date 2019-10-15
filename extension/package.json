@@ -1,0 +1,68 @@
+{
+	"name": "autolispext",
+	"displayName": "AutoCAD Lisp Extension",
+	"description": "This is a vscode extension for AutoCAD visual lisp",
+	"version": "0.1.4",
+	"engines": {
+		"vscode": "^1.31.1"
+	},
+	"categories": [
+		"Other"
+	],
+	"main": "./out/extension",
+	"activationEvents": [
+		"onDebug",
+		"onCommand:extension.vslisp-debug.getProgramName",
+		"onLanguage:autolisp",
+		"onLanguage:autolispdcl"
+	],
+	"contributes": {
+		"breakpoints": [
+			{
+				"language": "autolisp"
+			},
+			{
+				"language": "autolispdcl"
+			}
+		],
+		"languages": [
+			{
+				"id": "autolisp",
+				"aliases": [
+					"Autolisp",
+					"autolisp"
+				],
+				"extensions": [
+					".lsp",
+					".mnl"
+				]
+			},
+			{
+				"id": "autolispdcl",
+				"aliases": [
+					"AutolispDCL",
+					"autolispdcl"
+				],
+				"extensions": [
+					".dcl"
+				]
+			}
+		]
+	},
+	"scripts": {
+		"update-vscode": "vscode-install",
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"postinstall": "vscode-install && node ./node_modules/vscode/bin/install",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"dependencies": {
+		"vscode-i18n": "0.2.0",
+		"vscode-languageclient": "4.1.4"
+	},
+	"devDependencies": {
+		"vscode": "1.1.21",
+		"vscode-nls": "4.0.0"
+	}
+}

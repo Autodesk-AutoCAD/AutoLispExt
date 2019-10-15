@@ -1,0 +1,322 @@
+{
+	"name": "autolispext",
+	"displayName": "AutoCAD Lisp Extension",
+	"description": "This is a vscode extension for AutoCAD visual lisp",
+	"version": "0.1.4",
+	"engines": {
+		"vscode": "^1.31.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://git.autodesk.com/AutoCAD/autocad/"
+	},
+	"publisher": "Autodesk",
+	"categories": [
+		"Debuggers",
+		"Programming Languages"
+	],
+	"icon": "images/Adsk_white.png",
+	"main": "./extension/out/extension",
+	"activationEvents": [
+		"onDebug",
+		"onCommand:extension.loadCurrentLisp",
+		"onLanguage:autolisp",
+		"onLanguage:autolispdcl"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "extension.loadCurrentLisp",
+				"title": "This command is used to load current active lisp document."
+			}
+		],
+		"configuration": {
+			"type": "object",
+			"title": "lisp configuration",
+			"properties": {
+				"lispLanguageServer.maxNumberOfProblems": {
+					"scope": "resource",
+					"type": "number",
+					"default": 100,
+					"description": "Controls the maximum number of problems produced by the server."
+				},
+				"lispLanguageServer.trace.server": {
+					"scope": "window",
+					"type": "string",
+					"enum": [
+						"off",
+						"messages",
+						"verbose"
+					],
+					"default": "off",
+					"description": "Traces the communication between VS Code and the language server."
+				}
+			}
+		},
+		"configurationDefaults": {
+			"[lisp]": {
+				"files.autoGuessEncoding": true,
+				"editor.tabSize": 2,
+				"editor.detectIndentation": false,
+				"editor.quickSuggestions": true,
+				"editor.autoIndent": true,
+				"files.encoding": "utf8",
+				"editor.suggest.localityBonus": true,
+				"editor.wordSeparators": "&#^()[]|;'\".",
+				"editor.suggestSelection": "recentlyUsed"
+			},
+			"[autolisp]": {
+				"files.autoGuessEncoding": true,
+				"editor.tabSize": 2,
+				"editor.detectIndentation": false,
+				"editor.quickSuggestions": true,
+				"editor.autoIndent": true,
+				"files.encoding": "utf8",
+				"editor.suggest.localityBonus": true,
+				"editor.wordSeparators": "&#^()[]|;'\".",
+				"editor.suggestSelection": "recentlyUsed"
+			},
+			"[autolispdcl]": {
+				"files.autoGuessEncoding": true,
+				"editor.tabSize": 2,
+				"editor.detectIndentation": false,
+				"editor.quickSuggestions": true,
+				"editor.autoIndent": true,
+				"files.encoding": "utf8",
+				"editor.suggest.localityBonus": true,
+				"editor.wordSeparators": "=;{}\":",
+				"editor.suggestSelection": "recentlyUsed"
+			}
+		},
+		"breakpoints": [
+			{
+				"language": "autolisp"
+			},
+			{
+				"language": "autolispdcl"
+			},
+			{
+				"language": "lisp"
+			}
+		],
+		"languages": [
+			{
+				"id": "autolisp",
+				"aliases": [
+					"Autolisp",
+					"autolisp"
+				],
+				"extensions": [
+					".lsp",
+					".mnl"
+				],
+				"configuration": "./extension/smartBracket/language-configuration.json"
+			},
+			{
+				"id": "autolispdcl",
+				"aliases": [
+					"AutolispDCL",
+					"autolispdcl"
+				],
+				"extensions": [
+					".dcl"
+				],
+				"configuration": "./extension/smartBracket/language-configuration-dcl.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "autolisp",
+				"scopeName": "source.autolisp",
+				"path": "./extension/syntaxes/autolisp.tmLanguage.json"
+			},
+			{
+				"language": "autolispdcl",
+				"scopeName": "source.autolispdcl",
+				"path": "./extension/syntaxes/autolispdcl.tmLanguage.json"
+			}
+		],
+		"snippets": [
+			{
+				"language": "autolisp",
+				"path": "./snippets/snippets.json"
+			}
+		],
+		"debuggers": [
+			{
+				"type": "attachlisp",
+				"label": "AutoCAD Lisp Debug(Attach)",
+				"enableBreakpointsFor": {
+					"languageIds": [
+						"autolisp",
+						"autolispdcl",
+						"lisp"
+					]
+				},
+				"windows": {
+					"program": "${lispadapterpath}"
+				},
+				"adapterExecutableCommand": "extension.lispAttachAdapterExecutableCommand",
+				"languages": [
+					{
+						"id": "autolisp",
+						"aliases": [
+							"Autolisp",
+							"autolisp"
+						],
+						"extensions": [
+							".lsp",
+							".mnl"
+						],
+						"configuration": "./extension/smartBracket/language-configuration.json"
+					},
+					{
+						"id": "autolispdcl",
+						"aliases": [
+							"AutolispDCL",
+							"autolispdcl"
+						],
+						"extensions": [
+							".dcl"
+						],
+						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
+					}
+				],
+				"configurationAttributes": {
+					"attach": {
+						"required": [
+							"attributes"
+						],
+						"properties": {
+							"attributes": {
+								"type": "object",
+								"description": "user settings for process list filter param.",
+								"default": ""
+							}
+						}
+					}
+				},
+				"initialConfigurations": [
+					{
+						"type": "attachlisp",
+						"request": "attach",
+						"name": "Autolisp Debug: Attach",
+						"attributes": {
+							"process": ""
+						}
+					}
+				],
+				"configurationSnippets": [
+					{
+						"label": "Autolisp Debug: Attach",
+						"description": "A new configuration for 'debugging' a user selected lisp file.",
+						"body": {
+							"type": "attachlisp",
+							"request": "attach",
+							"name": "Autolisp Debug: Attach",
+							"attributes": {
+								"process": ""
+							}
+						}
+					}
+				]
+			},
+			{
+				"type": "launchlisp",
+				"label": "AutoCAD Lisp Debug(Launch)",
+				"enableBreakpointsFor": {
+					"languageIds": [
+						"autolisp",
+						"autolispdcl",
+						"lisp"
+					]
+				},
+				"languages": [
+					{
+						"id": "autolisp",
+						"aliases": [
+							"Autolisp",
+							"autolisp"
+						],
+						"extensions": [
+							".lsp",
+							".mnl"
+						],
+						"configuration": "./extension/smartBracket/language-configuration.json"
+					},
+					{
+						"id": "autolispdcl",
+						"aliases": [
+							"AutolispDCL",
+							"autolispdcl"
+						],
+						"extensions": [
+							".dcl"
+						],
+						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
+					}
+				],
+				"adapterExecutableCommand": "extension.lispLaunchAdapterExecutableCommand",
+				"configurationAttributes": {
+					"launch": {
+						"required": [
+							"attributes"
+						],
+						"properties": {
+							"attributes": {
+								"type": "object",
+								"description": "user settings for AutoCAD path and startup params.",
+								"default": ""
+							}
+						}
+					}
+				},
+				"initialConfigurations": [
+					{
+						"type": "launchlisp",
+						"request": "launch",
+						"name": "Autolisp Debug: Launch",
+						"attributes": {
+							"path": "",
+							"params": ""
+						}
+					}
+				],
+				"configurationSnippets": [
+					{
+						"label": "Autolisp Debug: Launch",
+						"description": "A new configuration for 'debugging' a user selected lisp file.",
+						"body": {
+							"type": "launchlisp",
+							"request": "launch",
+							"name": "Autolisp Debug: Launch",
+							"attributes": {
+								"path": "",
+								"params": ""
+							}
+						}
+					}
+				]
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "cd extension && npm run update-vscode && cd .. && npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd extension && npm install && cd ..",
+		"test": "npm run compile && node ./node_modules/vscode/bin/test"
+	},
+	"devDependencies": {
+		"@types/mocha": "5.2.0",
+		"@types/node": "8.10.18",
+		"request": "2.88.0",
+		"tslint": "5.11.0",
+		"typescript": "3.2.4",
+		"url-parse": "1.4.4"
+	},
+	"dependencies": {
+		"vsce": "1.57.0",
+		"vscode-languageserver-protocol": "3.14.1"
+	}
+}
