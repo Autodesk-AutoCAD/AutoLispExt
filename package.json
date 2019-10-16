@@ -8,7 +8,7 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://git.autodesk.com/AutoCAD/autocad/"
+		"url": "https://git.autodesk.com/AutoCAD/AutoLispExt/"
 	},
 	"publisher": "Autodesk",
 	"categories": [
