@@ -21,7 +21,8 @@ def init():
 
 def makepackage_vsix():
 	vsce = os.path.join(os.path.curdir, 'node_modules', '.bin', 'vsce')
-	os.system(vsce + " package")
+        output_opt = " -o " + os.path.join(os.path.curdir, 'autolispext.vsix')
+	os.system(vsce + " package" + output_opt)
 
 
 if __name__ == "__main__":
