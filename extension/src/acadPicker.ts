@@ -21,7 +21,9 @@ import * as os from 'os';
 import { basename } from 'path';
 import { getProcesses } from './processTree';
 import {ProcessPathCache} from "./processCache";
-import {calculateACADProcessName} from './platform';
+import { calculateACADProcessName } from './platform';
+import { acitiveDocHasValidLanguageId } from './extension';
+
 
 const localize = nls.loadMessageBundle();
 
@@ -44,14 +46,22 @@ function getProcesspickerPlaceHolderStr(){
 /**
  * Process picker command (for launch config variable)
  */
-export function pickProcess(ports:any): Promise<string | null> {
+export function pickProcess(ports:any, defaultPid: number): Promise<string | null> {
 
 	return listProcesses(ports).then(items => {
 		let options: vscode.QuickPickOptions = {
 			placeHolder: getProcesspickerPlaceHolderStr(),
 			matchOnDescription: true,
 			matchOnDetail: true
-		};
+        };
+        if (defaultPid > 0) {
+            let foundItem = items.find(x => {
+                return x.pidOrPort === defaultPid.toString();
+            });
+            if (foundItem)
+                return foundItem.pidOrPort;
+        }
+
 		let choosedItem =  vscode.window.showQuickPick(items, options).then(item => item ? item.pidOrPort : null);
 		return choosedItem;
 	}).catch(err => {
@@ -69,19 +79,26 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 
 	return getProcesses((pid: number, ppid: number, command: string, args: string, executablePath: string,
 		 date?: number) => {
-		//read attach configuration from launch.json
-		let configurations:[] = vscode.workspace.getConfiguration("launch", vscode.window.activeTextEditor.document.uri).get("configurations");
-		let attachLispConfig;
-		let processName = "";	// debugger's process name
-		configurations.forEach(function(item){
-			if(item["type"] === "attachlisp"){
-				attachLispConfig = item;
-			}
-		});
-		if(attachLispConfig){
-			processName = attachLispConfig["attributes"]["process"] ? attachLispConfig["attributes"]["process"] : "";
-		}
 		let ProcessFilter;
+		let processName = "";	// debugger's process name
+
+        if (vscode.window.activeTextEditor && acitiveDocHasValidLanguageId()) {
+			//read attach configuration from launch.json
+			let configurations:[] = vscode.workspace.getConfiguration("launch", vscode.window.activeTextEditor.document.uri).get("configurations");
+			let attachLispConfig;
+			configurations.forEach(function(item){
+				if(item["type"] === "attachlisp"){
+					attachLispConfig = item;
+				}
+			});
+			if(attachLispConfig){
+				processName = attachLispConfig["attributes"]["process"] ? attachLispConfig["attributes"]["process"] : "";
+			}
+		}
+		else {
+			processName = calculateACADProcessName(processName);
+		}
+		
 		if(processName !== ""){
 			ProcessFilter = new RegExp('^(?:' + calculateACADProcessName(processName) + '|iojs)$', 'i');
 		}
@@ -114,6 +131,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 			} else {
 				// no port given
 				let addintolist = false;
+
 				if (processName) {
 					if(ProcessFilter.test(executable_name)){
 						addintolist = true;

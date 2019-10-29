@@ -29,6 +29,7 @@ import { calculateABSPathForDAP, isSupportedLispFile } from './platform';
 import { ProcessPathCache } from './processCache';
 import { AutoFormater } from "./autoFormater";
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
+import { onUriRequested } from './uriHandler';
 import { existsSync } from 'fs';
 
 let client: LanguageClient;
@@ -73,6 +74,26 @@ fs.readFile(winonlyprefixpath, "utf8", function (err, data) {
 
 let strNoADPerr: string = "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.";
 let strNoACADerr: string = "doesn’t exist. Verify and correct the folder path to the product executable.";
+let acadPid2Attach = -1;
+
+let attachCfgName = 'Autolisp Debug: Attach';
+let attachCfgType = 'attachlisp';
+let attachCfgRequest = 'attach';
+
+export function setDefaultAcadPid(pid: number) {
+    acadPid2Attach = pid;
+}
+
+export function createAttachConfig() {
+    return {
+        type: attachCfgType,
+        name: attachCfgName,
+        request: attachCfgRequest,
+        stopOnEntry: false,
+        protocol: 'auto'
+    };
+}
+
 export function activate(context: vscode.ExtensionContext) {
 
 	//-----------------------------------------------------------
@@ -122,8 +143,8 @@ export function activate(context: vscode.ExtensionContext) {
 			
 			// If it is in comments, it doesn't need to provide lisp autocomplete
 			let linetext = document.lineAt(position).text;
-			if (  linetext.startsWith(";") || linetext.startsWith(";;") 
-			   || linetext.startsWith("#|") || linetext.startsWith("|#"))
+            if (linetext.startsWith(";") || linetext.startsWith(";;")
+                || linetext.startsWith("#|") || linetext.startsWith("|#"))
 			{
 				return;
 			}
@@ -242,21 +263,32 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//register a configuration provider for 'lisp' attach debug type
 	const attachProvider = new LispAttachConfigurationProvider();
-	context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('attachlisp', attachProvider));
+    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider(attachCfgType, attachProvider));
 	context.subscriptions.push(attachProvider);
 
 	//register attach failed message
 	context.subscriptions.push(vscode.debug.onDidReceiveDebugSessionCustomEvent((event) => {
 		console.log(event);
-		if (event.session && (event.session.type === "launchlisp" || event.session.type === "attachlisp")) {
+        if (event.session && (event.session.type === "launchlisp" || event.session.type === attachCfgType)) {
 			if (event.event === "runtimeerror") {
 				// handle runtime diagnostics errors
 				DiagnosticsCtrl.addDocumentDiagnostics(event.body.file, event.body.message, event.body.startline, event.body.startcol, event.body.endline, event.body.endcol);
-			} else if (event.event === "acadnosupport") {
+			} 
+			else if (event.event === "clearcache") {
+				setDefaultAcadPid(-1);
+			}
+			else if (event.event === "acadnosupport") {
 				vscode.window.showErrorMessage("This instance of AutoCAD doesn’t support debugging AutoLISP files, use a release later than AutoCAD 2020.");
 			}
 		}
-	}));
+    }));
+
+    //register the handler to uri scheme: vscode://autodesk.autolispext?......
+    vscode.window.registerUriHandler({
+        handleUri(uri: vscode.Uri) {
+            onUriRequested(uri);
+        }
+    });
 
 	context.subscriptions.push(vscode.debug.onDidChangeActiveDebugSession(e => {
 		// clear the runtime diagnostics errors
@@ -280,40 +312,43 @@ export function deactivate(): Thenable<void> | undefined {
 	return client.stop();
 }
 
+export function acitiveDocHasValidLanguageId() : Boolean
+{
+	const editor = vscode.window.activeTextEditor;
+
+	return editor.document.languageId === 'autolisp' || 
+		   editor.document.languageId === 'autolispdcl' || 
+		   editor.document.languageId === 'lisp';
+}
+
+export function need2AddDefaultConfig(config: vscode.DebugConfiguration) : Boolean
+{
+	if(config.type) return false;
+	if(config.request) return false;
+	if(config.name) return false;
+
+	return true;
+}
+
+
 class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvider {
 
 	private _server?: Net.Server;
 
 	async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
 		console.log(config);
+		
 		// if launch.json is missing or empty
-		if (!config.type && !config.request && !config.name) {
-			const editor = vscode.window.activeTextEditor;
-			if (editor && (editor.document.languageId === 'autolisp' || editor.document.languageId === 'autolispdcl' || editor.document.languageId === 'lisp')) {
-				config.type = 'launchlisp';
-				config.name = 'Autolisp Debug: Launch';
-				config.request = 'launch';
-			}
+		if (need2AddDefaultConfig(config)) {
+			config.type = 'launchlisp';
+			config.name = 'Autolisp Debug: Launch';
+			config.request = 'launch';
 		}
 
-		let currentLSPDoc = vscode.window.activeTextEditor.document.fileName;
-		if (currentLSPDoc && isSupportedLispFile(currentLSPDoc) && (vscode.window.activeTextEditor.document.languageId === 'autolisp' || vscode.window.activeTextEditor.document.languageId === 'autolispdcl' || vscode.window.activeTextEditor.document.languageId === 'lisp')) {
-			config.program = currentLSPDoc;
-		} else {
-			if (isSupportedLispFile(currentLSPDoc)) {
-				vscode.window.showErrorMessage("There’s a conflict with the AutoCAD Lisp Extension. First, uninstall all other LISP-related extensions and try again.");
-			} else {
-				let platform = os.type();
-				if(platform === 'Windows_NT'){
-					vscode.window.showErrorMessage("This file format isn’t supported. Activate a window containing a DCL, LSP, or MNL file.");
-				}
-				else{
-					vscode.window.showErrorMessage("This file format isn’t supported. Activate a window containing a DCL or LSP file.");
-				}
-			}
-			return undefined; 	//abort launch
-		}
-		if (config["type"] === "launchlisp") {
+        if (vscode.window.activeTextEditor)
+            config.program = vscode.window.activeTextEditor.document.fileName;
+
+        if (config["type"] === "launchlisp") {
 			// 1. get acad and adapter path
 			//2. get acadRoot path
 			//2.1 get acadRoot path from launch.json
@@ -377,51 +412,35 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
 	private _server?: Net.Server;
 
 	async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
+
 		// if launch.json is missing or empty
-		if (!config.type && !config.request && !config.name) {
-			const editor = vscode.window.activeTextEditor;
-			if (editor && (editor.document.languageId === 'autolisp' || editor.document.languageId === 'autolispdcl' || editor.document.languageId === 'lisp')) {
-				config.type = 'attachlisp';
-				config.name = 'Autolisp Debug: Attach';
-				config.request = 'attach';
-			}
+       if (need2AddDefaultConfig(config)) {
+                config.type = attachCfgType;
+                config.name = attachCfgName;
+                config.request = attachCfgRequest;
+        }
+
+        if (vscode.window.activeTextEditor)
+            config.program = vscode.window.activeTextEditor.document.fileName;
+
+		ProcessPathCache.clearProductProcessPathArr();
+        let processId = await pickProcess(false, acadPid2Attach);
+		if (!processId) {
+			return vscode.window.showInformationMessage("No process for which to attach could be found.").then(_ => {
+				return undefined;	// abort attach
+			});
 		}
-
-		let currentLSPDoc = vscode.window.activeTextEditor.document.fileName;
-		if (currentLSPDoc && isSupportedLispFile(currentLSPDoc) && (vscode.window.activeTextEditor.document.languageId === 'autolisp' || vscode.window.activeTextEditor.document.languageId === 'autolispdcl' || vscode.window.activeTextEditor.document.languageId === 'lisp')) {
-			config.program = currentLSPDoc;
-
-			ProcessPathCache.clearProductProcessPathArr();
-			let processId = await pickProcess(false);
-			if (!processId) {
-				return vscode.window.showInformationMessage("No process for which to attach could be found.").then(_ => {
-					return undefined;	// abort attach
-				});
-			}
-			ProcessPathCache.chooseProductPathByPid(parseInt(processId));
-			let lispadapterpath = calculateABSPathForDAP(ProcessPathCache.globalProductPath);
-			if (!existsSync(lispadapterpath)) {
-				vscode.window.showErrorMessage(lispadapterpath + " " + strNoADPerr);
-				ProcessPathCache.globalProductPath = "";
-				return undefined;
-			}
-			ProcessPathCache.globalLispAdapterPath = lispadapterpath;
-			config.processId = processId;
-		} else {
-			if (isSupportedLispFile(currentLSPDoc)) {
-				vscode.window.showErrorMessage("There’s a conflict with the AutoCAD Lisp Extension. First, uninstall all other LISP-related extensions and try again.");
-			} else {
-				let platform = os.type();
-				if(platform === 'Windows_NT'){
-					vscode.window.showErrorMessage("This file format isn’t supported. Activate a window containing a DCL, LSP, or MNL file.");
-				}
-				else{
-					vscode.window.showErrorMessage("This file format isn’t supported. Activate a window containing a DCL or LSP file.");
-				}
-			}
+		ProcessPathCache.chooseProductPathByPid(parseInt(processId));
+		let lispadapterpath = calculateABSPathForDAP(ProcessPathCache.globalProductPath);
+		if (!existsSync(lispadapterpath)) {
+			vscode.window.showErrorMessage(lispadapterpath + " " + strNoADPerr);
+			ProcessPathCache.globalProductPath = "";
 			return undefined;
 		}
-		return config;
+		ProcessPathCache.globalLispAdapterPath = lispadapterpath;
+		config.processId = processId;
+
+        return config;
 	}
 
 	dispose() {

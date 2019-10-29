@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD Lisp Extension",
 	"description": "This is a vscode extension for AutoCAD visual lisp",
-	"version": "0.1.4",
+	"version": "1.6.14",
 	"engines": {
 		"vscode": "^1.31.1"
 	},
@@ -12,6 +12,7 @@
 	"main": "./out/extension",
 	"activationEvents": [
 		"onDebug",
+		"onUri",
 		"onCommand:extension.vslisp-debug.getProgramName",
 		"onLanguage:autolisp",
 		"onLanguage:autolispdcl"
