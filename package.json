@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD Lisp Extension",
 	"description": "This is a vscode extension for AutoCAD visual lisp",
-	"version": "1.6.16",
+	"version": "1.6.17",
 	"engines": {
 		"vscode": "^1.31.1"
 	},

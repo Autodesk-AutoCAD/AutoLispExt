@@ -47,7 +47,11 @@ timestamps {
                 ]) {
 
                 stage ('Build') {
-                    sh "python pack.py"
+                    sh """
+                    cd $WORKSPACE
+                    npm config set registry https://art-bobcat.autodesk.com/artifactory/api/npm/team-autocad-npm-virtual
+                    python pack.py
+                    """
                 }
 
                 // stage ('Run tests') {
@@ -61,7 +65,6 @@ timestamps {
                         withCredentials([file(credentialsId: "ACAD_NPM_CONFIG_FILE", variable: 'NPM_CONFIG_FILE')]) {
                             sh """
                             cp -rf $NPM_CONFIG_FILE $WORKSPACE/.npmrc
-                            npm config set registry https://art-bobcat.autodesk.com/artifactory/api/npm/team-autocad-npm-virtual
                             cd $WORKSPACE
                             npm publish
                             """
