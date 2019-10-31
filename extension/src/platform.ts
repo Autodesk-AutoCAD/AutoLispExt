@@ -22,12 +22,16 @@ export function calculateABSPathForDAP(productPath){
 
 //calculate the process name for AutoCAD process picker
 export function calculateACADProcessName(pName){
+	let processName = pName ? pName.replace(".exe", "") : "";
+	if(processName !== "")
+		return processName;
+
 	let platform = os.type();						//reference - https://nodejs.org/api/os.html#os_os_type
-	let processName = pName.replace(".exe", "");
+	
 	if(platform === 'Windows_NT'){
-		return processName ? processName : "acad";
+		return "acad";
 	}else if(platform === 'Darwin'){
-		return processName ? processName : "AutoCAD";
+		return "AutoCAD";
 	}else{
 		return "";
 	}

@@ -91,17 +91,12 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 					attachLispConfig = item;
 				}
 			});
-			if(attachLispConfig){
+			if(attachLispConfig && attachLispConfig["attributes"]){
 				processName = attachLispConfig["attributes"]["process"] ? attachLispConfig["attributes"]["process"] : "";
 			}
 		}
-		else {
-			processName = calculateACADProcessName(processName);
-		}
 		
-		if(processName !== ""){
-			ProcessFilter = new RegExp('^(?:' + calculateACADProcessName(processName) + '|iojs)$', 'i');
-		}
+		ProcessFilter = new RegExp('^(?:' + calculateACADProcessName(processName) + '|iojs)$', 'i');
 
 		if (process.platform === 'win32' && executablePath.indexOf('\\??\\') === 0) {
 			// remove leading device specifier
@@ -132,7 +127,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 				// no port given
 				let addintolist = false;
 
-				if (processName) {
+				if (ProcessFilter) {
 					if(ProcessFilter.test(executable_name)){
 						addintolist = true;
 					}
