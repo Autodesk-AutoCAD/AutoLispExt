@@ -76,7 +76,7 @@ let strNoADPerr: string = "doesn’t exist. Verify that the file exists in the s
 let strNoACADerr: string = "doesn’t exist. Verify and correct the folder path to the product executable.";
 let acadPid2Attach = -1;
 
-let attachCfgName = 'Autolisp Debug: Attach';
+let attachCfgName = 'AutoLISP Debug: Attach';
 let attachCfgType = 'attachlisp';
 let attachCfgRequest = 'attach';
 
@@ -341,7 +341,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
 		// if launch.json is missing or empty
 		if (need2AddDefaultConfig(config)) {
 			config.type = 'launchlisp';
-			config.name = 'Autolisp Debug: Launch';
+			config.name = 'AutoLISP Debug: Launch';
 			config.request = 'launch';
 		}
 

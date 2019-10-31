@@ -31,28 +31,28 @@ export function onUriRequested(uri: vscode.Uri) {
     
     let pidStr = qs["pid"];
     if(pidStr === undefined) {
-        vscode.window.showInformationMessage("Invalid call to AutoCAD Lisp Extension.");
+        vscode.window.showInformationMessage("Invalid call to AutoCAD AutoLISP Extension.");
         return;
     }
 
     setDefaultAcadPid(parseInt(pidStr));
 
     if(vscode.debug.activeDebugSession){
-        vscode.window.showInformationMessage("Current debug session name:\r\n" + vscode.debug.activeDebugSession.name,
+        vscode.window.showInformationMessage("Current debug configuration: " + vscode.debug.activeDebugSession.name,
                     modalMsgOption);
         return;
     }
 
     if(vscode.window.activeTextEditor){
         if(acitiveDocHasValidLanguageId())
-            vscode.window.showInformationMessage("Press F5 to debug.", modalMsgOption);
+            vscode.window.showInformationMessage("From the menu bar, click Debug > Start Debugging to debug the current AutoLISP source file.", modalMsgOption);
         else
-            vscode.window.showInformationMessage("Open a LISP file and press F5 to debug.", modalMsgOption);
+            vscode.window.showInformationMessage("Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.", modalMsgOption);
         
         return;
     }
  
-    vscode.window.showInformationMessage("Press F5 to debug.", modalMsgOption);
+    vscode.window.showInformationMessage("Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.", modalMsgOption);
 
     return;
    

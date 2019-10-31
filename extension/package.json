@@ -1,8 +1,8 @@
 {
 	"name": "autolispext",
-	"displayName": "AutoCAD Lisp Extension",
-	"description": "This is a vscode extension for AutoCAD visual lisp",
-	"version": "1.6.17",
+	"displayName": "AutoCAD AutoLISP Extension",
+	"description": "This is a vscode extension for AutoCAD AutoLISP",
+	"version": "1.6.18",
 	"engines": {
 		"vscode": "^1.31.1"
 	},
@@ -30,7 +30,7 @@
 			{
 				"id": "autolisp",
 				"aliases": [
-					"Autolisp",
+					"AutoLISP",
 					"autolisp"
 				],
 				"extensions": [
@@ -41,7 +41,7 @@
 			{
 				"id": "autolispdcl",
 				"aliases": [
-					"AutolispDCL",
+					"AutoLISPDCL",
 					"autolispdcl"
 				],
 				"extensions": [

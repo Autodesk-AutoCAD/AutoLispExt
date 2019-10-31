@@ -1,6 +1,6 @@
 # Welcome to AutoCAD Lisp Extension
 
-AutoCAD Lisp Extension is a vscode extension for debug AutoCAD Visual Lisp. The Extension plays the roles of both debug adapter and language server which could enable you debug lisp with AutoCAD. The following description is for developers.
+AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Extension plays the roles of both debug adapter and language server which could enable you debug lisp with AutoCAD. The following description is for developers.
 
 ## How to setup the Dev Env
 You could setup the develop environment by:

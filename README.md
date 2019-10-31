@@ -1,6 +1,6 @@
 # Welcome to the AutoCAD® LISP Extension
 
-The AutoCAD LISP extension is a Microsoft® Visual Studio® Code extension that enables you to debug AutoLISP® source files with AutoCAD. The extension plays the dual role of both debug adapter and language server.
+The AutoCAD AutoLISP extension is a Microsoft® Visual Studio® Code extension that enables you to debug AutoLISP® source files with AutoCAD. The extension plays the dual role of both debug adapter and language server.
 
 ## Features
 1. Debug Adapter
@@ -17,7 +17,7 @@ Windows | Mac | Linux |
 :-------: | :---: | :-------: |
 <font color=green>√</font> | <font color=green>√</font> | <font color=red>x</font> |
 
-## How to use the AutoCAD LISP Extension
+## How to use the AutoCAD AutoLISP Extension
 To debug an AutoLISP source file, press F5 and then choose one of the following debug configurations:
 - AutoLISP Debug: Launch
 - AutoLISP Debug: Attach
@@ -35,7 +35,7 @@ To specify the path to the AutoCAD executable that is used with launch debug, up
         {
             "type": "attachlisp",
             "request": "attach",
-            "name": "Autolisp Debug: Attach",
+            "name": "AutoLISP Debug: Attach",
             "attributes": {
                 "process":"acad"       //process name used to filter when attach
             }
@@ -43,7 +43,7 @@ To specify the path to the AutoCAD executable that is used with launch debug, up
         {
             "type": "launchlisp",
             "request": "launch",
-            "name": "Autolisp Debug: Launch",
+            "name": "AutoLISP Debug: Launch",
             "attributes":{
                 "path": "C:\\Program Files\\Autodesk\\AutoCAD AutoLISP Preview\\acad.exe", // absolute path of acad.exe
                 "params": ""                                                               // AutoCAD startup parameter

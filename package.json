@@ -1,8 +1,8 @@
 {
 	"name": "autolispext",
-	"displayName": "AutoCAD Lisp Extension",
-	"description": "This is a vscode extension for AutoCAD visual lisp",
-	"version": "1.6.17",
+	"displayName": "AutoCAD AutoLISP Extension",
+	"description": "This is a vscode extension for AutoCAD AutoLISP",
+	"version": "1.6.18",
 	"engines": {
 		"vscode": "^1.31.1"
 	},
@@ -105,7 +105,7 @@
 			{
 				"id": "autolisp",
 				"aliases": [
-					"Autolisp",
+					"AutoLISP",
 					"autolisp"
 				],
 				"extensions": [
@@ -117,7 +117,7 @@
 			{
 				"id": "autolispdcl",
 				"aliases": [
-					"AutolispDCL",
+					"AutoLISPDCL",
 					"autolispdcl"
 				],
 				"extensions": [
@@ -147,7 +147,7 @@
 		"debuggers": [
 			{
 				"type": "attachlisp",
-				"label": "AutoCAD Lisp Debug(Attach)",
+				"label": "AutoLISP Debug: Attach",
 				"enableBreakpointsFor": {
 					"languageIds": [
 						"autolisp",
@@ -163,7 +163,7 @@
 					{
 						"id": "autolisp",
 						"aliases": [
-							"Autolisp",
+							"AutoLISP",
 							"autolisp"
 						],
 						"extensions": [
@@ -175,7 +175,7 @@
 					{
 						"id": "autolispdcl",
 						"aliases": [
-							"AutolispDCL",
+							"AutoLISPDCL",
 							"autolispdcl"
 						],
 						"extensions": [
@@ -202,7 +202,7 @@
 					{
 						"type": "attachlisp",
 						"request": "attach",
-						"name": "Autolisp Debug: Attach",
+						"name": "AutoLISP Debug: Attach",
 						"attributes": {
 							"process": ""
 						}
@@ -210,12 +210,12 @@
 				],
 				"configurationSnippets": [
 					{
-						"label": "Autolisp Debug: Attach",
+						"label": "AutoLISP Debug: Attach",
 						"description": "A new configuration for 'debugging' a user selected lisp file.",
 						"body": {
 							"type": "attachlisp",
 							"request": "attach",
-							"name": "Autolisp Debug: Attach",
+							"name": "AutoLISP Debug: Attach",
 							"attributes": {
 								"process": ""
 							}
@@ -225,7 +225,7 @@
 			},
 			{
 				"type": "launchlisp",
-				"label": "AutoCAD Lisp Debug(Launch)",
+				"label": "AutoLISP Debug: Launch",
 				"enableBreakpointsFor": {
 					"languageIds": [
 						"autolisp",
@@ -237,7 +237,7 @@
 					{
 						"id": "autolisp",
 						"aliases": [
-							"Autolisp",
+							"AutoLISP",
 							"autolisp"
 						],
 						"extensions": [
@@ -249,7 +249,7 @@
 					{
 						"id": "autolispdcl",
 						"aliases": [
-							"AutolispDCL",
+							"AutoLISPDCL",
 							"autolispdcl"
 						],
 						"extensions": [
@@ -277,7 +277,7 @@
 					{
 						"type": "launchlisp",
 						"request": "launch",
-						"name": "Autolisp Debug: Launch",
+						"name": "AutoLISP Debug: Launch",
 						"attributes": {
 							"path": "",
 							"params": ""
@@ -286,12 +286,12 @@
 				],
 				"configurationSnippets": [
 					{
-						"label": "Autolisp Debug: Launch",
+						"label": "AutoLISP Debug: Launch",
 						"description": "A new configuration for 'debugging' a user selected lisp file.",
 						"body": {
 							"type": "launchlisp",
 							"request": "launch",
-							"name": "Autolisp Debug: Launch",
+							"name": "AutoLISP Debug: Launch",
 							"attributes": {
 								"path": "",
 								"params": ""
