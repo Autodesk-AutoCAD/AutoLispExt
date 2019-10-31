@@ -2,6 +2,11 @@
 
 The AutoCAD AutoLISP extension is a Microsoft® Visual Studio® Code extension that enables you to debug AutoLISP® source files with AutoCAD. The extension plays the dual role of both debug adapter and language server.
 
+## Build status
+
+[![Build Status](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master)](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master/)
+
+
 ## Features
 1. Debug Adapter
     * Launch Debug
