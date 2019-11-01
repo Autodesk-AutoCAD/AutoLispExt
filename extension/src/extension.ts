@@ -356,10 +356,6 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
 			if (config["attributes"])
 				productPath = config["attributes"]["path"] ? config["attributes"]["path"] : "";
 
-			if (!productPath && ProcessPathCache.globalProductPath) {
-				//2.2 get acadRoot path from global cache
-				productPath = ProcessPathCache.globalProductPath;
-			}
 			if (!productPath) {
 				vscode.window.showInformationMessage("Specify the absolute path to the product with the Path attribute of the launch.json file.");
 				let platform = os.type();
