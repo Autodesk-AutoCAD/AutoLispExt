@@ -12,12 +12,14 @@ export class ProcessPathCache{
 	public static globalProductProcessPathArr:ProductProcessPathPid[] = []; 
 	public static globalParameter:string = "";
 	public static globalLispAdapterPath:string="";
+	public static globalAcadNameInUserAttachConfig = "";
 
 	constructor(){
 		ProcessPathCache.globalProductPath = "";
 		ProcessPathCache.globalProductProcessPathArr = [];
 		ProcessPathCache.globalParameter = "";
 		ProcessPathCache.globalLispAdapterPath = "";
+		ProcessPathCache.globalAcadNameInUserAttachConfig = "";
 	}
 
 	public static addGlobalProductProcessPathArr(path:string, pid:number){

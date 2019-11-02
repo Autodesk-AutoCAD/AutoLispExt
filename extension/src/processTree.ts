@@ -19,6 +19,7 @@ import { spawn, ChildProcess } from 'child_process';
 import { join } from 'path';
 import * as _ from 'lodash';
 
+import { ProcessPathCache } from "./processCache";
 
 export function getProcesses(one: (pid: number, ppid: number, command: string, args: string, exepath: string, date?: number) => void) : Promise<void> {
 
@@ -40,10 +41,16 @@ export function getProcesses(one: (pid: number, ppid: number, command: string, a
 		let proc: ChildProcess;
 
 		if (process.platform === 'win32') {
+			let nameClause = undefined;
+			if(ProcessPathCache.globalAcadNameInUserAttachConfig)
+				nameClause = 'name like \'' + ProcessPathCache.globalAcadNameInUserAttachConfig +'%\'';
+			else
+				nameClause = 'name like \'acad%\'';
+
 			const CMD_PAT = /^(.*)\s+([0-9]+)\.[0-9]+[+-][0-9]+\s+(.*)\s+([0-9]+)\s+([0-9]+)$/;
 			//const CMD_PAT = /^(.*)\s+([0-9]+)\.[0-9]+[+-][0-9]+\s+([0-9]+)\s+([0-9]+)$/;
 			const wmic = join(process.env['WINDIR'] || 'C:\\Windows', 'System32', 'wbem', 'WMIC.exe');
-			proc = spawn(wmic, [ 'process', 'get', 'CommandLine,CreationDate,ExecutablePath,ParentProcessId,ProcessId' ]);
+			proc = spawn(wmic, [ 'process', 'where', nameClause, 'get', 'CommandLine,CreationDate,ExecutablePath,ParentProcessId,ProcessId' ]);
 			proc.stdout.setEncoding('utf8');
 			proc.stdout.on('data', lines(line => {
 				//let matches = _.compact(line.trim().split(' '));
