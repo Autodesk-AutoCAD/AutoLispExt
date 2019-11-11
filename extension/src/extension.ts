@@ -421,7 +421,9 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
 
         if (config && config.attributes && config.attributes.process){
             ProcessPathCache.globalAcadNameInUserAttachConfig = config.attributes.process;
-        }
+        } else {
+			ProcessPathCache.globalAcadNameInUserAttachConfig = "";
+		}
 
 		ProcessPathCache.clearProductProcessPathArr();
         let processId = await pickProcess(false, acadPid2Attach);
