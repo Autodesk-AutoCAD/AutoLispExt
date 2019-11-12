@@ -63,15 +63,17 @@ timestamps {
                     if (env.BRANCH_NAME == "master")
                     {
                         withCredentials([file(credentialsId: "ACAD_NPM_CONFIG_FILE", variable: 'NPM_CONFIG_FILE')]) {
-                            sh """
+                            publishScript = '''
                             cp -rf $NPM_CONFIG_FILE $WORKSPACE/.npmrc
                             cd $WORKSPACE
-                            PACKAGE_VERSION=`node -pe \"require('./package.json').version\"`
-                            BUILD_VERSION=\"${PACKAGE_VERSION}-${env.BUILD_NUMBER}\"
-                            echo \"Publishing to artifactory, version: ${BUILD_VERSION}\"
+                            PACKAGE_VERSION=`node -pe "require('./package.json').version"`
+                            BUILD_VERSION="${PACKAGE_VERSION}-${env.BUILD_NUMBER}"
+                            echo "Publishing to artifactory, version: ${BUILD_VERSION}"
                             npm version --no-git-tag-version ${BUILD_VERSION}
                             npm publish
-                            """
+                            '''
+                            println publishScript
+                            sh publishScript
                         }
                     }
                 }
