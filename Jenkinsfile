@@ -55,7 +55,7 @@ timestamps {
                 }
 
                 // stage ('Run tests') {
-                //     sh "npm run test" 
+                //     sh "npm run test"
                 // }
 
                 stage ('Publish') {
