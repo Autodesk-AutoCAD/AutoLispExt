@@ -67,7 +67,7 @@ timestamps {
                             cp -rf $NPM_CONFIG_FILE $WORKSPACE/.npmrc
                             cd $WORKSPACE
                             PACKAGE_VERSION=`node -pe "require('./package.json').version"`
-                            BUILD_VERSION="${PACKAGE_VERSION}-${env.BUILD_NUMBER}"
+                            BUILD_VERSION="${PACKAGE_VERSION}-${BUILD_NUMBER}"
                             echo "Publishing to artifactory, version: ${BUILD_VERSION}"
                             npm version --no-git-tag-version ${BUILD_VERSION}
                             npm publish
