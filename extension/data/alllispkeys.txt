@@ -19,12 +19,6 @@ defun
 foreach
 vlax-for
 if
-asciiu
-chru
-vl-string-positionu
-vl-string-eltu
-vl-string->listu
-vl-list->stringu
 lambda
 or
 progn

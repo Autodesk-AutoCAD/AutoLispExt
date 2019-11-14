@@ -232,14 +232,7 @@
 		"body":[
 			"(ascii \"${1:str}\")"
 		],
-		"description":"Returns the conversion of the first character of a string into its ASCII character code (an integer)"
-	},
-	"asciiu":{
-		"prefix": "asciiu",
-		"body":[
-			"(asciiu \"${1:str}\")"
-		],
-		"description":"Returns the conversion of the first character of a unicode string into its ASCII character code (an integer)"
+		"description":"Returns the conversion of the first character of a string into its Unicode character code (an integer)"
 	},
 	"assoc":{
 		"prefix": "assoc",
@@ -309,14 +302,7 @@
 		"body":[
 			"(chr ${1:int})"
 		],
-		"description":"Converts an integer representing an ASCII character code into a single-character string"
-	},
-	"chru":{
-		"prefix": "chru",
-		"body":[
-			"(chru ${1:int})"
-		],
-		"description":"Converts an integer representing an ASCII character code into a single-character string"
+		"description":"Converts an integer representing an Unicode character code into a single-character string"
 	},
 	"open":{
 		"prefix": "open",
