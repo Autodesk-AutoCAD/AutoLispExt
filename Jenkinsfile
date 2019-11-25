@@ -60,7 +60,7 @@ timestamps {
 
                 stage ('Publish') {
                     //only publish the master branch
-                    if (env.BRANCH_NAME == "master")
+                    if (env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("release"))
                     {
                         withCredentials([file(credentialsId: "ACAD_NPM_CONFIG_FILE", variable: 'NPM_CONFIG_FILE')]) {
                             publishScript = '''
