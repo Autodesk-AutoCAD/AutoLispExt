@@ -31,6 +31,7 @@ import { AutoFormater } from "./autoFormater";
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
 import { existsSync } from 'fs';
+import {LispFormatter} from './format/formatter'
 
 let client: LanguageClient;
 
@@ -113,6 +114,20 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
+	vscode.languages.registerOnTypeFormattingEditProvider(['autolisp', 'lisp'], {
+		provideOnTypeFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
+			let activeTextEditor = vscode.window.activeTextEditor;
+			let currentLSPDoc = activeTextEditor.document.fileName;
+			let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
+			if (ext === ".DCL") {
+				vscode.window.showInformationMessage("Command doesn’t support DCL files.");
+				return;
+			}
+
+			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor), AutoFormater.excuteFormatDoc(activeTextEditor, true))];
+		}
+	}, "\n", "\r\n");
+
 	vscode.languages.registerDocumentRangeFormattingEditProvider(['autolisp', 'lisp'], {
 		provideDocumentRangeFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
 			let activeTextEditor = vscode.window.activeTextEditor;
@@ -125,7 +140,8 @@ export function activate(context: vscode.ExtensionContext) {
 			if (activeTextEditor.selection.isEmpty) {
 				vscode.window.showInformationMessage("First, select the lines of code to format.");
 			}
-			return [vscode.TextEdit.replace(AutoFormater.getSelectedDocRange(activeTextEditor), AutoFormater.excuteFormatDoc(activeTextEditor, false))];
+			let fmt = LispFormatter.format(activeTextEditor, false);
+			return [vscode.TextEdit.replace(AutoFormater.getSelectedDocRange(activeTextEditor), fmt)];
 		}
 	});
 
