@@ -6,6 +6,8 @@ For information on creating custom programs for AutoCAD with the AutoLISP progra
    - AutoCAD AutoLISP: [Reference](https://www.autodesk.com/autolisp-reference)
    - AutoCAD AutoLISP: [Tutorials](https://www.autodesk.com/autolisp-tutorials)
 
+The extension is distributed under the [Autodesk Terms of Use](https://www.autodesk.com/company/terms-of-use/en/general-terms#offerings).
+
 ## Features
 1. AutoLISP Debugger
     * Launch/Attach Debug
@@ -121,8 +123,8 @@ All use of this Software is subject to the Autodesk terms of service accepted ac
 ### Privacy 
 To learn more about Autodesk’s online and offline privacy practices, please see the [Autodesk Privacy Statement](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement).
 
-### Autodesk Trademarks
-The trademarks on the [Autodesk Trademarks page](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement) are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates in the USA and/or other countries.
+### Trademarks
+The license does not grant permission to use the trade names, trademarks, service marks, or product names of Autodesk, except as required for reasonable and customary use in describing the origin of the work and reproducing the content of any notice file. Autodesk, the Autodesk logo, AutoCAD and AutoLISP are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates in the USA and/or other countries. All other brand names, product names, or trademarks belong to their respective holders. Autodesk is not responsible for typographical or graphical errors that may appear in this document.
 
 All other brand names, product names or trademarks belong to their respective holders.
 

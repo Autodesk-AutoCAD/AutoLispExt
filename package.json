@@ -3,6 +3,8 @@
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
 	"version": "1.6.20",
+	"license": "SEE LICENSE IN LICENSE.md",
+	"bugs": "https://knowledge.autodesk.com/contact-support",
 	"engines": {
 		"vscode": "^1.31.1"
 	},
