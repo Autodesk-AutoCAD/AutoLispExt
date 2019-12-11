@@ -19,6 +19,14 @@ enum FormattingStyle {
 //       "\nline this is a test for long long one line for s expression"
 // )
 
+export class CursorPosition {
+	offsetInSelection: number;
+	offsetInDocument: number;
+
+	delta() :number {
+		return this.offsetInDocument - this.offsetInSelection;
+	}
+}
 
 
 class InputStream {
@@ -251,4 +259,67 @@ export class ListReader {
 		return sexpr;
 	}
 
+	static skipComment(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
+	{
+		let inRangeStringLength = stringInRange.length;
+
+		if(startPosOffset.offsetInSelection >= (inRangeStringLength - 1) )//it's the final char in the given range;
+			return null; //the given range ends with a comment
+
+		if(stringInRange.charAt(startPosOffset.offsetInSelection + 1) == '|')
+		{
+			//it's starting a block comment with a ;|
+
+			//searching for the ending of comment
+
+			//the shortest block comment is ;||; with length == 4, so:
+			if( (startPosOffset.offsetInSelection + 4) > inRangeStringLength )
+				//the rest part of the given range is less than 2 characters; won't have a |; to end the comment
+				return null; //let's take the rest as part of an incomplete comment
+
+			var endingOfComment = stringInRange.indexOf("|;", startPosOffset.offsetInSelection + 2);
+
+			if(endingOfComment < (startPosOffset.offsetInSelection + 2))
+			{
+				//no ending |; found; the LSP in the given range is in problem and let's take the whole rest part as a block comment
+				return null;
+			}
+
+			//return the offset of the char that is right after current block comment
+
+			let endPos = new CursorPosition();
+			endPos.offsetInSelection = endingOfComment + 2;
+			endPos.offsetInDocument = endPos.offsetInSelection + startPosOffset.delta();
+
+			return endPos;
+		}
+
+
+		//else, the rest of current line is a comment
+
+		//skip the rest of current line
+		var cursorPos2d = document.positionAt(startPosOffset.offsetInDocument);
+
+		if(cursorPos2d.line >= (document.lineCount - 1))
+		{
+			//there's no next line
+			return null; //the rest of the given range is a comment
+		}
+
+		//not the final line; continue to scan the next line
+		let next = new vscode.Position(cursorPos2d.line + 1, 0);
+
+		let nextCharOffsetInDoc = document.offsetAt(next);
+		
+		let delta = startPosOffset.offsetInDocument - startPosOffset.offsetInSelection;
+
+		let endPos = new CursorPosition();
+		endPos.offsetInDocument = nextCharOffsetInDoc;
+		endPos.offsetInSelection = nextCharOffsetInDoc - startPosOffset.delta();
+
+		return endPos;//return the next offset in string, not the offset in doc
+	}
+
+
 }
+

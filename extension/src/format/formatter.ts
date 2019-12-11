@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ListReader } from "./lispreader";
+import { ListReader, CursorPosition } from "./lispreader";
 
 class LeftParentItem {
     public location: Number;
@@ -11,46 +11,63 @@ class LeftParentItem {
 
 
 export class LispFormatter {
-    private static readComments(str: string, index: number): string {
-        let commentsPrefix = ";";
-        if (index + 1 < str.length)
-            commentsPrefix += str.charAt(index + 1);
-        let isBlockComment = false;
-        if (commentsPrefix == ";|")
-            isBlockComment = true;
+    private static readComments(document: vscode.TextDocument, docAsString: string, startPosOffset:CursorPosition): string {
 
-        let res = "";
-        for (let i = index; i < str.length; i++) {
-
-            let ch = str.charAt(i);
-            if (ch == "\n") {
-                if (!isBlockComment)
-                    break;
-            }
-
-            if (ch == "|" && isBlockComment && i < str.length - 1) {
-                let nextch = str.charAt(i + 1);
-                if (nextch == ";") {
-                    res += ch;
-                    res += nextch;
-                    break;
-                }
-            }
-            res += ch;
+        if(docAsString.length == 0) {
+            console.log("scanning an empty string is meaningless\n")
+            return null;
         }
 
-        return res;
+        let offsetAfterComment = ListReader.skipComment(document, docAsString, startPosOffset);
+        
+        if(offsetAfterComment == null) {
+            offsetAfterComment = new CursorPosition();
+            offsetAfterComment.offsetInSelection = docAsString.length;
+            offsetAfterComment.offsetInDocument = docAsString.length + startPosOffset.delta();
+        }
+        else if(offsetAfterComment.offsetInSelection > docAsString.length) { //out of the given range 
+            offsetAfterComment.offsetInSelection = docAsString.length;
+            offsetAfterComment.offsetInDocument = docAsString.length + startPosOffset.delta();
+        }
+        else if(offsetAfterComment.offsetInSelection <= startPosOffset.offsetInSelection) {
+            //it shouldn't run into this code path;
+            console.log("failed to locate the end of a comment\n");
+            offsetAfterComment.offsetInSelection = docAsString.length;
+            offsetAfterComment.offsetInDocument = docAsString.length + startPosOffset.delta();
+        }
+
+        let startPos2d = document.positionAt(startPosOffset.offsetInDocument);
+        let endPos2d = document.positionAt(offsetAfterComment.offsetInDocument);
+ 
+        return document.getText(new vscode.Range(startPos2d, endPos2d));
+    }
+
+    static endOfLineEnum2String(eolEnum: vscode.EndOfLine ) : string {
+        switch(eolEnum) {
+            case vscode.EndOfLine.LF:
+                return "\n";
+
+            case vscode.EndOfLine.CRLF:
+                return "\r\n";
+            
+            default:
+                console.log("Unexpected eol\n");
+                return "\r\n";
+        }
     }
 
     public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
-        let textString = editor.document.getText();
+        let textString:string = "";
+        let selectionStartOffset = 0;
+
         if (!ifFullFormat) {
-            textString = "";
-            for (let row = editor.selection.start.line; row <= editor.selection.end.line; row++)
-                textString += editor.document.lineAt(row).text + "\n";
+            textString = editor.document.getText(editor.selection);
+            selectionStartOffset = editor.document.offsetAt(editor.selection.start);
+        }
+        else {
+            textString = editor.document.getText();
         }
 
-        textString.trim();
         if (textString.length == 0)
             return "";
 
@@ -58,26 +75,36 @@ export class LispFormatter {
 
         let leftParensStack = [];
 
-        for (let i = 0; i < textString.length; i++) {
+        for (let i = 0; i < textString.length; /*i++ is commented out on purpose, as the increment is different case by case*/)
+        {
             let ch = textString.charAt(i);
 
-            if (ch == ";" && leftParensStack.length == 0) {
-                let comments = LispFormatter.readComments(textString, i);
+            if (ch == ";" && leftParensStack.length == 0)
+            {
+                let startPos = new CursorPosition()
+                startPos.offsetInSelection = i;
+                startPos.offsetInDocument = i+ selectionStartOffset;
+
+                let comments = LispFormatter.readComments(editor.document, textString, startPos);
                 formattedstring += comments;
-                formattedstring += "\n";
 
                 i += comments.length;
+                continue;
             }
 
-            if (ch == "(") {
+            if (ch == "(")
+            {
                 leftParensStack.push(new LeftParentItem(i));
-            } else if (ch == ")") {
-                if (leftParensStack.length == 0) {
+            }
+            else if (ch == ")")
+            {
+                if (leftParensStack.length == 0)
+                {
                     // this is unbalnace paren
                     vscode.window.showErrorMessage("Unbalanced token found.");
-                    continue;
                 }
-                else if (leftParensStack.length == 1) {
+                else if (leftParensStack.length == 1)
+                {
                     // this is the toplevel scope s-expression
                     let leftparen = leftParensStack.pop();
                     let sexpr = textString.substring(i + 1, leftparen.location);
@@ -87,10 +114,14 @@ export class LispFormatter {
                     formattedstring += lispLists.formatting();
                     formattedstring += "\n";
                 }
-                else {
+                else
+                {
                     leftParensStack.pop();
                 }
             }
+
+            i++;
+            continue;
         }
 
         if (leftParensStack.length > 0) {
