@@ -1,16 +1,12 @@
 import * as vscode from 'vscode';
 import { assert } from 'console';
 
+import { closeParenStyle, maximumLineChars, longListFormatStyle } from '../config'
+
 let gMaxLineChars = 80;
 let gIndentSpaces = 4;
 let gClosedParenInSameLine = true;
-
-class LispSymbolConst {
-    static LIST_LPAR = '(';
-    static LIST_RPAR = ')';
-    static LISP_QUO = '\'';
-    static STR_QUO = '\"';
-}
+let gLongListFormatAsSingleColumn = false;
 
 export class LispAtom {
     public symbol: string;
@@ -122,11 +118,47 @@ export class Sexpression extends LispAtom {
         return res;
     }
 
+    public formatListToFillMargin(startColumn: number): string {
+        let res = "";
+
+        let leftMargin = gMaxLineChars - startColumn;
+        let line = this.atoms[0].format(startColumn);
+        let firstColWidth = line.length;
+        for (let i = 1; i < this.atoms.length - 1; i++) {
+
+            if (!this.atoms[i].isComment() && line.length + this.atoms[i].length() < leftMargin) {
+                line += this.atoms[i].format(startColumn + line.length);
+                line += " ";
+                continue;
+            }
+
+            line += this.atoms[i].format(startColumn + line.length);
+            res += line;
+            if (i < this.atoms.length - 2) {
+                res += "\n";
+                res += " ".repeat(startColumn + firstColWidth);
+            }
+
+            line = "";
+        }
+
+        if (line != "")
+            res += line;
+
+        // Last atom may be )
+        res += this.formatLastAtom(startColumn, startColumn);
+
+        return res;
+    }
+
     public formatListAsColumn(startColumn: number): string {
         if (startColumn + this.length() < gMaxLineChars)
             return this.formatAsPlainStyle(startColumn);
 
-        return this.formatList(startColumn, 1);
+        if (gLongListFormatAsSingleColumn)
+            return this.formatList(startColumn, 1);
+
+        return this.formatListToFillMargin(startColumn);
     }
 
     private formatDefun(startColumn: number): string {
@@ -210,6 +242,10 @@ export class Sexpression extends LispAtom {
     }
 
     private formatList(startColumn: number, firstlineAtomCount: number, isCond?: boolean): string {
+        
+        if (startColumn + this.length() < gMaxLineChars)
+            return this.formatAsPlainStyle(startColumn);
+
         let res = "";
         let firstcolumnWdith = 0;
         let lastIndex = firstlineAtomCount;
@@ -328,11 +364,15 @@ export class Sexpression extends LispAtom {
     }
 
     private getLispOperator(): LispAtom {
+        let symbol = this.atoms[0].format(0);
+        if (symbol != "(")
+            return this.atoms[0];
         for (let i = 1; i < this.atoms.length; i++) {
             if (!this.atoms[i].isComment())
                 return this.atoms[i];
         }
     }
+
     // 1. If and cond always use wide format style
     // 2. setq defun foreach progn use wide format style if there is no enough space
     // 3. If the space is enough, use the plain format style
@@ -371,11 +411,12 @@ export class Sexpression extends LispAtom {
                         return this.formatProgn(startColumn);
                     }
 
-                    let listAlignColumn = 3;
                     if (asCond != undefined) {
-                        listAlignColumn = 1;
+                        // cond branch internal expression has special alignment
+                        return this.formatList(startColumn, 1);
                     }
-                    return this.formatList(startColumn, listAlignColumn);
+
+                    return this.formatListAsColumn(startColumn);
                 }
             }
         }
@@ -384,6 +425,19 @@ export class Sexpression extends LispAtom {
     }
 
     formatting(): string {
+
+        gMaxLineChars = maximumLineChars();
+
+        let parenStyle = closeParenStyle();
+        if (parenStyle.toString() == "Same Line")
+            gClosedParenInSameLine = true;
+        else gClosedParenInSameLine = false;
+
+        let listFmtStyle = longListFormatStyle();
+        if (listFmtStyle.toString() == "Single column")
+            gLongListFormatAsSingleColumn = true;
+        else gLongListFormatAsSingleColumn = false;
+
         return this.format(0);
     }
 } 

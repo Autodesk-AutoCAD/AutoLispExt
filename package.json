@@ -36,24 +36,30 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "lisp configuration",
+			"title": "AutoCAD® LISP configuration",
 			"properties": {
-				"lispLanguageServer.maxNumberOfProblems": {
-					"scope": "resource",
+				"autolispext.maxLineChars": {
 					"type": "number",
-					"default": 100,
-					"description": "Controls the maximum number of problems produced by the server."
+					"default": 80,
+                    "description": "Specify the maximum characters can be display each line, autolisp formatter uses it do line wrapping"
 				},
-				"lispLanguageServer.trace.server": {
-					"scope": "window",
+				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
 					"enum": [
-						"off",
-						"messages",
-						"verbose"
+						"Same line",
+						"New line"
 					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
+					"default": "New line",
+					"description": "Specify the close parenthesis style"
+				},
+				"autolispext.LongListFormatStyle": {
+					"type": "string",
+					"enum": [
+						"Single column",
+						"Fill to margin"
+					],
+					"default": "Fill to margin",
+					"description": "Specify the long list format style in keyword like function parameters or quote expression"
 				}
 			}
 		},
