@@ -32,6 +32,7 @@ import { DiagnosticsCtrl } from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
 import { existsSync } from 'fs';
 import {LispFormatter} from './format/formatter'
+import * as autoIndent from './format/autoIndent'
 
 let client: LanguageClient;
 
@@ -100,6 +101,8 @@ export function activate(context: vscode.ExtensionContext) {
 	//-----------------------------------------------------------
 	//1. lisp autoformat
 	//-----------------------------------------------------------
+	autoIndent.subscribeOnEnterEvent(); //auto indent
+
 	vscode.languages.registerDocumentFormattingEditProvider(['autolisp', 'lisp'], {
 		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
 			let activeTextEditor = vscode.window.activeTextEditor;
@@ -113,20 +116,6 @@ export function activate(context: vscode.ExtensionContext) {
 			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor), AutoFormater.excuteFormatDoc(activeTextEditor, true))];
 		}
 	});
-
-	vscode.languages.registerOnTypeFormattingEditProvider(['autolisp', 'lisp'], {
-		provideOnTypeFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-			let activeTextEditor = vscode.window.activeTextEditor;
-			let currentLSPDoc = activeTextEditor.document.fileName;
-			let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-			if (ext === ".DCL") {
-				vscode.window.showInformationMessage("Command doesn’t support DCL files.");
-				return;
-			}
-
-			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor), AutoFormater.excuteFormatDoc(activeTextEditor, true))];
-		}
-	}, "\n", "\r\n");
 
 	vscode.languages.registerDocumentRangeFormattingEditProvider(['autolisp', 'lisp'], {
 		provideDocumentRangeFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {

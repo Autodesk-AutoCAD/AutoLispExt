@@ -23,6 +23,19 @@ enum FormattingStyle {
 export class CursorPosition {
     offsetInSelection: number;
     offsetInDocument: number;
+    
+    constructor() {
+        this.offsetInSelection = -1;
+        this.offsetInDocument = -1;
+    }
+
+    static create(offsetInSelection: number, offsetInDocument: number) {
+        let ret = new CursorPosition();
+        ret.offsetInSelection = offsetInSelection;
+        ret.offsetInDocument = offsetInDocument;
+
+        return ret;
+    }
 
     delta(): number {
         return this.offsetInDocument - this.offsetInSelection;

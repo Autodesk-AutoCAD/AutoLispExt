@@ -4,7 +4,7 @@
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
 	"version": "1.6.19",
 	"engines": {
-		"vscode": "^1.31.1"
+		"vscode": "^1.38.0"
 	},
 	"repository": {
 		"type": "git",
@@ -69,7 +69,8 @@
 				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": false,
+				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "&#^()[]|;'\".",
@@ -80,7 +81,8 @@
 				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": false,
+				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "&#^()[]|;'\".",
