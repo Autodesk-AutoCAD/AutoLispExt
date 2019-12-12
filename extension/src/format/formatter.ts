@@ -79,16 +79,50 @@ export class LispFormatter {
         {
             let ch = textString.charAt(i);
 
-            if (ch == ";" && leftParensStack.length == 0)
+            if (ch == ";")
             {
                 let startPos = new CursorPosition()
                 startPos.offsetInSelection = i;
                 startPos.offsetInDocument = i+ selectionStartOffset;
 
                 let comments = LispFormatter.readComments(editor.document, textString, startPos);
-                formattedstring += comments;
+
+                if(leftParensStack.length == 0)
+                    formattedstring += comments;
 
                 i += comments.length;
+                continue;
+            }
+
+            if(ch == '\"')
+            {
+                let startPos = new CursorPosition()
+                startPos.offsetInSelection = i;
+                startPos.offsetInDocument = i+ selectionStartOffset;
+
+                let endOfString = ListReader.skipStringWithQuotes(editor.document, textString, startPos);
+
+                let startPos2d = editor.document.positionAt(startPos.offsetInDocument);
+                let endPos2d = null;
+                if(endOfString != null)
+                {
+                    endPos2d = editor.document.positionAt(endOfString.offsetInDocument);
+                }
+                else
+                {
+                    endPos2d = selectionStartOffset + textString.length;
+                }
+
+                let stringExpr = editor.document.getText(new vscode.Range(startPos2d, endPos2d));
+                //set the index of next iteration
+                i += stringExpr.length;
+
+                if(stringExpr.length == 0)
+                    console.log("failed to read string on top level\n");
+                
+                if(leftParensStack.length == 0)
+                    formattedstring += stringExpr;
+
                 continue;
             }
 

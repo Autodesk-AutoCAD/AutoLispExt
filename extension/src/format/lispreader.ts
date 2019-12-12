@@ -265,6 +265,11 @@ export class ListReader {
         return sexpr;
     }
 
+	//startPosOffset: offset of the starting ; of a comment
+	//stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
+	//
+	//return the position right after the ending char of current comment
+	//return null if the end is out of range or missing
     static skipComment(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): CursorPosition {
         let inRangeStringLength = stringInRange.length;
 
@@ -322,6 +327,55 @@ export class ListReader {
         return endPos;//return the next offset in string, not the offset in doc
     }
 
+	//startPosOffset: offset of the starting " of a text string
+	//stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
+	//
+	//return the position right after the ending "
+	//return null if the ending " is out of range or missing
+	static skipStringWithQuotes(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
+	{
+		let inRangeStringLength = stringInRange.length;
+	
+		if(startPosOffset.offsetInSelection >= (inRangeStringLength - 1) )//it's the final char in the given range;
+			return null; 
 
+		let posAfterComment = -1;
+	
+		for(let curPos = startPosOffset.offsetInSelection + 1; curPos < inRangeStringLength; curPos++)
+		{
+			let char = stringInRange.charAt(curPos);
+	
+			if(char == '"')
+			{
+				posAfterComment = curPos + 1;
+				break;
+			}
+			
+			if(char != '\\')
+				continue;
+			
+			//it's escaping the next char
+			
+			if(curPos >= (inRangeStringLength - 1))
+				break;//there's no next char in given range; the given string ends here
+
+			//well, it's the escaping char, but it's also the last char before EOL
+			if((stringInRange.charAt(curPos + 1) == '\r') ||
+			   (stringInRange.charAt(curPos + 1) == '\n'))
+				continue; //simply igore this '\' which escapes nothing
+	
+			curPos++;//escape the escaped char
+		}
+	
+		if(posAfterComment == -1)
+			return null;
+
+		let nextPos = new CursorPosition();
+		nextPos.offsetInSelection = posAfterComment;
+		nextPos.offsetInDocument = posAfterComment + startPosOffset.delta();
+
+		return nextPos;
+	}
+	
 }
 
