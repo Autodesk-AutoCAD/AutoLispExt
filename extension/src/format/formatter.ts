@@ -100,7 +100,7 @@ export class LispFormatter {
                 startPos.offsetInSelection = i;
                 startPos.offsetInDocument = i+ selectionStartOffset;
 
-                let endOfString = ListReader.skipStringWithQuotes(editor.document, textString, startPos);
+                let endOfString = ListReader.findEndOfDoubleQuoteString(editor.document, textString, startPos);
 
                 let startPos2d = editor.document.positionAt(startPos.offsetInDocument);
                 let endPos2d = null;

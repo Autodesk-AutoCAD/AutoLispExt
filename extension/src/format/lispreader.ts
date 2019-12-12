@@ -159,21 +159,15 @@ export class ListReader {
     read_string() {
         let sline = this.input.line;
         let scol = this.input.col;
-        let res = "";
+
         assert(this.peek() == "\"");
 
-        let ch = this.next();
-        res += ch;
+        let startPoint = new CursorPosition();
+        startPoint.offsetInSelection = this.input.currentOffset();
+        startPoint.offsetInDocument = this.input.currentOffset() + this.startPosInDoc.delta();
+        let stringLength = ListReader.getLengthOfStringSym(this.document, this.input.text, startPoint);
 
-        res += this.read_when(function(ch) {
-            switch (ch) {
-                case "\"":
-                    return false;
-                default:
-                    return true;
-            }
-        });
-        res += this.next();
+        let res = this.input.nextString(stringLength);
 
         let lastList = this.cachedLists[this.cachedLists.length - 1];
         lastList.addAtom(new LispAtom(sline, scol, res));
@@ -286,6 +280,7 @@ export class ListReader {
         return sexpr;
     }
     
+     //return the length of a comment - including the chars that start and end a comment
     static getCommentLength(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): number {
         let endPos = ListReader.findEndOfComment(document, stringInRange, startPosOffset);
 
@@ -359,13 +354,26 @@ export class ListReader {
 
         return endPos;//return the next offset in string, not the offset in doc
     }
+    
+    //return the length of a string with double quotes - including the starting and ending "
+    static getLengthOfStringSym(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition): number {
+        let endPos = ListReader.findEndOfDoubleQuoteString(document, stringInRange, startPosOffset);
+
+        if(endPos == null) {
+            endPos = new CursorPosition();
+            endPos.offsetInSelection = stringInRange.length;
+            endPos.offsetInDocument = stringInRange.length + startPosOffset.delta();
+        }
+
+        return endPos.offsetInSelection - startPosOffset.offsetInSelection;
+    }
 
     //startPosOffset: offset of the starting " of a text string
     //stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
     //
     //return the position right after the ending "
     //return null if the ending " is out of range or missing
-    static skipStringWithQuotes(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
+    static findEndOfDoubleQuoteString(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
     {
         let inRangeStringLength = stringInRange.length;
     
