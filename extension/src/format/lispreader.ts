@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { assert } from 'console';
 import { Sexpression } from "./sexpression"
 import { LispAtom } from "./sexpression"
+import { start } from 'repl';
 
 enum FormattingStyle {
     Plain = 1,
@@ -10,7 +11,7 @@ enum FormattingStyle {
 }
 
 // (defun C:;|comment|;MYCMD (x) ;|inline comment|;
-//      (list 1 2 3)			;comment-column comment
+//      (list 1 2 3)            ;comment-column comment
 //     ;;current-column comment
 //;;; 0-column comment
 //) ;_ pasted comment 
@@ -66,14 +67,56 @@ class InputStream {
         }
         return null;
     }
+
+    nextString(length: number) : string{
+        if(length <= 0) {
+            console.log("it's meaningless to substring with 0 or negative length\n");
+            return "";
+        }
+
+        let startPos = this.pos;
+        let posAfterString = this.pos + length;
+
+        if(posAfterString > this.len) {
+            posAfterString = this.len;
+        }
+
+        length = posAfterString - startPos;
+
+        let ret = "";
+        for(let i=0; i<length; i++)
+            ret += this.next();
+            
+        return ret;
+    }
+    
+    currentOffset () : number {
+        return this.pos;
+    }
+
+    ignore(charNum: number) {
+        this.pos += charNum;
+        if(this.pos > this.len)
+            this.pos = this.len;
+    }
 }
 
 export class ListReader {
     input: InputStream;
     cachedLists: Array<Sexpression>;
-    constructor(text: string, column: number) {
-        this.input = new InputStream(text, column);
+    document: vscode.TextDocument;
+    startPosInDoc: CursorPosition;
+
+    constructor(text: string, startPos: CursorPosition, curDoc: vscode.TextDocument) {
+        let trimmedStr = text.trimLeft();
+        let lengthOfLeftTrim = text.length - trimmedStr.length;
+
+        this.input = new InputStream(text.trimRight(), startPos.offsetInSelection);
+        this.input.ignore(lengthOfLeftTrim);
+
         this.cachedLists = new Array<Sexpression>();
+        this.document = curDoc;
+        this.startPosInDoc = startPos;
     }
 
     next() { return this.input.next(); };
@@ -96,11 +139,11 @@ export class ListReader {
             case "\u2028":
             case "\u2029":
                 return true;
-		}
-		let linefeed = ch == '\r' && this.peek(1) == '\n';
-		if (linefeed)
-			return true;
-		return false;
+        }
+        let linefeed = ch == '\r' && this.peek(1) == '\n';
+        if (linefeed)
+            return true;
+        return false;
     }
 
     skip_blanks() {
@@ -177,34 +220,12 @@ export class ListReader {
         let sline = this.input.line;
         let scol = this.input.col;
 
-        let res = ";";
-        this.next();
-        let nextch = this.peek();
-        if (nextch == "|") {
-            // read block comment ;|.....|;
-            res += this.read_when((ch) => {
-                switch (ch) {
-                    case "|":
-                        let c = this.peek(1);
-                        if (c == ";")
-                            return false;
-                }
-                return true;
-            });
-            // read |;
-            res += this.next();
-            res += this.next();
-        } else {
-            // read line commented ;...............
-            res += this.read_when((ch) => {
-                switch (ch) {
-                    case "\n":
-                        return false;
-                    default:
-                        return true;
-                }
-            });
-        }
+        let startPoint = new CursorPosition();
+        startPoint.offsetInSelection = this.input.currentOffset();
+        startPoint.offsetInDocument = this.input.currentOffset() + this.startPosInDoc.delta();
+        let commentLength = ListReader.getCommentLength(this.document, this.input.text, startPoint);
+
+        let res = this.input.nextString(commentLength);
 
         let lastList = this.cachedLists[this.cachedLists.length - 1];
         lastList.addAtom(new LispAtom(sline, scol, res));
@@ -264,13 +285,25 @@ export class ListReader {
         }
         return sexpr;
     }
+    
+    static getCommentLength(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): number {
+        let endPos = ListReader.findEndOfComment(document, stringInRange, startPosOffset);
 
-	//startPosOffset: offset of the starting ; of a comment
-	//stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
-	//
-	//return the position right after the ending char of current comment
-	//return null if the end is out of range or missing
-    static skipComment(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): CursorPosition {
+        if(endPos == null) {
+            endPos = new CursorPosition();
+            endPos.offsetInSelection = stringInRange.length;
+            endPos.offsetInDocument = stringInRange.length + startPosOffset.delta();
+        }
+
+        return endPos.offsetInSelection - startPosOffset.offsetInSelection;
+    }
+
+    //startPosOffset: offset of the starting ; of a comment
+    //stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
+    //
+    //return the position right after the ending char of current comment
+    //return null if the end is out of range or missing
+    static findEndOfComment(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): CursorPosition {
         let inRangeStringLength = stringInRange.length;
 
         if (startPosOffset.offsetInSelection >= (inRangeStringLength - 1))//it's the final char in the given range;
@@ -327,55 +360,55 @@ export class ListReader {
         return endPos;//return the next offset in string, not the offset in doc
     }
 
-	//startPosOffset: offset of the starting " of a text string
-	//stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
-	//
-	//return the position right after the ending "
-	//return null if the ending " is out of range or missing
-	static skipStringWithQuotes(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
-	{
-		let inRangeStringLength = stringInRange.length;
-	
-		if(startPosOffset.offsetInSelection >= (inRangeStringLength - 1) )//it's the final char in the given range;
-			return null; 
+    //startPosOffset: offset of the starting " of a text string
+    //stringInRange:  either the text selected in editor, or the entire document as a string if nothing is selected
+    //
+    //return the position right after the ending "
+    //return null if the ending " is out of range or missing
+    static skipStringWithQuotes(document: vscode.TextDocument, stringInRange: string, startPosOffset:CursorPosition) : CursorPosition
+    {
+        let inRangeStringLength = stringInRange.length;
+    
+        if(startPosOffset.offsetInSelection >= (inRangeStringLength - 1) )//it's the final char in the given range;
+            return null; 
 
-		let posAfterComment = -1;
-	
-		for(let curPos = startPosOffset.offsetInSelection + 1; curPos < inRangeStringLength; curPos++)
-		{
-			let char = stringInRange.charAt(curPos);
-	
-			if(char == '"')
-			{
-				posAfterComment = curPos + 1;
-				break;
-			}
-			
-			if(char != '\\')
-				continue;
-			
-			//it's escaping the next char
-			
-			if(curPos >= (inRangeStringLength - 1))
-				break;//there's no next char in given range; the given string ends here
+        let posAfterComment = -1;
+    
+        for(let curPos = startPosOffset.offsetInSelection + 1; curPos < inRangeStringLength; curPos++)
+        {
+            let char = stringInRange.charAt(curPos);
+    
+            if(char == '"')
+            {
+                posAfterComment = curPos + 1;
+                break;
+            }
+            
+            if(char != '\\')
+                continue;
+            
+            //it's escaping the next char
+            
+            if(curPos >= (inRangeStringLength - 1))
+                break;//there's no next char in given range; the given string ends here
 
-			//well, it's the escaping char, but it's also the last char before EOL
-			if((stringInRange.charAt(curPos + 1) == '\r') ||
-			   (stringInRange.charAt(curPos + 1) == '\n'))
-				continue; //simply igore this '\' which escapes nothing
-	
-			curPos++;//escape the escaped char
-		}
-	
-		if(posAfterComment == -1)
-			return null;
+            //well, it's the escaping char, but it's also the last char before EOL
+            if((stringInRange.charAt(curPos + 1) == '\r') ||
+               (stringInRange.charAt(curPos + 1) == '\n'))
+                continue; //simply igore this '\' which escapes nothing
+    
+            curPos++;//escape the escaped char
+        }
+    
+        if(posAfterComment == -1)
+            return null;
 
-		let nextPos = new CursorPosition();
-		nextPos.offsetInSelection = posAfterComment;
-		nextPos.offsetInDocument = posAfterComment + startPosOffset.delta();
+        let nextPos = new CursorPosition();
+        nextPos.offsetInSelection = posAfterComment;
+        nextPos.offsetInDocument = posAfterComment + startPosOffset.delta();
 
-		return nextPos;
-	}
-	
+        return nextPos;
+    }
+    
 }
 

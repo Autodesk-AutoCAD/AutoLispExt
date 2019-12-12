@@ -18,7 +18,7 @@ export class LispFormatter {
             return null;
         }
 
-        let offsetAfterComment = ListReader.skipComment(document, docAsString, startPosOffset);
+        let offsetAfterComment = ListReader.findEndOfComment(document, docAsString, startPosOffset);
         
         if(offsetAfterComment == null) {
             offsetAfterComment = new CursorPosition();
@@ -142,8 +142,12 @@ export class LispFormatter {
                     // this is the toplevel scope s-expression
                     let leftparen = leftParensStack.pop();
                     let sexpr = textString.substring(i + 1, leftparen.location);
-                    sexpr.trim();
-                    let reader = new ListReader(sexpr, leftparen.location);
+
+                    let exprStartPos = new CursorPosition();
+                    exprStartPos.offsetInSelection = leftparen.location;
+                    exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
+
+                    let reader = new ListReader(sexpr, exprStartPos, editor.document);
                     let lispLists = reader.read_list();
                     formattedstring += lispLists.formatting();
                     formattedstring += "\n";
@@ -160,8 +164,12 @@ export class LispFormatter {
 
         if (leftParensStack.length > 0) {
             let sexpr = textString.substring(leftParensStack[0].location, textString.length);
-            sexpr.trim();
-            let reader = new ListReader(sexpr, leftParensStack[0].location);
+
+            let exprStartPos = new CursorPosition();
+            exprStartPos.offsetInSelection = leftParensStack[0].location;
+            exprStartPos.offsetInDocument = leftParensStack[0].location + selectionStartOffset;
+
+            let reader = new ListReader(sexpr, exprStartPos, editor.document);
             let lispLists = reader.read_list();
             formattedstring += lispLists.formatting();
         }
