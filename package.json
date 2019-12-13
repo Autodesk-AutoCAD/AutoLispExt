@@ -4,13 +4,11 @@
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
 	"version": "1.6.20",
 	"license": "SEE LICENSE IN LICENSE.md",
-	"bugs": "https://knowledge.autodesk.com/contact-support",
+	"bugs": {
+		"url": "https://knowledge.autodesk.com/contact-support"
+	},
 	"engines": {
 		"vscode": "^1.31.1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://git.autodesk.com/AutoCAD/AutoLispExt/"
 	},
 	"publisher": "Autodesk",
 	"categories": [
@@ -19,9 +17,6 @@
 	],
 	"icon": "images/Adsk_white.png",
 	"main": "./extension/out/extension",
-	"files": [
-		"autolispext.vsix"
-	],
 	"activationEvents": [
 		"onDebug",
 		"onUri",
@@ -45,17 +40,6 @@
 					"type": "number",
 					"default": 100,
 					"description": "Controls the maximum number of problems produced by the server."
-				},
-				"lispLanguageServer.trace.server": {
-					"scope": "window",
-					"type": "string",
-					"enum": [
-						"off",
-						"messages",
-						"verbose"
-					],
-					"default": "off",
-					"description": "Traces the communication between VS Code and the language server."
 				}
 			}
 		},
