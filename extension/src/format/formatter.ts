@@ -11,25 +11,25 @@ class LeftParentItem {
 
 
 export class LispFormatter {
-    private static readComments(document: vscode.TextDocument, docAsString: string, startPosOffset:CursorPosition): string {
+    private static readComments(document: vscode.TextDocument, docAsString: string, startPosOffset: CursorPosition): string {
 
-        if(docAsString.length == 0) {
+        if (docAsString.length == 0) {
             console.log("scanning an empty string is meaningless\n")
             return null;
         }
 
         let offsetAfterComment = ListReader.findEndOfComment(document, docAsString, startPosOffset);
-        
-        if(offsetAfterComment == null) {
+
+        if (offsetAfterComment == null) {
             offsetAfterComment = new CursorPosition();
             offsetAfterComment.offsetInSelection = docAsString.length;
             offsetAfterComment.offsetInDocument = docAsString.length + startPosOffset.delta();
         }
-        else if(offsetAfterComment.offsetInSelection > docAsString.length) { //out of the given range 
+        else if (offsetAfterComment.offsetInSelection > docAsString.length) { //out of the given range 
             offsetAfterComment.offsetInSelection = docAsString.length;
             offsetAfterComment.offsetInDocument = docAsString.length + startPosOffset.delta();
         }
-        else if(offsetAfterComment.offsetInSelection <= startPosOffset.offsetInSelection) {
+        else if (offsetAfterComment.offsetInSelection <= startPosOffset.offsetInSelection) {
             //it shouldn't run into this code path;
             console.log("failed to locate the end of a comment\n");
             offsetAfterComment.offsetInSelection = docAsString.length;
@@ -38,26 +38,42 @@ export class LispFormatter {
 
         let startPos2d = document.positionAt(startPosOffset.offsetInDocument);
         let endPos2d = document.positionAt(offsetAfterComment.offsetInDocument);
- 
+
         return document.getText(new vscode.Range(startPos2d, endPos2d));
     }
 
-    static endOfLineEnum2String(eolEnum: vscode.EndOfLine ) : string {
-        switch(eolEnum) {
+    static endOfLineEnum2String(eolEnum: vscode.EndOfLine): string {
+        switch (eolEnum) {
             case vscode.EndOfLine.LF:
                 return "\n";
 
             case vscode.EndOfLine.CRLF:
                 return "\r\n";
-            
+
             default:
                 console.log("Unexpected eol\n");
                 return "\r\n";
         }
     }
 
+    static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
+        try {
+            let reader = new ListReader(sexpr, exprStartPos, editor.document);
+            let lispLists = reader.tokenize();
+            let formatstr = lispLists.formatting();
+            if (sexpr.length != 0 && formatstr.length == 0) {
+                vscode.window.showErrorMessage("AutoLisp formatter can not format these codes.");
+                return sexpr;
+            }
+            return formatstr;
+        } catch (e) {
+            vscode.window.showErrorMessage("AutoLisp formatter can not format these codes.");
+            return sexpr;
+        }
+    }
+
     public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
-        let textString:string = "";
+        let textString: string = "";
         let selectionStartOffset = 0;
 
         if (!ifFullFormat) {
@@ -75,41 +91,36 @@ export class LispFormatter {
 
         let leftParensStack = [];
 
-        for (let i = 0; i < textString.length; /*i++ is commented out on purpose, as the increment is different case by case*/)
-        {
+        for (let i = 0; i < textString.length; /*i++ is commented out on purpose, as the increment is different case by case*/) {
             let ch = textString.charAt(i);
 
-            if (ch == ";")
-            {
+            if (ch == ";") {
                 let startPos = new CursorPosition()
                 startPos.offsetInSelection = i;
-                startPos.offsetInDocument = i+ selectionStartOffset;
+                startPos.offsetInDocument = i + selectionStartOffset;
 
                 let comments = LispFormatter.readComments(editor.document, textString, startPos);
 
-                if(leftParensStack.length == 0)
+                if (leftParensStack.length == 0)
                     formattedstring += comments;
 
                 i += comments.length;
                 continue;
             }
 
-            if(ch == '\"')
-            {
+            if (ch == '\"') {
                 let startPos = new CursorPosition()
                 startPos.offsetInSelection = i;
-                startPos.offsetInDocument = i+ selectionStartOffset;
+                startPos.offsetInDocument = i + selectionStartOffset;
 
                 let endOfString = ListReader.findEndOfDoubleQuoteString(editor.document, textString, startPos);
 
                 let startPos2d = editor.document.positionAt(startPos.offsetInDocument);
                 let endPos2d = null;
-                if(endOfString != null)
-                {
+                if (endOfString != null) {
                     endPos2d = editor.document.positionAt(endOfString.offsetInDocument);
                 }
-                else
-                {
+                else {
                     endPos2d = selectionStartOffset + textString.length;
                 }
 
@@ -117,28 +128,24 @@ export class LispFormatter {
                 //set the index of next iteration
                 i += stringExpr.length;
 
-                if(stringExpr.length == 0)
+                if (stringExpr.length == 0)
                     console.log("failed to read string on top level\n");
-                
-                if(leftParensStack.length == 0)
+
+                if (leftParensStack.length == 0)
                     formattedstring += stringExpr;
 
                 continue;
             }
 
-            if (ch == "(")
-            {
+            if (ch == "(") {
                 leftParensStack.push(new LeftParentItem(i));
             }
-            else if (ch == ")")
-            {
-                if (leftParensStack.length == 0)
-                {
+            else if (ch == ")") {
+                if (leftParensStack.length == 0) {
                     // this is unbalnace paren
                     vscode.window.showErrorMessage("Unbalanced token found.");
                 }
-                else if (leftParensStack.length == 1)
-                {
+                else if (leftParensStack.length == 1) {
                     // this is the toplevel scope s-expression
                     let leftparen = leftParensStack.pop();
                     let sexpr = textString.substring(i + 1, leftparen.location);
@@ -147,13 +154,10 @@ export class LispFormatter {
                     exprStartPos.offsetInSelection = leftparen.location;
                     exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
 
-                    let reader = new ListReader(sexpr, exprStartPos, editor.document);
-                    let lispLists = reader.read_list();
-                    formattedstring += lispLists.formatting();
+                    formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
                     formattedstring += "\n";
                 }
-                else
-                {
+                else {
                     leftParensStack.pop();
                 }
             }
@@ -169,9 +173,7 @@ export class LispFormatter {
             exprStartPos.offsetInSelection = leftParensStack[0].location;
             exprStartPos.offsetInDocument = leftParensStack[0].location + selectionStartOffset;
 
-            let reader = new ListReader(sexpr, exprStartPos, editor.document);
-            let lispLists = reader.read_list();
-            formattedstring += lispLists.formatting();
+            formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
         }
 
         return formattedstring;
