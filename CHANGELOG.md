@@ -1,3 +1,6 @@
+## [1.0.0] - 2019-12-20
+Initial release to VSCode marketplace
+
 ## [0.1.4] – 2019-09-18
 Initial preview release for Mac OS.
 

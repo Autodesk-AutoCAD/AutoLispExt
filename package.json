@@ -18,6 +18,9 @@
 	],
 	"icon": "images/Adsk_white.png",
 	"main": "./extension/out/extension",
+	"files": [
+		"autolispext.vsix"
+	],
 	"activationEvents": [
 		"onDebug",
 		"onUri",
