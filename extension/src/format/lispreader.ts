@@ -49,10 +49,10 @@ class InputStream {
     col: number;
     text: string;
     len: number;
-    constructor(text: string, column: number) {
+    constructor(text: string, pos2d: vscode.Position) {
         this.pos = 0;
-        this.line = 0;
-        this.col = column;
+        this.line = pos2d.line;
+        this.col = pos2d.character;
         this.text = text;
         this.len = text.length;
     }
@@ -124,7 +124,8 @@ export class ListReader {
         let trimmedStr = text.trimLeft();
         let lengthOfLeftTrim = text.length - trimmedStr.length;
 
-        this.input = new InputStream(text.trimRight(), startPos.offsetInSelection);
+        let startPos2D = curDoc.positionAt(startPos.offsetInDocument);
+        this.input = new InputStream(text.trimRight(), startPos2D);
         this.input.ignore(lengthOfLeftTrim);
 
         this.cachedLists = new Array<Sexpression>();

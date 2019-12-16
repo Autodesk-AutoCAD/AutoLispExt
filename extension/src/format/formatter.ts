@@ -56,7 +56,11 @@ export class LispFormatter {
         }
     }
 
-    static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
+public static getEOL(document: vscode.TextDocument): string {
+    return LispFormatter.endOfLineEnum2String(document.eol);
+}
+
+static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
         try {
             let reader = new ListReader(sexpr, exprStartPos, editor.document);
             let lispLists = reader.tokenize();
@@ -74,7 +78,7 @@ export class LispFormatter {
 
     public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
         let textString: string = "";
-        let selectionStartOffset = 0;
+        let selectionStartOffset = 0;//the position in the whole doc of the first char of the text selected to format
 
         if (!ifFullFormat) {
             textString = editor.document.getText(editor.selection);
@@ -151,11 +155,11 @@ export class LispFormatter {
                     let sexpr = textString.substring(i + 1, leftparen.location);
 
                     let exprStartPos = new CursorPosition();
-                    exprStartPos.offsetInSelection = leftparen.location;
+                    exprStartPos.offsetInSelection = 0;
                     exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
 
                     formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
-                    formattedstring += "\n";
+                    formattedstring += LispFormatter.getEOL(editor.document);
                 }
                 else {
                     leftParensStack.pop();
