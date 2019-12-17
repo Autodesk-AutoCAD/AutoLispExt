@@ -17,7 +17,7 @@ import * as vscode from 'vscode';
 
 import { OnTypeFormattingEditProvider, TextDocument, Position, FormattingOptions, CancellationToken, TextEdit } from 'vscode';
 import * as format from './lispreader';
-import { LispAtom } from './sexpression';
+import { LispAtom, Sexpression } from './sexpression';
 
 class ParenExprInfo
 {
@@ -31,15 +31,19 @@ class ParenExprInfo
     endPos: format.CursorPosition;
 }
 
-function getOperator(document:vscode.TextDocument, exprInfo:ParenExprInfo): LispAtom
+function parseSourceCode(document:vscode.TextDocument, exprInfo:ParenExprInfo): Sexpression
 {
     let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
     let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
 
     let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
     let reader = new format.ListReader(sexpr, exprInfo.startPos, document);
-    let lispLists = reader.tokenize();
 
+    return reader.tokenize();
+}
+
+function findOperator(lispLists:Sexpression): LispAtom
+{
     if((lispLists == null) || (lispLists.atoms == null) || (lispLists.atoms.length == 0))
         return null;
 
@@ -59,15 +63,65 @@ function getOperator(document:vscode.TextDocument, exprInfo:ParenExprInfo): Lisp
         break;
     }
 
-    if(operator == null)
-        return null;
-
     return operator;
 }
 
-
-function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo): number 
+function getOperator(document:vscode.TextDocument, exprInfo:ParenExprInfo): LispAtom
 {
+    let lispLists = parseSourceCode(document, exprInfo);
+
+    return findOperator(lispLists);
+}
+
+function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
+{
+    let parentLists = parseSourceCode(document, parentParenExpr);
+
+    let parentOperator = findOperator(parentLists);
+
+    if(parentOperator == null) return -1;
+
+    if(parentOperator.isDefun() == false) return -1;
+
+    //find the starting ( of argument list
+    for(let i = 0; i < parentLists.atoms.length; i++)
+    {
+        if((parentLists.atoms[i] instanceof Sexpression) == false)
+            continue;
+
+        let subLists = <Sexpression>parentLists.atoms[i];
+        for(let j = 0; j < subLists.atoms.length; j++)
+        {
+            if(subLists.atoms[j].isLeftParen() == false)
+                continue;
+
+            //found it
+            let pos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
+            if(pos2d.line != parentLists.atoms[i].line)
+                return -1;
+            
+            if(pos2d.character != parentLists.atoms[i].column)
+                return -1;
+
+            //now the exprInfo represents the range of ([argument list]) of defun
+            return parentLists.atoms[i].column + 1;//horizontally right after the ( of argument list
+        }        
+    }
+
+    //ok it's the direct children of defun
+    //return parentOperator.column + parentOperator.length() + 1;
+    return -1; //to deal it with the default code path
+}
+
+function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
+{
+    if(parentParenExpr != null)
+    {
+        let num = getNumber_Defun_ArgList(document, exprInfo, parentParenExpr);
+        if(num >= 0)
+            return num;
+    }
+
     let operator = getOperator(document, exprInfo);
 
     if(operator == null)
@@ -91,7 +145,11 @@ function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInf
     if((exprInfoArray == null) || (exprInfoArray.length == 0))
         return ""; //no identation for top level text
 
-    let num = getWhiteSpaceNumber(document, exprInfoArray[0]);
+    let parentParenExpr: ParenExprInfo = null;
+    if(exprInfoArray.length > 1)
+        parentParenExpr = exprInfoArray[1];
+
+    let num = getWhiteSpaceNumber(document, exprInfoArray[0], parentParenExpr);
     if(num == -1)
     {
         console.log("failed to parse paren expression.\n");

@@ -48,6 +48,12 @@ export class LispAtom {
             return true;
         return false;
     }
+    isDefun(): boolean {
+        if((this.symbol != null) && (this.symbol.toLowerCase() == "defun"))
+            return true;
+
+        return false;
+    }
 }
 
 export class Sexpression extends LispAtom {
