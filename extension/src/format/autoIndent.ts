@@ -17,6 +17,7 @@ import * as vscode from 'vscode';
 
 import { OnTypeFormattingEditProvider, TextDocument, Position, FormattingOptions, CancellationToken, TextEdit } from 'vscode';
 import * as format from './lispreader';
+import { LispAtom } from './sexpression';
 
 class ParenExprInfo
 {
@@ -28,6 +29,80 @@ class ParenExprInfo
 
     startPos: format.CursorPosition;
     endPos: format.CursorPosition;
+}
+
+function getOperator(document:vscode.TextDocument, exprInfo:ParenExprInfo): LispAtom
+{
+    let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
+    let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
+
+    let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
+    let reader = new format.ListReader(sexpr, exprInfo.startPos, document);
+    let lispLists = reader.tokenize();
+
+    if((lispLists == null) || (lispLists.atoms == null) || (lispLists.atoms.length == 0))
+        return null;
+
+    if(lispLists.atoms[0].isLeftParen() == false)
+    {
+        console.log("ListReader doesn't provide expected result.\n")
+        return null;
+    }
+
+    let operator: LispAtom = null;
+    for(let i=1; i<lispLists.atoms.length; i++)
+    {
+        if(lispLists.atoms[i].isComment())
+            continue; //ignore comment
+        
+        operator = lispLists.atoms[i];
+        break;
+    }
+
+    if(operator == null)
+        return null;
+
+    return operator;
+}
+
+
+function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo): number 
+{
+    let operator = getOperator(document, exprInfo);
+
+    if(operator == null)
+        return -1;
+
+    if(operator.symbol == null)
+        return -1;
+
+    //the default case: align to (right side of first item + 1 white space)
+    //e.g.:
+    //(theOperator xxx
+    //             //auto indent pos)
+    //(theOperator     xxx
+    //             //auto indent pos)
+
+    return operator.column + operator.symbol.length + 1;
+}
+
+function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[]): string 
+{
+    if((exprInfoArray == null) || (exprInfoArray.length == 0))
+        return ""; //no identation for top level text
+
+    let num = getWhiteSpaceNumber(document, exprInfoArray[0]);
+    if(num == -1)
+    {
+        console.log("failed to parse paren expression.\n");
+        return "  ";//two white spaces on error
+    }
+
+    let ret = "";
+    for(let i=0; i<num; i++)
+        ret += " ";
+
+    return ret;
 }
 
 export
@@ -52,8 +127,8 @@ function subscribeOnEnterEvent()
                 let trimmedLine = lineText.trimLeft();
                 let unexpectedIndentLength = lineText.length - trimmedLine.length;
 
-                //TODO: step 1.2 work out the real indentation and replace following hard code
-                edits.push(TextEdit.insert(position2d, ';|the indent|;'));
+                let indentation = getIndentation(document, containerExprs);
+                edits.push(TextEdit.insert(position2d, indentation));
 
                 //step 1.3, remove possibly inserted indentation from unexpected handlers that run before this handler
                 if(unexpectedIndentLength > 0)
@@ -226,7 +301,7 @@ function makeTrimEndInfo(document: vscode.TextDocument, position2d:Position) : T
         let start = new Position(oldLine, oldColumnIndex + 1);//start with the empty char
         let end = new Position(oldLine, lineWidth); //end pos has to be the real ending index + 1 to compose the following range
         let range = new vscode.Range(start, end);
-        return TextEdit.replace(range, ";|to trim|;");
+        return TextEdit.delete(range);
     }
 
     return null;
