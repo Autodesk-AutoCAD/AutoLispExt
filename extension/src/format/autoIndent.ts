@@ -38,6 +38,7 @@ class BasicSemantics
     operands: Array<LispAtom | Sexpression> = new Array<LispAtom | Sexpression>();
 
     operatorLowerCase: string = null;
+    leftParenPos: vscode.Position = null;
 
     static parse(exprInfo:ParenExprInfo, document:vscode.TextDocument): BasicSemantics
     {
@@ -85,6 +86,7 @@ class BasicSemantics
         let ret = new BasicSemantics();
         ret.operator = operator;
         ret.operatorLowerCase = operator.symbol.toLowerCase();
+        ret.leftParenPos = startPos2d;
 
         for(; nextIndex <lispLists.atoms.length; nextIndex++)
         {
@@ -109,7 +111,9 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExp
     let parentOperator = parentSemantics.operator;
     if(parentOperator == null) return -1;
 
-    if(parentSemantics.operatorLowerCase != "defun") return -1;
+    if((parentSemantics.operatorLowerCase != "defun") &&
+       (parentSemantics.operatorLowerCase != "defun-q") )
+        return -1;
 
     let directChildren = parentSemantics.operands;
 
@@ -138,7 +142,7 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExp
         }        
     }
 
-    return -1; //to deal it with the default code path
+    return -1;
 }
 
 //check if cursorPos2d is after [line, column]
@@ -250,13 +254,14 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
 
     let semantics = BasicSemantics.parse(exprInfo, document);
 
-    let operator = semantics.operator;
+    let operator:LispAtom = (semantics != null) ? semantics.operator : null;
 
-    if(operator == null)
-        return -1;
-
-    if(operator.symbol == null)
-        return -1;
+    if((operator == null) || (operator.symbol == null))
+    {
+        //there's no operator at all; align right after the beginning (
+        let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
+        return startPos2d.character + 1;
+    }
 
     let num:number = -1;
     switch(semantics.operatorLowerCase)
@@ -265,6 +270,11 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
             num = getNumber_SetQ(cursorPos2d, semantics);
             if(num >= 0)
                 return num;
+            break;
+
+        case "defun":
+        case "defun-q":
+            num = semantics.leftParenPos.character + 2;
             break;
         
         default:
@@ -281,7 +291,7 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     //(theOperator     xxx
     //             //auto indent pos)
 
-    return operator.column + 2;
+    return semantics.leftParenPos.character + 2;
 }
 
 function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[], cursorPos2d: Position): string 
