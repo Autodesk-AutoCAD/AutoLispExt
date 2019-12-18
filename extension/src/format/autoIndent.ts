@@ -178,7 +178,19 @@ function isPosBetween(cursorPos2d: Position, line1:number, column1:number, line2
     return true;
 }
 
-function getNumber_SetQ(document:vscode.TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
+function getNumber_AlignWith1stOperand(cursorPos2d: Position, semantics:BasicSemantics): number 
+{
+    if(semantics.operands.length == 0)
+        return -1; //to deal with default logic
+    
+    //if it's after the first operand, align with it
+    if(isPosAfter(cursorPos2d, semantics.operands[0].line, semantics.operands[0].column))
+        return semantics.operands[0].column;
+
+    return -1;
+}
+
+function getNumber_SetQ(cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     let operandNumBeforePos = -1;
 
@@ -206,9 +218,11 @@ function getNumber_SetQ(document:vscode.TextDocument, cursorPos2d: Position, sem
 
         if(isPosAfter(cursorPos2d, lastOperand.line, lastOperand.column))
             operandNumBeforePos = semantics.operands.length;
-        else
-            operandNumBeforePos = 0;
     }
+
+    if(operandNumBeforePos == -1)
+        return -1;
+
 
     let firstOperandStartColumn = semantics.operands[0].column;
 
@@ -244,12 +258,20 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     if(operator.symbol == null)
         return -1;
 
-    if(semantics.operatorLowerCase == "setq")
+    let num:number = -1;
+    switch(semantics.operatorLowerCase)
     {
-        let num = getNumber_SetQ(document, cursorPos2d, semantics);
-
-        if(num >= 0)
-            return num;
+        case "setq":
+            num = getNumber_SetQ(cursorPos2d, semantics);
+            if(num >= 0)
+                return num;
+            break;
+        
+        default:
+            num = getNumber_AlignWith1stOperand(cursorPos2d, semantics);
+            if(num >= 0)
+                return num;
+            break;
     }
 
     //the default case: align to (right side of first item + 1 white space)
@@ -259,7 +281,7 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     //(theOperator     xxx
     //             //auto indent pos)
 
-    return operator.column + operator.symbol.length + 1;
+    return operator.column + 2;
 }
 
 function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[], cursorPos2d: Position): string 
