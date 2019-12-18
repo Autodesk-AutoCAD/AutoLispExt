@@ -31,65 +31,87 @@ class ParenExprInfo
     endPos: format.CursorPosition;
 }
 
-function parseSourceCode(document:vscode.TextDocument, exprInfo:ParenExprInfo): Sexpression
+class BasicSemantics
 {
-    let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
-    let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
+    operator: LispAtom = null;
+    directChildren: Array<LispAtom | Sexpression> = new Array<LispAtom | Sexpression>();
 
-    let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
-    let reader = new format.ListReader(sexpr, exprInfo.startPos, document);
+    operatorLowerCase: string = null;
 
-    return reader.tokenize();
-}
-
-function findOperator(lispLists:Sexpression): LispAtom
-{
-    if((lispLists == null) || (lispLists.atoms == null) || (lispLists.atoms.length == 0))
-        return null;
-
-    if(lispLists.atoms[0].isLeftParen() == false)
+    static parse(exprInfo:ParenExprInfo, document:vscode.TextDocument): BasicSemantics
     {
-        console.log("ListReader doesn't provide expected result.\n")
-        return null;
-    }
+        //parse plain text
+        let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
+        let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
+    
+        let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
+        let reader = new format.ListReader(sexpr, exprInfo.startPos, document);
+    
+        let lispLists = reader.tokenize();
 
-    let operator: LispAtom = null;
-    for(let i=1; i<lispLists.atoms.length; i++)
-    {
-        if(lispLists.atoms[i].isComment())
-            continue; //ignore comment
-        
-        operator = lispLists.atoms[i];
-        break;
-    }
+        if((lispLists == null) || (lispLists.atoms == null) || (lispLists.atoms.length == 0))
+            return null;
 
-    return operator;
-}
+        if(lispLists.atoms[0].isLeftParen() == false)
+        {
+            console.log("ListReader didn't provide expected result.\n")
+            return null;
+        }
 
-function getOperator(document:vscode.TextDocument, exprInfo:ParenExprInfo): LispAtom
-{
-    let lispLists = parseSourceCode(document, exprInfo);
+        //find operator
+        let operator: LispAtom = null;
+        let nextIndex = 0;
+        for(let i=1; i<lispLists.atoms.length; i++)
+        {
+            if(lispLists.atoms[i].isComment())
+                continue; //ignore comment
 
-    return findOperator(lispLists);
+            if(lispLists.atoms[i].isRightParen())
+                break; //expression closed
+            
+            operator = lispLists.atoms[i];
+            nextIndex = i + 1;
+            break;
+        }
+
+        if((operator == null) || (operator.symbol == null) || (operator.symbol == ""))
+            return null;
+
+        let ret = new BasicSemantics();
+        ret.operator = operator;
+        ret.operatorLowerCase = operator.symbol.toLowerCase();
+
+        for(; nextIndex <lispLists.atoms.length; nextIndex++)
+        {
+            if(lispLists.atoms[nextIndex].isRightParen())//expression closed
+                break;
+            
+            ret.directChildren.push(lispLists.atoms[nextIndex]);
+        }
+
+        return ret;
+    }    
 }
 
 function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
 {
-    let parentLists = parseSourceCode(document, parentParenExpr);
+    let parentSemantics = BasicSemantics.parse(parentParenExpr, document);
+    if(parentSemantics == null) return -1;
 
-    let parentOperator = findOperator(parentLists);
-
+    let parentOperator = parentSemantics.operator;
     if(parentOperator == null) return -1;
 
-    if(parentOperator.isDefun() == false) return -1;
+    if(parentSemantics.operatorLowerCase != "defun") return -1;
+
+    let directChildren = parentSemantics.directChildren;
 
     //find the starting ( of argument list
-    for(let i = 0; i < parentLists.atoms.length; i++)
+    for(let i = 0; i < directChildren.length; i++)
     {
-        if((parentLists.atoms[i] instanceof Sexpression) == false)
+        if((directChildren[i] instanceof Sexpression) == false)
             continue;
 
-        let subLists = <Sexpression>parentLists.atoms[i];
+        let subLists = <Sexpression>directChildren[i];
         for(let j = 0; j < subLists.atoms.length; j++)
         {
             if(subLists.atoms[j].isLeftParen() == false)
@@ -97,21 +119,20 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExp
 
             //found it
             let pos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
-            if(pos2d.line != parentLists.atoms[i].line)
+            if(pos2d.line != directChildren[i].line)
                 return -1;
             
-            if(pos2d.character != parentLists.atoms[i].column)
+            if(pos2d.character != directChildren[i].column)
                 return -1;
 
             //now the exprInfo represents the range of ([argument list]) of defun
-            return parentLists.atoms[i].column + 1;//horizontally right after the ( of argument list
+            return directChildren[i].column + 1;//horizontally right after the ( of argument list
         }        
     }
 
-    //ok it's the direct children of defun
-    //return parentOperator.column + parentOperator.length() + 1;
     return -1; //to deal it with the default code path
 }
+
 
 function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
 {
@@ -122,7 +143,9 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
             return num;
     }
 
-    let operator = getOperator(document, exprInfo);
+    let semantics = BasicSemantics.parse(exprInfo, document);
+
+    let operator = semantics.operator;
 
     if(operator == null)
         return -1;
