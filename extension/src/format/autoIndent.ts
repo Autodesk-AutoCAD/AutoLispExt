@@ -18,6 +18,7 @@ import * as vscode from 'vscode';
 import { OnTypeFormattingEditProvider, TextDocument, Position, FormattingOptions, CancellationToken, TextEdit } from 'vscode';
 import * as format from './lispreader';
 import { LispAtom, Sexpression } from './sexpression';
+import { CursorPosition } from './lispreader';
 
 class ParenExprInfo
 {
@@ -34,7 +35,7 @@ class ParenExprInfo
 class BasicSemantics
 {
     operator: LispAtom = null;
-    directChildren: Array<LispAtom | Sexpression> = new Array<LispAtom | Sexpression>();
+    operands: Array<LispAtom | Sexpression> = new Array<LispAtom | Sexpression>();
 
     operatorLowerCase: string = null;
 
@@ -45,7 +46,11 @@ class BasicSemantics
         let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
     
         let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
-        let reader = new format.ListReader(sexpr, exprInfo.startPos, document);
+
+        let readerStartPos = new CursorPosition();
+        readerStartPos.offsetInSelection = 0; //the start position in sexpr is 0
+        readerStartPos.offsetInDocument = exprInfo.startPos.offsetInDocument; //the start position in doc
+        let reader = new format.ListReader(sexpr, readerStartPos, document);
     
         let lispLists = reader.tokenize();
 
@@ -86,7 +91,10 @@ class BasicSemantics
             if(lispLists.atoms[nextIndex].isRightParen())//expression closed
                 break;
             
-            ret.directChildren.push(lispLists.atoms[nextIndex]);
+            if(lispLists.atoms[nextIndex].isComment())
+                continue;
+            
+            ret.operands.push(lispLists.atoms[nextIndex]);
         }
 
         return ret;
@@ -103,7 +111,7 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExp
 
     if(parentSemantics.operatorLowerCase != "defun") return -1;
 
-    let directChildren = parentSemantics.directChildren;
+    let directChildren = parentSemantics.operands;
 
     //find the starting ( of argument list
     for(let i = 0; i < directChildren.length; i++)
@@ -133,8 +141,91 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExp
     return -1; //to deal it with the default code path
 }
 
+//check if cursorPos2d is after [line, column]
+function isPosAfter(cursorPos2d: Position, line:number, column:number): boolean
+{
+    if(cursorPos2d.line < line)
+        return false;
+    
+    if(cursorPos2d.line == line)
+    {
+        if(cursorPos2d.character <= column)
+            return false;
+    }
 
-function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
+    return true;
+}
+
+//check if cursorPos2d is between [line1, column1] and [line2, column2]
+function isPosBetween(cursorPos2d: Position, line1:number, column1:number, line2:number, column2:number): boolean
+{
+    if(isPosAfter(cursorPos2d, line1, column1) == false)
+        return false;
+
+    //now cursorPos2d is after [line1, column1]
+
+    if(cursorPos2d.line > line2)
+        return false;
+
+    if(cursorPos2d.line == line2)
+    {
+        if(cursorPos2d.character > column2)
+            return false;
+    }
+
+    //now cursorPos2d is before or at [line2, column2]
+    //if cursofPos2d is at [line2,column2], when typing sth. new, it's still between the left and right atoms
+    return true;
+}
+
+function getNumber_SetQ(document:vscode.TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
+{
+    let operandNumBeforePos = -1;
+
+    if(semantics.operands.length == 0)
+        return -1; //to deal with default logic
+
+    //get the number of operands before current position to determine it should be a variable or value if I
+    //add a new atom here
+    for(let i=0; i<semantics.operands.length-1; i++)
+    {
+        //check if it's between the beginnings of operand[i] and operand[i+1]
+        let operand1 = semantics.operands[i];
+        let operand2 = semantics.operands[i+1];
+        if(isPosBetween(cursorPos2d, operand1.line, operand1.column, operand2.line, operand2.column) == false)
+            continue;
+        
+        operandNumBeforePos = i+1;
+        break;
+    }
+
+    if(operandNumBeforePos == -1)
+    {
+        //check if it's after the beginning of last operand
+        let lastOperand = semantics.operands[semantics.operands.length-1];
+
+        if(isPosAfter(cursorPos2d, lastOperand.line, lastOperand.column))
+            operandNumBeforePos = semantics.operands.length;
+        else
+            operandNumBeforePos = 0;
+    }
+
+    let firstOperandStartColumn = semantics.operands[0].column;
+
+    if((operandNumBeforePos%2) == 0)
+    {
+        //it's a variable
+        return firstOperandStartColumn;
+    }
+    else
+    {
+        //it's a value
+        return firstOperandStartColumn + 1;
+    }
+}
+
+function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo,
+    cursorPos2d: Position): number 
 {
     if(parentParenExpr != null)
     {
@@ -153,6 +244,14 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     if(operator.symbol == null)
         return -1;
 
+    if(semantics.operatorLowerCase == "setq")
+    {
+        let num = getNumber_SetQ(document, cursorPos2d, semantics);
+
+        if(num >= 0)
+            return num;
+    }
+
     //the default case: align to (right side of first item + 1 white space)
     //e.g.:
     //(theOperator xxx
@@ -163,7 +262,7 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     return operator.column + operator.symbol.length + 1;
 }
 
-function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[]): string 
+function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[], cursorPos2d: Position): string 
 {
     if((exprInfoArray == null) || (exprInfoArray.length == 0))
         return ""; //no identation for top level text
@@ -172,7 +271,7 @@ function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInf
     if(exprInfoArray.length > 1)
         parentParenExpr = exprInfoArray[1];
 
-    let num = getWhiteSpaceNumber(document, exprInfoArray[0], parentParenExpr);
+    let num = getWhiteSpaceNumber(document, exprInfoArray[0], parentParenExpr, cursorPos2d);
     if(num == -1)
     {
         console.log("failed to parse paren expression.\n");
@@ -208,7 +307,7 @@ function subscribeOnEnterEvent()
                 let trimmedLine = lineText.trimLeft();
                 let unexpectedIndentLength = lineText.length - trimmedLine.length;
 
-                let indentation = getIndentation(document, containerExprs);
+                let indentation = getIndentation(document, containerExprs, position2d);
                 edits.push(TextEdit.insert(position2d, indentation));
 
                 //step 1.3, remove possibly inserted indentation from unexpected handlers that run before this handler

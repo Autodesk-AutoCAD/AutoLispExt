@@ -74,7 +74,8 @@ class InputStream {
                 ++this.line;
                 this.col = 0;
             } else {
-                ++this.col;
+                if(ch != '\r')
+                    ++this.col;
             }
             return ch;
         }

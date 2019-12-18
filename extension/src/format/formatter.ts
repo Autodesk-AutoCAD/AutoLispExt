@@ -174,7 +174,7 @@ static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: v
             let sexpr = textString.substring(leftParensStack[0].location, textString.length);
 
             let exprStartPos = new CursorPosition();
-            exprStartPos.offsetInSelection = leftParensStack[0].location;
+            exprStartPos.offsetInSelection = 0;
             exprStartPos.offsetInDocument = leftParensStack[0].location + selectionStartOffset;
 
             formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
