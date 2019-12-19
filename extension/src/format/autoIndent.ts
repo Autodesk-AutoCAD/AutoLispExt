@@ -111,6 +111,73 @@ class BasicSemantics
     }    
 }
 
+function getNumber_Lambda(cursorPos2d: Position, semantics:BasicSemantics): number 
+{
+    let operator = semantics.operator;
+    if(operator == null) return -1;
+
+    if(semantics.operatorLowerCase != "lambda")
+        return -1;
+
+    if(semantics.operands.length == 0)
+    {
+        //assuming user is adding argument list, which should align after "lambda "
+        return operator.column + operator.symbol.length + 1;
+    }
+    
+    let argList = semantics.operands[0];
+    if(isPosBetween(cursorPos2d, operator.line, operator.column, argList.line, argList.column))
+    {
+        //it's after the start of function name and before the argument list
+        //align with function name
+        return operator.column + operator.symbol.length + 1;
+    }
+
+    return -1; //leave it to default case handler
+}
+
+function getNumber_Defun(cursorPos2d: Position, semantics:BasicSemantics): number 
+{
+    let operator = semantics.operator;
+    if(operator == null) return -1;
+
+    if((semantics.operatorLowerCase != "defun") &&
+       (semantics.operatorLowerCase != "defun-q"))
+        return -1;
+
+    if(semantics.operands.length == 0)
+    {
+        //assuming user is adding function name, which should be after, e.g., "defun "
+        return operator.column + operator.symbol.length + 1;
+    }
+    
+    let funName = semantics.operands[0];
+
+    if(isPosBetween(cursorPos2d, operator.line, operator.column, funName.line, funName.column))
+    {
+        //cursor is after the start of defun, and before the function name
+        //1 column after the end of operator
+        return operator.column + operator.symbol.length + 1;
+    }
+
+    if(semantics.operands.length == 1)
+    {
+        //it's after the start of function name; argument list missing
+        //assume user is adding argument list, which should align with function name
+        return funName.column;
+    }
+
+    let argList = semantics.operands[1];
+    if(isPosBetween(cursorPos2d, funName.line, funName.column, argList.line, argList.column))
+    {
+        //it's after the start of function name and before the argument list
+        //align with function name
+        return funName.column;
+    }
+
+    return -1; //leave it to default case handler
+}
+
 function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange): number 
 {
     let parentSemantics = BasicSemantics.parse(parentParenExpr, document);
@@ -120,7 +187,8 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ElementR
     if(parentOperator == null) return -1;
 
     if((parentSemantics.operatorLowerCase != "defun") &&
-       (parentSemantics.operatorLowerCase != "defun-q") )
+       (parentSemantics.operatorLowerCase != "defun-q") &&
+       (parentSemantics.operatorLowerCase != "lambda"))
         return -1;
 
     let directChildren = parentSemantics.operands;
@@ -264,11 +332,18 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
 
     let operator:LispAtom = (semantics != null) ? semantics.operator : null;
 
-    if((operator == null) || (operator.symbol == null) || exprInfo.quoted)
+    if((operator == null) || (operator.symbol == null))
     {
-        //align right after the beginning ( in following cases:
-        //1. there's no operator at all; 
-        //2. the beginning ( is after operator ' 
+        //align right after the beginning ( if there's no operator at all; 
+        let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
+        return startPos2d.character + 1;
+    }
+
+    if(exprInfo.quoted && (semantics.operatorLowerCase != "lambda"))
+    {
+        //align right after the beginning ( if:
+        //1) the beginning ( is after operator ' and
+        //2) the operator of () is not lambda
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
         return startPos2d.character + 1;
     }
@@ -291,7 +366,15 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
 
         case "defun":
         case "defun-q":
-            num = semantics.leftParenPos.character + 2;
+            num = getNumber_Defun(cursorPos2d, semantics);
+            if(num >= 0)
+                return num;
+            break;
+        
+        case "lambda":
+            num = getNumber_Lambda(cursorPos2d, semantics);
+            if(num >= 0)
+                return num;
             break;
         
         default:
