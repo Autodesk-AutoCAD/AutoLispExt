@@ -470,21 +470,13 @@ function subscribeOnEnterEvent()
                 //step 1.1, search for all parentheses that contain current posistion
                 let containerInfo = findContainers(document, position2d);
 
-                //check if there's already some unexpected handler that has made auto-indent
-                let lineText = document.lineAt(position2d.line).text;
-                let trimmedLine = lineText.trimLeft();
-                let unexpectedIndentLength = lineText.length - trimmedLine.length;
+                //step 1.2, work out the correctly indented text string of the given line
+                let lineOldText = document.lineAt(position2d.line).text;
+                let lineNewTxt = getIndentation(document, containerInfo, position2d) + lineOldText.trimLeft();
 
-                let indentation = getIndentation(document, containerInfo, position2d);
-                edits.push(TextEdit.insert(position2d, indentation));
-
-                //step 1.3, remove possibly inserted indentation from unexpected handlers that run before this handler
-                if(unexpectedIndentLength > 0)
-                {
-                    let startPos = new Position(position2d.line, 0);
-                    let endPos = new Position(position2d.line, unexpectedIndentLength);
-                    edits.push(TextEdit.delete(new vscode.Range(startPos, endPos)));
-                }
+                let lineStartPos2d = new vscode.Position(position2d.line, 0);
+                let lineEndPos2d = new vscode.Position(position2d.line, lineOldText.length);
+                edits.push(TextEdit.replace(new vscode.Range(lineStartPos2d, lineEndPos2d), lineNewTxt));
 
                 //step 2: remove the ending ' ' and '\t' at the end of the old line
                 let trimEnd = makeTrimEndInfo(document, position2d);
