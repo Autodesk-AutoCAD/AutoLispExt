@@ -20,7 +20,7 @@ import * as format from './lispreader';
 import { LispAtom, Sexpression } from './sexpression';
 import { CursorPosition } from './lispreader';
 
-class ParenExprInfo
+class ElementRange
 {
     constructor()
     {
@@ -32,6 +32,12 @@ class ParenExprInfo
     endPos: format.CursorPosition;
 }
 
+class ContainerElements
+{
+    containerParens: ElementRange[] = null;
+    containerComment: ElementRange = null;
+}
+
 class BasicSemantics
 {
     operator: LispAtom = null;
@@ -40,7 +46,7 @@ class BasicSemantics
     operatorLowerCase: string = null;
     leftParenPos: vscode.Position = null;
 
-    static parse(exprInfo:ParenExprInfo, document:vscode.TextDocument): BasicSemantics
+    static parse(exprInfo:ElementRange, document:vscode.TextDocument): BasicSemantics
     {
         //parse plain text
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
@@ -103,7 +109,7 @@ class BasicSemantics
     }    
 }
 
-function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo): number 
+function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange): number 
 {
     let parentSemantics = BasicSemantics.parse(parentParenExpr, document);
     if(parentSemantics == null) return -1;
@@ -242,7 +248,7 @@ function getNumber_SetQ(cursorPos2d: Position, semantics:BasicSemantics): number
     }
 }
 
-function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInfo, parentParenExpr:ParenExprInfo,
+function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange,
     cursorPos2d: Position): number 
 {
     if(parentParenExpr != null)
@@ -294,12 +300,12 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ParenExprInf
     return semantics.leftParenPos.character + 2;
 }
 
-function getIndentation(document:vscode.TextDocument, exprInfoArray:ParenExprInfo[], cursorPos2d: Position): string 
+function getIndentation(document:vscode.TextDocument, exprInfoArray:ElementRange[], cursorPos2d: Position): string 
 {
     if((exprInfoArray == null) || (exprInfoArray.length == 0))
         return ""; //no identation for top level text
 
-    let parentParenExpr: ParenExprInfo = null;
+    let parentParenExpr: ElementRange = null;
     if(exprInfoArray.length > 1)
         parentParenExpr = exprInfoArray[1];
 
@@ -332,14 +338,14 @@ function subscribeOnEnterEvent()
 
                 //step 1: work out the indentation and fill white spaces in the new line
                 //step 1.1, search for all parentheses that contain current posistion
-                let containerExprs = findCoveringParens(document, position2d);
+                let containerInfo = findContainers(document, position2d);
 
                 //check if there's already some unexpected handler that has made auto-indent
                 let lineText = document.lineAt(position2d.line).text;
                 let trimmedLine = lineText.trimLeft();
                 let unexpectedIndentLength = lineText.length - trimmedLine.length;
 
-                let indentation = getIndentation(document, containerExprs, position2d);
+                let indentation = getIndentation(document, containerInfo.containerParens, position2d);
                 edits.push(TextEdit.insert(position2d, indentation));
 
                 //step 1.3, remove possibly inserted indentation from unexpected handlers that run before this handler
@@ -362,15 +368,15 @@ function subscribeOnEnterEvent()
     );
 }
 
-function findCoveringParens(document: vscode.TextDocument, cursorPos2d:Position) : ParenExprInfo[]
+function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : ContainerElements
 {
     let docAsString = document.getText();
     let cursorPos = document.offsetAt(cursorPos2d);
 
     let docStringLength = docAsString.length;
 
-    let parenPairs = new Array<ParenExprInfo>();//temp array to find ( ... ) expression
-    let coverParenPairs = new Array<ParenExprInfo>(); //( ... ) expressions that are ancestors of current position
+    let parenPairs = new Array<ElementRange>();//temp array to find ( ... ) expression
+    let coverParenPairs = new Array<ElementRange>(); //( ... ) expressions that are ancestors of current position
 
     for(let pos = 0; pos < docStringLength; /*startPosInString++*/ )
     {
@@ -414,7 +420,7 @@ function findCoveringParens(document: vscode.TextDocument, cursorPos2d:Position)
 
         if(char == '(')
         {
-            let anExpr = new ParenExprInfo();
+            let anExpr = new ElementRange();
             anExpr.startPos = format.CursorPosition.create(pos, pos);
             parenPairs.push(anExpr);
 
@@ -480,7 +486,10 @@ function findCoveringParens(document: vscode.TextDocument, cursorPos2d:Position)
     }
     console.log(dbgMsg); 
 
-    return coverParenPairs;
+    let containerInfo = new ContainerElements();
+    containerInfo.containerParens = coverParenPairs;
+
+    return containerInfo;
 }
 
 function makeTrimEndInfo(document: vscode.TextDocument, position2d:Position) : TextEdit
