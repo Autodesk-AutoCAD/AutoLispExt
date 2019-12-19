@@ -37,7 +37,7 @@ class ElementRange
 class ContainerElements
 {
     containerParens: ElementRange[] = null;
-    containerComment: ElementRange = null;
+    containerBlockComment: ElementRange = null;
 }
 
 class BasicSemantics
@@ -394,8 +394,44 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
     return semantics.leftParenPos.character + 2;
 }
 
-function getIndentation(document:vscode.TextDocument, exprInfoArray:ElementRange[], cursorPos2d: Position): string 
+function getIndentationInBlockComment(document:vscode.TextDocument, commentRange: ElementRange, cursorNewPos2d:Position): string
 {
+    let startPos2d = document.positionAt(commentRange.startPos.offsetInDocument);
+
+    let indentNum = startPos2d.character + 2;//default alignment: horizontally after ;|
+
+    //now, check if the block comment has multiple lines; if true, and the old cursor pos is not on the first line,
+    //the new line should align with the old line
+    let cursorOldLine = cursorNewPos2d.line - 1;
+    if(cursorOldLine > startPos2d.line)
+    {
+        let textLastLine = document.lineAt(cursorOldLine).text;
+        let trimmedText= textLastLine.trimLeft();
+        indentNum = textLastLine.length - trimmedText.length;
+    }
+    else if(cursorOldLine == startPos2d.line)
+    {
+        let textLastLine = document.lineAt(cursorOldLine).text;
+        let charNumBeforeRealComment = startPos2d.character + 2;
+        textLastLine = textLastLine.substr(charNumBeforeRealComment);
+
+        let trimmedText = textLastLine.trimLeft();
+        indentNum = charNumBeforeRealComment + textLastLine.length - trimmedText.length;
+    }
+
+    let indentStr = "";
+    for(let i=0; i<indentNum; i++)
+        indentStr +=" ";
+
+    return indentStr;
+}
+
+function getIndentation(document:vscode.TextDocument, containerInfo:ContainerElements, cursorPos2d: Position): string 
+{
+    if(containerInfo.containerBlockComment != null)
+        return getIndentationInBlockComment(document, containerInfo.containerBlockComment, cursorPos2d);
+
+    let exprInfoArray:ElementRange[] = containerInfo.containerParens;
     if((exprInfoArray == null) || (exprInfoArray.length == 0))
         return ""; //no identation for top level text
 
@@ -439,7 +475,7 @@ function subscribeOnEnterEvent()
                 let trimmedLine = lineText.trimLeft();
                 let unexpectedIndentLength = lineText.length - trimmedLine.length;
 
-                let indentation = getIndentation(document, containerInfo.containerParens, position2d);
+                let indentation = getIndentation(document, containerInfo, position2d);
                 edits.push(TextEdit.insert(position2d, indentation));
 
                 //step 1.3, remove possibly inserted indentation from unexpected handlers that run before this handler
@@ -462,6 +498,51 @@ function subscribeOnEnterEvent()
     );
 }
 
+function createContainerBlockCommentInfo(commentStartPos:CursorPosition, nextPos2Scan:CursorPosition, cursorPos: number, 
+    document: vscode.TextDocument, docText: string): ElementRange
+{
+    if(cursorPos < (commentStartPos.offsetInDocument + 2))
+        return null;
+    
+    if(nextPos2Scan == null)
+    {
+        //the block comment is not finished; the whole rest doc after ;| is inside the comment
+        let endPos = new CursorPosition();
+        endPos.offsetInDocument = docText.length;
+        endPos.offsetInSelection = docText.length - commentStartPos.delta();
+
+        let coverBlockComment = new ElementRange();
+        coverBlockComment.startPos = commentStartPos;
+        coverBlockComment.endPos = endPos;
+
+        return coverBlockComment;
+    }
+
+    if(cursorPos > nextPos2Scan.offsetInDocument)
+        return null;//nextPos2Scan if after the end of comment; it's just a rough check to quickly exclude most impossible cases
+
+    let commentStartPos2d = document.positionAt(commentStartPos.offsetInDocument);
+    let commentEndPos2d = document.positionAt(nextPos2Scan.offsetInDocument);
+    let commentText = document.getText(new vscode.Range(commentStartPos2d, commentEndPos2d));
+
+    if(commentText.endsWith("|;") == false)
+        console.log("unexpected end of a block comment");
+
+    if(cursorPos <= (commentStartPos.offsetInDocument + commentText.length - 2))
+    {
+        let coverBlockComment = new ElementRange();
+        coverBlockComment.startPos = commentStartPos;
+        coverBlockComment.endPos = nextPos2Scan;
+
+        return coverBlockComment;
+    }
+
+    //console.log("check if it can be avoided\n");
+
+    return null;
+}
+
+
 function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : ContainerElements
 {
     let docAsString = document.getText();
@@ -471,6 +552,7 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
 
     let parenPairs = new Array<ElementRange>();//temp array to find ( ... ) expression
     let coverParenPairs = new Array<ElementRange>(); //( ... ) expressions that are ancestors of current position
+    let coverBlockComment:ElementRange = null;
 
     let isPrevCharQuote = false;//inside operator '
     for(let pos = 0; pos < docStringLength; /*startPosInString++*/ )
@@ -491,6 +573,13 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
             let commentStartPos = format.CursorPosition.create(pos, pos);
 
             let nextPos2Scan = format.ListReader.findEndOfComment(document, docAsString, commentStartPos);
+
+            if((nextChar == '|') && (coverBlockComment == null))
+            {
+                //check if cursor is in this block comment, and if true, create an ElementRange to keep this information
+                coverBlockComment = createContainerBlockCommentInfo(commentStartPos, nextPos2Scan, cursorPos, document, docAsString);
+            }
+
             if(nextPos2Scan == null) //doc ended or not found
                 break;
 
@@ -586,6 +675,7 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
         coverParenPairs.push(expr);
     }
  
+/* 
     let dbgMsg = "All parens that cover given position:\n";
     for(let i=0; i<coverParenPairs.length; i++)
     {
@@ -601,9 +691,11 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
         dbgMsg += "\n************************\n";
     }
     console.log(dbgMsg); 
+*/
 
     let containerInfo = new ContainerElements();
     containerInfo.containerParens = coverParenPairs;
+    containerInfo.containerBlockComment = coverBlockComment;
 
     return containerInfo;
 }
