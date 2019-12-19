@@ -111,7 +111,41 @@ class BasicSemantics
     }    
 }
 
-function getNumber_Lambda(cursorPos2d: Position, semantics:BasicSemantics): number 
+function getTabSize(): number
+{
+    let editor = vscode.window.activeTextEditor;
+
+    if(editor)
+        return <number>editor.options.tabSize;
+
+    return 2;
+}
+
+function character2Column(charPosInLine: number, line: number, document:TextDocument): number
+{
+    let tabsize = getTabSize();
+
+    if(line >= document.lineCount)
+    {
+        console.log("invalid line number;\n");
+        return charPosInLine;
+    }
+
+    let lineText = document.lineAt(line).text;
+    
+    let column = 0;
+    for(let i=0; i<charPosInLine; i++)
+    {
+        if(lineText.charAt(i) == '\t')
+            column+= tabsize;
+        else
+            column++;
+    }
+
+    return column;
+}
+
+function getNumber_Lambda(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     let operator = semantics.operator;
     if(operator == null) return -1;
@@ -119,10 +153,12 @@ function getNumber_Lambda(cursorPos2d: Position, semantics:BasicSemantics): numb
     if(semantics.operatorLowerCase != "lambda")
         return -1;
 
+    let column = character2Column(operator.column, operator.line, document);
+
     if(semantics.operands.length == 0)
     {
         //assuming user is adding argument list, which should align after "lambda "
-        return operator.column + operator.symbol.length + 1;
+        return column + operator.symbol.length + 1;
     }
     
     let argList = semantics.operands[0];
@@ -130,13 +166,13 @@ function getNumber_Lambda(cursorPos2d: Position, semantics:BasicSemantics): numb
     {
         //it's after the start of function name and before the argument list
         //align with function name
-        return operator.column + operator.symbol.length + 1;
+        return column + operator.symbol.length + 1;
     }
 
     return -1; //leave it to default case handler
 }
 
-function getNumber_Defun(cursorPos2d: Position, semantics:BasicSemantics): number 
+function getNumber_Defun(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     let operator = semantics.operator;
     if(operator == null) return -1;
@@ -147,32 +183,40 @@ function getNumber_Defun(cursorPos2d: Position, semantics:BasicSemantics): numbe
 
     if(semantics.operands.length == 0)
     {
+        let column = character2Column(operator.column, operator.line, document);
+
         //assuming user is adding function name, which should be after, e.g., "defun "
-        return operator.column + operator.symbol.length + 1;
+        return column + operator.symbol.length + 1;
     }
     
     let funName = semantics.operands[0];
 
     if(isPosBetween(cursorPos2d, operator.line, operator.column, funName.line, funName.column))
     {
+        let column = character2Column(operator.column, operator.line, document);
+
         //cursor is after the start of defun, and before the function name
         //1 column after the end of operator
-        return operator.column + operator.symbol.length + 1;
+        return column + operator.symbol.length + 1;
     }
 
     if(semantics.operands.length == 1)
     {
+        let column = character2Column(funName.column, funName.line, document);
+
         //it's after the start of function name; argument list missing
         //assume user is adding argument list, which should align with function name
-        return funName.column;
+        return column;
     }
 
     let argList = semantics.operands[1];
     if(isPosBetween(cursorPos2d, funName.line, funName.column, argList.line, argList.column))
     {
+        let column = character2Column(funName.column, funName.line, document);
+
         //it's after the start of function name and before the argument list
         //align with function name
-        return funName.column;
+        return column;
     }
 
     return -1; //leave it to default case handler
@@ -214,7 +258,10 @@ function getNumber_Defun_ArgList(document:vscode.TextDocument, exprInfo:ElementR
                 return -1;
 
             //now the exprInfo represents the range of ([argument list]) of defun
-            return directChildren[i].column + 1;//horizontally right after the ( of argument list
+            
+            let column = character2Column(directChildren[i].column, directChildren[i].line, document);
+
+            return column + 1;//horizontally right after the ( of argument list
         }        
     }
 
@@ -258,19 +305,23 @@ function isPosBetween(cursorPos2d: Position, line1:number, column1:number, line2
     return true;
 }
 
-function getNumber_AlignWith1stOperand(cursorPos2d: Position, semantics:BasicSemantics): number 
+function getNumber_AlignWith1stOperand(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     if(semantics.operands.length == 0)
         return -1; //to deal with default logic
     
     //if it's after the first operand, align with it
     if(isPosAfter(cursorPos2d, semantics.operands[0].line, semantics.operands[0].column))
-        return semantics.operands[0].column;
+    {
+        let column = character2Column(semantics.operands[0].column, semantics.operands[0].line, document);
+
+        return column;
+    }
 
     return -1;
 }
 
-function getNumber_SetQ(cursorPos2d: Position, semantics:BasicSemantics): number 
+function getNumber_SetQ(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     let operandNumBeforePos = -1;
 
@@ -304,7 +355,7 @@ function getNumber_SetQ(cursorPos2d: Position, semantics:BasicSemantics): number
         return -1;
 
 
-    let firstOperandStartColumn = semantics.operands[0].column;
+    let firstOperandStartColumn = character2Column(semantics.operands[0].column, semantics.operands[0].line, document);
 
     if((operandNumBeforePos%2) == 0)
     {
@@ -318,7 +369,7 @@ function getNumber_SetQ(cursorPos2d: Position, semantics:BasicSemantics): number
     }
 }
 
-function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange,
+function getWhiteSpaceNumber(document:TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange,
     cursorPos2d: Position): number 
 {
     if(parentParenExpr != null)
@@ -336,7 +387,9 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
     {
         //align right after the beginning ( if there's no operator at all; 
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
-        return startPos2d.character + 1;
+        
+        let column = character2Column(startPos2d.character, startPos2d.line, document);
+        return column + 1;
     }
 
     if(exprInfo.quoted && (semantics.operatorLowerCase != "lambda"))
@@ -345,40 +398,44 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
         //1) the beginning ( is after operator ' and
         //2) the operator of () is not lambda
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
-        return startPos2d.character + 1;
+
+        let column = character2Column(startPos2d.character, startPos2d.line, document);
+        return column + 1;
     }
 
     if(operator.symbol.startsWith('"') || operator.symbol.startsWith("'"))
     {
         //first atom is a string or after '
         //just align with it
-        return operator.column;
+
+        let column = character2Column(operator.column, operator.line, document);
+        return column;
     }
 
     let num:number = -1;
     switch(semantics.operatorLowerCase)
     {
         case "setq":
-            num = getNumber_SetQ(cursorPos2d, semantics);
+            num = getNumber_SetQ(document, cursorPos2d, semantics);
             if(num >= 0)
                 return num;
             break;
 
         case "defun":
         case "defun-q":
-            num = getNumber_Defun(cursorPos2d, semantics);
+            num = getNumber_Defun(document, cursorPos2d, semantics);
             if(num >= 0)
                 return num;
             break;
         
         case "lambda":
-            num = getNumber_Lambda(cursorPos2d, semantics);
+            num = getNumber_Lambda(document, cursorPos2d, semantics);
             if(num >= 0)
                 return num;
             break;
         
         default:
-            num = getNumber_AlignWith1stOperand(cursorPos2d, semantics);
+            num = getNumber_AlignWith1stOperand(document, cursorPos2d, semantics);
             if(num >= 0)
                 return num;
             break;
@@ -391,7 +448,8 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
     //(theOperator     xxx
     //             //auto indent pos)
 
-    return semantics.leftParenPos.character + 2;
+    let column = character2Column(semantics.leftParenPos.character, semantics.leftParenPos.line, document);
+    return column + 2;
 }
 
 function getIndentationInBlockComment(document:vscode.TextDocument, commentRange: ElementRange, cursorNewPos2d:Position): string
@@ -426,7 +484,7 @@ function getIndentationInBlockComment(document:vscode.TextDocument, commentRange
     return indentStr;
 }
 
-function getIndentation(document:vscode.TextDocument, containerInfo:ContainerElements, cursorPos2d: Position): string 
+function getIndentation(document:TextDocument, containerInfo:ContainerElements, cursorPos2d: Position): string 
 {
     if(containerInfo.containerBlockComment != null)
         return getIndentationInBlockComment(document, containerInfo.containerBlockComment, cursorPos2d);
@@ -443,7 +501,7 @@ function getIndentation(document:vscode.TextDocument, containerInfo:ContainerEle
     if(num == -1)
     {
         console.log("failed to parse paren expression.\n");
-        return "  ";//two white spaces on error
+        return "";
     }
 
     let ret = "";
@@ -484,7 +542,7 @@ function subscribeOnEnterEvent()
                     edits.push(trimEnd);
 
                  return edits;
-                }
+            }
         },
         '\n'
     );
