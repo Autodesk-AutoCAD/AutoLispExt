@@ -26,10 +26,12 @@ class ElementRange
     {
       this.startPos = null;
       this.endPos = null;
+      this.quoted = false;
     }
 
     startPos: format.CursorPosition;
     endPos: format.CursorPosition;
+    quoted: boolean;
 }
 
 class ContainerElements
@@ -262,11 +264,20 @@ function getWhiteSpaceNumber(document:vscode.TextDocument, exprInfo:ElementRange
 
     let operator:LispAtom = (semantics != null) ? semantics.operator : null;
 
-    if((operator == null) || (operator.symbol == null))
+    if((operator == null) || (operator.symbol == null) || exprInfo.quoted)
     {
-        //there's no operator at all; align right after the beginning (
+        //align right after the beginning ( in following cases:
+        //1. there's no operator at all; 
+        //2. the beginning ( is after operator ' 
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
         return startPos2d.character + 1;
+    }
+
+    if(operator.symbol.startsWith('"') || operator.symbol.startsWith("'"))
+    {
+        //first atom is a string or after '
+        //just align with it
+        return operator.column;
     }
 
     let num:number = -1;
@@ -378,9 +389,11 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
     let parenPairs = new Array<ElementRange>();//temp array to find ( ... ) expression
     let coverParenPairs = new Array<ElementRange>(); //( ... ) expressions that are ancestors of current position
 
+    let isPrevCharQuote = false;//inside operator '
     for(let pos = 0; pos < docStringLength; /*startPosInString++*/ )
     {
         let char = docAsString.charAt(pos);
+        let nextChar = (pos < (docStringLength - 1)) ? docAsString.charAt(pos + 1) : null;
 
         if((pos > cursorPos) && (parenPairs.length == 0))
         {
@@ -389,6 +402,7 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
             break;
         }
 
+        //highest priority
         if(char == ';')
         {
             let commentStartPos = format.CursorPosition.create(pos, pos);
@@ -403,8 +417,11 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
 
         //getting here means you're not in a comment
 
+        //2nd highest priority
         if(char == '"')
         {
+            isPrevCharQuote = false;
+
             let stringStartPos = format.CursorPosition.create(pos, pos);
 
             let nextPos2Scan = format.ListReader.findEndOfDoubleQuoteString(document, docAsString, stringStartPos);
@@ -416,11 +433,27 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
             continue;
         }
 
+        if(char =='\'')
+        {
+            isPrevCharQuote = true;
+            pos++;
+            continue;
+        }
+
+        let curCharQuoted = false;
+        if(format.ListReader.is_empty(char, nextChar) == false)
+        {
+            curCharQuoted = isPrevCharQuote;
+
+            isPrevCharQuote = false;
+        }
+
         //getting here means you're in neither comment nor string with double quotes
 
         if(char == '(')
         {
             let anExpr = new ElementRange();
+            anExpr.quoted = curCharQuoted;
             anExpr.startPos = format.CursorPosition.create(pos, pos);
             parenPairs.push(anExpr);
 

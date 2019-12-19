@@ -144,7 +144,7 @@ export class ListReader {
         }
         return buf;
     }
-    is_blank(ch: string): boolean {
+    static is_empty(ch: string, chNext: string): boolean {
         switch (ch) {
             case " ":
             case "\n":
@@ -155,10 +155,13 @@ export class ListReader {
             case "\u2029":
                 return true;
         }
-        let linefeed = ch == '\r' && this.peek(1) == '\n';
+        let linefeed = ch == '\r' && chNext == '\n';
         if (linefeed)
             return true;
         return false;
+    }
+    is_blank(ch: string): boolean {
+        return ListReader.is_empty(ch, this.peek(1));
     }
 
     skip_blanks() {
