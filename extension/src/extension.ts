@@ -37,7 +37,7 @@ import * as autoIndent from './format/autoIndent'
 let client: LanguageClient;
 
 var fs = require("fs");
-let internalLispFuncs: Array<String> = [];
+export let internalLispFuncs: Array<String> = [];
 let internalDclKeys: Array<String> = [];
 var lispkeyspath = path.resolve(__dirname, "../data/alllispkeys.txt");
 fs.readFile(lispkeyspath, "utf8", function (err, data) {
@@ -113,7 +113,8 @@ export function activate(context: vscode.ExtensionContext) {
 				return;
 			}
 
-			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor), AutoFormater.excuteFormatDoc(activeTextEditor, true))];
+			let fmt = LispFormatter.format(activeTextEditor, true);
+			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor),fmt)];
 		}
 	});
 

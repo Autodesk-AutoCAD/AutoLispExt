@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.19",
+	"version": "1.6.38",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
@@ -38,18 +38,23 @@
 			"type": "object",
 			"title": "AutoCAD® LISP configuration",
 			"properties": {
-				"autolispext.maxLineChars": {
+				"autolispext.MaxLineChars": {
 					"type": "number",
-					"default": 80,
-                    "description": "Specify the maximum characters can be display each line, autolisp formatter uses it do line wrapping"
+					"default": 85,
+                    "description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
+				},
+				"autolispext.NarrowStyleIndent": {
+					"type": "number",
+					"default": 2,
+                    "description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
 				},
 				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
 					"enum": [
 						"Same line",
-						"New line"
+						"New line with outer identation"
 					],
-					"default": "New line",
+					"default": "New line with outer identation",
 					"description": "Specify the close parenthesis style"
 				},
 				"autolispext.LongListFormatStyle": {
@@ -59,7 +64,7 @@
 						"Fill to margin"
 					],
 					"default": "Fill to margin",
-					"description": "Specify the long list format style in keyword like function parameters or quote expression"
+					"description": "Specify the long list format style, for example apply to function parameters or quote expression"
 				}
 			}
 		},

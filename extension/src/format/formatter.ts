@@ -56,24 +56,20 @@ export class LispFormatter {
         }
     }
 
-public static getEOL(document: vscode.TextDocument): string {
-    return LispFormatter.endOfLineEnum2String(document.eol);
-}
+    public static getEOL(document: vscode.TextDocument): string {
+        return LispFormatter.endOfLineEnum2String(document.eol);
+    }
 
-static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
-        try {
-            let reader = new ListReader(sexpr, exprStartPos, editor.document);
-            let lispLists = reader.tokenize();
-            let formatstr = lispLists.formatting();
-            if (sexpr.length != 0 && formatstr.length == 0) {
-                vscode.window.showErrorMessage("AutoLisp formatter can not format these codes.");
-                return sexpr;
-            }
-            return formatstr;
-        } catch (e) {
-            vscode.window.showErrorMessage("AutoLisp formatter can not format these codes.");
-            return sexpr;
+    static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
+        let reader = new ListReader(sexpr, exprStartPos, editor.document);
+        let lispLists = reader.tokenize();
+        let startPos = editor.document.positionAt(exprStartPos.offsetInDocument);
+
+        let formatstr = lispLists.formatting(startPos.character);
+        if (sexpr.length != 0 && formatstr.length == 0) {
+            throw new Error("It met some errors when formatting");
         }
+        return formatstr;
     }
 
     public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
@@ -87,9 +83,20 @@ static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: v
         else {
             textString = editor.document.getText();
         }
-
         if (textString.length == 0)
             return "";
+
+        try {
+            return LispFormatter.formatGut(editor, textString, selectionStartOffset);
+        } catch (e) {
+            vscode.window.showErrorMessage(e.message);
+            return textString;
+        }
+    }
+
+    private static formatGut(editor: vscode.TextEditor, needFmtString: string, offset: number): string {
+        let selectionStartOffset = offset;
+        let textString = needFmtString;
 
         let formattedstring = "";
 
@@ -109,6 +116,7 @@ static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: v
                     formattedstring += comments;
 
                 i += comments.length;
+
                 continue;
             }
 
@@ -147,23 +155,26 @@ static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: v
             else if (ch == ")") {
                 if (leftParensStack.length == 0) {
                     // this is unbalnace paren
-                    vscode.window.showErrorMessage("Unbalanced token found.");
+                    //throw new Error("Unbalanced parenthesis token found.");
+                    formattedstring += ch;
                 }
                 else if (leftParensStack.length == 1) {
                     // this is the toplevel scope s-expression
                     let leftparen = leftParensStack.pop();
-                    let sexpr = textString.substring(i + 1, leftparen.location);
+                    let sexpr = textString.substring(leftparen.location, i + 1);
 
                     let exprStartPos = new CursorPosition();
                     exprStartPos.offsetInSelection = 0;
                     exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
 
                     formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
-                    formattedstring += LispFormatter.getEOL(editor.document);
                 }
                 else {
                     leftParensStack.pop();
                 }
+            }
+            else if (leftParensStack.length == 0) {
+                formattedstring += ch;
             }
 
             i++;

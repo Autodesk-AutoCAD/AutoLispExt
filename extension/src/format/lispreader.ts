@@ -23,7 +23,7 @@ enum FormattingStyle {
 export class CursorPosition {
     offsetInSelection: number;
     offsetInDocument: number;
-    
+
     constructor() {
         this.offsetInSelection = -1;
         this.offsetInDocument = -1;
@@ -74,7 +74,7 @@ class InputStream {
                 ++this.line;
                 this.col = 0;
             } else {
-                if(ch != '\r')
+                if (ch != '\r')
                     ++this.col;
             }
             return ch;
@@ -137,14 +137,14 @@ export class ListReader {
     next() { return this.input.next(); };
     peek(incr?: number) { return this.input.peek(incr); };
 
-    read_when(pred) {
+    readWhen(pred) {
         let buf = "", ch;
         while ((ch = this.peek()) && pred(ch)) {
             buf += this.next();
         }
         return buf;
     }
-    static is_empty(ch: string, chNext: string): boolean {
+    static isEmpty(ch: string, chNext: string): boolean {
         switch (ch) {
             case " ":
             case "\n":
@@ -160,13 +160,13 @@ export class ListReader {
             return true;
         return false;
     }
-    is_blank(ch: string): boolean {
-        return ListReader.is_empty(ch, this.peek(1));
+    isBlank(ch: string): boolean {
+        return ListReader.isEmpty(ch, this.peek(1));
     }
 
-    skip_blanks() {
-        this.read_when((ch) => {
-            if (this.is_blank(ch))
+    skipBlanks() {
+        this.readWhen((ch) => {
+            if (this.isBlank(ch))
                 return true;
             let linefeed = ch == '\r' && this.peek(1) == '\n';
             if (linefeed)
@@ -174,7 +174,7 @@ export class ListReader {
         });
     }
 
-    read_string() {
+    readString() {
         let sline = this.input.line;
         let scol = this.input.col;
 
@@ -191,42 +191,47 @@ export class ListReader {
         lastList.addAtom(new LispAtom(sline, scol, res));
     }
 
-    read_symbol() {
+    readSymbol() {
         let sline = this.input.line;
         let scol = this.input.col;
 
-        let res = this.read_when((ch) => {
+        let firstCh = this.next();
+        let res = this.readWhen((ch) => {
 
-            if (this.is_blank(ch))
+            if (this.isBlank(ch))
                 return false;
 
             switch (ch) {
                 case ")":
                 case "(":
                 case ";":
+                case "\"":
+                case "\'":
                     return false;
                 default:
                     return true;
             }
         });
+        res = firstCh + res;
 
         let lastList = this.cachedLists[this.cachedLists.length - 1];
         lastList.addAtom(new LispAtom(sline, scol, res));
     }
 
-    read_quote() {
+    readQuote() {
         let quote = this.next();
-        return this.read_list(new LispAtom(this.input.line, this.input.col, quote));
+        this.skipBlanks();
+        return this.readList(new LispAtom(this.input.line, this.input.col, quote));
     }
 
-    read_end_list() {
+    readEndList() {
         this.next();
         let lastList = this.cachedLists[this.cachedLists.length - 1];
         lastList.addAtom(new LispAtom(this.input.line, this.input.col, ")"));
         this.cachedLists.pop();
     }
 
-    read_comment() {
+    readComment() {
         let sline = this.input.line;
         let scol = this.input.col;
 
@@ -241,7 +246,7 @@ export class ListReader {
         lastList.addAtom(new LispAtom(sline, scol, res));
     }
 
-    read_list(prefixAtom?: LispAtom) {
+    readList(prefixAtom?: LispAtom) {
         let sexpr = new Sexpression();
         sexpr.line = this.input.line;
         sexpr.column = this.input.col;
@@ -255,43 +260,43 @@ export class ListReader {
 
         while (true) {
 
-            this.skip_blanks();
+            this.skipBlanks();
             let ch = this.peek();
 
             if (ch == null)
                 break;
             else if (ch == ")") {
-                this.read_end_list();
+                this.readEndList();
                 break;
             }
 
             switch (ch) {
                 case "(":
-                    let subList = this.read_list();
+                    let subList = this.readList();
                     sexpr.addAtom(subList);
                     continue;
 
                 case ";":
-                    this.read_comment();
+                    this.readComment();
                     continue;
 
                 case "\"":
-                    this.read_string();
+                    this.readString();
                     continue;
 
                 case "\'":
                     let nextCh = this.peek(1);
                     if (nextCh != "(") {
-                        this.read_symbol();
+                        this.readSymbol();
                     }
                     else {
-                        let quoteList = this.read_quote();
+                        let quoteList = this.readQuote();
                         sexpr.addAtom(quoteList);
                     }
                     continue;
 
                 default:
-                    this.read_symbol();
+                    this.readSymbol();
                     continue;
             }
         }
@@ -299,9 +304,9 @@ export class ListReader {
     }
 
     tokenize() {
-        return this.read_list();
+        return this.readList();
     }
-    
+
     //return the length of a comment - including the chars that start and end a comment
     static getCommentLength(document: vscode.TextDocument, stringInRange: string, startPosOffset: CursorPosition): number {
         let endPos = ListReader.findEndOfComment(document, stringInRange, startPosOffset);

@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.19",
+	"version": "1.6.38",
 	"engines": {
 		"vscode": "^1.31.1"
 	},

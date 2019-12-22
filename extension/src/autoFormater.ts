@@ -162,8 +162,8 @@ export class AutoFormater{
 	}
 	
 	public static getSelectedDocRange(editor: vscode.TextEditor): vscode.Range {
-		let startPos = new vscode.Position(editor.selection.start.line, 0);
-		let endPos = new vscode.Position(editor.selection.end.line, editor.document.lineAt(editor.selection.end.line).text.length);
+		let startPos = new vscode.Position(editor.selection.start.line, editor.selection.start.character);
+		let endPos = new vscode.Position(editor.selection.end.line, editor.selection.end.character);
 		return editor.document.validateRange(
 			new vscode.Range(
 				startPos,

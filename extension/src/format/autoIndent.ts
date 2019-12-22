@@ -663,7 +663,7 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
         }
 
         let curCharQuoted = false;
-        if(format.ListReader.is_empty(char, nextChar) == false)
+        if(format.ListReader.isEmpty(char, nextChar) == false)
         {
             curCharQuoted = isPrevCharQuote;
 
