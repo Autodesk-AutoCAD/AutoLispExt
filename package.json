@@ -16,7 +16,7 @@
 		"Debuggers",
 		"Programming Languages"
 	],
-	"icon": "images/Adsk_white.png",
+	"icon": "images/adsk_lisp.png",
 	"main": "./extension/out/extension",
 	"files": [
 		"autolispext.vsix"
