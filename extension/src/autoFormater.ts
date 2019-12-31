@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import {LispFormatter} from "./format/formatter"
+import {LispParser} from "./format/formatter"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /////////              The basic idea of the format algorithm                //////////////
@@ -183,7 +183,7 @@ export class AutoFormater{
 		{
 			textString = "";
 			for (let row=editor.selection.start.line; row <=editor.selection.end.line; row++)
-				textString +=editor.document.lineAt(row).text + LispFormatter.getEOL(editor.document);
+				textString +=editor.document.lineAt(row).text + LispParser.getEOL(editor.document);
 		}
 
 		//get all matcher list
@@ -195,7 +195,7 @@ export class AutoFormater{
 			if((row >= editor.selection.start.line && row <= editor.selection.end.line) || ifFullFormat){
 				let lineInfo =  editor.document.lineAt(row).text;
 				let newLineInfo = this.addWhiteSpace(lineInfo, this.calculateSpaceNum(row));
-				newDoc += newLineInfo + LispFormatter.getEOL(editor.document);
+				newDoc += newLineInfo + LispParser.getEOL(editor.document);
 			}
 		}
 		newDoc = newDoc.substring(0, newDoc.length -1);

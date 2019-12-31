@@ -130,6 +130,7 @@ export function activate(context: vscode.ExtensionContext) {
 			if (activeTextEditor.selection.isEmpty) {
 				vscode.window.showInformationMessage("First, select the lines of code to format.");
 			}
+			
 			let fmt = LispFormatter.format(activeTextEditor, false);
 			return [vscode.TextEdit.replace(AutoFormater.getSelectedDocRange(activeTextEditor), fmt)];
 		}

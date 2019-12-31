@@ -55,10 +55,12 @@ export class LispAtom {
 
 export class Sexpression extends LispAtom {
     atoms: Array<LispAtom | Sexpression>;
+    linefeed: string;
 
     constructor() {
         super(0, 0, "");
         this.atoms = new Array<LispAtom | Sexpression>();
+        this.linefeed = "\n";
     }
 
     setAtoms(atoms: Array<LispAtom | Sexpression>): void {
@@ -83,7 +85,7 @@ export class Sexpression extends LispAtom {
 
     private addNewLine(numBlanks: number): string {
         let res = "";
-        res += "\n";
+        res += this.linefeed;
         res += " ".repeat(numBlanks);
         return res;
     }
@@ -96,7 +98,7 @@ export class Sexpression extends LispAtom {
     }
 
     private isMultilineString(res: string): boolean {
-        if (res.indexOf("\n") > -1) {
+        if (res.indexOf("\n") > -1 || res.indexOf(this.linefeed) > -1) {
             return true;
         }
         return false;
@@ -513,14 +515,39 @@ export class Sexpression extends LispAtom {
         return false;
     }
 
+    private isSameLineInRawText(): boolean {
+        let line = this.atoms[0].line;
+
+        for (let i = 1; i < this.atoms.length; i++) {
+            if (this.atoms[i].line != line)
+                return false;
+        }
+        return true;
+    }
+
     private canBeFormatAsPlain(startColumn: number): boolean {
+        // Even if the expression is short, but in the raw text there is a linefeed, then
+        // it formats as nonplain style.
+        if (!this.isSameLineInRawText())
+            return false;
+
         let op = this.getLispOperator();
         if (op == undefined)
             return true;
-        let operator = op.format(0);
+        let operator = op.format(startColumn);
         let mustwrapCases = ["if", "list", "setq", "progn", "cond", "lambda"];
         if (mustwrapCases.indexOf(operator) > -1)
             return false;
+
+        if (operator == "and") {
+            let layoutLen = startColumn + this.length() + 2 * this.atoms.length;
+            if (layoutLen > gMaxLineChars * 0.7)
+                return false;
+        }
+
+        if (this.isPureLongList() && gLongListFormatAsSingleColumn)
+            return false;
+
         if (operator.indexOf("\n") != -1)
             return false;
 
@@ -633,7 +660,7 @@ export class Sexpression extends LispAtom {
         return this.formatAsPlainStyle(startColumn);
     }
 
-    formatting(startColumn: number): string {
+    formatting(startColumn: number, linefeed?: string): string {
 
         gMaxLineChars = maximumLineChars();
         if (gMaxLineChars < 60)
@@ -654,6 +681,9 @@ export class Sexpression extends LispAtom {
         if (listFmtStyle.toString() == "Single column")
             gLongListFormatAsSingleColumn = true;
         else gLongListFormatAsSingleColumn = false;
+
+        if (linefeed)
+            this.linefeed = linefeed;
 
         return this.format(startColumn);
     }

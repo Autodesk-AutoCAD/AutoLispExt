@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { ListReader, CursorPosition } from "./lispreader";
+import { Sexpression } from "./sexpression";
 
 class LeftParentItem {
     public location: Number;
@@ -11,6 +12,101 @@ class LeftParentItem {
 
 
 export class LispFormatter {
+
+    public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
+        let textString: string = "";
+        let selectionStartOffset = 0;//the position in the whole doc of the first char of the text selected to format
+
+        let fileParser: LispParser = undefined;
+
+        if (!ifFullFormat) {
+            textString = editor.document.getText(editor.selection);
+            selectionStartOffset = editor.document.offsetAt(editor.selection.start);
+
+            fileParser = new LispParser(editor);
+            fileParser.tokenizeString(textString, 0);
+        }
+        else {
+            textString = editor.document.getText();
+        }
+        if (textString.length == 0)
+            return "";
+
+        try {
+            let parser = new LispParser(editor);
+            parser.tokenizeString(textString, selectionStartOffset);
+            if (fileParser)
+                fileParser.tokenizeString(textString, 0);
+
+            return this.formatGut(editor, parser, textString, fileParser);
+        } catch (e) {
+            vscode.window.showErrorMessage(e.message);
+            return textString;
+        }
+    }
+
+    private static formatGut(editor: vscode.TextEditor, parser: LispParser, origCopy: string, fileParser?: LispParser): string {
+        let atoms = parser.atomsForest;
+        if (atoms.length == 0)
+            return origCopy;
+
+        let formattedstring = "";
+        let linefeed = LispParser.getEOL(editor.document);
+        for (let i = 0; i < atoms.length; i++) {
+            if (atoms[i] instanceof Sexpression) {
+                let lispLists = atoms[i] as Sexpression;
+
+                let firstAtom = lispLists.atoms[0];
+                let isTopLevelAtom = true;
+                if (fileParser)
+                    isTopLevelAtom = fileParser.isTopLevelAtom(firstAtom.line, firstAtom.column);
+
+                let startColumn = firstAtom.column;
+                if (isTopLevelAtom)
+                    startColumn = 0;
+
+                let formatstr = lispLists.formatting(startColumn, linefeed);
+                if (formatstr.length == 0) {
+                    throw new Error("It met some errors when formatting");
+                }
+
+                if (isTopLevelAtom && formattedstring.length > 0) {
+                    let lastCh = formattedstring.substr(-1);
+                    if (lastCh != "\n")
+                        formattedstring += linefeed;
+                }
+
+                formattedstring += formatstr;
+            } else {
+                // This branch maybe comment, spaces, line breaks or alone atoms
+                formattedstring += atoms[i].toString();
+            }
+        }
+        return formattedstring;
+    }
+}
+
+export class LispParser {
+    editor: vscode.TextEditor;
+    atomsForest: Array<string | Sexpression>;
+
+    constructor(editor: vscode.TextEditor) {
+        this.atomsForest = new Array<string | Sexpression>();
+        this.editor = editor;
+    }
+
+    isTopLevelAtom(line: number, column: number): boolean {
+        for (let i = 0; i < this.atomsForest.length; i++) {
+            if (this.atomsForest[i] instanceof Sexpression) {
+                let lispLists = this.atomsForest[i] as Sexpression;
+                if (lispLists.atoms[0].line == line
+                    && lispLists.atoms[0].column == column)
+                    return true;
+            }
+        }
+        return false;
+    }
+
     private static readComments(document: vscode.TextDocument, docAsString: string, startPosOffset: CursorPosition): string {
 
         if (docAsString.length == 0) {
@@ -57,48 +153,14 @@ export class LispFormatter {
     }
 
     public static getEOL(document: vscode.TextDocument): string {
-        return LispFormatter.endOfLineEnum2String(document.eol);
+        return LispParser.endOfLineEnum2String(document.eol);
     }
 
-    static getFormattedString(sexpr: string, exprStartPos: CursorPosition, editor: vscode.TextEditor): string {
-        let reader = new ListReader(sexpr, exprStartPos, editor.document);
-        let lispLists = reader.tokenize();
-        let startPos = editor.document.positionAt(exprStartPos.offsetInDocument);
-
-        let formatstr = lispLists.formatting(startPos.character);
-        if (sexpr.length != 0 && formatstr.length == 0) {
-            throw new Error("It met some errors when formatting");
-        }
-        return formatstr;
-    }
-
-    public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
-        let textString: string = "";
-        let selectionStartOffset = 0;//the position in the whole doc of the first char of the text selected to format
-
-        if (!ifFullFormat) {
-            textString = editor.document.getText(editor.selection);
-            selectionStartOffset = editor.document.offsetAt(editor.selection.start);
-        }
-        else {
-            textString = editor.document.getText();
-        }
-        if (textString.length == 0)
-            return "";
-
-        try {
-            return LispFormatter.formatGut(editor, textString, selectionStartOffset);
-        } catch (e) {
-            vscode.window.showErrorMessage(e.message);
-            return textString;
-        }
-    }
-
-    private static formatGut(editor: vscode.TextEditor, needFmtString: string, offset: number): string {
+    public tokenizeString(needFmtString: string, offset: number) {
         let selectionStartOffset = offset;
         let textString = needFmtString;
 
-        let formattedstring = "";
+        let editor = this.editor;
 
         let leftParensStack = [];
 
@@ -110,10 +172,11 @@ export class LispFormatter {
                 startPos.offsetInSelection = i;
                 startPos.offsetInDocument = i + selectionStartOffset;
 
-                let comments = LispFormatter.readComments(editor.document, textString, startPos);
+                let comments = LispParser.readComments(editor.document, textString, startPos);
 
-                if (leftParensStack.length == 0)
-                    formattedstring += comments;
+                if (leftParensStack.length == 0) {
+                    this.atomsForest.push(comments);
+                }
 
                 i += comments.length;
 
@@ -143,8 +206,9 @@ export class LispFormatter {
                 if (stringExpr.length == 0)
                     console.log("failed to read string on top level\n");
 
-                if (leftParensStack.length == 0)
-                    formattedstring += stringExpr;
+                if (leftParensStack.length == 0) {
+                    this.atomsForest.push(stringExpr);
+                }
 
                 continue;
             }
@@ -155,8 +219,7 @@ export class LispFormatter {
             else if (ch == ")") {
                 if (leftParensStack.length == 0) {
                     // this is unbalnace paren
-                    //throw new Error("Unbalanced parenthesis token found.");
-                    formattedstring += ch;
+                    this.atomsForest.push(ch);
                 }
                 else if (leftParensStack.length == 1) {
                     // this is the toplevel scope s-expression
@@ -167,14 +230,16 @@ export class LispFormatter {
                     exprStartPos.offsetInSelection = 0;
                     exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
 
-                    formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
+                    let reader = new ListReader(sexpr, exprStartPos, editor.document);
+                    let lispLists = reader.tokenize();
+                    this.atomsForest.push(lispLists);
                 }
                 else {
                     leftParensStack.pop();
                 }
             }
             else if (leftParensStack.length == 0) {
-                formattedstring += ch;
+                this.atomsForest.push(ch);
             }
 
             i++;
@@ -188,9 +253,9 @@ export class LispFormatter {
             exprStartPos.offsetInSelection = 0;
             exprStartPos.offsetInDocument = leftParensStack[0].location + selectionStartOffset;
 
-            formattedstring += this.getFormattedString(sexpr, exprStartPos, editor);
+            let reader = new ListReader(sexpr, exprStartPos, editor.document);
+            let lispLists = reader.tokenize();
+            this.atomsForest.push(lispLists);
         }
-
-        return formattedstring;
     }
 }
