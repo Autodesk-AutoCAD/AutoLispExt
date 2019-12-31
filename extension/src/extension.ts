@@ -24,21 +24,22 @@ import {
 
 } from 'vscode-languageclient';
 
-import { pickProcess } from './acadPicker';
+import { pickProcess } from './process/acadPicker';
 import { calculateABSPathForDAP, isSupportedLispFile } from './platform';
-import { ProcessPathCache } from './processCache';
-import { AutoFormater } from "./autoFormater";
+import { ProcessPathCache } from './process/processCache';
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
 import { existsSync } from 'fs';
-import {LispFormatter} from './format/formatter'
+import * as formatProviders from './format/formatProviders'
+import * as autoCompletionProvider from "./completion/autocompletionProvider"
+
 import * as autoIndent from './format/autoIndent'
 
 let client: LanguageClient;
 
 var fs = require("fs");
 export let internalLispFuncs: Array<String> = [];
-let internalDclKeys: Array<String> = [];
+export let internalDclKeys: Array<String> = [];
 var lispkeyspath = path.resolve(__dirname, "../data/alllispkeys.txt");
 fs.readFile(lispkeyspath, "utf8", function (err, data) {
 	if (err === null) {
@@ -61,7 +62,7 @@ fs.readFile(dclkeyspath, "utf8", function (err, data) {
 		}
 	}
 });
-let winOnlyListFuncPrefix: Array<string> = [];
+export let winOnlyListFuncPrefix: Array<string> = [];
 var winonlyprefixpath = path.resolve(__dirname, "../data/winonlylispkeys_prefix.txt");
 fs.readFile(winonlyprefixpath, "utf8", function (err, data) {
 	if (err == null) {
@@ -103,101 +104,10 @@ export function activate(context: vscode.ExtensionContext) {
 	//-----------------------------------------------------------
 	autoIndent.subscribeOnEnterEvent(); //auto indent
 
-	vscode.languages.registerDocumentFormattingEditProvider(['autolisp', 'lisp'], {
-		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-			let activeTextEditor = vscode.window.activeTextEditor;
-			let currentLSPDoc = activeTextEditor.document.fileName;
-			let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-			if (ext === ".DCL") {
-				vscode.window.showInformationMessage("Command doesn’t support DCL files.");
-				return;
-			}
+	formatProviders.registerDocumentFormatter();
+	formatProviders.registeSelectionFormatter();
 
-			let fmt = LispFormatter.format(activeTextEditor, true);
-			return [vscode.TextEdit.replace(AutoFormater.getFullDocRange(activeTextEditor),fmt)];
-		}
-	});
-
-	vscode.languages.registerDocumentRangeFormattingEditProvider(['autolisp', 'lisp'], {
-		provideDocumentRangeFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-			let activeTextEditor = vscode.window.activeTextEditor;
-			let currentLSPDoc = activeTextEditor.document.fileName;
-			let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-			if (ext === ".DCL") {
-				vscode.window.showInformationMessage("Command doesn’t support DCL files.");
-				return;
-			}
-			if (activeTextEditor.selection.isEmpty) {
-				vscode.window.showInformationMessage("First, select the lines of code to format.");
-			}
-			
-			let fmt = LispFormatter.format(activeTextEditor, false);
-			return [vscode.TextEdit.replace(AutoFormater.getSelectedDocRange(activeTextEditor), fmt)];
-		}
-	});
-
-	vscode.languages.registerCompletionItemProvider(['autolisp', 'lsp', 'autolispdcl'], {
-
-		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
-
-			let currentLSPDoc = document.fileName;
-			let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-			let candidatesItems = internalLispFuncs;
-			if (ext === ".DCL")
-			{
-				candidatesItems = internalDclKeys;
-			}
-			
-			// If it is in comments, it doesn't need to provide lisp autocomplete
-			let linetext = document.lineAt(position).text;
-            if (linetext.startsWith(";") || linetext.startsWith(";;")
-                || linetext.startsWith("#|") || linetext.startsWith("|#"))
-			{
-				return;
-			}
-
-			let word = document.getText(document.getWordRangeAtPosition(position));
-            let wordSep = " &#^()[]|;'\".";
-            // Maybe has some issues for matching first item
-            let pos = linetext.indexOf(word);
-            pos--;
-            let length = 0;
-            for (; pos >= 0; pos--) {
-                if (linetext.length <= pos)
-                    break;
-                let ch = linetext.charAt(pos);
-                if (wordSep.includes(ch)) {
-                    word = linetext.substr(pos + 1, word.length + length);
-                    break;
-                }
-                length++;
-            }
-
-			let allSuggestions: Array<vscode.CompletionItem> = [];
-			word = word.toLowerCase();
-
-			candidatesItems.forEach((item) => {
-				if (item.startsWith(word) || item.endsWith(word)) {
-					const completion = new vscode.CompletionItem(item.toString());
-					allSuggestions.push(completion);
-				}
-			});
-
-			if (os.platform() === "win32") {
-				return allSuggestions;
-			}
-			else {
-				return allSuggestions.filter(function (suggestion) {
-					for (var prefix of winOnlyListFuncPrefix) {
-						if (suggestion.label.startsWith(prefix)) {
-							return false;
-						}
-					}
-					return true;
-				});
-			}
-		}
-	});
+	autoCompletionProvider.registerAutoCompletionProviders();
 
 	//-----------------------------------------------------------
 	//2. lisp load button

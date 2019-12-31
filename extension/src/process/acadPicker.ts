@@ -21,8 +21,8 @@ import * as os from 'os';
 import { basename } from 'path';
 import { getProcesses } from './processTree';
 import {ProcessPathCache} from "./processCache";
-import { calculateACADProcessName } from './platform';
-import { acitiveDocHasValidLanguageId } from './extension';
+import { calculateACADProcessName } from '../platform';
+import { acitiveDocHasValidLanguageId } from '../extension';
 
 
 const localize = nls.loadMessageBundle();

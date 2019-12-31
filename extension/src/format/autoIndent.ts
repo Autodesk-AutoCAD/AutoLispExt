@@ -16,9 +16,9 @@
 import * as vscode from 'vscode';
 
 import { OnTypeFormattingEditProvider, TextDocument, Position, FormattingOptions, CancellationToken, TextEdit } from 'vscode';
-import * as format from './lispreader';
+import * as format from './listreader';
 import { LispAtom, Sexpression } from './sexpression';
-import { CursorPosition } from './lispreader';
+import { CursorPosition } from './listreader';
 
 class ElementRange
 {

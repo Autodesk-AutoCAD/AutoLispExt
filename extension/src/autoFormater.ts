@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import {LispParser} from "./format/formatter"
+import {LispParser} from "./format/parser"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /////////              The basic idea of the format algorithm                //////////////
