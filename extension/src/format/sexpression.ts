@@ -1,6 +1,4 @@
-import * as vscode from 'vscode';
-import { assert } from 'console';
-import { internalLispFuncs } from '../extension'
+import { internalLispFuncs } from '../completion/autocompletionProvider'
 import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from '../config'
 
 let gMaxLineChars = 80;
