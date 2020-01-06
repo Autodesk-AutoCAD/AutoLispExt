@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.38",
+	"version": "1.6.39",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
@@ -41,12 +41,12 @@
 				"autolispext.MaxLineChars": {
 					"type": "number",
 					"default": 85,
-                    "description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
+					"description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
 				},
 				"autolispext.NarrowStyleIndent": {
 					"type": "number",
 					"default": 2,
-                    "description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
+					"description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
 				},
 				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
@@ -318,10 +318,9 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "cd extension && npm run update-vscode && cd .. && npm run compile",
+		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"postinstall": "cd extension && npm install && cd ..",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
@@ -330,10 +329,14 @@
 		"request": "2.88.0",
 		"tslint": "5.11.0",
 		"typescript": "3.2.4",
-		"url-parse": "1.4.4"
+		"url-parse": "1.4.4",
+		"vscode": "^1.1.36",
+		"vscode-nls": "4.0.0"
 	},
 	"dependencies": {
 		"vsce": "1.57.0",
-		"vscode-languageserver-protocol": "3.14.1"
+		"vscode-languageserver-protocol": "3.14.1",
+		"vscode-i18n": "0.2.0",
+		"vscode-languageclient": "4.1.4"
 	}
 }
