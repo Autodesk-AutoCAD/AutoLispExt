@@ -71,10 +71,10 @@
 		"configurationDefaults": {
 			"[lisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": false,
+				"editor.autoIndent": "none",
 				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
@@ -83,10 +83,10 @@
 			},
 			"[autolisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": false,
+				"editor.autoIndent": "none",
 				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
@@ -95,10 +95,10 @@
 			},
 			"[autolispdcl]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "=;{}\":",
@@ -163,13 +163,6 @@
 			{
 				"type": "attachlisp",
 				"label": "AutoLISP Debug: Attach",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"autolisp",
-						"autolispdcl",
-						"lisp"
-					]
-				},
 				"windows": {
 					"program": "${lispadapterpath}"
 				},
@@ -241,13 +234,6 @@
 			{
 				"type": "launchlisp",
 				"label": "AutoLISP Debug: Launch",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"autolisp",
-						"autolispdcl",
-						"lisp"
-					]
-				},
 				"languages": [
 					{
 						"id": "autolisp",
