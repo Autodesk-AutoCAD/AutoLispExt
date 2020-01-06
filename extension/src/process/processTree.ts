@@ -21,6 +21,13 @@ import * as _ from 'lodash';
 
 import { ProcessPathCache } from "./processCache";
 
+function isNothingFound(msg : string) {
+	if(msg && (msg.indexOf('No Instance(s) Available.') >= 0)) {
+		return true;
+	}
+	return false;
+}
+
 export function getProcesses(one: (pid: number, ppid: number, command: string, args: string, exepath: string, date?: number) => void) : Promise<void> {
 
 	function lines(callback: (a: string) => void) {
@@ -135,7 +142,12 @@ export function getProcesses(one: (pid: number, ppid: number, command: string, a
 
 		proc.stderr.setEncoding('utf8');
 		proc.stderr.on('data', data => {
-			reject(new Error(data.toString()));
+			if(isNothingFound(data.toString())) {
+				resolve();
+			}
+			else {
+				reject(new Error(data.toString()));
+			}
 		});
 
 		proc.on('close', (code, signal) => {
