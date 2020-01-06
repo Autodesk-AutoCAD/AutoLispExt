@@ -1,5 +1,5 @@
 import { internalLispFuncs } from '../completion/autocompletionProvider'
-import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from '../config'
+import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
 
 let gMaxLineChars = 80;
 let gIndentSpaces = 2;
