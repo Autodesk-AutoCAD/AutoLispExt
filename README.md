@@ -1,7 +1,7 @@
 # AutoCAD® AutoLISP® Extension for Visual Studio Code
 
-This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your custom programs with AutoCAD 2021.
-For information on creating custom programs for AutoCAD with the AutoLISP programming language, see the:
+This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your lisp programs with AutoCAD 2021.
+For information on creating lisp programs for AutoCAD with the AutoLISP programming language, see the:
    - AutoCAD AutoLISP: [Developer’s Guide](https://www.autodesk.com/autolisp-developers-guide)
    - AutoCAD AutoLISP: [Reference](https://www.autodesk.com/autolisp-reference)
    - AutoCAD AutoLISP: [Tutorials](https://www.autodesk.com/autolisp-tutorials)
@@ -16,13 +16,13 @@ The extension is distributed under the [Autodesk Terms of Use](https://www.autod
     * Step In/Out/Over
     * Variables
     * Callstacks
+    * Break on error
 
 2. AutoLISP Editor
     * Syntax highlight
     * Autocompletion and code snippets
     * Smart bracket
-    * Document format
-    * Break on error
+    * Document format 
 
 ## Getting started
 - Step 1. Install a supported AutoCAD release on your system.
@@ -33,7 +33,7 @@ The extension is distributed under the [Autodesk Terms of Use](https://www.autod
 
 ## Installation
 This extension can be installed through the Extension panel within VS Code. Search for AutoCAD AutoLISP Extension.
-You can also install this extension by entering the following into the VS Code Open View window (click View > Open View or press Ctrl+SHIFT+P):
+You can also install this extension by entering the following into the VS Code Open Command Palette...(click View > Command Palette... or press Ctrl+SHIFT+P):
 ext install autodesk.autolispext
 
 ## Platform support
@@ -42,10 +42,14 @@ Windows | Mac | Linux |
 <font color=green>√</font> | <font color=green>√</font> | <font color=red>x</font> |
 
 ## How to use the AutoCAD AutoLISP Extension
-To debug an AutoLISP source file, open a LSP file and click Debug > Start Debugging (or press F5). Then choose one of the following debug configurations:
-•	AutoLISP Debug: Launch – Launches a new instance of the AutoCAD application to debug the current LSP file
-•	AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file
-If prompted, specify the absolute path to the AutoCAD executable (acad.exe on Windows or AutoCAD on Mac).
+To debug an AutoLISP source file:
+1.  Open a LSP file.
+2.  Click Debug > Start Debugging (or press F5). 
+3.  Then choose one of the following debug configurations:
+     * AutoLISP Debug: Launch – Launches a new instance of the AutoCAD application to debug the current LSP file.
+     * AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file.
+    If prompted, specify the absolute path to the AutoCAD executable (acad.exe on Windows or AutoCAD on Mac).
+
 Note: To avoid specifying this path each time you click Debug > Start Debugging (or press F5), configure launch.json to include the absolute path to the AutoCAD executable.
 For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
 
@@ -71,8 +75,8 @@ launch.json file on Windows
             "request": "launch",
             "name": "AutoLISP Debug: Launch",
             "attributes":{
-                "path": "C:\\Program Files\\Autodesk\\AutoCAD AutoLISP Preview\\acad.exe", // absolute path of acad.exe
-                "params": ""                                                               // AutoCAD startup parameter
+                "path": "C:\\Program Files\\Autodesk\\AutoCAD <release>\\acad.exe", // absolute path of acad.exe
+                "params": ""                                                        // AutoCAD startup parameter
             }
         }
     ]
