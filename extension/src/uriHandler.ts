@@ -14,7 +14,7 @@ import * as vscode from 'vscode';
 
 import {
     acitiveDocHasValidLanguageId
-} from './extension'
+} from './utils'
 import {setDefaultAcadPid } from "./debug"
 
 function getUrlParams(queryString) {

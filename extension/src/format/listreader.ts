@@ -2,13 +2,6 @@ import * as vscode from 'vscode';
 import { assert } from 'console';
 import { Sexpression } from "./sexpression"
 import { LispAtom } from "./sexpression"
-import { start } from 'repl';
-
-enum FormattingStyle {
-    Plain = 1,
-    Narrow,
-    Wide
-}
 
 // (defun C:;|comment|;MYCMD (x) ;|inline comment|;
 //      (list 1 2 3)            ;comment-column comment

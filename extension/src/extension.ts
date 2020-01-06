@@ -15,16 +15,13 @@
 //
 'use strict';
 import * as vscode from 'vscode';
-import * as path from 'path';
-import * as Net from 'net';
-import * as os from 'os';
 
 import {
 	LanguageClient
 } from 'vscode-languageclient';
 
 
-import { DiagnosticsCtrl } from './diagnosticsCtrl';
+import * as Diagnostics from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
 
 import * as formatProviders from './format/formatProviders'
@@ -58,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
 	//-----------------------------------------------------------
 	//3. runtime diagnostics
 	//-----------------------------------------------------------
-	DiagnosticsCtrl.initDiagnostic();
+	Diagnostics.registerDiagnosticHandler(context);
 
 	//-----------------------------------------------------------
 	//4. debug adapter
@@ -70,20 +67,6 @@ export function activate(context: vscode.ExtensionContext) {
             onUriRequested(uri);
         }
     });
-
-	context.subscriptions.push(vscode.debug.onDidChangeActiveDebugSession(e => {
-		// clear the runtime diagnostics errors
-		DiagnosticsCtrl.clearDocumentDiagnostics();
-	}));
-	context.subscriptions.push(vscode.debug.onDidStartDebugSession(e => {
-		// clear the runtime diagnostics errors
-		DiagnosticsCtrl.clearDocumentDiagnostics();
-	}));
-
-	context.subscriptions.push(vscode.debug.onDidTerminateDebugSession(e => {
-		// clear the runtime diagnostics errors
-		DiagnosticsCtrl.clearDocumentDiagnostics();
-	}));
 }
 
 export function deactivate(): Thenable<void> | undefined {
@@ -91,14 +74,5 @@ export function deactivate(): Thenable<void> | undefined {
 		return undefined;
 	}
 	return client.stop();
-}
-
-export function acitiveDocHasValidLanguageId() : Boolean
-{
-	const editor = vscode.window.activeTextEditor;
-
-	return editor.document.languageId === 'autolisp' || 
-		   editor.document.languageId === 'autolispdcl' || 
-		   editor.document.languageId === 'lisp';
 }
 

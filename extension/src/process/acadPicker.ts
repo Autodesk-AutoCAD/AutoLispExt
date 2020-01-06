@@ -22,7 +22,7 @@ import { basename } from 'path';
 import { getProcesses } from './processTree';
 import {ProcessPathCache} from "./processCache";
 import { calculateACADProcessName } from '../platform';
-import { acitiveDocHasValidLanguageId } from '../extension';
+import { acitiveDocHasValidLanguageId } from '../utils';
 
 
 const localize = nls.loadMessageBundle();
