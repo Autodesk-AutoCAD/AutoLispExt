@@ -4,7 +4,7 @@
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
 	"version": "1.6.41",
 	"engines": {
-		"vscode": "^1.38.0"
+		"vscode": "^1.31.1"
 	},
 	"categories": [
 		"Other"

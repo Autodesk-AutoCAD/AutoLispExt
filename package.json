@@ -9,7 +9,7 @@
 	},
 	"repository": {},
 	"engines": {
-		"vscode": "^1.38.0"
+		"vscode": "^1.31.1"
 	},
 	"publisher": "Autodesk",
 	"categories": [
@@ -42,12 +42,12 @@
 				"autolispext.MaxLineChars": {
 					"type": "number",
 					"default": 85,
-                    "description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
+					"description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
 				},
 				"autolispext.NarrowStyleIndent": {
 					"type": "number",
 					"default": 2,
-                    "description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
+					"description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
 				},
 				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
