@@ -1,8 +1,8 @@
-import { internalLispFuncs } from '../completion/autocompletionProvider'
 import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
+import * as Utils from "../utils"
 
 let gMaxLineChars = 80;
-let gIndentSpaces = 2;
+export let gIndentSpaces = 2;
 let gClosedParenInSameLine = true;
 let gLongListFormatAsSingleColumn = false;
 
@@ -196,8 +196,6 @@ export class Sexpression extends LispAtom {
     public formatListToFillMargin(startColumn: number, alignCol?: number): string {
         let res = "";
 
-        let builtinSymbols = internalLispFuncs;
-
         let leftMargin = gMaxLineChars - startColumn;
         let line = this.atoms[0].format(startColumn);
         let lineLen = line.length + startColumn;
@@ -231,10 +229,7 @@ export class Sexpression extends LispAtom {
                 if (secondColWidth == 0) {
                     secondColWidth = firstColWidth + this.atoms[i].length() + 1;
                     if (alignCol != undefined) {
-                        let op = this.atoms[i].format(0);
-                        if (builtinSymbols.indexOf(op) == -1)
-                            alignWidth = gIndentSpaces;
-                        else alignWidth = secondColWidth;
+                        alignWidth = secondColWidth;
                     }
                 }
 
@@ -500,7 +495,7 @@ export class Sexpression extends LispAtom {
         }
     }
 
-    private isPureLongList(): boolean {
+    public isPureLongList(): boolean {
 
         if (this.atoms.length > 7) {
             for (let i = 0; i < this.atoms.length; i++) {
@@ -622,6 +617,8 @@ export class Sexpression extends LispAtom {
                 if (opName == "progn") {
                     return this.formatProgn(startColumn);
                 }
+                if (opName == "setfunhelp")
+                    return this.formatList(startColumn, 2);
 
                 if (!this.canBeFormatAsPlain(startColumn)) {
                     if (opName == "foreach") {
@@ -645,10 +642,7 @@ export class Sexpression extends LispAtom {
                     if (this.isPureLongList())
                         return this.formatListAsColumn(startColumn, gLongListFormatAsSingleColumn ? 3 : 2);
                     else {
-                        let builtinSymbols = internalLispFuncs;
-                        let align2ndcol = false;
-                        if (builtinSymbols.indexOf(opName) >= 0)
-                            align2ndcol = true;
+                        let align2ndcol = Utils.isAutolispBultinAtom(opName);
                         return this.formatList(startColumn, 3, false, align2ndcol);
                     }
                 }

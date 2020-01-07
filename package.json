@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.41",
+	"version": "1.6.43",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -53,9 +53,9 @@
 					"type": "string",
 					"enum": [
 						"Same line",
-						"New line with outer identation"
+						"New line with outer indentation"
 					],
-					"default": "New line with outer identation",
+					"default": "New line with outer indentation",
 					"description": "Specify the close parenthesis style"
 				},
 				"autolispext.LongListFormatStyle": {

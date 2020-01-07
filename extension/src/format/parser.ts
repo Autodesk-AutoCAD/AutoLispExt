@@ -97,7 +97,8 @@ export class LispParser {
                 startPos.offsetInDocument = i + selectionStartOffset;
 
                 let comments = LispParser.readComments(editor.document, textString, startPos);
-
+                if (comments == null)
+                    continue;
                 if (leftParensStack.length == 0) {
                     this.atomsForest.push(comments);
                 }
@@ -113,7 +114,6 @@ export class LispParser {
                 startPos.offsetInDocument = i + selectionStartOffset;
 
                 let endOfString = ListReader.findEndOfDoubleQuoteString(editor.document, textString, startPos);
-
                 let startPos2d = editor.document.positionAt(startPos.offsetInDocument);
                 let endPos2d = null;
                 if (endOfString != null) {

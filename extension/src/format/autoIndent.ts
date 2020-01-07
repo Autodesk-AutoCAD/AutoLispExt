@@ -15,10 +15,11 @@
 
 import * as vscode from 'vscode';
 
-import { OnTypeFormattingEditProvider, TextDocument, Position, FormattingOptions, CancellationToken, TextEdit } from 'vscode';
+import {TextDocument, Position, TextEdit } from 'vscode';
 import * as format from './listreader';
-import { LispAtom, Sexpression } from './sexpression';
+import { LispAtom, Sexpression, gIndentSpaces } from './sexpression';
 import { CursorPosition } from './listreader';
+import * as Utils from '../utils';
 
 class ElementRange
 {
@@ -305,7 +306,7 @@ function isPosBetween(cursorPos2d: Position, line1:number, column1:number, line2
     return true;
 }
 
-function getNumber_AlignWith1stOperand(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
+function getIdentationForWideFormatStyle(document:TextDocument, cursorPos2d: Position, semantics:BasicSemantics): number 
 {
     if(semantics.operands.length == 0)
         return -1; //to deal with default logic
@@ -369,31 +370,27 @@ function getNumber_SetQ(document:TextDocument, cursorPos2d: Position, semantics:
     }
 }
 
-function getWhiteSpaceNumber(document:TextDocument, exprInfo:ElementRange, parentParenExpr:ElementRange,
-    cursorPos2d: Position): number 
-{
-    if(parentParenExpr != null)
-    {
+function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, parentParenExpr: ElementRange,
+    cursorPos2d: Position): number {
+    if (parentParenExpr != null) {
         let num = getNumber_Defun_ArgList(document, exprInfo, parentParenExpr);
-        if(num >= 0)
+        if (num >= 0)
             return num;
     }
 
     let semantics = BasicSemantics.parse(exprInfo, document);
 
-    let operator:LispAtom = (semantics != null) ? semantics.operator : null;
+    let operator: LispAtom = (semantics != null) ? semantics.operator : null;
 
-    if((operator == null) || (operator.symbol == null))
-    {
+    if ((operator == null) || (operator.symbol == null)) {
         //align right after the beginning ( if there's no operator at all; 
         let startPos2d = document.positionAt(exprInfo.startPos.offsetInDocument);
-        
+
         let column = character2Column(startPos2d.character, startPos2d.line, document);
         return column + 1;
     }
 
-    if(exprInfo.quoted && (semantics.operatorLowerCase != "lambda"))
-    {
+    if (exprInfo.quoted && (semantics.operatorLowerCase != "lambda")) {
         //align right after the beginning ( if:
         //1) the beginning ( is after operator ' and
         //2) the operator of () is not lambda
@@ -403,8 +400,7 @@ function getWhiteSpaceNumber(document:TextDocument, exprInfo:ElementRange, paren
         return column + 1;
     }
 
-    if(operator.symbol.startsWith('"') || operator.symbol.startsWith("'"))
-    {
+    if (operator.symbol.startsWith('"') || operator.symbol.startsWith("'")) {
         //first atom is a string or after '
         //just align with it
 
@@ -412,44 +408,56 @@ function getWhiteSpaceNumber(document:TextDocument, exprInfo:ElementRange, paren
         return column;
     }
 
-    let num:number = -1;
-    switch(semantics.operatorLowerCase)
-    {
+    let charCol: number = -1;
+    switch (semantics.operatorLowerCase) {
         case "setq":
-            num = getNumber_SetQ(document, cursorPos2d, semantics);
-            if(num >= 0)
-                return num;
+            charCol = getNumber_SetQ(document, cursorPos2d, semantics);
+            if (charCol >= 0)
+                return charCol;
             break;
 
         case "defun":
         case "defun-q":
-            num = getNumber_Defun(document, cursorPos2d, semantics);
-            if(num >= 0)
-                return num;
+            charCol = getNumber_Defun(document, cursorPos2d, semantics);
+            if (charCol >= 0)
+                return charCol;
             break;
-        
+
         case "lambda":
-            num = getNumber_Lambda(document, cursorPos2d, semantics);
-            if(num >= 0)
-                return num;
+            charCol = getNumber_Lambda(document, cursorPos2d, semantics);
+            if (charCol >= 0)
+                return charCol;
             break;
-        
+
+        case "if":
+        case "or":
+        case "while":
+        case "repeat":
+        case "foreach":
+        case "progn":
+        case "setfunhelp":
+            return gIndentSpaces + semantics.leftParenPos.character;
+
         default:
-            num = getNumber_AlignWith1stOperand(document, cursorPos2d, semantics);
-            if(num >= 0)
-                return num;
+            let sexpr = new Sexpression();
+            let atoms = new Array<LispAtom | Sexpression>();
+            atoms = atoms.concat(semantics.operator);
+            atoms = atoms.concat(semantics.operands);
+            sexpr.setAtoms(atoms);
+
+            if (Utils.isAutolispBultinAtom(semantics.operatorLowerCase) || sexpr.isPureLongList()) {
+                charCol = getIdentationForWideFormatStyle(document, cursorPos2d, semantics);
+                if (charCol >= 0)
+                    return charCol;
+            }
             break;
     }
 
-    //the default case: align to (right side of first item + 1 white space)
-    //e.g.:
+    //the default case: align to Narrow format style:
     //(theOperator xxx
-    //             //auto indent pos)
-    //(theOperator     xxx
-    //             //auto indent pos)
-
+    //    auto indent pos)
     let column = character2Column(semantics.leftParenPos.character, semantics.leftParenPos.line, document);
-    return column + 2;
+    return column + gIndentSpaces;
 }
 
 function getIndentationInBlockComment(document:vscode.TextDocument, commentRange: ElementRange, cursorNewPos2d:Position): string
@@ -509,43 +517,6 @@ function getIndentation(document:TextDocument, containerInfo:ContainerElements, 
         ret += " ";
 
     return ret;
-}
-
-export
-function subscribeOnEnterEvent()
-{
-    vscode.languages.registerOnTypeFormattingEditProvider(
-        ['autolisp', 'lisp'], 
-        {
-            provideOnTypeFormattingEdits(document: vscode.TextDocument, position2d: Position, ch: string): vscode.TextEdit[]
-            {
-                if(ch != '\n')
-                    return null;
-
-                 let edits = new Array<TextEdit>();
-
-                //step 1: work out the indentation and fill white spaces in the new line
-                //step 1.1, search for all parentheses that contain current posistion
-                let containerInfo = findContainers(document, position2d);
-
-                //step 1.2, work out the correctly indented text string of the given line
-                let lineOldText = document.lineAt(position2d.line).text;
-                let lineNewTxt = getIndentation(document, containerInfo, position2d) + lineOldText.trimLeft();
-
-                let lineStartPos2d = new vscode.Position(position2d.line, 0);
-                let lineEndPos2d = new vscode.Position(position2d.line, lineOldText.length);
-                edits.push(TextEdit.replace(new vscode.Range(lineStartPos2d, lineEndPos2d), lineNewTxt));
-
-                //step 2: remove the ending ' ' and '\t' at the end of the old line
-                let trimEnd = makeTrimEndInfo(document, position2d);
-                if(null != trimEnd)
-                    edits.push(trimEnd);
-
-                 return edits;
-            }
-        },
-        '\n'
-    );
 }
 
 function createContainerBlockCommentInfo(commentStartPos:CursorPosition, nextPos2Scan:CursorPosition, cursorPos: number, 
@@ -724,24 +695,6 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
         expr.endPos = format.CursorPosition.create(docAsString.length - 1, docAsString.length- 1);
         coverParenPairs.push(expr);
     }
- 
-/* 
-    let dbgMsg = "All parens that cover given position:\n";
-    for(let i=0; i<coverParenPairs.length; i++)
-    {
-        var startPos2d = document.positionAt(coverParenPairs[i].startPos.offsetInDocument);
-        //see https://stackoverflow.com/questions/45203543/vs-code-extension-api-to-get-the-range-of-the-whole-text-of-a-document/46427868
-        //to get the text between [startPos, endPos], you need getText(startPos, endPos +1)
-        var endPos2d = document.positionAt(coverParenPairs[i].endPos.offsetInDocument + 1);
-        
-        dbgMsg += ("[(" + (startPos2d.line +1).toString() + ", " + (startPos2d.character + 1).toString() + "), ");
-        dbgMsg += ("(" + (endPos2d.line +1).toString() + ", " + (endPos2d.character + 1).toString() + ")]\n");
-        dbgMsg += document.getText(new vscode.Range(startPos2d, endPos2d));
-        //dbgMsg += document.getText(new vscode.Range(new Position(0, 0), new Position(2, 1)));
-        dbgMsg += "\n************************\n";
-    }
-    console.log(dbgMsg); 
-*/
 
     let containerInfo = new ContainerElements();
     containerInfo.containerParens = coverParenPairs;
@@ -750,38 +703,40 @@ function findContainers(document: vscode.TextDocument, cursorPos2d:Position) : C
     return containerInfo;
 }
 
-function makeTrimEndInfo(document: vscode.TextDocument, position2d:Position) : TextEdit
-{
-    let line = position2d.line;
+export function subscribeOnEnterEvent() {
+    vscode.languages.registerOnTypeFormattingEditProvider(
+        ['autolisp', 'lisp'],
+        {
+            provideOnTypeFormattingEdits(document: vscode.TextDocument, position2d: Position, ch: string): vscode.TextEdit[] {
+                if (ch != '\n')
+                    return [];
 
-    //it's called after ENTER key is handled, the position before ENTER key is:
-    let oldLine = line - 1;
-    let textInOldLine = document.lineAt(oldLine).text;//the text remains in old line after ENTER key event
-    let lineWidth = textInOldLine.length;//note that a column in VS Code means a complete character
+                let edits = new Array<TextEdit>();
 
-    //search in old line, and locate the first char right before old position that is neither ' ' nor '\t'
+                try {
+                    //step 1: work out the indentation and fill white spaces in the new line
+                    //step 1.1, search for all parentheses that contain current posistion
+                    let containerInfo = findContainers(document, position2d);
 
-    var oldColumnIndex:number;
-    for(oldColumnIndex = lineWidth - 1; oldColumnIndex >= 0 ; oldColumnIndex--)
-    {
-        if(textInOldLine.charAt(oldColumnIndex) == ' ')
-          continue;
+                    //step 1.2, work out the correctly indented text string of the given line
+                    let lineOldText = document.lineAt(position2d.line).text;
+                    let lineNoLeftPadding = lineOldText.trimLeft();
+                    let leftblanks = lineOldText.length - lineNoLeftPadding.length;
+                    let leftblanksPos = new vscode.Position(position2d.line, leftblanks);
 
-         if(textInOldLine.charAt(oldColumnIndex) == '\t')
-          continue;
+                    let lineIndentation = getIndentation(document, containerInfo, position2d);
+                    let lineStartPos2d = new vscode.Position(position2d.line, 0);
 
-         break;//found it
-    }
+                    edits.push(TextEdit.delete(new vscode.Range(lineStartPos2d, leftblanksPos)));
+                    edits.push(TextEdit.insert(lineStartPos2d, lineIndentation));
 
-    if((oldColumnIndex >= 0) && //found a non empty char
-       ((oldColumnIndex + 1) < lineWidth)) //and there's at least 1 empty char after it in the same line
-    {
-        ////found the first char that was neither ' ' nor '\t'; remove the rest in this line
-        let start = new Position(oldLine, oldColumnIndex + 1);//start with the empty char
-        let end = new Position(oldLine, lineWidth); //end pos has to be the real ending index + 1 to compose the following range
-        let range = new vscode.Range(start, end);
-        return TextEdit.delete(range);
-    }
+                } catch (err) {
+                    vscode.window.showInformationMessage("It met some errors to compute the identation.");
+                }
 
-    return null;
+                return edits;
+            }
+        },
+        '\n'
+    );
 }
