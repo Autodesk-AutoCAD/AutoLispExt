@@ -2,18 +2,14 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.45",
+	"version": "1.0.5",
 	"engines": {
 		"vscode": "^1.31.1"
 	},
-	"categories": [
-		"Other"
-	],
 	"main": "./out/extension",
 	"activationEvents": [
 		"onDebug",
 		"onUri",
-		"onCommand:extension.vslisp-debug.getProgramName",
 		"onLanguage:autolisp",
 		"onLanguage:autolispdcl"
 	],

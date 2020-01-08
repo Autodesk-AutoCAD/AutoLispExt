@@ -611,7 +611,7 @@ export class Sexpression extends LispAtom {
     //
     // For the second phase it is a recursive algorithm. It layouts the tokens from top to bottom,
     // from left to right. And it follows the bellow rules to handle the individual cases:
-    // 1. "if cond setq lambda progn" always use wide format style even if the space is enough
+    // 1. "LIST AND OR APPEND" always use wide format style even if the space is enough
     // 2. function parameters and the pure long list can be layout single or fit to margin
     // 3. If the space is enough, use the plain format style except the keywords mentioned in 1
     // 4. Dot pairs as (test . 1234) should always as plain style
