@@ -261,8 +261,11 @@ export class Sexpression extends LispAtom {
             res += line;
 
         // Last atom may be )
-        if (hasCloseParen)
+        if (hasCloseParen) {
+            // trim the extra blanks before )
+            res = res.trimRight();
             res += this.formatLastAtom(startColumn, startColumn, false);
+        }
 
         return res;
     }
@@ -544,13 +547,10 @@ export class Sexpression extends LispAtom {
         let op = this.getLispOperator();
         if (op == undefined)
             return true;
-        let operator = op.format(startColumn);
-        let mustwrapCases = ["cond", "lambda"];
-        if (mustwrapCases.indexOf(operator) > -1)
-            return false;
+        let opsym = op.symbol;
 
         // setq can not layout in the same line
-        if (operator == "setq") {
+        if (opsym == "setq") {
             if (this.size() > 5)
                 return false
         }
@@ -564,9 +564,6 @@ export class Sexpression extends LispAtom {
         if (this.isPureLongList() && gLongListFormatAsSingleColumn)
             return false;
 
-        if (operator.indexOf("\n") != -1)
-            return false;
-
         for (let i = 2; i < this.atoms.length; i++) {
             if (this.atoms[i] instanceof Sexpression) {
                 let subSxpr = this.atoms[i] as Sexpression;
@@ -577,8 +574,13 @@ export class Sexpression extends LispAtom {
                 return false;
         }
 
+        let tryFmtStr = op.format(startColumn);
+        if (tryFmtStr.indexOf("\n") != -1)
+            return false;
+
         if (startColumn + this.length() + 2 * this.atoms.length < gMaxLineChars)
             return true;
+
         return false;
     }
 
@@ -630,36 +632,35 @@ export class Sexpression extends LispAtom {
         }
         else if (length > 4) {
             let lispOperator = this.getLispOperator();
-            if (this.atoms[0].isLeftParen()) {
+            if (this.atoms[0].isLeftParen() &&
+                !this.canBeFormatAsPlain(startColumn)) {
+
                 let opName = lispOperator.symbol.toLowerCase();
                 if (opName == "if" || opName == "lambda")
                     return this.formatList(startColumn, 3);
-                if (opName == "cond")
+                else if (opName == "cond")
                     return this.formatList(startColumn, 2, true);
-                if (opName == "setq") {
+                else if (opName == "setq") {
                     return this.formatSetq(startColumn);
                 }
+                else if (opName == "foreach") {
+                    return this.formatForeach(startColumn);
+                }
+                else if (opName == "defun" || opName == "defun-q") {
+                    return this.formatDefun(startColumn);
+                }
+                else if (this.shouldFormatWideStyle())
+                    return this.formatListAsWideStyle(startColumn);
 
-                if (!this.canBeFormatAsPlain(startColumn)) {
-                    if (opName == "foreach") {
-                        return this.formatForeach(startColumn);
-                    }
-                    else if (opName == "defun" || opName == "defun-q") {
-                        return this.formatDefun(startColumn);
-                    }
-                    else if (this.shouldFormatWideStyle())
-                        return this.formatListAsWideStyle(startColumn);
+                if (asCond) {
+                    // cond branch internal expression align with the outer left parenthes
+                    return this.formatList(startColumn, 1);
+                }
 
-                    if (asCond) {
-                        // cond branch internal expression align with the outer left parenthes
-                        return this.formatList(startColumn, 1);
-                    }
-
-                    if (this.isPureLongList())
-                        return this.formatListAsColumn(startColumn, gLongListFormatAsSingleColumn ? 3 : 2);
-                    else {
-                        return this.formatListAsNarrowStyle(startColumn);
-                    }
+                if (this.isPureLongList())
+                    return this.formatListAsColumn(startColumn, gLongListFormatAsSingleColumn ? 3 : 2);
+                else {
+                    return this.formatListAsNarrowStyle(startColumn);
                 }
             }
         }
