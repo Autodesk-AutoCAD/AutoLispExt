@@ -40,3 +40,4 @@ You may encounter the failure of npm install, the error message would say:
 Error installing vscode.d.ts: Error: read ECONNRESET
 If you encounter this problem, maybe your NODE is too old, in version v10.13.0 it 
 can work well.
+or run "npm cache clean -force"

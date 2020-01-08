@@ -20,9 +20,5 @@
 		["[","]"],
 		["#|", "|#"],
 		[";|", "|;"]
-	],
-	"indentationRules": {
-		"increaseIndentPattern": "^(\\(defun)|\\(progn\\b",
-		"decreaseIndentPattern": "^((?!.*?\\/\\*).*\\*/)?\\s*[\\}\\]].*$"
-	  }
+	]
 }

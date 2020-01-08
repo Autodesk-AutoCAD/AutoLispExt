@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import {LispParser} from "./format/parser"
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 /////////              The basic idea of the format algorithm                //////////////
@@ -161,8 +162,8 @@ export class AutoFormater{
 	}
 	
 	public static getSelectedDocRange(editor: vscode.TextEditor): vscode.Range {
-		let startPos = new vscode.Position(editor.selection.start.line, 0);
-		let endPos = new vscode.Position(editor.selection.end.line, editor.document.lineAt(editor.selection.end.line).text.length);
+		let startPos = new vscode.Position(editor.selection.start.line, editor.selection.start.character);
+		let endPos = new vscode.Position(editor.selection.end.line, editor.selection.end.character);
 		return editor.document.validateRange(
 			new vscode.Range(
 				startPos,
@@ -182,7 +183,7 @@ export class AutoFormater{
 		{
 			textString = "";
 			for (let row=editor.selection.start.line; row <=editor.selection.end.line; row++)
-				textString +=editor.document.lineAt(row).text + "\n";
+				textString +=editor.document.lineAt(row).text + LispParser.getEOL(editor.document);
 		}
 
 		//get all matcher list
@@ -194,7 +195,7 @@ export class AutoFormater{
 			if((row >= editor.selection.start.line && row <= editor.selection.end.line) || ifFullFormat){
 				let lineInfo =  editor.document.lineAt(row).text;
 				let newLineInfo = this.addWhiteSpace(lineInfo, this.calculateSpaceNum(row));
-				newDoc += newLineInfo + "\n";
+				newDoc += newLineInfo + LispParser.getEOL(editor.document);
 			}
 		}
 		newDoc = newDoc.substring(0, newDoc.length -1);

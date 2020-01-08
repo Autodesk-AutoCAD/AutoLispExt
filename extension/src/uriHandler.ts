@@ -13,9 +13,9 @@
 import * as vscode from 'vscode';
 
 import {
-    setDefaultAcadPid,
     acitiveDocHasValidLanguageId
-} from './extension'
+} from './utils'
+import {setDefaultAcadPid } from "./debug"
 
 function getUrlParams(queryString) {
     let hashes = queryString.split('&')

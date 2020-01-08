@@ -120,7 +120,7 @@ launch.json file on Mac
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
-AutoCAD Lisp Extension © 2019 Autodesk, Inc. All rights reserved.
+AutoCAD Lisp Extension © 2020 Autodesk, Inc. All rights reserved.
 
 All use of this Software is subject to the Autodesk terms of service accepted accepted upon access or use of this Service or made available on the Autodesk webpage. Autodesk terms of service for Autodesk’s various web services can be found [here](https://www.autodesk.com/company/terms-of-use/en/general-terms).
 

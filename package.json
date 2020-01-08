@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.0.3",
+	"version": "1.0.5",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -37,23 +37,46 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "lisp configuration",
+			"title": "AutoCAD® AutoLISP configuration",
 			"properties": {
-				"lispLanguageServer.maxNumberOfProblems": {
-					"scope": "resource",
+				"autolispext.MaxLineChars": {
 					"type": "number",
-					"default": 100,
-					"description": "Controls the maximum number of problems produced by the server."
+					"default": 85,
+					"description": "Suggested maximum number of characters to display on each line. Value must be 60 or greater."
+				},
+				"autolispext.NarrowStyleIndent": {
+					"type": "number",
+					"default": 2,
+					"description": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6."
+				},
+				"autolispext.CloseParenthesisStyle": {
+					"type": "string",
+					"enum": [
+						"Same line",
+						"New line with outer indentation"
+					],
+					"default": "New line with outer indentation",
+					"description": "Controls the style of closing parenthesis. Closing parenthesis is placed on the same line as the function or aligned with the function’s opening parenthesis."
+				},
+				"autolispext.LongListFormatStyle": {
+					"type": "string",
+					"enum": [
+						"Single column",
+						"Fill to margin"
+					],
+					"default": "Fill to margin",
+					"description": "Controls the format style of long lists. Each or multiple parameters of a function are placed on separate lines."
 				}
 			}
 		},
 		"configurationDefaults": {
 			"[lisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": "none",
+				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "&#^()[]|;'\".",
@@ -61,10 +84,11 @@
 			},
 			"[autolisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": "none",
+				"editor.formatOnType": true,
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "&#^()[]|;'\".",
@@ -72,10 +96,10 @@
 			},
 			"[autolispdcl]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
+				"editor.tabSize": 4,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
-				"editor.autoIndent": true,
+				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,
 				"editor.wordSeparators": "=;{}\":",
@@ -140,13 +164,6 @@
 			{
 				"type": "attachlisp",
 				"label": "AutoLISP Debug: Attach",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"autolisp",
-						"autolispdcl",
-						"lisp"
-					]
-				},
 				"windows": {
 					"program": "${lispadapterpath}"
 				},
@@ -218,13 +235,6 @@
 			{
 				"type": "launchlisp",
 				"label": "AutoLISP Debug: Launch",
-				"enableBreakpointsFor": {
-					"languageIds": [
-						"autolisp",
-						"autolispdcl",
-						"lisp"
-					]
-				},
 				"languages": [
 					{
 						"id": "autolisp",
