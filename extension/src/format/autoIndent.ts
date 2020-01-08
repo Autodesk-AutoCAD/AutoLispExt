@@ -19,7 +19,6 @@ import {TextDocument, Position, TextEdit } from 'vscode';
 import * as format from './listreader';
 import { LispAtom, Sexpression, gIndentSpaces } from './sexpression';
 import { CursorPosition } from './listreader';
-import * as Utils from '../utils';
 
 class ElementRange
 {
@@ -408,6 +407,16 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
         return column;
     }
 
+    let leftParenCol = character2Column(semantics.leftParenPos.character, semantics.leftParenPos.line, document);
+    let endPos2d = document.positionAt(exprInfo.endPos.offsetInDocument + 1);
+    if (cursorPos2d.line == endPos2d.line)
+    {
+        let textBehindCursor = document.getText(new vscode.Range(cursorPos2d, endPos2d));
+        textBehindCursor = textBehindCursor.trim();
+        if (textBehindCursor.startsWith(")")) 
+            return leftParenCol;
+    }
+
     let charCol: number = -1;
     switch (semantics.operatorLowerCase) {
         case "setq":
@@ -429,15 +438,6 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
                 return charCol;
             break;
 
-        case "if":
-        case "or":
-        case "while":
-        case "repeat":
-        case "foreach":
-        case "progn":
-        case "setfunhelp":
-            return gIndentSpaces + semantics.leftParenPos.character;
-
         default:
             let sexpr = new Sexpression();
             let atoms = new Array<LispAtom | Sexpression>();
@@ -445,7 +445,7 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
             atoms = atoms.concat(semantics.operands);
             sexpr.setAtoms(atoms);
 
-            if (Utils.isAutolispBultinAtom(semantics.operatorLowerCase) || sexpr.isPureLongList()) {
+            if (sexpr.shouldFormatWideStyle() || sexpr.isPureLongList()) {
                 charCol = getIdentationForWideFormatStyle(document, cursorPos2d, semantics);
                 if (charCol >= 0)
                     return charCol;
@@ -456,8 +456,7 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
     //the default case: align to Narrow format style:
     //(theOperator xxx
     //    auto indent pos)
-    let column = character2Column(semantics.leftParenPos.character, semantics.leftParenPos.line, document);
-    return column + gIndentSpaces;
+    return leftParenCol + gIndentSpaces;
 }
 
 function getIndentationInBlockComment(document:vscode.TextDocument, commentRange: ElementRange, cursorNewPos2d:Position): string

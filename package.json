@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.43",
+	"version": "1.6.45",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -37,17 +37,17 @@
 		],
 		"configuration": {
 			"type": "object",
-			"title": "AutoCAD® LISP configuration",
+			"title": "AutoCAD® AutoLISP configuration",
 			"properties": {
 				"autolispext.MaxLineChars": {
 					"type": "number",
 					"default": 85,
-					"description": "Specify the suggested maximum characters can be display each line. It can not be less than 60 characters."
+					"description": "Suggested maximum number of characters to display on each line. Value must be 60 or greater."
 				},
 				"autolispext.NarrowStyleIndent": {
 					"type": "number",
 					"default": 2,
-					"description": "Narrow style indentation which applies for defun, cond, foreach branches and so on. It must be between [1...6]."
+					"description": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6."
 				},
 				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
@@ -56,7 +56,7 @@
 						"New line with outer indentation"
 					],
 					"default": "New line with outer indentation",
-					"description": "Specify the close parenthesis style"
+					"description": "Controls the style of closing parenthesis. Closing parenthesis is placed on the same line as the function or aligned with the function’s opening parenthesis."
 				},
 				"autolispext.LongListFormatStyle": {
 					"type": "string",
@@ -65,7 +65,7 @@
 						"Fill to margin"
 					],
 					"default": "Fill to margin",
-					"description": "Specify the long list format style, for example apply to function parameters or quote expression"
+					"description": "Controls the format style of long lists. Each or multiple parameters of a function are placed on separate lines."
 				}
 			}
 		},

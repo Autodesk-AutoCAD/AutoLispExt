@@ -1,5 +1,4 @@
 import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
-import * as Utils from "../utils"
 
 let gMaxLineChars = 80;
 export let gIndentSpaces = 2;
@@ -436,10 +435,6 @@ export class Sexpression extends LispAtom {
         return this.formatList(startColumn, 4);
     }
 
-    private formatProgn(startColumn: number): string {
-        return this.formatList(startColumn, 2);
-    }
-
     private formatAsPlainStyle(startColumn: number): string {
         let res = "";
         let startPos = startColumn;
@@ -465,12 +460,20 @@ export class Sexpression extends LispAtom {
             return false;
         return true;
     }
-    private formatQuote(startColumn: number) {
+    private formatQuote(startColumn: number): string {
         let quoteBody = this.atoms.slice(1);
         let quoteExpr = new Sexpression();
         quoteExpr.setAtoms(quoteBody);
 
         return "\'" + quoteExpr.format(startColumn + 1);
+    }
+
+    private formatListAsNarrowStyle(startColumn: number): string {
+        return this.formatList(startColumn, 2, false, false);
+    }
+
+    private formatListAsWideStyle(startColumn: number): string {
+        return this.formatList(startColumn, 3, false, true);
     }
 
     private isDotPairs(): boolean {
@@ -512,9 +515,23 @@ export class Sexpression extends LispAtom {
         let line = this.atoms[0].line;
 
         for (let i = 1; i < this.atoms.length; i++) {
+            if (this.atoms.length - 1 == i) {
+                if (this.atoms[i].isRightParen())
+                    break;
+            }
             if (this.atoms[i].line != line)
                 return false;
         }
+
+        return true;
+    }
+
+    shouldFormatWideStyle(): boolean {
+        let widestyleCases = ["list", "and", "or", "append"];
+        let lispOperator = this.getLispOperator();
+        let opName = lispOperator.symbol.toLowerCase();
+        if (widestyleCases.indexOf(opName) < 0)
+            return false;
         return true;
     }
 
@@ -528,13 +545,19 @@ export class Sexpression extends LispAtom {
         if (op == undefined)
             return true;
         let operator = op.format(startColumn);
-        let mustwrapCases = ["if", "list", "setq", "progn", "cond", "lambda"];
+        let mustwrapCases = ["cond", "lambda"];
         if (mustwrapCases.indexOf(operator) > -1)
             return false;
 
-        if (operator == "and") {
-            let layoutLen = startColumn + this.length() + 2 * this.atoms.length;
-            if (layoutLen > gMaxLineChars * 0.7)
+        // setq can not layout in the same line
+        if (operator == "setq") {
+            if (this.size() > 5)
+                return false
+        }
+
+        if (this.shouldFormatWideStyle()) {
+            let layoutLen = startColumn + this.length() + this.atoms.length;
+            if (layoutLen > gMaxLineChars * 0.9)
                 return false;
         }
 
@@ -550,6 +573,8 @@ export class Sexpression extends LispAtom {
                 if (!subSxpr.canBeFormatAsPlain(startColumn))
                     return false;
             }
+            else if (this.atoms[i].isLineComment() && i < this.atoms.length - 1)
+                return false;
         }
 
         if (startColumn + this.length() + 2 * this.atoms.length < gMaxLineChars)
@@ -614,11 +639,6 @@ export class Sexpression extends LispAtom {
                 if (opName == "setq") {
                     return this.formatSetq(startColumn);
                 }
-                if (opName == "progn") {
-                    return this.formatProgn(startColumn);
-                }
-                if (opName == "setfunhelp")
-                    return this.formatList(startColumn, 2);
 
                 if (!this.canBeFormatAsPlain(startColumn)) {
                     if (opName == "foreach") {
@@ -627,12 +647,8 @@ export class Sexpression extends LispAtom {
                     else if (opName == "defun" || opName == "defun-q") {
                         return this.formatDefun(startColumn);
                     }
-                    else if (opName == "or"
-                        || opName == "and"
-                        || opName == "while"
-                        || opName == "repeat") {
-                        return this.formatList(startColumn, 3);
-                    }
+                    else if (this.shouldFormatWideStyle())
+                        return this.formatListAsWideStyle(startColumn);
 
                     if (asCond) {
                         // cond branch internal expression align with the outer left parenthes
@@ -642,8 +658,7 @@ export class Sexpression extends LispAtom {
                     if (this.isPureLongList())
                         return this.formatListAsColumn(startColumn, gLongListFormatAsSingleColumn ? 3 : 2);
                     else {
-                        let align2ndcol = Utils.isAutolispBultinAtom(opName);
-                        return this.formatList(startColumn, 3, false, align2ndcol);
+                        return this.formatListAsNarrowStyle(startColumn);
                     }
                 }
             }
