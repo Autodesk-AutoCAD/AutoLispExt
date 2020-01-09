@@ -1,5 +1,4 @@
 import * as vscode from 'vscode';
-import { internalLispFuncs } from './completion/autocompletionProvider'
 
 export function getFullDocRange(editor: vscode.TextEditor): vscode.Range {
     return editor.document.validateRange(
@@ -27,11 +26,4 @@ export function acitiveDocHasValidLanguageId(): Boolean {
     return editor.document.languageId === 'autolisp' ||
         editor.document.languageId === 'autolispdcl' ||
         editor.document.languageId === 'lisp';
-}
-
-export function isAutolispBultinAtom(op: string): boolean {
-    let builtinSymbols = internalLispFuncs;
-    if (builtinSymbols.indexOf(op) >= 0)
-        return true;
-    return false;
 }

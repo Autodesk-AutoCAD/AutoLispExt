@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -72,7 +72,7 @@
 		"configurationDefaults": {
 			"[lisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 4,
+				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
 				"editor.autoIndent": "none",
@@ -84,7 +84,7 @@
 			},
 			"[autolisp]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 4,
+				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
 				"editor.autoIndent": "none",
@@ -96,7 +96,7 @@
 			},
 			"[autolispdcl]": {
 				"files.autoGuessEncoding": true,
-				"editor.tabSize": 4,
+				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": true,
 				"editor.autoIndent": "brackets",

@@ -17,7 +17,7 @@ import * as vscode from 'vscode';
 
 import {TextDocument, Position, TextEdit } from 'vscode';
 import * as format from './listreader';
-import { LispAtom, Sexpression, gIndentSpaces } from './sexpression';
+import { LispAtom, Sexpression, indentationForNarrowStyle } from './sexpression';
 import { CursorPosition } from './listreader';
 
 class ElementRange
@@ -456,7 +456,7 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
     //the default case: align to Narrow format style:
     //(theOperator xxx
     //    auto indent pos)
-    return leftParenCol + gIndentSpaces;
+    return leftParenCol + indentationForNarrowStyle();
 }
 
 function getIndentationInBlockComment(document:vscode.TextDocument, commentRange: ElementRange, cursorNewPos2d:Position): string

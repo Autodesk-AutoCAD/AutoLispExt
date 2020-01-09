@@ -36,7 +36,7 @@ export class CursorPosition {
 }
 
 
-class InputStream {
+class StringInputStream {
     pos: number;
     line: number;
     col: number;
@@ -109,7 +109,7 @@ class InputStream {
 }
 
 export class ListReader {
-    input: InputStream;
+    input: StringInputStream;
     cachedLists: Array<Sexpression>;
     document: vscode.TextDocument;
     startPosInDoc: CursorPosition;
@@ -119,7 +119,7 @@ export class ListReader {
         let lengthOfLeftTrim = text.length - trimmedStr.length;
 
         let startPos2D = curDoc.positionAt(startPos.offsetInDocument);
-        this.input = new InputStream(text.trimRight(), startPos2D);
+        this.input = new StringInputStream(text.trimRight(), startPos2D);
         this.input.ignore(lengthOfLeftTrim);
 
         this.cachedLists = new Array<Sexpression>();
@@ -365,8 +365,6 @@ export class ListReader {
         let next = new vscode.Position(cursorPos2d.line + 1, 0);
 
         let nextCharOffsetInDoc = document.offsetAt(next);
-
-        let delta = startPosOffset.offsetInDocument - startPosOffset.offsetInSelection;
 
         let endPos = new CursorPosition();
         endPos.offsetInDocument = nextCharOffsetInDoc;

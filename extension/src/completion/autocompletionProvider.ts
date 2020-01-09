@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import * as os from 'os';
 import * as path from 'path';
 
-export let internalLispFuncs: Array<String> = [];
-export let internalDclKeys: Array<String> = [];
-export let winOnlyListFuncPrefix: Array<string> = [];
+let internalLispFuncs: Array<String> = [];
+let internalDclKeys: Array<String> = [];
+let winOnlyListFuncPrefix: Array<string> = [];
 
 export function readAllBultinFunctions() {
     var fs = require("fs");

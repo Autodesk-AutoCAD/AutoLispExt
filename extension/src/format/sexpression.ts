@@ -1,9 +1,13 @@
 import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
 
 let gMaxLineChars = 80;
-export let gIndentSpaces = 2;
+let gIndentSpaces = 2;
 let gClosedParenInSameLine = true;
 let gLongListFormatAsSingleColumn = false;
+
+export function indentationForNarrowStyle(): number {
+    return gIndentSpaces;
+}
 
 export class LispAtom {
     public symbol: string;
@@ -607,6 +611,25 @@ export class Sexpression extends LispAtom {
         return false;
     }
 
+    /* There are 3 formating styles: 
+    NARROW FORMATTING STYLE
+    Looks like
+    ;--------------------------------------------------
+    (XXXX
+        yyyy
+        ...)
+    ;--------------------------------------------------
+    PLAIN FORMATTING STYLE
+    The expression is formatted in PLAIN STYLE if its opening and
+    closing parenthesis stands on the same text line.
+    WIDE FORMATTING STYLE
+    Looks like
+    ;--------------------------------------------------
+    (XXXX yyyy
+               ...)
+    ;-------------------------------------------------- */
+    //
+    //
     // The formatter has two seperate steps:
     // a. Tokenize: break into the lisp code into individual syntax atoms
     // b. Assemable the tokens to expected format
@@ -636,7 +659,7 @@ export class Sexpression extends LispAtom {
                 !this.canBeFormatAsPlain(startColumn)) {
 
                 let opName = lispOperator.symbol.toLowerCase();
-                if (opName == "if" || opName == "lambda")
+                if (opName == "if" || opName == "lambda" || opName == "repeat")
                     return this.formatList(startColumn, 3);
                 else if (opName == "cond")
                     return this.formatList(startColumn, 2, true);
