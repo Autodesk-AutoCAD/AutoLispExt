@@ -275,11 +275,11 @@ export class Sexpression extends LispAtom {
     }
 
     public formatListAsColumn(startColumn: number, alignCol?: number): string {
-        if (startColumn + this.length() < gMaxLineChars)
-            return this.formatAsPlainStyle(startColumn);
-
         if (gLongListFormatAsSingleColumn)
             return this.formatList(startColumn, alignCol == undefined ? 1 : alignCol);
+
+        if (startColumn + this.length() < gMaxLineChars)
+            return this.formatAsPlainStyle(startColumn);
 
         return this.formatListToFillMargin(startColumn, alignCol);
     }

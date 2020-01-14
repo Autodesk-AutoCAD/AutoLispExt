@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -12,9 +12,16 @@
 		"vscode": "^1.31.1"
 	},
 	"publisher": "Autodesk",
+	"keywords": [
+		"lisp",
+		"autolisp",
+		"dcl"
+	  ],
 	"categories": [
 		"Debuggers",
-		"Programming Languages"
+		"Programming Languages",
+		"Formatters",
+		"Snippets"
 	],
 	"icon": "images/adsk_lisp.png",
 	"main": "./extension/out/extension",
