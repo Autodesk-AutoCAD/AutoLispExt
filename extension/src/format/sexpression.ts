@@ -19,6 +19,9 @@ export class LispAtom {
         this.column = column;
         this.symbol = sym;
     }
+    symbLine():number{
+        return this.line;
+    }
     length(): number {
         return this.symbol.length;
     }
@@ -78,6 +81,14 @@ export class Sexpression extends LispAtom {
             res += atom.length();
         });
         return res;
+    }
+
+    symbLine():number{
+        if (this.atoms.length == 0)
+        return -1;
+
+        let lastAtom = this.atoms[this.atoms.length - 1];
+        return lastAtom.symbLine();
     }
 
     size(): number {
@@ -240,7 +251,7 @@ export class Sexpression extends LispAtom {
 
                 res += line;
                 if (!this.atoms[i - 1].isLineComment()
-                    && this.atoms[i].line != this.atoms[i - 1].line) {
+                    && this.atoms[i].symbLine() != this.atoms[i - 1].symbLine()) {
                     res += this.addNewLine(startColumn + alignWidth);
                 }
                 res += this.atoms[i].format(startColumn + alignWidth);
@@ -328,7 +339,7 @@ export class Sexpression extends LispAtom {
                 break;
             }
 
-            if (this.atoms[i].isLineComment() && this.atoms[i - 1].line == this.atoms[i].line) {
+            if (this.atoms[i].isLineComment() && this.atoms[i - 1].symbLine() == this.atoms[i].symbLine()) {
                 let comment = this.atoms[i].format(columnWidth);
                 res += " " + comment;
 
@@ -417,7 +428,7 @@ export class Sexpression extends LispAtom {
                 break;
             }
 
-            if (this.atoms[j].isLineComment() && this.atoms[j - 1].line == this.atoms[j].line) {
+            if (this.atoms[j].isLineComment() && this.atoms[j - 1].symbLine() == this.atoms[j].symbLine()) {
                 let comment = this.atoms[j].format(columnWidth);
                 res += " " + comment;
                 continue;
