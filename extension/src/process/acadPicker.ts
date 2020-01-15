@@ -82,7 +82,10 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 		let ProcessFilter;
 		let processName = "";	// debugger's process name
 
-        if (vscode.window.activeTextEditor && acitiveDocHasValidLanguageId()) {
+		if(ProcessPathCache.globalAcadNameInUserAttachConfig){
+			processName = ProcessPathCache.globalAcadNameInUserAttachConfig;
+		}
+		else if (vscode.window.activeTextEditor && acitiveDocHasValidLanguageId()) {
 			//read attach configuration from launch.json
 			let configurations:[] = vscode.workspace.getConfiguration("launch", vscode.window.activeTextEditor.document.uri).get("configurations");
 			let attachLispConfig;
