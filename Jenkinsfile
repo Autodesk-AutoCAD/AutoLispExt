@@ -77,6 +77,13 @@ timestamps {
                         }
                     }
                 }
+
+                stage ('Deploy') {
+                    sh """
+                    cd $WORKSPACE
+                    python publish.py
+                    """
+                }
             }
         }
     }
