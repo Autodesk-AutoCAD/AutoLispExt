@@ -445,7 +445,7 @@ function getWhiteSpaceNumber(document: TextDocument, exprInfo: ElementRange, par
             atoms = atoms.concat(semantics.operands);
             sexpr.setAtoms(atoms);
 
-            if (sexpr.shouldFormatWideStyle() || sexpr.isPureLongList()) {
+            if (sexpr.shouldFormatWideStyle(cursorPos2d.character)) {
                 charCol = getIdentationForWideFormatStyle(document, cursorPos2d, semantics);
                 if (charCol >= 0)
                     return charCol;

@@ -6,10 +6,21 @@ let internalLispFuncs: Array<String> = [];
 let internalDclKeys: Array<String> = [];
 let winOnlyListFuncPrefix: Array<string> = [];
 
+export function isInternalAutoLispOp(item: string): boolean {
+    if (!item)
+        return false;
+
+    for (let i = 0; i < internalLispFuncs.length; i++) {
+        if (internalLispFuncs[i] === item)
+            return true;
+    }
+    return false;
+}
+
 export function readAllBultinFunctions() {
     var fs = require("fs");
     var lispkeyspath = path.resolve(__dirname, "../../data/alllispkeys.txt");
-    fs.readFile(lispkeyspath, "utf8", function(err, data) {
+    fs.readFile(lispkeyspath, "utf8", function (err, data) {
         if (err === null) {
             if (data.includes("\r\n")) {
                 internalLispFuncs = data.split("\r\n");
@@ -20,7 +31,7 @@ export function readAllBultinFunctions() {
         }
     });
     var dclkeyspath = path.resolve(__dirname, "../../data/alldclkeys.txt");
-    fs.readFile(dclkeyspath, "utf8", function(err, data) {
+    fs.readFile(dclkeyspath, "utf8", function (err, data) {
         if (err === null) {
             if (data.includes("\r\n")) {
                 internalDclKeys = data.split("\r\n");
@@ -32,7 +43,7 @@ export function readAllBultinFunctions() {
     });
 
     var winonlyprefixpath = path.resolve(__dirname, "../data/winonlylispkeys_prefix.txt");
-    fs.readFile(winonlyprefixpath, "utf8", function(err, data) {
+    fs.readFile(winonlyprefixpath, "utf8", function (err, data) {
         if (err == null) {
             if (data.includes("\r\n")) {
                 winOnlyListFuncPrefix = data.split("\r\n");
@@ -95,7 +106,7 @@ export function registerAutoCompletionProviders() {
                 return allSuggestions;
             }
             else {
-                return allSuggestions.filter(function(suggestion) {
+                return allSuggestions.filter(function (suggestion) {
                     for (var prefix of winOnlyListFuncPrefix) {
                         if (suggestion.label.startsWith(prefix)) {
                             return false;

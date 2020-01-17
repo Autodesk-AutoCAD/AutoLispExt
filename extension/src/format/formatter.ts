@@ -16,7 +16,6 @@ export class LispFormatter {
             selectionStartOffset = editor.document.offsetAt(editor.selection.start);
 
             fileParser = new LispParser(editor);
-            fileParser.tokenizeString(textString, 0);
         }
         else {
             textString = editor.document.getText();
@@ -28,7 +27,7 @@ export class LispFormatter {
             let parser = new LispParser(editor);
             parser.tokenizeString(textString, selectionStartOffset);
             if (fileParser)
-                fileParser.tokenizeString(textString, 0);
+                fileParser.tokenizeString(editor.document.getText(), 0);
 
             return this.formatGut(editor, parser, textString, fileParser);
         } catch (e) {
@@ -64,8 +63,11 @@ export class LispFormatter {
 
                 if (isTopLevelAtom && formattedstring.length > 0) {
                     let lastCh = formattedstring.substr(-1);
-                    if (lastCh != "\n")
-                        formattedstring += linefeed;
+                    if (lastCh != "\n") {
+                        formattedstring = formattedstring.trimRight();
+                        if (formattedstring != linefeed && formattedstring.length > 0)
+                            formattedstring += linefeed;
+                    }
                 }
 
                 formattedstring += formatstr;
