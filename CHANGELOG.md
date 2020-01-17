@@ -1,3 +1,6 @@
+## [1.1.0] - 2020-01-19
+Refine lisp code formatter and auto indent
+
 ## [1.0.2] - 2020-01-02
 Initial release to VSCode marketplace
 

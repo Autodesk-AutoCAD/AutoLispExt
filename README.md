@@ -22,7 +22,8 @@ The extension is distributed under the [Autodesk Terms of Use](https://www.autod
     * Syntax highlight
     * Autocompletion and code snippets
     * Smart bracket
-    * Document format 
+    * Document/selection formatting using narrow or wide style
+    * Auto indent
 
 ## Getting started
 - Step 1. Install a supported AutoCAD release on your system.
