@@ -1,7 +1,7 @@
 import os
 import os.path 
 import shutil, errno
-
+import platform
 
 # init
 def init():
@@ -18,6 +18,15 @@ def init():
 	print("          complete npm run compile")
 	print("===============================================")
 	print("\n\n")
+
+	if platform.system() == "Windows":
+		src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'acadProcessFinder.exe')
+		dst = os.path.join(os.path.curdir, 'extension', 'out', 'process')
+		shutil.copy(src, dst)
+		print("===============================================")
+		print("          copied acadProcessFinder.exe")
+		print("===============================================")
+		print("\n\n")
 
 def makepackage_vsix():
 	vsce = os.path.join(os.path.curdir, 'node_modules', '.bin', 'vsce')

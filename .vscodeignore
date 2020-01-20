@@ -16,6 +16,8 @@ src/**
 DevREADME.md
 Jenkinsfile
 pack.py
+winCompile.bat
 package-lock.json
 tsconfig.json
 tslint.json
+utils/**

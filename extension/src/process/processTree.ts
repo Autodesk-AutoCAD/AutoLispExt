@@ -28,7 +28,7 @@ function isNothingFound(msg : string) {
 	return false;
 }
 
-export function getProcesses(one: (pid: number, ppid: number, command: string, args: string, exepath: string, date?: number) => void) : Promise<void> {
+export function getProcesses(one: (pid: number, ppid: number, command: string, args: string, exepath: string, date?: number, title?: string) => void) : Promise<void> {
 
 	function lines(callback: (a: string) => void) {
 		let unfinished = '';
@@ -48,45 +48,28 @@ export function getProcesses(one: (pid: number, ppid: number, command: string, a
 		let proc: ChildProcess;
 
 		if (process.platform === 'win32') {
-			let nameClause = undefined;
+			let acadExeName = undefined;
 			if(ProcessPathCache.globalAcadNameInUserAttachConfig)
-				nameClause = 'name like \'' + ProcessPathCache.globalAcadNameInUserAttachConfig +'%\'';
+				acadExeName = ProcessPathCache.globalAcadNameInUserAttachConfig;
 			else
-				nameClause = 'name like \'acad%\'';
+				acadExeName = 'acad';
 
 			const CMD_PAT = /^(.*)\s+([0-9]+)\.[0-9]+[+-][0-9]+\s+(.*)\s+([0-9]+)\s+([0-9]+)$/;
 			//const CMD_PAT = /^(.*)\s+([0-9]+)\.[0-9]+[+-][0-9]+\s+([0-9]+)\s+([0-9]+)$/;
-			const wmic = join(process.env['WINDIR'] || 'C:\\Windows', 'System32', 'wbem', 'WMIC.exe');
-			proc = spawn(wmic, [ 'process', 'where', nameClause, 'get', 'CommandLine,CreationDate,ExecutablePath,ParentProcessId,ProcessId' ]);
+			const acadProcFinder = join(__dirname, 'acadProcessFinder.exe');
+			proc = spawn(acadProcFinder, [ acadExeName ]);
 			proc.stdout.setEncoding('utf8');
 			proc.stdout.on('data', lines(line => {
 				//let matches = _.compact(line.trim().split(' '));
-				let matches = CMD_PAT.exec(line.trim());
-				if (matches && matches.length === 6) {
-					const pid = Number(matches[5]);
-					const ppid = Number(matches[4]);
-					const exepath = matches[3].trim();
-					const date = Number(matches[2]);
-					let args = matches[1].trim();
-					if (!isNaN(pid) && !isNaN(ppid) && args) {
-						let command = args;
-						if (args[0] === '"') {
-							const end = args.indexOf('"', 1);
-							if (end > 0) {
-								command = args.substr(1, end-1);
-								args = args.substr(end + 2);
-							}
-						} else {
-							const end = args.indexOf(' ');
-							if (end > 0) {
-								command = args.substr(0, end);
-								args = args.substr(end + 1);
-							} else {
-								args = '';
-							}
-						}
-						one(pid, ppid, command, args, exepath, date);
-					}
+				let cells = line.split('\t');
+				if(cells.length == 5) {
+					let exePath = cells[0];
+					let startTime = cells[1];
+					let args = cells[2];
+					let pid = cells[3];
+					let title = cells[4];
+
+					one(Number(pid), -1, exePath, args, exePath, Number(startTime), title);
 				}
 			}));
 

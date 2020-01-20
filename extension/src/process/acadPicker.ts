@@ -78,7 +78,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 	let seq = 0;	// default sort key
 
 	return getProcesses((pid: number, ppid: number, command: string, args: string, executablePath: string,
-		 date?: number) => {
+		 date?: number, title?: string) => {
 		let ProcessFilter;
 		let processName = "";	// debugger's process name
 
@@ -115,6 +115,13 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 		let description = '';
 		let pidOrPort = '';
 
+		let titleField = '';
+
+		if(title)
+		    titleField = title;
+		else
+		    titleField = basename(executablePath, '.exe');
+
 		if (usePort) {
 			if (protocol === 'inspector') {
 				description = localize('process.id.port', "process id: {0}, debug port: {1}", pid, port);
@@ -149,7 +156,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 		if (description && pidOrPort) {
 			items.push({
 				// render data
-				label: executable_name,
+				label: titleField,
 				description: args,
 				detail: description,
 
