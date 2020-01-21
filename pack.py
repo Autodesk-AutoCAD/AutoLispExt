@@ -20,7 +20,7 @@ def init():
 	print("\n\n")
 
 	if platform.system() == "Windows":
-		src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'acadProcessFinder.exe')
+		src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'bin', 'acadProcessFinder.exe')
 		dst = os.path.join(os.path.curdir, 'extension', 'out', 'process')
 		shutil.copy(src, dst)
 		print("===============================================")
