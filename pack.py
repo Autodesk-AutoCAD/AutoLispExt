@@ -19,14 +19,16 @@ def init():
 	print("===============================================")
 	print("\n\n")
 
-	if platform.system() == "Windows":
-		src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'bin', 'acadProcessFinder.exe')
-		dst = os.path.join(os.path.curdir, 'extension', 'out', 'process')
+	src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'bin', 'acadProcessFinder.exe')
+	dst = os.path.join(os.path.curdir, 'extension', 'out', 'process')
+	try:
 		shutil.copy(src, dst)
 		print("===============================================")
 		print("          copied acadProcessFinder.exe")
 		print("===============================================")
 		print("\n\n")
+	except IOError, e:
+		print "Unable to copy file. %s" % e
 
 def makepackage_vsix():
 	vsce = os.path.join(os.path.curdir, 'node_modules', '.bin', 'vsce')
