@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "no existe. Compruebe que el archivo se encuentre en la misma carpeta que el producto especificado en el archivo launch.json.",
+  "autolispext.debug.noacad": "no existe. Compruebe y corrija la ruta de carpeta al archivo ejecutable del producto.",
+  "autolispext.debug.acad.nosupport": "Este ejemplar de AutoCAD no admite la depuración de archivos de AutoLISP: utilice una versión posterior a AutoCAD 2020.",
+  "autolispext.debug.launchjson.path": "Especifique la ruta absoluta al producto con el atributo Path del archivo launch.json.",
+  "autolispext.debug.prod.path.win": "Especifique la ruta absoluta del producto. Por ejemplo, C://Archivos de programa//Autodesk//AutoCAD//acad.exe.",
+  "autolispext.debug.prod.path.osx": "Especifique la ruta absoluta del producto. Por ejemplo, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.",
+  "autolispext.debug.prod.path.other": "Especifique la ruta absoluta del producto.",
+  "autolispext.debug.noprocess.eror": "No se ha encontrado ningún proceso que enlazar."
+}

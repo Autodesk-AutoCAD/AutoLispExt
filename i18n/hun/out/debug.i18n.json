@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "nem létezik. Győződjön meg arról, hogy a fájl ugyanabban a mappában található, mint amelyet a launch.json fájlban lévő termékhez megadott.",
+  "autolispext.debug.noacad": "nem létezik. Ellenőrizze és javítsa ki a termék végrehajtható fájljához tartozó mappa elérési útját.",
+  "autolispext.debug.acad.nosupport": "Az AutoCAD ezen példánya nem támogatja az AutoLISP-fájlok hibakeresését. Használjon egy AutoCAD 2020-nál újabb kiadást.",
+  "autolispext.debug.launchjson.path": "Adja meg a termék abszolút elérési útját és launch.json fájl Elérési út attribútumával.",
+  "autolispext.debug.prod.path.win": "Adja meg a termék abszolút elérési útját. Például: C://Program Files//Autodesk//AutoCAD//acad.exe.",
+  "autolispext.debug.prod.path.osx": "Adja meg a termék abszolút elérési útját. Például: /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.",
+  "autolispext.debug.prod.path.other": "Adja meg a termék abszolút elérési útját.",
+  "autolispext.debug.noprocess.eror": "Nem található olyan folyamat, amelyhez csatolni lehetne."
+}

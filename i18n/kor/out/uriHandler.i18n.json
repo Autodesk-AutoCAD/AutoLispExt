@@ -1,0 +1,6 @@
+{
+  "autolispext.urihandler.invaid": "AutoCAD AutoLISP 확장자에 대한 잘못된 호출입니다.",
+  "autolispext.urihandler.activeddebugcfg": "현재 디버그 구성: ",
+  "autolispext.urihandler.debug.start": "메뉴 막대에서 디버그 > 디버그 시작을 클릭하여 현재 AutoLISP 원본 파일을 디버그합니다.",
+  "autolispext.urihandler.debug.openfile": "AutoLISP 원본 파일을 열고 메뉴 막대에서 디버그 > 디버그 시작을 클릭하여 파일을 디버그합니다."
+}

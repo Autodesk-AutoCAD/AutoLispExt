@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Selecione o processo a ser anexado. Assegure-se de que o AutoCAD, ou um dos conjuntos de ferramentas especializadas, esteja em execução. Digite “acad” e selecione-o na lista.",
+  "autolispext.pickprocess.acad.osx": "Selecione o processo a ser anexado. Assegure-se de que o AutoCAD está em execução. Digite “AutoCAD” e selecione-o na lista.",
+  "autolispext.pickprocess.acad.other": "Selecione o processo a ser anexado",
+  "autolispext.pickprocess.pickfailed": "Falha no selecionador do processo ({0})",
+  "autolispext.pickprocess.process.id.port": "ID do processo: {0}, porta de depuração: {1}",
+  "autolispext.pickprocess.process.id.legacy": "ID do processo: {0}, porta de depuração: {1} (protocolo herdado)",
+  "autolispext.pickprocess.process.port.singal": "ID do processo: {0}, porta de depuração: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "ID do processo: {0} ({1})"
+}

@@ -5,6 +5,10 @@ import platform
 
 # init
 def init():
+	print("===============================================")
+	print("             try to install gulp-cli globally")
+	os.system("npm install --global gulp-cli")
+
 	os.system("npm install --unsafe-perm")
 
 	print("===============================================")
@@ -12,15 +16,16 @@ def init():
 	print("===============================================")
 	print("\n\n")
 
-	os.system("npm run compile")
+    # "build" means to generate i18n content
+	os.system("gulp build")
 
 	print("===============================================")
-	print("          complete npm run compile")
+	print("          complete gulp build")
 	print("===============================================")
 	print("\n\n")
 
 	src = os.path.join(os.path.curdir, 'utils', 'acadProcessFinder', 'bin', 'acadProcessFinder.exe')
-	dst = os.path.join(os.path.curdir, 'extension', 'out', 'process')
+	dst = os.path.join(os.path.curdir, 'out', 'process')
 	try:
 		shutil.copy(src, dst)
 		print("===============================================")
@@ -31,9 +36,8 @@ def init():
 		print "Unable to copy file. %s" % e
 
 def makepackage_vsix():
-	vsce = os.path.join(os.path.curdir, 'node_modules', '.bin', 'vsce')
 	output_opt = " -o " + os.path.join(os.path.curdir, 'autolispext.vsix')
-	os.system(vsce + " package" + output_opt)
+	os.system("gulp package" + output_opt)
 
 
 if __name__ == "__main__":

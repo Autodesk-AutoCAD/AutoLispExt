@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "點選要貼附的程序。請確保 AutoCAD 或其中一個專用工具集正在執行。鍵入 acad 並從清單中選取。",
+  "autolispext.pickprocess.acad.osx": "點選要貼附的程序。請確保 AutoCAD 正在執行。鍵入 AutoCAD 並從清單中選取。",
+  "autolispext.pickprocess.acad.other": "點選要貼附的程序",
+  "autolispext.pickprocess.pickfailed": "程序點選器失敗 ({0})",
+  "autolispext.pickprocess.process.id.port": "程序 ID: {0}，除錯連接埠: {1}",
+  "autolispext.pickprocess.process.id.legacy": "程序 ID: {0}，除錯連接埠: {1} (舊式通訊協定)",
+  "autolispext.pickprocess.process.port.singal": "程序 ID: {0}，除錯連接埠: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "程序 ID: {0} ({1})"
+}

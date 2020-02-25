@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "拾取要附着的进程。确保 AutoCAD 或其中一个专业化工具组合正在运行。键入 acad 并从列表中选择。",
+  "autolispext.pickprocess.acad.osx": "拾取要附着的进程。确保 AutoCAD 正在运行。键入 AutoCAD 并从列表中选择它。",
+  "autolispext.pickprocess.acad.other": "拾取要附着的进程",
+  "autolispext.pickprocess.pickfailed": "进程选择器失败 ({0})",
+  "autolispext.pickprocess.process.id.port": "进程 ID: {0}，调试端口： {1}",
+  "autolispext.pickprocess.process.id.legacy": "进程 ID: {0}，调试端口： {1} （传统协议）",
+  "autolispext.pickprocess.process.port.singal": "进程 ID: {0}，调试端口： {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "进程 ID: {0} ({1})"
+}

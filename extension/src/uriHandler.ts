@@ -15,7 +15,9 @@ import * as vscode from 'vscode';
 import {
     acitiveDocHasValidLanguageId
 } from './utils'
-import {setDefaultAcadPid } from "./debug"
+import { setDefaultAcadPid } from "./debug"
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 function getUrlParams(queryString) {
     let hashes = queryString.split('&')
@@ -25,35 +27,45 @@ function getUrlParams(queryString) {
     }, {})
 }
 
-const modalMsgOption = { modal: true};
+const modalMsgOption = { modal: true };
 export function onUriRequested(uri: vscode.Uri) {
     let qs = getUrlParams(uri.query);
-    
+
     let pidStr = qs["pid"];
-    if(pidStr === undefined) {
-        vscode.window.showInformationMessage("Invalid call to AutoCAD AutoLISP Extension.");
+    if (pidStr === undefined) {
+        let msg = localize("autolispext.urihandler.invaid", "Invalid call to AutoCAD AutoLISP Extension.");
+        vscode.window.showInformationMessage(msg);
         return;
     }
 
     setDefaultAcadPid(parseInt(pidStr));
 
-    if(vscode.debug.activeDebugSession){
-        vscode.window.showInformationMessage("Current debug configuration: " + vscode.debug.activeDebugSession.name,
-                    modalMsgOption);
+    if (vscode.debug.activeDebugSession) {
+        let msg = localize("autolispext.urihandler.activeddebugcfg", "Current debug configuration: ");
+        vscode.window.showInformationMessage(msg + vscode.debug.activeDebugSession.name,
+            modalMsgOption);
         return;
     }
 
-    if(vscode.window.activeTextEditor){
-        if(acitiveDocHasValidLanguageId())
-            vscode.window.showInformationMessage("From the menu bar, click Debug > Start Debugging to debug the current AutoLISP source file.", modalMsgOption);
-        else
-            vscode.window.showInformationMessage("Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.", modalMsgOption);
-        
+    if (vscode.window.activeTextEditor) {
+        if (acitiveDocHasValidLanguageId()) {
+            let msg = localize("autolispext.urihandler.debug.start",
+                "From the menu bar, click Debug > Start Debugging to debug the current AutoLISP source file.");
+            vscode.window.showInformationMessage(msg, modalMsgOption);
+        }
+        else {
+            let msg = localize("autolispext.urihandler.debug.openfile",
+                "Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.");
+            vscode.window.showInformationMessage(msg, modalMsgOption);
+        }
+
         return;
     }
- 
-    vscode.window.showInformationMessage("Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.", modalMsgOption);
+
+    let msg = localize("autolispext.urihandler.debug.openfile",
+        "Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.");
+    vscode.window.showInformationMessage(msg, modalMsgOption);
 
     return;
-   
+
 }

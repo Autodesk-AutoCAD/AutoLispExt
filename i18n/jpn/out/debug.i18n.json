@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "は存在しません。launch.json ファイルで指定された製品のフォルダと同じフォルダにファイルが存在することを確認してください。",
+  "autolispext.debug.noacad": "は存在しません。製品の実行ファイルへのフォルダ パスを確認して修正してください。",
+  "autolispext.debug.acad.nosupport": "AutoCAD のこのインスタンスは AutoLISP ファイルのデバッグをサポートしていません。AutoCAD 2020 より後のリリースを使用してください。",
+  "autolispext.debug.launchjson.path": "launch.json ファイルの Path 属性を使用して、製品への絶対パスを指定します。",
+  "autolispext.debug.prod.path.win": "製品の絶対パスを指定します。例: C://Program Files//Autodesk//AutoCAD//acad.exe",
+  "autolispext.debug.prod.path.osx": "製品の絶対パスを指定します。例: /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD",
+  "autolispext.debug.prod.path.other": "製品の絶対パスを指定します。",
+  "autolispext.debug.noprocess.eror": "アタッチするプロセスが見つかりませんでした。"
+}

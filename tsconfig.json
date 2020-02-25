@@ -3,18 +3,15 @@
 		"module": "commonjs",
 		"target": "es6",
 		"outDir": "out",
-		"rootDir": "src",
+		"rootDir": "extension/src",
 		"lib": [ "es6" ],
 		"sourceMap": true
 	},
 	"include": [
-		"src"
+		"extension/src"
 	],
 	"exclude": [
 		"node_modules",
 		".vscode-test"
-	],
-	"references": [
-		{ "path": "./extension" }
 	]
 }

@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -24,7 +24,7 @@
 		"Snippets"
 	],
 	"icon": "images/adsk_lisp.png",
-	"main": "./extension/out/extension",
+	"main": "./out/extension",
 	"files": [
 		"autolispext.vsix"
 	],
@@ -39,22 +39,22 @@
 		"commands": [
 			{
 				"command": "extension.loadCurrentLisp",
-				"title": "This command is used to load current active lisp document."
+				"title": "%autolispext.loadcurrentfile.title%"
 			}
 		],
 		"configuration": {
 			"type": "object",
-			"title": "AutoCAD® AutoLISP configuration",
+			"title": "%autolispext.configuration.title%",
 			"properties": {
 				"autolispext.MaxLineChars": {
 					"type": "number",
 					"default": 85,
-					"description": "Suggested maximum number of characters to display on each line. Value must be 60 or greater."
+					"description": "%autolispext.configuration.maxlinechars.desc%"
 				},
 				"autolispext.NarrowStyleIndent": {
 					"type": "number",
 					"default": 2,
-					"description": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6."
+					"description": "%autolispext.configuration.narrowstyleindent.desc%"
 				},
 				"autolispext.CloseParenthesisStyle": {
 					"type": "string",
@@ -63,7 +63,7 @@
 						"New line with outer indentation"
 					],
 					"default": "New line with outer indentation",
-					"description": "Controls the style of closing parenthesis. Closing parenthesis is placed on the same line as the function or aligned with the function’s opening parenthesis."
+					"description": "%autolispext.configuration.closeparenstyle.desc%"
 				},
 				"autolispext.LongListFormatStyle": {
 					"type": "string",
@@ -72,7 +72,7 @@
 						"Fill to margin"
 					],
 					"default": "Fill to margin",
-					"description": "Controls the format style of long lists. Each or multiple parameters of a function are placed on separate lines."
+					"description": "%autolispext.configuration.longlistformatstyle%"
 				}
 			}
 		},
@@ -208,7 +208,7 @@
 						"properties": {
 							"attributes": {
 								"type": "object",
-								"description": "user settings for process list filter param.",
+								"description": "%autolispext.debug.attachconfig.desc%",
 								"default": ""
 							}
 						}
@@ -227,7 +227,7 @@
 				"configurationSnippets": [
 					{
 						"label": "AutoLISP Debug: Attach",
-						"description": "A new configuration for 'debugging' a user selected lisp file.",
+						"description": "%autolispext.debug.config.snippet.desc%",
 						"body": {
 							"type": "attachlisp",
 							"request": "attach",
@@ -276,7 +276,7 @@
 						"properties": {
 							"attributes": {
 								"type": "object",
-								"description": "user settings for AutoCAD path and startup params.",
+								"description": "%autolispext.debug.launchconfig.desc%",
 								"default": ""
 							}
 						}
@@ -296,7 +296,7 @@
 				"configurationSnippets": [
 					{
 						"label": "AutoLISP Debug: Launch",
-						"description": "A new configuration for 'debugging' a user selected lisp file.",
+						"description": "%autolispext.debug.config.snippet.desc%",
 						"body": {
 							"type": "launchlisp",
 							"request": "launch",
@@ -312,22 +312,31 @@
 		]
 	},
 	"scripts": {
-		"vscode:prepublish": "cd extension && npm run update-vscode && cd .. && npm run compile",
 		"compile": "tsc -b",
 		"watch": "tsc -b -w",
-		"postinstall": "cd extension && npm install && cd ..",
 		"test": "npm run compile && node ./node_modules/vscode/bin/test"
 	},
 	"devDependencies": {
 		"@types/mocha": "5.2.0",
 		"@types/node": "8.10.18",
+		"del": "^4.1.1",
+		"event-stream": "^4.0.1",
+		"gulp": "^4.0.2",
+		"gulp-filter": "^5.1.0",
+		"gulp-sourcemaps": "^2.6.5",
+		"gulp-typescript": "^5.0.1",
 		"request": "2.88.0",
+		"run-sequence": "^2.2.1",
 		"tslint": "5.11.0",
 		"typescript": "3.2.4",
-		"url-parse": "1.4.4"
+		"url-parse": "1.4.4",
+		"vscode": "^1.1.36",
+		"vscode-nls-dev": "^3.2.6"
 	},
 	"dependencies": {
 		"vsce": "1.57.0",
-		"vscode-languageserver-protocol": "3.14.1"
+		"vscode-languageclient": "4.1.4",
+		"vscode-nls": "3.2.5",
+		"vscode-i18n": "0.2.0"
 	}
 }

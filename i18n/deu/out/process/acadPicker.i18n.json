@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Wählen Sie den Prozess aus, der zugeordnet werden soll. Stellen Sie sicher, dass AutoCAD oder eines der spezialisierten Toolsets ausgeführt wird. Geben Sie acad ein, und wählen Sie es aus der Liste aus.",
+  "autolispext.pickprocess.acad.osx": "Wählen Sie den Prozess aus, der zugeordnet werden soll. Stellen Sie sicher, dass AutoCAD ausgeführt wird. Geben Sie AutoCAD ein, und wählen Sie es aus der Liste aus.",
+  "autolispext.pickprocess.acad.other": "Zuzuordnenden Prozess wählen",
+  "autolispext.pickprocess.pickfailed": "Prozessauswahl fehlgeschlagen ({0})",
+  "autolispext.pickprocess.process.id.port": "Prozess-ID: {0}, Debug-Anschluss: {1}",
+  "autolispext.pickprocess.process.id.legacy": "Prozess-ID: {0}, Debug-Anschluss: {1} (älteres Protokoll)",
+  "autolispext.pickprocess.process.port.singal": "Prozess-ID: {0}, Debug-Anschluss: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "Prozess-ID: {0} ({1})"
+}

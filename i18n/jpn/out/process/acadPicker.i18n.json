@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "アタッチするプロセスを選択します。AutoCAD または業種別ツールセットのいずれかが実行されていることを確認します。acad と入力して、リストから選択します。",
+  "autolispext.pickprocess.acad.osx": "アタッチするプロセスを選択します。AutoCAD が実行されていることを確認します。AutoCAD と入力して、リストから選択します。",
+  "autolispext.pickprocess.acad.other": "アタッチするプロセスを選択",
+  "autolispext.pickprocess.pickfailed": "プロセス ピッカーが失敗しました({0})",
+  "autolispext.pickprocess.process.id.port": "プロセス ID: {0}、デバッグ ポート: {1}",
+  "autolispext.pickprocess.process.id.legacy": "プロセス ID: {0}、デバッグ ポート: {1} (従来のプロトコル)",
+  "autolispext.pickprocess.process.port.singal": "プロセス ID: {0}、デバッグ ポート: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "プロセス ID: {0} ({1})"
+}

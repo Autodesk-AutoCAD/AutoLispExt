@@ -1,0 +1,6 @@
+{
+  "autolispext.urihandler.invaid": "AutoCAD AutoLISP Extension の呼び出しが無効です。",
+  "autolispext.urihandler.activeddebugcfg": "現在のデバッグ環境設定: ",
+  "autolispext.urihandler.debug.start": "現在の AutoLISP ソース ファイルをデバッグするには、メニュー バーから、[デバッグ] > [デバッグを開始]をクリックします。",
+  "autolispext.urihandler.debug.openfile": "ファイルをデバッグするには、AutoLISP ソース ファイルを開き、メニューバーから[デバッグ] > [デバッグを開始]をクリックします。"
+}

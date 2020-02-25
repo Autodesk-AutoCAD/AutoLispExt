@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "이(가) 존재하지 않습니다. launch.json 파일에서 지정된 제품에 대한 파일과 동일한 폴더에 해당 파일이 있는지 확인하십시오.",
+  "autolispext.debug.noacad": "이(가) 없습니다. 제품 실행 파일의 폴더 경로를 확인하고 수정하십시오.",
+  "autolispext.debug.acad.nosupport": "이 AutoCAD 인스턴스는 AutoLISP 파일 디버그를 지원하지 않습니다. AutoCAD 2020 이후 릴리즈를 사용하십시오.",
+  "autolispext.debug.launchjson.path": "launch.json 파일의 경로 속성을 사용해 제품의 절대 경로를 지정합니다.",
+  "autolispext.debug.prod.path.win": "제품의 절대 경로를 지정합니다(예: C://Program Files//Autodesk//AutoCAD//acad.exe).",
+  "autolispext.debug.prod.path.osx": "제품의 절대 경로를 지정합니다(예: /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD).",
+  "autolispext.debug.prod.path.other": "제품의 절대 경로를 지정합니다.",
+  "autolispext.debug.noprocess.eror": "부착할 프로세스가 없습니다."
+}

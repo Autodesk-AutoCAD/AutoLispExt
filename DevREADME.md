@@ -14,6 +14,7 @@ AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Ext
 You could setup the develop environment by:
 ```
 cd AutoLispExt
+npm install --global gulp-cli
 npm install 
 ```
 
@@ -21,6 +22,10 @@ npm install
 You could compile the code by:
 ```
 cd AutoLispExt
+gulp build
+```
+If you only want to build the ts file and debug it via F5, you can run:
+```
 npm run compile
 ```
 
@@ -28,11 +33,13 @@ npm run compile
 You could package the extension by:
 ```
 cd AutoLispExt
-.\\node_modules\\.bin\\vsce package
+gulp package
 ```
+Note that don't run "publish" command otherwise you make sure you want to do.
+For the publish command it will release current version extension to vscode market. 
 
 ## The Script pack.py
-You could do all above steps  by the script pack.py.
+You could do all above steps  by the script pack.py, it is python2
 ```
 cd AutoLispExt
 python pack.py

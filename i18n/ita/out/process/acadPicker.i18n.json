@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Selezionare il processo da associare. Assicurarsi che AutoCAD o uno dei set di strumenti specializzati sia in esecuzione. Digitare acad e selezionarlo dall'elenco.",
+  "autolispext.pickprocess.acad.osx": "Selezionare il processo da associare. Assicurarsi che AutoCAD sia in esecuzione. Digitare AutoCAD e selezionarlo dall'elenco.",
+  "autolispext.pickprocess.acad.other": "Seleziona il processo da associare",
+  "autolispext.pickprocess.pickfailed": "Selezione processo non riuscita ({0})",
+  "autolispext.pickprocess.process.id.port": "ID processo: {0}, porta di debug: {1}",
+  "autolispext.pickprocess.process.id.legacy": "ID processo: {0}, porta di debug: {1} (protocollo precedente)",
+  "autolispext.pickprocess.process.port.singal": "ID processo: {0}, porta di debug: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "ID processo: {0} ({1})"
+}

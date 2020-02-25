@@ -1,0 +1,4 @@
+{
+  "autolispext.format.notsupport.dcl": "Команда не поддерживает файлы DCL.",
+  "autolispext.format.selectionlines": "Сначала выберите строки кода для форматирования."
+}

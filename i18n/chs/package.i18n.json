@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "这是适用于 AutoCAD autoLISP 的 vscode 扩展",
+  "autolispext.loadcurrentfile.title": "此命令用于加载当前活动的 LISP 文档。",
+  "autolispext.configuration.title": "AutoCAD® autoLISP 配置",
+  "autolispext.configuration.maxlinechars.desc": "建议每行显示的最大字符数。值必须为 60 或更大。",
+  "autolispext.configuration.narrowstyleindent.desc": "函数参数的窄格式样式中使用的缩进值。值必须在 1 和 6 之间。",
+  "autolispext.configuration.closeparenstyle.desc": "控制右括号的样式。右括号与函数位于同一行或与函数的左括号对齐。",
+  "autolispext.configuration.longlistformatstyle": "控制长列表的格式样式。函数的每个参数或多个参数都放置在单独的行上。",
+  "autolispext.debug.attachconfig.desc": "进程列表过滤器参数的用户设置。",
+  "autolispext.debug.config.snippet.desc": "用于“调试”用户选定的 LISP 文件的新配置",
+  "autolispext.debug.launchconfig.desc": "AutoCAD 路径和启动参数的用户设置。"
+}

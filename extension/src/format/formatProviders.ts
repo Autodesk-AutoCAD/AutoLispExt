@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { LispFormatter } from './formatter'
 import * as utils from "../utils"
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export function registerDocumentFormatter() {
     vscode.languages.registerDocumentFormattingEditProvider(['autolisp', 'lisp'], {
@@ -11,7 +13,8 @@ export function registerDocumentFormatter() {
             let currentLSPDoc = activeTextEditor.document.fileName;
             let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
             if (ext === ".DCL") {
-                vscode.window.showInformationMessage("Command doesn’t support DCL files.");
+                let msg = localize("autolispext.format.notsupport.dcl", "Command doesn't support DCL files.");
+                vscode.window.showInformationMessage(msg);
                 return [];
             }
 
@@ -30,11 +33,13 @@ export function registeSelectionFormatter() {
             let currentLSPDoc = activeTextEditor.document.fileName;
             let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
             if (ext === ".DCL") {
-                vscode.window.showInformationMessage("Command doesn’t support DCL files.");
+                let msg = localize("autolispext.format.notsupport.dcl", "Command doesn't support DCL files.");
+                vscode.window.showInformationMessage(msg);
                 return [];
             }
             if (activeTextEditor.selection.isEmpty) {
-                vscode.window.showInformationMessage("First, select the lines of code to format.");
+                let msg = localize("autolispext.format.selectionlines", "First, select the lines of code to format.");
+                vscode.window.showInformationMessage(msg);
             }
 
             let fmt = LispFormatter.format(activeTextEditor, false);

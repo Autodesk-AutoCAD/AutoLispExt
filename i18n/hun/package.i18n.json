@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "Ez egy vscode-bővítmény az AutoCAD AutoLISP-hez",
+  "autolispext.loadcurrentfile.title": "Ez a parancs az aktuális aktív LISP-dokumentum betöltését szolgálja.",
+  "autolispext.configuration.title": "AutoCAD® AutoLISP-konfiguráció",
+  "autolispext.configuration.maxlinechars.desc": "Az egyes sorokban megjelenítendő karakterek javasolt maximális száma. Az értéknek 60-nak vagy nagyobbnak kell lennie.",
+  "autolispext.configuration.narrowstyleindent.desc": "A függvényargumentumok keskeny formázási stílusában használt behúzási érték. Az értéknek 1 és 6 között kell lennie.",
+  "autolispext.configuration.closeparenstyle.desc": "A záró zárójel stílusát szabályozza. A záró zárójel a függvénnyel azonos sorba kerül, vagy a függvény nyitó zárójeléhez van igazítva.",
+  "autolispext.configuration.longlistformatstyle": "A hosszú listák formátumstílusát szabályozza. A függvények minden vagy több paramétere külön sorba kerül.",
+  "autolispext.debug.attachconfig.desc": "a folyamatlista szűrőparaméterének felhasználói beállításai.",
+  "autolispext.debug.config.snippet.desc": "Egy felhasználó által kiválasztott LISP-fájl „hibakeresésének” új konfigurációja",
+  "autolispext.debug.launchconfig.desc": "az AutoCAD elérési útjának és indítási paramétereinek felhasználói beállításai."
+}

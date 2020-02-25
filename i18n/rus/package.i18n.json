@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "Это расширение vscode для AutoCAD AutoLISP",
+  "autolispext.loadcurrentfile.title": "Эта команда используется для загрузки текущего активного документа LISP.",
+  "autolispext.configuration.title": "Конфигурация AutoCAD® AutoLISP",
+  "autolispext.configuration.maxlinechars.desc": "Предлагаемое максимальное количество символов в каждой строке. Значение должно быть не менее 60.",
+  "autolispext.configuration.narrowstyleindent.desc": "Значение отступа, используемое в узком стиле форматирования аргументов функции. Значение должно находиться в диапазоне от 1 до 6.",
+  "autolispext.configuration.closeparenstyle.desc": "Управление стилем закрывающей скобки. Закрывающая скобка помещается на той же строке, что и функция, или выравнивается по открывающей скобке функции.",
+  "autolispext.configuration.longlistformatstyle": "Управление стилем форматирования длинных списков. Каждый или несколько параметров функции размещаются на отдельных строках.",
+  "autolispext.debug.attachconfig.desc": "пользовательские параметры для параметра фильтра списка процессов.",
+  "autolispext.debug.config.snippet.desc": "Новая конфигурация для отладки выбранного пользователем файла LISP",
+  "autolispext.debug.launchconfig.desc": "пользовательские настройки для параметров пути и запуска AutoCAD."
+}

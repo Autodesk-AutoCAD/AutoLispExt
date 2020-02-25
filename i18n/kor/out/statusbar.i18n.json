@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "현재 파일 로드",
+  "autolispext.loadlisp.title": "lisp 로드",
+  "autolispext.loadlisp.attach": "먼저 이 파일을 로드하기 전에 호스트 응용프로그램에 연결하거나 호스트 응용프로그램을 시작합니다.",
+  "autolispext.loadlisp.fileformat.win": "이 파일 형식은 지원되지 않습니다. DCL, LSP 또는 MNL 파일이 포함된 윈도우를 활성화하십시오.",
+  "autolispext.loadlisp.fileformat.mac": "이 파일 형식은 지원되지 않습니다. DCL 또는 LSP 파일이 포함된 윈도우를 활성화하십시오."
+}

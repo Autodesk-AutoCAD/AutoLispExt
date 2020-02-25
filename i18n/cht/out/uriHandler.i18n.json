@@ -1,0 +1,6 @@
+{
+  "autolispext.urihandler.invaid": "呼叫 AutoCAD AutoLISP 延伸無效。",
+  "autolispext.urihandler.activeddebugcfg": "目前的除錯規劃: ",
+  "autolispext.urihandler.debug.start": "從功能表列中，按一下「除錯」>「開始除錯」，以除錯目前的 AutoLISP 原始檔。",
+  "autolispext.urihandler.debug.openfile": "開啟 AutoLISP 原始檔，然後從功能表列中按一下「除錯」>「開始除錯」以除錯檔案。"
+}

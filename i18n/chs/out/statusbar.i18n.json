@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "加载当前文件",
+  "autolispext.loadlisp.title": "加载 LISP",
+  "autolispext.loadlisp.attach": "首先，在加载此文件之前附着或启动主机应用程序。",
+  "autolispext.loadlisp.fileformat.win": "此文件格式不受支持。请激活包含 DCL、LSP 或 MNL 文件的窗口。",
+  "autolispext.loadlisp.fileformat.mac": "此文件格式不受支持。请激活包含 DCL 或 LSP 文件的窗口。"
+}

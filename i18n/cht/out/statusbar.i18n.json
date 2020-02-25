@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "載入目前的檔案",
+  "autolispext.loadlisp.title": "載入 lisp",
+  "autolispext.loadlisp.attach": "先貼附或啟動主應用程式，再載入此檔案。",
+  "autolispext.loadlisp.fileformat.win": "不支援此檔案格式。請啟用包含 DCL、LSP 或 MNL 檔的視窗。",
+  "autolispext.loadlisp.fileformat.mac": "不支援此檔案格式。請啟用包含 DCL 或 LSP 檔的視窗。"
+}

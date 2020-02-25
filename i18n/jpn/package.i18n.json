@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "これは、AutoCAD AutoLISP 用 vscode Extension です。",
+  "autolispext.loadcurrentfile.title": "このコマンドは、現在アクティブな LISP ドキュメントをロードするために使用します。",
+  "autolispext.configuration.title": "AutoCAD® AutoLISP の環境設定",
+  "autolispext.configuration.maxlinechars.desc": "各行に表示する最大文字数の推奨値です。値は 60 以上でなければなりません。",
+  "autolispext.configuration.narrowstyleindent.desc": "関数の引数の幅狭整形スタイルで使用されるインデント値。値は 1 ~ 6 の範囲でなければなりません。",
+  "autolispext.configuration.closeparenstyle.desc": "右括弧のスタイルをコントロールします。右括弧は、関数と同じ行に配置されるか、関数の左括弧に位置合わせて配置されます。",
+  "autolispext.configuration.longlistformatstyle": "長いリストの整形スタイルをコントロールします。関数の各パラメータまたは複数のパラメータは、別々の行に配置されます。",
+  "autolispext.debug.attachconfig.desc": "プロセス リスト フィルタ パラメータのユーザ設定。",
+  "autolispext.debug.config.snippet.desc": "ユーザが選択した LISP ファイルを「デバッグ」するための新しい環境設定",
+  "autolispext.debug.launchconfig.desc": "AutoCAD のパスと起動パラメータのユーザ設定。"
+}

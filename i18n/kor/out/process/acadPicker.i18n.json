@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "부착할 프로세스를 선택합니다. AutoCAD 또는 전문화 툴셋 중 하나가 실행되고 있는지 확인하십시오. acad를 입력하고 리스트에서 선택합니다.",
+  "autolispext.pickprocess.acad.osx": "부착할 프로세스를 선택합니다. AutoCAD가 실행 중인지 확인합니다. AutoCAD를 입력하고 리스트에서 선택합니다.",
+  "autolispext.pickprocess.acad.other": "부착할 프로세스 선택",
+  "autolispext.pickprocess.pickfailed": "프로세스 선택기 실패({0})",
+  "autolispext.pickprocess.process.id.port": "프로세스 ID: {0}, 디버그 포트: {1}",
+  "autolispext.pickprocess.process.id.legacy": "프로세스 ID: {0}, 디버그 포트: {1}(기존 프로토콜)",
+  "autolispext.pickprocess.process.port.singal": "프로세스 ID: {0}, 디버그 포트: {1}({2})",
+  "autolispext.pickprocess.process.id.singal": "프로세스 ID: {0}({1})"
+}

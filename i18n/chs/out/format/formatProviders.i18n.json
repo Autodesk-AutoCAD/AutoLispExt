@@ -1,0 +1,4 @@
+{
+  "autolispext.format.notsupport.dcl": "命令不支持 DCL 文件。",
+  "autolispext.format.selectionlines": "首先，选择要设置格式的代码行。"
+}

@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "Aktuelle Datei laden",
+  "autolispext.loadlisp.title": "LISP laden",
+  "autolispext.loadlisp.attach": "Ordnen Sie vor dem Laden dieser Datei eine Host-Anwendung zu, oder starten Sie diese.",
+  "autolispext.loadlisp.fileformat.win": "Dieses Dateiformat wird nicht unterstützt. Aktivieren Sie ein Fenster mit einer DCL-, LSP- oder MNL-Datei.",
+  "autolispext.loadlisp.fileformat.mac": "Dieses Dateiformat wird nicht unterstützt. Aktivieren Sie ein Fenster mit einer DCL- oder LSP-Datei."
+}

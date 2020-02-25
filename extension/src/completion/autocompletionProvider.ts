@@ -19,7 +19,7 @@ export function isInternalAutoLispOp(item: string): boolean {
 
 export function readAllBultinFunctions() {
     var fs = require("fs");
-    var lispkeyspath = path.resolve(__dirname, "../../data/alllispkeys.txt");
+    var lispkeyspath = path.resolve(__dirname, "../../extension/data/alllispkeys.txt");
     fs.readFile(lispkeyspath, "utf8", function (err, data) {
         if (err === null) {
             if (data.includes("\r\n")) {
@@ -30,7 +30,7 @@ export function readAllBultinFunctions() {
             }
         }
     });
-    var dclkeyspath = path.resolve(__dirname, "../../data/alldclkeys.txt");
+    var dclkeyspath = path.resolve(__dirname, "../../extension/data/alldclkeys.txt");
     fs.readFile(dclkeyspath, "utf8", function (err, data) {
         if (err === null) {
             if (data.includes("\r\n")) {
@@ -42,7 +42,7 @@ export function readAllBultinFunctions() {
         }
     });
 
-    var winonlyprefixpath = path.resolve(__dirname, "../data/winonlylispkeys_prefix.txt");
+    var winonlyprefixpath = path.resolve(__dirname, "../extension/data/winonlylispkeys_prefix.txt");
     fs.readFile(winonlyprefixpath, "utf8", function (err, data) {
         if (err == null) {
             if (data.includes("\r\n")) {

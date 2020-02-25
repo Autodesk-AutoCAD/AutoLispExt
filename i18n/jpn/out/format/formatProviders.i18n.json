@@ -1,0 +1,4 @@
+{
+  "autolispext.format.notsupport.dcl": "コマンドは DCL ファイルをサポートしていません。",
+  "autolispext.format.selectionlines": "まず、整形するコード行を選択します。"
+}

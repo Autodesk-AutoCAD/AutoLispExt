@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 
 import { Sexpression } from "./sexpression";
 import { LispParser } from "./parser";
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class LispFormatter {
 
@@ -58,7 +60,8 @@ export class LispFormatter {
 
                 let formatstr = lispLists.formatting(startColumn, linefeed);
                 if (formatstr.length == 0) {
-                    throw new Error("It met some errors when formatting");
+                    let msg = localize("autolispext.formatter.errors", "It meets some errors when formatting");
+                    throw new Error(msg);
                 }
 
                 if (isTopLevelAtom && formattedstring.length > 0) {

@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "AutoCAD AutoLISP용 vscode 확장자입니다.",
+  "autolispext.loadcurrentfile.title": "이 명령은 현재 활성 lisp 문서를 로드하는 데 사용됩니다.",
+  "autolispext.configuration.title": "AutoCAD® AutoLISP 구성",
+  "autolispext.configuration.maxlinechars.desc": "각 행에 표시할 제안된 최대 문자 수입니다. 값은 60 이상이어야 합니다.",
+  "autolispext.configuration.narrowstyleindent.desc": "함수 인수의 좁은 형식 스타일에 사용되는 들여쓰기 값입니다. 값은 1과 6 범위 내에 있어야 합니다.",
+  "autolispext.configuration.closeparenstyle.desc": "닫는 괄호의 스타일을 조정합니다. 닫는 괄호는 함수와 같은 행에 배치되거나 함수의 여는 괄호에 정렬됩니다.",
+  "autolispext.configuration.longlistformatstyle": "긴 리스트의 형식 스타일을 조정합니다. 함수의 각 또는 여러 매개변수는 별도의 행에 배치됩니다.",
+  "autolispext.debug.attachconfig.desc": "프로세스 리스트 필터 매개변수에 대한 사용자 설정입니다.",
+  "autolispext.debug.config.snippet.desc": "사용자 선택 lisp 파일 '디버깅'을 위한 새 구성입니다.",
+  "autolispext.debug.launchconfig.desc": "AutoCAD 경로 및 시작 매개변수에 대한 사용자 설정입니다."
+}

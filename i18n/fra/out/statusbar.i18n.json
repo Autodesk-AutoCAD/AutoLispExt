@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "Charger le fichier actuel",
+  "autolispext.loadlisp.title": "Charger lisp",
+  "autolispext.loadlisp.attach": "Associez ou lancez une application hôte avant de charger ce fichier.",
+  "autolispext.loadlisp.fileformat.win": "Ce format de fichier n'est pas pris en charge. Activez une fenêtre contenant un fichier DCL, LSP ou MNL.",
+  "autolispext.loadlisp.fileformat.mac": "Ce format de fichier n'est pas pris en charge. Activez une fenêtre contenant un fichier DCL ou LSP."
+}

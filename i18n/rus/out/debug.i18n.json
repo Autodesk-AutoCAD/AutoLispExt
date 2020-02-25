@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "не существует. Убедитесь, что файл существует в одной папке с программой, указанной в файле launch.json.",
+  "autolispext.debug.noacad": "не существует. Проверьте и исправьте путь к папке исполняемого файла программы.",
+  "autolispext.debug.acad.nosupport": "Этот экземпляр AutoCAD не поддерживает отладку файлов AutoLISP. Используйте версию, выпущенную после AutoCAD 2020.",
+  "autolispext.debug.launchjson.path": "Укажите абсолютный путь к программе с атрибутом Path файла launch.json.",
+  "autolispext.debug.prod.path.win": "Укажите абсолютный путь к программе. Например, C://Program Files//Autodesk//AutoCAD//acad.exe.",
+  "autolispext.debug.prod.path.osx": "Укажите абсолютный путь к программе. Например, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.",
+  "autolispext.debug.prod.path.other": "Укажите абсолютный путь к программе.",
+  "autolispext.debug.noprocess.eror": "Не удалось найти процесс для присоединения."
+}

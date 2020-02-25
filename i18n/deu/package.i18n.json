@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "Dies ist eine VS Code Extension für AutoCAD AutoLISP",
+  "autolispext.loadcurrentfile.title": "Mit diesem Befehl wird das aktuell aktive LISP-Dokument geladen.",
+  "autolispext.configuration.title": "AutoCAD® AutoLISP-Konfiguration",
+  "autolispext.configuration.maxlinechars.desc": "Empfohlene Höchstzahl an Zeichen für die Anzeige pro Zeile. Wert muss 60 oder höher sein.",
+  "autolispext.configuration.narrowstyleindent.desc": "Einrückungswert für den schmalen Formatierungsstil der Funktionsargumente. Wert muss zwischen 1 und 6 liegen.",
+  "autolispext.configuration.closeparenstyle.desc": "Steuert den Stil schließender Klammern. Die schließende Klammer wird auf derselben Zeile platziert wie die Funktion oder an der öffnenden Klammer der Funktion ausgerichtet.",
+  "autolispext.configuration.longlistformatstyle": "Steuert den Formatstil von langen Listen. Jeder oder mehrere Parameter einer Funktion werden in separaten Zeilen platziert.",
+  "autolispext.debug.attachconfig.desc": "Benutzereinstellungen für Prozesslisten-Filterparameter.",
+  "autolispext.debug.config.snippet.desc": "Neue Konfiguration zum Debuggen einer vom Benutzer ausgewählten LISP-Datei",
+  "autolispext.debug.launchconfig.desc": "Benutzereinstellungen für AutoCAD-Pfad und -Startparameter."
+}

@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Jelölje ki a csatolni kívánt folyamatot. Győződjön meg arról, hogy az AutoCAD vagy valamelyik specializált eszközkészlet fut. Írja be az acad karakterláncot, és válassza ki a listából.",
+  "autolispext.pickprocess.acad.osx": "Jelölje ki a csatolni kívánt folyamatot. Győződjön meg arról, hogy az AutoCAD fut. Írja be az AutoCAD karakterláncot, és válassza ki a listából.",
+  "autolispext.pickprocess.acad.other": "Válassza ki a csatolni kívánt folyamatot",
+  "autolispext.pickprocess.pickfailed": "A folyamatválasztó hibába ütközött ({0})",
+  "autolispext.pickprocess.process.id.port": "folyamatazonosító: {0}, hibakeresési port: {1}",
+  "autolispext.pickprocess.process.id.legacy": "folyamatazonosító: {0}, hibakeresési port: {1} (korábbi protokoll)",
+  "autolispext.pickprocess.process.port.singal": "folyamatazonosító: {0}, hibakeresési port: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "folyamatazonosító: {0} ({1})"
+}

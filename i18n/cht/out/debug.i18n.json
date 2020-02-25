@@ -1,0 +1,10 @@
+{
+  "autolispext.debug.nodap": "不存在。請確認檔案所在的資料夾與 launch.json 檔中指定的產品資料夾相同。",
+  "autolispext.debug.noacad": "不存在。請確認並更正產品可執行檔的資料夾路徑。",
+  "autolispext.debug.acad.nosupport": "此 AutoCAD 例證不支援除錯 AutoLISP 檔，請使用比 AutoCAD 2020 更高的版本。",
+  "autolispext.debug.launchjson.path": "請使用 launch.json 檔的 Path 屬性指定產品的絕對路徑。",
+  "autolispext.debug.prod.path.win": "請指定產品的絕對路徑。例如，C://Program Files//Autodesk//AutoCAD//acad.exe。",
+  "autolispext.debug.prod.path.osx": "請指定產品的絕對路徑。例如，/Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD。",
+  "autolispext.debug.prod.path.other": "請指定產品的絕對路徑。",
+  "autolispext.debug.noprocess.eror": "找不到要貼附的程序。"
+}

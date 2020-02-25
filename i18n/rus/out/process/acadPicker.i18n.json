@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Выберите процесс для присоединения. Убедитесь, что AutoCAD или один из специализированных инструментариев запущены. Введите acad и выберите программу в списке.",
+  "autolispext.pickprocess.acad.osx": "Выберите процесс для присоединения. Убедитесь, что программа AutoCAD запущена. Введите AutoCAD и выберите ее в списке.",
+  "autolispext.pickprocess.acad.other": "Выберите процесс для присоединения",
+  "autolispext.pickprocess.pickfailed": "Ошибка средства выбора процессов ({0})",
+  "autolispext.pickprocess.process.id.port": "ИД процесса: {0}, порт отладки: {1}",
+  "autolispext.pickprocess.process.id.legacy": "ИД процесса: {0}, порт отладки: {1} (старый протокол)",
+  "autolispext.pickprocess.process.port.singal": "ИД процесса: {0}, порт отладки: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "ИД процесса: {0} ({1})"
+}

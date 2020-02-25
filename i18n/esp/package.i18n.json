@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "Es una extensión de VS Code para AutoCAD AutoLISP.",
+  "autolispext.loadcurrentfile.title": "Este comando se utiliza para cargar el documento LISP activo.",
+  "autolispext.configuration.title": "Configuración de AutoCAD® AutoLISP",
+  "autolispext.configuration.maxlinechars.desc": "Número máximo de caracteres sugeridos que se mostrarán en cada línea. El valor debe ser 60 o superior.",
+  "autolispext.configuration.narrowstyleindent.desc": "Valor de sangría utilizado en el estilo de formato estrecho de los argumentos de función. El valor debe encontrarse en el intervalo entre 1 y 6.",
+  "autolispext.configuration.closeparenstyle.desc": "Controla el estilo del paréntesis de cierre. El paréntesis de cierre se coloca en la misma línea que la función o se alinea con el paréntesis de apertura de la función.",
+  "autolispext.configuration.longlistformatstyle": "Controla el estilo de formato de las listas largas. Uno o varios parámetros de una función se colocan en líneas independientes.",
+  "autolispext.debug.attachconfig.desc": "Configuración de usuario para el parámetro de filtro de lista de procesos.",
+  "autolispext.debug.config.snippet.desc": "Una nueva configuración para \"depurar\" un archivo LISP seleccionado por el usuario.",
+  "autolispext.debug.launchconfig.desc": "Configuración de usuario para la ruta de AutoCAD y los parámetros de inicio."
+}

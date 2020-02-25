@@ -1,0 +1,12 @@
+{
+  "autolispext.description": "這是適用於 AutoCAD AutoLISP 的 vscode 延伸",
+  "autolispext.loadcurrentfile.title": "此指令用來載入目前作用中的 lisp 文件。",
+  "autolispext.configuration.title": "AutoCAD® AutoLISP 規劃",
+  "autolispext.configuration.maxlinechars.desc": "每行建議顯示的字元數上限。值必須為 60 或更高。",
+  "autolispext.configuration.narrowstyleindent.desc": "函數引數的窄格式型式使用的縮排值。值必須在 1 到 6 的範圍內。",
+  "autolispext.configuration.closeparenstyle.desc": "控制右圓括號的型式。右圓括號會放在與函數同一行的位置，或與函數的左圓括號對齊。",
+  "autolispext.configuration.longlistformatstyle": "控制長清單的格式型式。函數的每個參數或多個參數都會放在單獨的一行。",
+  "autolispext.debug.attachconfig.desc": "程序清單篩選參數的使用者設定。",
+  "autolispext.debug.config.snippet.desc": "用來除錯使用者所選 lisp 檔的新規劃",
+  "autolispext.debug.launchconfig.desc": "AutoCAD 路徑和啟動參數的使用者設定。"
+}
