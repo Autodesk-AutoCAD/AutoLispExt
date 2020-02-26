@@ -68,7 +68,7 @@ timestamps {
                             signScript = '''
                             cd $WORKSPACE
                             curl -k -u $INTEGRATUSER:$INTEGRATAPI -O https://art-bobcat.autodesk.com/artifactory/team-engsol-certs-generic/win/2020/autodesk.pfx
-                            ~/.dotnet/tools/OpenVsixSignTool sign --certificate ./autodesk.pfx --password '$PFX_PASSWORD' --timestamp http://timestamp.digicert.com -ta sha256 -fd sha256 ./autolispext.vsix
+                            ~/.dotnet/tools/OpenVsixSignTool sign --certificate ./autodesk.pfx --password "$PFX_PASSWORD" --timestamp http://timestamp.digicert.com -ta sha256 -fd sha256 ./autolispext.vsix
                             '''
                             sh signScript
                         }
