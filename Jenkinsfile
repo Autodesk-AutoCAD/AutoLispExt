@@ -7,7 +7,7 @@ import ors.utils.common_shell
 // ******* constants *******
 def dockerRegistry = 'autodesk-docker.art-bobcat.autodesk.com:10873'
 def artifactoryCredsId = 'local-svc_p_ors_art'
-def dotnetImageFullName = "$dockerRegistry/autolisp-ext/build:1.0"
+def dotnetImageFullName = "$dockerRegistry/autolisp-ext/build:2.0"
 echo "Starting build #$BUILD_NUMBER (on '$BRANCH_NAME' branch)."
 
 timestamps {
@@ -63,6 +63,16 @@ timestamps {
                     //only publish the master branch
                     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("release"))
                     {
+                        // sign before publishing
+                        withCredentials([string(credentialsId: 'PFX_PWD', variable: 'PFX_PASSWORD'), usernamePassword(credentialsId: 'INTEGRATARTAPI', passwordVariable: 'INTEGRATAPI', usernameVariable: 'INTEGRATUSER')]) {
+                            signScript = '''
+                            cd $WORKSPACE
+                            curl -k -u $INTEGRATUSER:$INTEGRATAPI -O https://art-bobcat.autodesk.com/artifactory/team-engsol-certs-generic/win/2020/autodesk.pfx
+                            ~/.dotnet/tools/OpenVsixSignTool sign --certificate ./autodesk.pfx --password '$PFX_PASSWORD' --timestamp http://timestamp.digicert.com -ta sha256 -fd sha256 ./autolispext.vsix
+                            '''
+                            sh signScript
+                        }
+
                         withCredentials([file(credentialsId: "ACAD_NPM_CONFIG_FILE", variable: 'NPM_CONFIG_FILE')]) {
                             publishScript = '''
                             cp -rf $NPM_CONFIG_FILE $WORKSPACE/.npmrc
