@@ -21,11 +21,11 @@ def init():
     print("===============================================")
     print("\n\n")
 
-# "build" means to generate i18n content
+    # "build" means to generate i18n content
     os.system("gulp build") # nosec
 
     print("===============================================")
-    print("          complete gulp build")
+    print("          complete i18n build")
     print("===============================================")
     print("\n\n")
 
@@ -43,10 +43,17 @@ def init():
 
 
 def makepackage_vsix():
+    print("===============================================")
+    print("start to make vsix package")
     vsce = os.path.join(os.path.curdir, 'node_modules', '.bin', 'vsce')
-    outputpath = os.path.join(os.path.curdir, 'autolispext.vsix')
-    subprocess.call([vsce, 'package', '-o', outputpath], shell=True) # nosec
-
+    output_opt = " -o " + os.path.join(os.path.curdir, 'autolispext.vsix')
+    os.system(vsce + " package" + output_opt) # nosec
+    if (os.path.exists('autolispext.vsix')):
+        print("It created autolispext.vsix file sucessfully")
+    else:
+        print("It failed to create autolispext.vsix file")
+    print("end tp make visx file")
+    print("===============================================")
 
 if __name__ == "__main__":
     init()
@@ -56,8 +63,4 @@ if __name__ == "__main__":
     print("===============================================")
     print("\n\n")
     makepackage_vsix()
-    print("===============================================")
-    print("            congratulations!!")
-    print("      generate vsix package completed!!")
-    print("===============================================")
     print("\n\n")

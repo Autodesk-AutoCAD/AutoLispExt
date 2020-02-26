@@ -51,6 +51,7 @@ timestamps {
                     cd $WORKSPACE
                     npm config set registry https://art-bobcat.autodesk.com/artifactory/api/npm/team-autocad-npm-virtual
                     python pack.py
+                    ls
                     """
                 }
 
