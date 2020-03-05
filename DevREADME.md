@@ -49,15 +49,13 @@ python pack.py
 
 You need to see the details to the page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 
-1. Ask BRE to do the sign via send out an [Action Request](https://engineering.autodesk.com/esc/)
-2. BRE will do the sign and upload the package to the above "pacakge location"
-3. Download the signed version pacakage to local machine and unzip it
-4. Change path to the path in step 3, and run command "vsce login Autodesk"; it will prompt you input the PAT.
-5. Run command "vsce publish --packagePath autolispextxxx.vsix"
-6. Check the [extension web page](https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext) to see if it is updated.
-7. run command "vsce logout Autodesk"
+1. Download the signed version pacakage from Artifactory to local machine and unzip it
+2. Change path to the path in step 3, and run command "vsce login Autodesk"; it will prompt you input the PAT.
+3. Run command "vsce publish --packagePath autolispextxxx.vsix"
+4. Check the [extension web page](https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext) to see if it is updated.
+5. run command "vsce logout Autodesk"
 
-Note that when you input the PAT by hand in the machine. The VSCE tool will save the PAT, and next time to run "vsce publish" it will not prompt you to input the PAT and publish it to markey directly.
+Note that when you input the PAT by hand in the machine. The VSCE tool will save the PAT, and next time to run "vsce publish" it will not prompt you to input the PAT and publish it to market directly. So this is risk.
 
 ## Notice
 
