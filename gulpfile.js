@@ -23,12 +23,12 @@ const languages = [
     { id: "fr", folderName: "fra" },
     { id: "de", folderName: "deu" },
     { id: "it", folderName: "ita" },
-    { id: "es", folderName: "esn" },
+    { id: "es", folderName: "esp" },
     { id: "ja", folderName: "jpn" },
     { id: "ko", folderName: "kor" },
     { id: "ru", folderName: "rus" },
     //{ id: "bg", folderName: "bul" }, // VS Code supports Bulgarian, but VS is not currently localized for it
-    //{ id: "hu", folderName: "hun" }, // VS Code supports Hungarian, but VS is not currently localized for it
+	{ id: "hu", folderName: "hun" }, // VS Code supports Hungarian, but VS is not currently localized for it
     { id: "pt-br", folderName: "ptb", transifexId: "pt-BR" },
     { id: "tr", folderName: "trk" },
     { id: "cs", folderName: "csy" },
