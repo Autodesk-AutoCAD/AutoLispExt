@@ -529,7 +529,7 @@ function createContainerBlockCommentInfo(commentStartPos: CursorPosition, nextPo
 }
 
 
-function findContainers(document: vscode.TextDocument, cursorPos2d: Position): ContainerElements {
+export function findContainers(document: vscode.TextDocument, cursorPos2d: Position): ContainerElements {
     let docAsString = document.getText();
     let cursorPos = document.offsetAt(cursorPos2d);
 
@@ -653,6 +653,32 @@ function findContainers(document: vscode.TextDocument, cursorPos2d: Position): C
     containerInfo.containerBlockComment = coverBlockComment;
 
     return containerInfo;
+}
+
+export function isCursorInDoubleQuoteExpr(document: vscode.TextDocument, position: vscode.Position): boolean {
+    try {
+        var syntaxContainers = findContainers(document, position);
+        var firstLevelContainer = syntaxContainers.containerParens.pop();
+
+        let startPos2d = document.positionAt(firstLevelContainer.startPos.offsetInDocument);
+        let endPos2d = document.positionAt(firstLevelContainer.endPos.offsetInDocument + 1);
+
+        let sexpr = document.getText(new vscode.Range(startPos2d, endPos2d));
+
+        let readerStartPos = new CursorPosition();
+        readerStartPos.offsetInSelection = 0; //the start position in sexpr is 0
+        readerStartPos.offsetInDocument = firstLevelContainer.startPos.offsetInDocument; //the start position in doc
+        let reader = new format.ListReader(sexpr, readerStartPos, document);
+
+        let lispLists = reader.tokenize();
+        var atomAtCursor = lispLists.getAtomFromPos(position);
+        if (atomAtCursor != null && atomAtCursor.symbol.startsWith("\""))
+             return true;
+    } catch (err) {
+        
+    }
+
+    return false;
 }
 
 export function subscribeOnEnterEvent() {

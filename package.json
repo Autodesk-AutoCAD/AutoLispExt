@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.1.11",
+	"version": "1.1.12",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -81,7 +81,12 @@
 				"files.autoGuessEncoding": true,
 				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
-				"editor.quickSuggestions": true,
+				"editor.quickSuggestions": {
+					"other": true,
+					"comments": false,
+					"strings": true
+				},
+				"editor.wordBasedSuggestions": true,
 				"editor.autoIndent": "none",
 				"editor.formatOnType": true,
 				"files.encoding": "utf8",
@@ -92,8 +97,13 @@
 			"[autolisp]": {
 				"files.autoGuessEncoding": true,
 				"editor.tabSize": 2,
+				"editor.wordBasedSuggestions": true,
 				"editor.detectIndentation": false,
-				"editor.quickSuggestions": true,
+				"editor.quickSuggestions": {
+					"other": true,
+					"comments": false,
+					"strings": true
+				},
 				"editor.autoIndent": "none",
 				"editor.formatOnType": true,
 				"files.encoding": "utf8",
@@ -105,7 +115,12 @@
 				"files.autoGuessEncoding": true,
 				"editor.tabSize": 2,
 				"editor.detectIndentation": false,
-				"editor.quickSuggestions": true,
+				"editor.quickSuggestions": {
+					"other": true,
+					"comments": false,
+					"strings": true
+				},
+				"editor.wordBasedSuggestions": true,
 				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": true,

@@ -1,10 +1,14 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
 import * as path from 'path';
+import { isCursorInDoubleQuoteExpr } from "../format/autoIndent";
 
-let internalLispFuncs: Array<String> = [];
-let internalDclKeys: Array<String> = [];
+let internalLispFuncs: Array<string> = [];
+let internalDclKeys: Array<string> = [];
 let winOnlyListFuncPrefix: Array<string> = [];
+
+let allSysvars: Array<string> = [];
+let allArxCmds: Array<string> = [];
 
 export function isInternalAutoLispOp(item: string): boolean {
     if (!item)
@@ -17,43 +21,70 @@ export function isInternalAutoLispOp(item: string): boolean {
     return false;
 }
 
-export function readAllBultinFunctions() {
+function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
     var fs = require("fs");
-    var lispkeyspath = path.resolve(__dirname, "../../extension/data/alllispkeys.txt");
-    fs.readFile(lispkeyspath, "utf8", function (err, data) {
+    var dataPath = path.resolve(__dirname, datafile);
+    fs.readFile(dataPath, "utf8", function(err, data) {
+        var lineList = new Array<String>();
         if (err === null) {
             if (data.includes("\r\n")) {
-                internalLispFuncs = data.split("\r\n");
+                lineList = data.split("\r\n");
             }
             else {
-                internalLispFuncs = data.split("\n");
+                lineList = data.split("\n");
+            }
+
+            lineList.forEach(line => {
+                var items = line.split(delimiter);
+                var item = items[0];
+                item = item.trim();
+                if (item.length > 0)
+                    action(item);
+            });
+        }
+    });
+}
+
+function readDataFileByLine(datafile: string, action: (items: string[]) => void) {
+    var fs = require("fs");
+    var dataPath = path.resolve(__dirname, datafile);
+    fs.readFile(dataPath, "utf8", function(err, data) {
+        if (err === null) {
+            if (data.includes("\r\n")) {
+                action(data.split("\r\n"));
+            }
+            else {
+                action(data.split("\n"));
             }
         }
     });
-    var dclkeyspath = path.resolve(__dirname, "../../extension/data/alldclkeys.txt");
-    fs.readFile(dclkeyspath, "utf8", function (err, data) {
-        if (err === null) {
-            if (data.includes("\r\n")) {
-                internalDclKeys = data.split("\r\n");
-            }
-            else {
-                internalDclKeys = data.split("\n");
-            }
+}
+export function readAllBultinFunctions() {
+
+    readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items });
+
+    readDataFileByLine("../../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items });
+
+    readDataFileByLine("../../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items });
+
+    readDataFileByDelimiter("../../extension/data/allcmds.txt", ",", (item) => { allArxCmds.push(item) });
+
+    readDataFileByDelimiter("../../extension/data/allsysvars.txt", " ", (item) => { allSysvars.push(item) });
+}
+
+function getCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
+    let allSuggestions: Array<vscode.CompletionItem> = [];
+    allCandiates.forEach((item) => {
+        var candidate = item;
+        if (userInputIsUpper)
+            candidate = item.toUpperCase();
+        if (candidate.startsWith(word) || candidate.endsWith(word)) {
+            const completion = new vscode.CompletionItem(candidate);
+            allSuggestions.push(completion);
         }
     });
 
-    var winonlyprefixpath = path.resolve(__dirname, "../extension/data/winonlylispkeys_prefix.txt");
-    fs.readFile(winonlyprefixpath, "utf8", function (err, data) {
-        if (err == null) {
-            if (data.includes("\r\n")) {
-                winOnlyListFuncPrefix = data.split("\r\n");
-            }
-            else {
-                winOnlyListFuncPrefix = data.split("\n");
-            }
-        }
-    });
-
+    return allSuggestions;
 }
 
 export function registerAutoCompletionProviders() {
@@ -61,59 +92,78 @@ export function registerAutoCompletionProviders() {
 
         provideCompletionItems(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.CompletionContext) {
 
-            let currentLSPDoc = document.fileName;
-            let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-            let candidatesItems = internalLispFuncs;
-            if (ext === ".DCL") {
-                candidatesItems = internalDclKeys;
-            }
+            try {
 
-            // If it is in comments, it doesn't need to provide lisp autocomplete
-            let linetext = document.lineAt(position).text;
-            if (linetext.startsWith(";") || linetext.startsWith(";;")
-                || linetext.startsWith("#|") || linetext.startsWith("|#")) {
-                return;
-            }
-
-            let word = document.getText(document.getWordRangeAtPosition(position));
-            let wordSep = " &#^()[]|;'\".";
-            // Maybe has some issues for matching first item
-            let pos = linetext.indexOf(word);
-            pos--;
-            let length = 0;
-            for (; pos >= 0; pos--) {
-                if (linetext.length <= pos)
-                    break;
-                let ch = linetext.charAt(pos);
-                if (wordSep.includes(ch)) {
-                    word = linetext.substr(pos + 1, word.length + length);
-                    break;
+                let currentLSPDoc = document.fileName;
+                let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
+                let candidatesItems = internalLispFuncs;
+                if (ext === ".DCL") {
+                    candidatesItems = internalDclKeys;
                 }
-                length++;
-            }
 
-            let allSuggestions: Array<vscode.CompletionItem> = [];
-            word = word.toLowerCase();
-
-            candidatesItems.forEach((item) => {
-                if (item.startsWith(word) || item.endsWith(word)) {
-                    const completion = new vscode.CompletionItem(item.toString());
-                    allSuggestions.push(completion);
+                // If it is in comments, it doesn't need to provide lisp autocomplete
+                let linetext = document.lineAt(position).text;
+                if (linetext.startsWith(";") || linetext.startsWith(";;")
+                    || linetext.startsWith("#|") || linetext.startsWith("|#")) {
+                    return [];
                 }
-            });
 
-            if (os.platform() === "win32") {
-                return allSuggestions;
-            }
-            else {
-                return allSuggestions.filter(function (suggestion) {
-                    for (var prefix of winOnlyListFuncPrefix) {
-                        if (suggestion.label.startsWith(prefix)) {
-                            return false;
-                        }
+                let word = document.getText(document.getWordRangeAtPosition(position));
+                let wordSep = " &#^()[]|;'\".";
+
+                // Autolisp has special word range rules and now VScode has some issues to check the "word", 
+                // so it needs this logic to check the REAL word range
+                let pos = position.character;
+                pos -= 2;
+                let length = 0;
+                for (; pos >= 0; pos--) {
+                    let ch = linetext.charAt(pos);
+                    if (wordSep.includes(ch)) {
+                        if (length == 0)
+                            length = word.length;
+                        word = linetext.substr(pos + 1, length);
+                        break;
                     }
-                    return true;
-                });
+                    length++;
+                }
+                if (word.length == 0)
+                    return [];
+                var isupper = () => {
+                    if (word === word.toLocaleUpperCase())
+                        return true;
+                    return false;
+                }
+                var userInputIsUpper = isupper();
+
+                let allSuggestions: Array<vscode.CompletionItem> = [];
+
+                var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
+                if (isInDoubleQuote) {
+                    allSuggestions = allSuggestions.concat(getCompletionCandidates(allArxCmds, word, userInputIsUpper));
+
+                    allSuggestions = allSuggestions.concat(getCompletionCandidates(allSysvars, word, userInputIsUpper));
+
+                    return allSuggestions;
+                }
+
+                allSuggestions = allSuggestions.concat(getCompletionCandidates(candidatesItems, word, userInputIsUpper));
+
+                if (os.platform() === "win32") {
+                    return allSuggestions;
+                }
+                else {
+                    return allSuggestions.filter(function(suggestion) {
+                        for (var prefix of winOnlyListFuncPrefix) {
+                            if (suggestion.label.startsWith(prefix)) {
+                                return false;
+                            }
+                        }
+                        return true;
+                    });
+                }
+            }
+            catch (err) {
+                return [];
             }
         }
     });

@@ -1,5 +1,6 @@
 import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
 import { isInternalAutoLispOp } from '../completion/autocompletionProvider'
+import { Position } from 'vscode';
 
 let gMaxLineChars = 80;
 let gIndentSpaces = 2;
@@ -99,6 +100,28 @@ export class Sexpression extends LispAtom {
 
     addAtom(item) {
         this.atoms.push(item);
+    }
+
+    getAtomFromPos(loc: Position): LispAtom {
+        var line = loc.line;
+        var col = loc.character;
+        for (var i = 0; i < this.atoms.length; i++) {
+            if (this.atoms[i] instanceof Sexpression) {
+                var sexpr = this.atoms[i] as Sexpression;
+                var atom = sexpr.getAtomFromPos(loc);
+                if (atom != null)
+                    return atom;
+            }
+            else 
+            {
+                if (line === this.atoms[i].line 
+                    && col >= this.atoms[i].column 
+                    && col <= this.atoms[i].column + this.atoms[i].length())
+                    return this.atoms[i];
+            }
+        }
+
+        return null;
     }
 
     length(): number {
