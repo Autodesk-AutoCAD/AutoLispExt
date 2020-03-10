@@ -119,6 +119,7 @@ timestamps {
     node ('cloud&&centos') {
 
         String vsixUriOnArtifactory = params.vsixUri
+        String PAT = params.PAT
 
         def common_shell = new ors.utils.common_shell(steps, env)
 
