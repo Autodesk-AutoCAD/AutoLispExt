@@ -23,10 +23,12 @@ You could compile the code by:
 ```
 cd AutoLispExt
 gulp build
+copy utils\acadProcessFinder\bin\acadProcessFinder.exe extension\out\process
 ```
 If you only want to build the ts file and debug it via F5, you can run:
 ```
-npm run compile
+=> Windows:   winCompile.bat
+=> Otherwise: npm run compile
 ```
 
 ## How to package the extension
@@ -49,6 +51,17 @@ python pack.py
 
 You need to see the details to the page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 
+1. Create a tag on GIT, with the correct commit ID selected
+2. Open https://master-2.jenkins.autodesk.com/job/AutoCAD/job/AutoLispExt/job/master/, and do the following:
+2.1 Click on the "Build with Parameters" on the left side; if you can't find it, please ask Jenkins Admin for permission;
+2.2 Fill in the "vsixUri" field with the Uri of the signed and tested VSIX. It shall be a link on Artifactory, e.g.:
+https://art-bobcat.autodesk.com:443/artifactory/team-autocad-npm/autolispext/-/autolispext-1.0.10-40.tgz!/package/autolispext.vsix
+2.3 Fill in the "PAT" field with the personal acess token that is needed to publish autolispext.vsix;
+2.4 Check the "publish2VsCodeMarket" box;
+2.5 Click on the "Build" button;
+2.6 After a few minutes, visit https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext to make sure it's done.
+
+You can also do it by hand:
 1. Download the signed version pacakage from Artifactory to local machine and unzip it
 2. Change path to the path in step 3, and run command "vsce login Autodesk"; it will prompt you input the PAT.
 3. Run command "vsce publish --packagePath autolispextxxx.vsix"
