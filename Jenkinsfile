@@ -16,13 +16,6 @@ properties([
                 required    : false
             ],
             [
-                $class      : 'StringParameterDefinition',
-                defaultValue: 'empty',
-                description : 'The Personal Access Token for publishing',
-                name        : 'PAT',
-                required    : false
-            ],
-            [
                 $class      : 'BooleanParameterDefinition',
                 defaultValue: false,
                 description : 'Checked to publish to VS Code Market; unchecked to build source code; be careful with this option!',
@@ -70,7 +63,7 @@ def publish2VsCode() {
     //so if you want to test your change in this stage, don't do it on master branch
     pubScript = '''
     cd $WORKSPACE
-    ./node_modules/.bin/vsce publish --packagePath autolispext.vsix -p ${PAT}
+    ./node_modules/.bin/vsce publish --packagePath autolispext.vsix -p ${PAT_TOKEN}
     '''
 
     if(env.BRANCH_NAME == "master") {
@@ -79,7 +72,6 @@ def publish2VsCode() {
     else {
         echo "folowing script doesn't run on wip branch:"
         echo pubScript
-        echo "where PAT = ${PAT}"
     }
 }
 
@@ -119,7 +111,6 @@ timestamps {
     node ('cloud&&centos') {
 
         String vsixUriOnArtifactory = params.vsixUri
-        String PAT = params.PAT
 
         def common_shell = new ors.utils.common_shell(steps, env)
 
@@ -151,8 +142,7 @@ timestamps {
         dotnetImage.inside("-u root:root") {
             withEnv([
                 'CI=1',
-                "vsixUriOnArtifactory=${vsixUriOnArtifactory}",
-                "PAT=${PAT}"
+                "vsixUriOnArtifactory=${vsixUriOnArtifactory}"
                 ]) {
 
                 stage ('Build') {
@@ -173,7 +163,9 @@ timestamps {
 
                 stage ('Publish') {
                     if(params.publish2VsCodeMarket) {
-                        publish2VsCode()
+                        withCredentials(([[$class: 'StringBinding', credentialsId: "PAT_TOKEN", variable: "PAT_TOKEN"]])) {
+                            publish2VsCode()
+                        }
                     }
                     else {
                         publish2Artifactory()
