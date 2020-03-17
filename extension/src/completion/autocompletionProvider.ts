@@ -67,7 +67,10 @@ export function readAllBultinFunctions() {
 
     readDataFileByLine("../../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items });
 
-    readDataFileByDelimiter("../../extension/data/allcmds.txt", ",", (item) => { allArxCmds.push(item) });
+    readDataFileByDelimiter("../../extension/data/allcmds.txt", ",", (item) => {
+        if (!item.startsWith("c:"))
+            allArxCmds.push(item)
+    });
 
     readDataFileByDelimiter("../../extension/data/allsysvars.txt", " ", (item) => { allSysvars.push(item) });
 }
@@ -131,7 +134,7 @@ function getCompletionCandidates(allCandiates: string[], word: string, userInput
     return suggestions;
 }
 
-function getMatchingWord(document: vscode.TextDocument, position: vscode.Position): [string, boolean]{
+function getMatchingWord(document: vscode.TextDocument, position: vscode.Position): [string, boolean] {
     let linetext = document.lineAt(position).text;
 
     let word = document.getText(document.getWordRangeAtPosition(position));
@@ -170,8 +173,7 @@ function getMatchingWord(document: vscode.TextDocument, position: vscode.Positio
     return [word, inputIsUpper];
 }
 
-function getLispAndDclCompletions(document: vscode.TextDocument, word:string, isupper:boolean): vscode.CompletionItem[]
-{
+function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
     let candidatesItems = internalLispFuncs;
