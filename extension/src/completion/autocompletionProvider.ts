@@ -218,12 +218,10 @@ export function registerAutoCompletionProviders() {
                 if (inputword.length == 0)
                     return [];
 
-                if (os.platform() === "win32") {
-                    var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
-                    if (isInDoubleQuote) {
-                        var cmds = getCmdAndVarsCompletionCandidates(allCmdsAndSysvars, inputword, userInputIsUpper);
-                        return cmds;
-                    }
+                var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
+                if (isInDoubleQuote) {
+                    var cmds = getCmdAndVarsCompletionCandidates(allCmdsAndSysvars, inputword, userInputIsUpper);
+                    return cmds;
                 }
 
                 return getLispAndDclCompletions(document, inputword, userInputIsUpper);
