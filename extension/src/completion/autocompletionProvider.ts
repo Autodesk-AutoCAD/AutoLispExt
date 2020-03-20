@@ -7,8 +7,7 @@ let internalLispFuncs: Array<string> = [];
 let internalDclKeys: Array<string> = [];
 let winOnlyListFuncPrefix: Array<string> = [];
 
-let allSysvars: Array<string> = [];
-let allArxCmds: Array<string> = [];
+let allCmdsAndSysvars: Array<string> = [];
 
 export function isInternalAutoLispOp(item: string): boolean {
     if (!item)
@@ -61,18 +60,22 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
 }
 export function readAllBultinFunctions() {
 
-    readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items });
+    var lispfuncs: Array<string> = [];
+    readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { lispfuncs = items });
+    internalLispFuncs = lispfuncs.filter(function(item, pos) {
+        return lispfuncs.indexOf(item) == pos;
+    })
 
     readDataFileByLine("../../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items });
 
     readDataFileByLine("../../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items });
 
-    readDataFileByDelimiter("../../extension/data/allcmds.txt", ",", (item) => {
-        if (!item.startsWith("c:"))
-            allArxCmds.push(item)
+    readDataFileByDelimiter("../../extension/data/cmdAndVarsList.txt", ",", (item) => {
+        var isLispCmds = item.startsWith("C:") || item.startsWith("c:");
+        if (!isLispCmds && allCmdsAndSysvars.indexOf(item) < 0)
+            allCmdsAndSysvars.push(item)
     });
 
-    readDataFileByDelimiter("../../extension/data/allsysvars.txt", " ", (item) => { allSysvars.push(item) });
 }
 
 function getCmdAndVarsCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
@@ -215,14 +218,12 @@ export function registerAutoCompletionProviders() {
                 if (inputword.length == 0)
                     return [];
 
-
-                var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
-                if (isInDoubleQuote) {
-                    var cmds = getCmdAndVarsCompletionCandidates(allArxCmds, inputword, userInputIsUpper);
-
-                    var vars = getCmdAndVarsCompletionCandidates(allSysvars, inputword, userInputIsUpper);
-                    var res = cmds.concat(vars);
-                    return res;
+                if (os.platform() === "win32") {
+                    var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
+                    if (isInDoubleQuote) {
+                        var cmds = getCmdAndVarsCompletionCandidates(allCmdsAndSysvars, inputword, userInputIsUpper);
+                        return cmds;
+                    }
                 }
 
                 return getLispAndDclCompletions(document, inputword, userInputIsUpper);
