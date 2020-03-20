@@ -59,12 +59,7 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
     });
 }
 export function readAllBultinFunctions() {
-
-    var lispfuncs: Array<string> = [];
-    readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { lispfuncs = items });
-    internalLispFuncs = lispfuncs.filter(function(item, pos) {
-        return lispfuncs.indexOf(item) == pos;
-    })
+    readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items });
 
     readDataFileByLine("../../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items });
 
