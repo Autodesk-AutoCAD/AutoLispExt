@@ -55,11 +55,11 @@ You need to see the details to the page <https://code.visualstudio.com/api/worki
 2. Open https://master-2.jenkins.autodesk.com/job/AutoCAD/job/AutoLispExt/job/master/, and do the following:
 2.1 Click on the "Build with Parameters" on the left side; if you can't find it, please ask Jenkins Admin for permission;
 2.2 Fill in the "vsixUri" field with the Uri of the signed and tested VSIX. It shall be a link on Artifactory, e.g.:
-https://art-bobcat.autodesk.com:443/artifactory/team-autocad-npm/autolispext/-/autolispext-1.0.10-40.tgz!/package/autolispext.vsix
-2.3 Fill in the "PAT" field with the personal acess token that is needed to publish autolispext.vsix;
-2.4 Check the "publish2VsCodeMarket" box;
-2.5 Click on the "Build" button;
-2.6 After a few minutes, visit https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext to make sure it's done.
+    https://art-bobcat.autodesk.com/artifactory/team-autocad-npm/autolispext/-/autolispext-1.0.10-40.tgz!/package/autolispext.vsix
+    NOTE: don't copy the Url from your web browser. Copy the address of the "Download" link of the correct VSIX file.
+2.3 Check the "publish2VsCodeMarket" box;
+2.4 Click on the "Build" button;
+2.5 After a few minutes, visit https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext to make sure it's done.
 
 You can also do it by hand:
 1. Download the signed version pacakage from Artifactory to local machine and unzip it

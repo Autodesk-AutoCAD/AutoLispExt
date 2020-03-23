@@ -18,7 +18,7 @@ def download_artifactory_vsix():
 
     print ("executed; file size: " + str(fileSize))
 
-    if fileSize < 1024:
+    if fileSize < 102400:
         print ("ERROR: file size of autolispext.vsix is too small; the downloading failed.")
         sys.exit(3)
 

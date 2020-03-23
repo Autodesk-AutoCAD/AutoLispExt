@@ -79,15 +79,15 @@ def publish2Artifactory() {
     //only publish the master branch
     if (env.BRANCH_NAME == "master" || env.BRANCH_NAME.startsWith("release"))
     {
-        // sign before publishing
-        withCredentials([string(credentialsId: 'PFX_PWD', variable: 'PFX_PASSWORD'), usernamePassword(credentialsId: 'INTEGRATARTAPI', passwordVariable: 'INTEGRATAPI', usernameVariable: 'INTEGRATUSER')]) {
-            signScript = '''
-            cd $WORKSPACE
-            curl -k -u $INTEGRATUSER:$INTEGRATAPI -O https://art-bobcat.autodesk.com/artifactory/team-engsol-certs-generic/win/2020/autodesk.pfx
-            ~/.dotnet/tools/OpenVsixSignTool sign --certificate ./autodesk.pfx --password "$PFX_PASSWORD" --timestamp http://timestamp.digicert.com -ta sha256 -fd sha256 ./autolispext.vsix
-            '''
-            sh signScript
-        }
+        // // sign before publishing
+        // withCredentials([string(credentialsId: 'PFX_PWD', variable: 'PFX_PASSWORD'), usernamePassword(credentialsId: 'INTEGRATARTAPI', passwordVariable: 'INTEGRATAPI', usernameVariable: 'INTEGRATUSER')]) {
+        //     signScript = '''
+        //     cd $WORKSPACE
+        //     curl -k -u $INTEGRATUSER:$INTEGRATAPI -O https://art-bobcat.autodesk.com/artifactory/team-engsol-certs-generic/win/2020/autodesk.pfx
+        //     ~/.dotnet/tools/OpenVsixSignTool sign --certificate ./autodesk.pfx --password "$PFX_PASSWORD" --timestamp http://timestamp.digicert.com -ta sha256 -fd sha256 ./autolispext.vsix
+        //     '''
+        //     sh signScript
+        // }
 
         withCredentials([file(credentialsId: "ACAD_NPM_CONFIG_FILE", variable: 'NPM_CONFIG_FILE')]) {
             publishScript = '''
