@@ -1,3 +1,6 @@
+## [1.2.0] - 2020-03-23
+Support extension localization, support AutoCAD commands and sysvars in autocompletion within the string expression like (command "_line").
+
 ## [1.1.0] - 2020-01-19
 Refine lisp code formatter and auto indent
 
