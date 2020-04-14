@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { ProjectNode, LspFileNode } from './projectTree'
+import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree } from './projectTree'
 import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../format/sexpression';
 import * as path from 'path'
@@ -22,7 +22,7 @@ export async function OpenProject() {
             return Promise.resolve(ret);
     }
     catch (e) {
-        Promise.reject(e);
+        return Promise.reject(e);
     }
 }
 
@@ -30,9 +30,9 @@ async function SelectProjectFile() {
     const options: vscode.OpenDialogOptions = {
         //TBD: globalize
         canSelectMany: false,
-        openLabel: 'Open Autolisp Project',
+        openLabel: 'Open Project',
         filters: {
-            'Autolisp project files': ['prj'], 
+            'Autolisp project files': ['prj'],
             'All files': ['*']
         }
     };
@@ -41,7 +41,7 @@ async function SelectProjectFile() {
     if (fileUri && fileUri.length > 0)
         return Promise.resolve(fileUri[0]);
 
-    return Promise.reject();
+    //return Promise.resolve(undefined) by default, and it means the operation is cancelled
 }
 
 
@@ -73,7 +73,7 @@ function ParseProjectDocument(prjPath: string, document: vscode.TextDocument): P
 
         //now it's a project expression
 
-        if(IsValidProjectExpression(vlspPrjList) == false)
+        if (IsValidProjectExpression(vlspPrjList) == false)
             return undefined; //it's content is not valid
 
         let prjName: string = vlspPrjList.atoms[3].symbol;
@@ -85,18 +85,14 @@ function ParseProjectDocument(prjPath: string, document: vscode.TextDocument): P
         root.projectDirectory = path.dirname(prjPath);
         root.sourceFiles = new Array<LspFileNode>();
 
-        if (vlspPrjList.atoms[5] instanceof Sexpression)
-        {
+        if (vlspPrjList.atoms[5] instanceof Sexpression) {
             //create source file nodes
             for (let j = 1; j < (fileList.atoms.length - 1); j++) {
                 let fileName = Convert2AbsoluteLspFilePath(fileList.atoms[j].symbol, root.projectDirectory);
                 if(!fileName)
                     return undefined;
 
-                let fileNode = new LspFileNode();
-                fileNode.filePath = fileName;
-                fileNode.fileExists = fs.existsSync(fileName);
-                root.sourceFiles.push(fileNode);
+                addLispFileNode2ProjectTree(root, fileName);
             }
         }
 
@@ -106,7 +102,7 @@ function ParseProjectDocument(prjPath: string, document: vscode.TextDocument): P
     return undefined;
 }
 
-function Convert2AbsoluteLspFilePath(fileName:string, prjDir:string): string {
+function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
     //remove the starting and ending "
     if (fileName.startsWith('\"') == false)
         return undefined;

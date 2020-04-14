@@ -3,6 +3,7 @@ import { OpenProject } from './openProject';
 import { ProjectTreeProvider } from './projectTree';
 import { openLspFile } from './openLspFile';
 import { IconUris } from './icons';
+import { AddFile2Project } from './addFile2Project';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -14,7 +15,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.openProject', async () => {
             OpenProject()
                 .then(prjNode => {
-                    if (!prjNode) return;//it's possible that the user cancelled the operation
+                    if (!prjNode)
+                        return;//it's possible that the user cancelled the operation
+
                     ProjectTreeProvider.instance().updateData(prjNode);
                 })
                 .catch(err => {
@@ -23,7 +26,16 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.addFile2Project', async () => {
-            vscode.window.showInformationMessage("[Add file to Project] Not implemented yet");
+            AddFile2Project()
+                .then(addedFiles => {
+                    if (!addedFiles)
+                        return;//it's possible that the user cancelled the operation
+
+                    ProjectTreeProvider.instance().refreshData();
+                })
+                .catch(err => {
+                    vscode.window.showErrorMessage("Failed to add selected files to project.");//TBD: localize
+                })
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {

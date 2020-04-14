@@ -2,6 +2,8 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import { IconUris } from './icons';
 
+const fs = require('fs');
+
 
 export interface DisplayNode {
     getDisplayText: () => string;
@@ -17,6 +19,8 @@ export class ProjectNode implements DisplayNode {
     projectDirectory: string;
 
     projectName: string;
+
+    projectModified: Boolean = false;
 
     getDisplayText(): string {
         return this.projectName;
@@ -44,7 +48,7 @@ export class LspFileNode implements DisplayNode {
     }
 
     getTooltip(): string {
-        if(this.fileExists)
+        if (this.fileExists)
             return this.filePath;
         else
             return "File doesn't exist: " + this.filePath; //TBD: localize
@@ -85,6 +89,30 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         this.onChanged.fire();
     }
 
+    public refreshData() {
+        this.onChanged.fire();
+    }
+
+    public static hasProjectOpened(): Boolean {
+        if (!ProjectTreeProvider.currentInstance)
+            return false;
+
+        if (!ProjectTreeProvider.currentInstance.rootNode)
+            return false;
+
+        return true;
+    }
+
+    public addFileNode(filePath: string) {
+        if (!this.rootNode)
+            return;
+
+        let ret = addLispFileNode2ProjectTree(this.rootNode, filePath);
+        if (ret) {
+            this.rootNode.projectModified = true;
+        }
+    }
+
     private onChanged: vscode.EventEmitter<DisplayNode> = new vscode.EventEmitter<DisplayNode>();
     public readonly onDidChangeTreeData?: vscode.Event<DisplayNode> = this.onChanged.event;
 
@@ -123,4 +151,24 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         return null;
     }
 
+}
+
+//return false if the file is already added;
+//return true in all other cases
+export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string): Boolean {
+    let file2Add = path.normalize(fileName).toUpperCase();
+
+    for (let fileNode of root.sourceFiles) {
+        let addedFile = path.normalize(fileNode.filePath).toUpperCase();
+
+        if (file2Add == addedFile)
+            return false;
+    }
+
+    let fileNode = new LspFileNode();
+    fileNode.filePath = fileName;
+    fileNode.fileExists = fs.existsSync(fileName);
+    root.sourceFiles.push(fileNode);
+
+    return true;
 }
