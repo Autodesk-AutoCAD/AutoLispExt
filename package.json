@@ -31,15 +31,56 @@
 	"activationEvents": [
 		"onDebug",
 		"onUri",
-		"onCommand:extension.loadCurrentLisp",
+		"onCommand:autolisp.loadActiveFile",
 		"onLanguage:autolisp",
-		"onLanguage:autolispdcl"
+		"onLanguage:autolispdcl",
+		"onView:Autolisp-ProjectView"
 	],
 	"contributes": {
 		"commands": [
 			{
-				"command": "extension.loadCurrentLisp",
+				"command": "autolisp.loadActiveFile",
 				"title": "%autolispext.loadcurrentfile.title%"
+			},
+			{
+				"command": "autolisp.createProject",
+				"title": "Create a New Project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
+				"command": "autolisp.openProject",
+				"title": "Open an existing Project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
+				"command": "autolisp.addFile2Project",
+				"title": "Add file to current project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
+				"command": "autolisp.SaveProject",
+				"title": "Save current project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
+				"command": "autolisp.loadAllFiles",
+				"title": "Load all files",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
 			}
 		],
 		"configuration": {
@@ -324,7 +365,64 @@
 					}
 				]
 			}
-		]
+		],
+		"viewsContainers": {
+			"activitybar": [
+				{
+					"id": "Autolisp-PMSideBar",
+					"title": "Autolisp Project Manager",
+					"icon": "images/adsk_lisp.png"
+				}
+			]
+		},
+		"views": {
+			"Autolisp-PMSideBar": [
+				{
+					"id": "Autolisp-ProjectView",
+					"name": "Project Manager",
+					"when": ""
+				},
+				{
+					"id": "Autolisp-FindReplaceView",
+					"name": "Find & Replace",
+					"when": ""
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "autolisp.createProject",
+					"alt": "autolisp.createProject",
+					"group": "navigation@1",
+					"when": "view == Autolisp-ProjectView"
+				},
+				{
+					"command": "autolisp.openProject",
+					"alt": "autolisp.openProject",
+					"group": "navigation@2",
+					"when": "view == Autolisp-ProjectView"
+				},
+				{
+					"command": "autolisp.addFile2Project",
+					"alt": "autolisp.addFile2Project",
+					"group": "navigation@3",
+					"when": "view == Autolisp-ProjectView"
+				},
+				{
+					"command": "autolisp.SaveProject",
+					"alt": "autolisp.SaveProject",
+					"group": "navigation@4",
+					"when": "view == Autolisp-ProjectView"
+				},
+				{
+					"command": "autolisp.loadAllFiles",
+					"alt": "autolisp.loadAllFiles",
+					"group": "navigation@5",
+					"when": "view == Autolisp-ProjectView"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"compile": "tsc -b",

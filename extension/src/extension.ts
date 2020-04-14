@@ -30,6 +30,7 @@ import * as statusBar from "./statusbar"
 import * as autoIndent from './format/autoIndent'
 
 import * as DebugProviders from "./debug"
+import * as pmCmds from "./project/projectCommands"
 
 import * as nls from 'vscode-nls';
 
@@ -66,12 +67,17 @@ export function activate(context: vscode.ExtensionContext) {
 	//4. debug adapter
 	DebugProviders.registerLispDebugProviders(context);
 
-    //register the handler to uri scheme: vscode://autodesk.autolispext?......
+ 	//-----------------------------------------------------------
+    //5. register the handler to uri scheme: vscode://autodesk.autolispext?......
     vscode.window.registerUriHandler({
         handleUri(uri: vscode.Uri) {
             onUriRequested(uri);
         }
-    });
+	});
+	
+	//-----------------------------------------------------------
+	//6. register project commands
+	pmCmds.registerProjectCommands(context);
 }
 
 export function deactivate(): Thenable<void> | undefined {

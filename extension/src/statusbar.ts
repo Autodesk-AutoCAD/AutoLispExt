@@ -10,9 +10,9 @@ export function registerLoadLispButton(context: vscode.ExtensionContext) {
 	lspLoadButton.text = "📄" + title;
 	lspLoadButton.color = 'white';
 	lspLoadButton.tooltip = localize("autolispext.loadlisp.tooltip", "Load the Current File");
-	lspLoadButton.command = "extension.loadCurrentLisp";
+	lspLoadButton.command = "autolisp.loadActiveFile";
 	lspLoadButton.show();
-	context.subscriptions.push(vscode.commands.registerCommand("extension.loadCurrentLisp", () => {
+	context.subscriptions.push(vscode.commands.registerCommand("autolisp.loadActiveFile", () => {
 		let currentLSPDoc = vscode.window.activeTextEditor.document.fileName;
 		if(isSupportedLispFile(currentLSPDoc)) {
 			//execute load progress 
