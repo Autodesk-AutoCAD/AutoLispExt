@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { DisplayNode, LspFileNode } from './projectTree'
 
-export function openLspFile(clickedTreeItem: DisplayNode) {
+export async function openLspFile(clickedTreeItem: DisplayNode) {
 
     try {
         let isLspFile = clickedTreeItem instanceof LspFileNode;
@@ -10,15 +10,14 @@ export function openLspFile(clickedTreeItem: DisplayNode) {
 
         let lspNode = clickedTreeItem as LspFileNode;
         if (lspNode.fileExists == false) {
-            vscode.window.showErrorMessage("File doesn't exist");//TBD: localize
-            return;
+            return Promise.reject("File doesn't exist: " + lspNode.filePath); //TBD: localize
         }
 
         let options = { "preview": false };
 
-        vscode.commands.executeCommand("vscode.open", vscode.Uri.file(lspNode.filePath), options);
+        return vscode.commands.executeCommand("vscode.open", vscode.Uri.file(lspNode.filePath), options);
     }
     catch (e) {
-        vscode.window.showErrorMessage("Unable to open file.")//TBD: localize
+        return Promise.reject(e);
     }
 }

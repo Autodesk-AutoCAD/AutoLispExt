@@ -4,6 +4,7 @@ import { ProjectTreeProvider } from './projectTree';
 import { openLspFile } from './openLspFile';
 import { IconUris } from './icons';
 import { AddFile2Project } from './addFile2Project';
+import { SaveProject } from './saveProject';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -21,7 +22,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     ProjectTreeProvider.instance().updateData(prjNode);
                 })
                 .catch(err => {
-                    vscode.window.showErrorMessage("Failed to open the given project.");//TBD: localize
+                    showErrorMessage("Failed to open the given project.", err);//TBD: localize
                 });
         }));
 
@@ -34,12 +35,18 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     ProjectTreeProvider.instance().refreshData();
                 })
                 .catch(err => {
-                    vscode.window.showErrorMessage("Failed to add selected files to project.");//TBD: localize
+                    showErrorMessage("Failed to add selected files to project.", err);//TBD: localize
                 })
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
-            vscode.window.showInformationMessage("[Save Project] Not implemented yet");
+            SaveProject()
+            .then(prjPath => {
+                vscode.window.showInformationMessage("Project file saved"); //TBD: localize
+            })
+            .catch(err => {
+                showErrorMessage("Failed to save project:", err); //TBD: localize
+            });
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.loadAllFiles', async () => {
@@ -48,7 +55,10 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
 
         context.subscriptions.push(vscode.commands.registerCommand(ProjectTreeProvider.TreeItemClicked, (treeItem) => {
-            openLspFile(treeItem);
+            openLspFile(treeItem)
+            .catch(err => {
+                showErrorMessage("Failed to open file.", err); //TBD: localize
+            })
         }));
 
         IconUris.initialize();
@@ -56,5 +66,13 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
     catch (e) {
         vscode.window.showErrorMessage("Failed to initialize Autolisp project manager.");//TBD: localize
         console.log(e);
+    }
+}
+
+function showErrorMessage(description:string, detail:string) {
+    if(!detail) {
+        vscode.window.showErrorMessage(description);
+    } else {
+        vscode.window.showErrorMessage(description + "\r\n" + detail);
     }
 }

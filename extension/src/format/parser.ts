@@ -11,12 +11,12 @@ class LeftParentItem {
 }
 
 export class LispParser {
-    editor: vscode.TextEditor;
+    document: vscode.TextDocument;
     atomsForest: Array<string | Sexpression>;
 
-    constructor(editor: vscode.TextEditor) {
+    constructor(document: vscode.TextDocument) {
         this.atomsForest = new Array<string | Sexpression>();
-        this.editor = editor;
+        this.document = document;
     }
 
     isTopLevelAtom(line: number, column: number): boolean {
@@ -84,7 +84,7 @@ export class LispParser {
         let selectionStartOffset = offset;
         let textString = needFmtString;
 
-        let editor = this.editor;
+        let document = this.document;
 
         let leftParensStack = [];
 
@@ -96,7 +96,7 @@ export class LispParser {
                 startPos.offsetInSelection = i;
                 startPos.offsetInDocument = i + selectionStartOffset;
 
-                let comments = LispParser.readComments(editor.document, textString, startPos);
+                let comments = LispParser.readComments(document, textString, startPos);
                 if (comments == null)
                     continue;
                 if (leftParensStack.length == 0) {
@@ -113,17 +113,17 @@ export class LispParser {
                 startPos.offsetInSelection = i;
                 startPos.offsetInDocument = i + selectionStartOffset;
 
-                let endOfString = ListReader.findEndOfDoubleQuoteString(editor.document, textString, startPos);
-                let startPos2d = editor.document.positionAt(startPos.offsetInDocument);
+                let endOfString = ListReader.findEndOfDoubleQuoteString(document, textString, startPos);
+                let startPos2d = document.positionAt(startPos.offsetInDocument);
                 let endPos2d = null;
                 if (endOfString != null) {
-                    endPos2d = editor.document.positionAt(endOfString.offsetInDocument);
+                    endPos2d = document.positionAt(endOfString.offsetInDocument);
                 }
                 else {
                     endPos2d = selectionStartOffset + textString.length;
                 }
 
-                let stringExpr = editor.document.getText(new vscode.Range(startPos2d, endPos2d));
+                let stringExpr = document.getText(new vscode.Range(startPos2d, endPos2d));
                 //set the index of next iteration
                 i += stringExpr.length;
 
@@ -154,7 +154,7 @@ export class LispParser {
                     exprStartPos.offsetInSelection = 0;
                     exprStartPos.offsetInDocument = leftparen.location + selectionStartOffset;
 
-                    let reader = new ListReader(sexpr, exprStartPos, editor.document);
+                    let reader = new ListReader(sexpr, exprStartPos, document);
                     let lispLists = reader.tokenize();
                     this.atomsForest.push(lispLists);
                 }
@@ -177,7 +177,7 @@ export class LispParser {
             exprStartPos.offsetInSelection = 0;
             exprStartPos.offsetInDocument = leftParensStack[0].location + selectionStartOffset;
 
-            let reader = new ListReader(sexpr, exprStartPos, editor.document);
+            let reader = new ListReader(sexpr, exprStartPos, document);
             let lispLists = reader.tokenize();
             this.atomsForest.push(lispLists);
         }

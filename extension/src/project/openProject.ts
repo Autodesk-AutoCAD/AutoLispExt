@@ -1,7 +1,9 @@
-import * as vscode from 'vscode'
 import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree } from './projectTree'
 import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../format/sexpression';
+import { ProjectDefinition } from './projectDefinition';
+
+import * as vscode from 'vscode'
 import * as path from 'path'
 
 const fs = require('fs');
@@ -13,17 +15,23 @@ export async function OpenProject() {
         if (!prjUri)
             return;
 
-        let document = await vscode.workspace.openTextDocument(prjUri);
-        if (!document)
-            return;
-
-        let ret = ParseProjectDocument(prjUri.fsPath, document);
-        if (ret)
-            return Promise.resolve(ret);
+        return OpenProjectFile(prjUri);
     }
     catch (e) {
         return Promise.reject(e);
     }
+}
+
+export async function OpenProjectFile(prjUri: vscode.Uri) {
+    let document = await vscode.workspace.openTextDocument(prjUri);
+    if (!document)
+        return Promise.reject("can't read project file: " + prjUri.fsPath); //TBD: localization
+
+    let ret = ParseProjectDocument(prjUri.fsPath, document);
+    if (ret)
+        return Promise.resolve(ret);
+
+    return Promise.reject("malformed project file: " + prjUri.fsPath); //TBD: localization
 }
 
 async function SelectProjectFile() {
@@ -53,53 +61,89 @@ function ParseProjectDocument(prjPath: string, document: vscode.TextDocument): P
     let reader = new ListReader(document.getText(), readerStartPos, document);
 
     let lispLists = reader.tokenize();
-    if ((!lispLists) || (!lispLists.atoms) || (lispLists.atomsCount() < 2))
+    let atomCount = lispLists.atoms.length;
+    if ((!lispLists) || (!lispLists.atoms) || (atomCount < 2))
         return undefined;
 
-    let atomsCount = lispLists.atomsCount();
+    //get the VLISP-PROJECT-LIST expression
+    let index = IndexOfProjectList(lispLists);
+    if (index < 0)
+        return undefined;
+    let vlspPrjList = lispLists.atoms[index] as Sexpression;
+
+    //parse project metadata
+    let prjMetaData = ProjectDefinition.Create(vlspPrjList);
+    if (IsValidProjectExpression(prjMetaData) == false)
+        return undefined; //its content is not valid
+
+    //get the value of :own-list pair, i.e. the source file list
+    index = IndexOfSourceList(vlspPrjList);
+    if (index < 0)//if there's no source file, we should at least get a "nil" string
+        return undefined;
+    let srcFileExpr = vlspPrjList.atoms[index];
+
+    //create the project node
+    let root = new ProjectNode();
+    root.projectName = prjMetaData.Name;
+    root.projectFilePath = prjPath;
+    root.projectDirectory = path.dirname(prjPath);
+    root.sourceFiles = new Array<LspFileNode>();
+    root.projectMetadata = prjMetaData;
+
+    if (srcFileExpr instanceof Sexpression) {
+        let fileList = srcFileExpr as Sexpression;
+
+        //create source file nodes
+        for (let j = 1; j < (fileList.atoms.length - 1); j++) {
+            let fileName = Convert2AbsoluteLspFilePath(fileList.atoms[j].symbol, root.projectDirectory);
+            if (!fileName)
+                return undefined;
+
+            addLispFileNode2ProjectTree(root, fileName, fileList.atoms[j].symbol);
+        }
+    }
+
+    return root;
+}
+
+function IndexOfSourceList(prjExpr: Sexpression): number {
+    let atomsCount = prjExpr.atoms.length;
+    for (let i = 0; i < atomsCount; i++) {
+        if (prjExpr.atoms[i].symbol.toUpperCase() != ProjectDefinition.key_own_list)
+            continue;
+
+        //now i is the index of the key of src file pair 
+        if (i >= atomsCount - 1)
+            return -1;
+
+        //i+1 is the index of value
+        return i + 1;
+    }
+
+    return -1;
+}
+
+function IndexOfProjectList(rootExpr: Sexpression): number {
+    let atomsCount = rootExpr.atoms.length;
+
     for (let i = 0; i < atomsCount; i++) {
         //find for the VLISP-PROJECT-LIST expression
-        if (lispLists.atoms[i] == null) continue;
-        if (!(lispLists.atoms[i] instanceof Sexpression)) continue;
+        if (rootExpr.atoms[i] == null) continue;
+        if (!(rootExpr.atoms[i] instanceof Sexpression)) continue;
 
-        let vlspPrjList = lispLists.atoms[i] as Sexpression;
+        let vlspPrjList = rootExpr.atoms[i] as Sexpression;
 
-        if (vlspPrjList.atomsCount() < 1)
+        if (vlspPrjList.atoms.length < 2)
             continue;
 
-        if (vlspPrjList.atoms[1].symbol != "VLISP-PROJECT-LIST") {
+        if (vlspPrjList.atoms[1].symbol.toUpperCase() != ProjectDefinition.key_expr_name) {
             continue;
         }
 
-        //now it's a project expression
+        return i;
+    }
 
-        if (IsValidProjectExpression(vlspPrjList) == false)
-            return undefined; //it's content is not valid
-
-        let prjName: string = vlspPrjList.atoms[3].symbol;
-        let fileList = vlspPrjList.atoms[5] as Sexpression;
-
-        let root = new ProjectNode();
-        root.projectName = prjName;
-        root.projectFilePath = prjPath;
-        root.projectDirectory = path.dirname(prjPath);
-        root.sourceFiles = new Array<LspFileNode>();
-
-        if (vlspPrjList.atoms[5] instanceof Sexpression) {
-            //create source file nodes
-            for (let j = 1; j < (fileList.atoms.length - 1); j++) {
-                let fileName = Convert2AbsoluteLspFilePath(fileList.atoms[j].symbol, root.projectDirectory);
-                if(!fileName)
-                    return undefined;
-
-                addLispFileNode2ProjectTree(root, fileName);
-            }
-        }
-
-        return root;
-    } //end of the for loop of project file elements
-
-    return undefined;
+    return -1;
 }
 
 function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
@@ -127,22 +171,15 @@ function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
     return fileName;
 }
 
-function IsValidProjectExpression(expr: Sexpression): Boolean {
-    //it should have at least 6 children
-    if ((!expr.atoms) || (expr.atomsCount() < 6))
+function IsValidProjectExpression(metaData: ProjectDefinition): Boolean {
+    if (!metaData)
         return false;
 
-    //the 3rd and 4th ones should be for project name
-    if (expr.atoms[2].symbol.toUpperCase() != ":NAME") {
-        console.error(":NAME not found");
+    if (metaData.hasProperty(ProjectDefinition.key_name) == false)
         return false;
-    }
 
-    //the 5th and 6th ones should be for for source files
-    if (expr.atoms[4].symbol.toUpperCase() != ":OWN-LIST") {
-        console.error(":OWN-LIST not found");
+    if (metaData.hasProperty(ProjectDefinition.key_own_list) == false)
         return false;
-    }
 
     return true;
 }

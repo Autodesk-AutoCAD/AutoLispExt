@@ -102,6 +102,25 @@ export class Sexpression extends LispAtom {
         this.atoms.push(item);
     }
 
+    static getRawText(sexpr:Sexpression): string {
+        let ret = '';
+
+        if(!sexpr.atoms)
+            return ret;
+
+        for(let atom of sexpr.atoms) {
+            if(atom instanceof Sexpression) {
+                ret += this.getRawText(atom as Sexpression);
+            }
+            else {
+                ret += atom.symbol;
+            }
+            ret += ' ';
+        }
+
+        return ret;
+    }
+
     getAtomFromPos(loc: Position): LispAtom {
         var line = loc.line;
         var col = loc.character;

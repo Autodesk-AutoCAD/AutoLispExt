@@ -18,7 +18,7 @@ export function registerDocumentFormatter() {
                 return [];
             }
 
-            let fmt = LispFormatter.format(activeTextEditor, true);
+            let fmt = LispFormatter.format(activeTextEditor.document, null);
             return [vscode.TextEdit.replace(utils.getFullDocRange(activeTextEditor), fmt)];
         }
     });
@@ -42,7 +42,7 @@ export function registeSelectionFormatter() {
                 vscode.window.showInformationMessage(msg);
             }
 
-            let fmt = LispFormatter.format(activeTextEditor, false);
+            let fmt = LispFormatter.format(activeTextEditor.document, activeTextEditor.selection);
             return [vscode.TextEdit.replace(utils.getSelectedDocRange(activeTextEditor), fmt)];
         }
     });

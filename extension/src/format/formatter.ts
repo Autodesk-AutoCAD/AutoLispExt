@@ -7,44 +7,44 @@ const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class LispFormatter {
 
-    public static format(editor: vscode.TextEditor, ifFullFormat: boolean): string {
+    public static format(document: vscode.TextDocument, selectedRange:vscode.Selection): string {
         let textString: string = "";
         let selectionStartOffset = 0;//the position in the whole doc of the first char of the text selected to format
 
         let fileParser: LispParser = undefined;
 
-        if (!ifFullFormat) {
-            textString = editor.document.getText(editor.selection);
-            selectionStartOffset = editor.document.offsetAt(editor.selection.start);
+        if (selectedRange != null) {
+            textString = document.getText(selectedRange);
+            selectionStartOffset = document.offsetAt(selectedRange.start);
 
-            fileParser = new LispParser(editor);
+            fileParser = new LispParser(document);
         }
         else {
-            textString = editor.document.getText();
+            textString = document.getText();
         }
         if (textString.length == 0)
             return "";
 
         try {
-            let parser = new LispParser(editor);
+            let parser = new LispParser(document);
             parser.tokenizeString(textString, selectionStartOffset);
             if (fileParser)
-                fileParser.tokenizeString(editor.document.getText(), 0);
+                fileParser.tokenizeString(document.getText(), 0);
 
-            return this.formatGut(editor, parser, textString, fileParser);
+            return this.formatGut(document, parser, textString, fileParser);
         } catch (e) {
             vscode.window.showErrorMessage(e.message);
             return textString;
         }
     }
 
-    private static formatGut(editor: vscode.TextEditor, parser: LispParser, origCopy: string, fileParser?: LispParser): string {
+    private static formatGut(document: vscode.TextDocument, parser: LispParser, origCopy: string, fileParser?: LispParser): string {
         let atoms = parser.atomsForest;
         if (atoms.length == 0)
             return origCopy;
 
         let formattedstring = "";
-        let linefeed = LispParser.getEOL(editor.document);
+        let linefeed = LispParser.getEOL(document);
         for (let i = 0; i < atoms.length; i++) {
             if (atoms[i] instanceof Sexpression) {
                 let lispLists = atoms[i] as Sexpression;

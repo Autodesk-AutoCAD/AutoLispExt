@@ -1,9 +1,10 @@
+import { IconUris } from './icons';
+import { ProjectDefinition } from './projectDefinition';
+
 import * as vscode from 'vscode'
 import * as path from 'path'
-import { IconUris } from './icons';
 
 const fs = require('fs');
-
 
 export interface DisplayNode {
     getDisplayText: () => string;
@@ -21,6 +22,8 @@ export class ProjectNode implements DisplayNode {
     projectName: string;
 
     projectModified: Boolean = false;
+
+    projectMetadata: ProjectDefinition = null;
 
     getDisplayText(): string {
         return this.projectName;
@@ -42,6 +45,8 @@ export class ProjectNode implements DisplayNode {
 export class LspFileNode implements DisplayNode {
     filePath: string;
     fileExists: boolean;
+
+    rawFilePath: string;//the raw path string read from .prj file; for new added file, it should be null
 
     getDisplayText(): string {
         return path.basename(this.filePath);
@@ -93,24 +98,33 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         this.onChanged.fire();
     }
 
-    public static hasProjectOpened(): Boolean {
+    public get projectNode(): ProjectNode {
         if (!ProjectTreeProvider.currentInstance)
-            return false;
+            return null;
 
-        if (!ProjectTreeProvider.currentInstance.rootNode)
+        return ProjectTreeProvider.currentInstance.rootNode;
+    }
+
+
+    public static hasProjectOpened(): Boolean {
+        if (!ProjectTreeProvider.currentInstance.projectNode)
             return false;
 
         return true;
     }
 
-    public addFileNode(filePath: string) {
+    //return false if file already belongs to given project;
+    //return true in all other cases
+    public addFileNode(filePath: string): Boolean {
         if (!this.rootNode)
             return;
 
-        let ret = addLispFileNode2ProjectTree(this.rootNode, filePath);
+        let ret = addLispFileNode2ProjectTree(this.rootNode, filePath, null);
         if (ret) {
             this.rootNode.projectModified = true;
         }
+
+        return ret;
     }
 
     private onChanged: vscode.EventEmitter<DisplayNode> = new vscode.EventEmitter<DisplayNode>();
@@ -153,9 +167,13 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 
 }
 
-//return false if the file is already added;
+//root: node of the owner project
+//fileName: the absolute file path of the lsp file to add
+//rawFilePath: the raw string of file path read from .prj file; for new added file, it should be null
+
+//return false if the file is already in project;
 //return true in all other cases
-export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string): Boolean {
+export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string, rawFilePath: string): Boolean {
     let file2Add = path.normalize(fileName).toUpperCase();
 
     for (let fileNode of root.sourceFiles) {
@@ -168,6 +186,7 @@ export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string)
     let fileNode = new LspFileNode();
     fileNode.filePath = fileName;
     fileNode.fileExists = fs.existsSync(fileName);
+    fileNode.rawFilePath = rawFilePath;
     root.sourceFiles.push(fileNode);
 
     return true;
