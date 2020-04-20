@@ -67,6 +67,14 @@
 				}
 			},
 			{
+				"command": "autolisp.removeFileFromProject",
+				"title": "Remove file from current project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
 				"command": "autolisp.SaveProject",
 				"title": "Save current project",
 				"category": "AutoLispExt",
@@ -442,6 +450,11 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.loadAllFiles",
 					"group": "navigation@3"
+				},
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == lspFile",
+					"command": "autolisp.removeFileFromProject",
+					"group": "navigation@1"
 				}
 			]
 		}
@@ -466,13 +479,13 @@
 		"typescript": "3.2.4",
 		"url-parse": "1.4.4",
 		"vscode": "^1.1.36",
-		"vscode-nls-dev": "^3.2.6",
-		"fs-extra": "^8.1.0"
+		"vscode-nls-dev": "^3.2.6"
 	},
 	"dependencies": {
 		"vsce": "1.57.0",
 		"vscode-languageclient": "4.1.4",
 		"vscode-nls": "3.2.5",
-		"vscode-i18n": "0.2.0"
+		"vscode-i18n": "0.2.0",
+		"fs-extra": "^8.1.0"
 	}
 }

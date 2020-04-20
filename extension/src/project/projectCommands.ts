@@ -5,6 +5,7 @@ import { openLspFile } from './openLspFile';
 import { IconUris } from './icons';
 import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
+import { excludeFromProject } from './excludeFile';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -39,14 +40,24 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 })
         }));
 
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.removeFileFromProject', async (selected) => {
+            excludeFromProject(selected)
+                .then(() => {
+                    ProjectTreeProvider.instance().refreshData();
+                })
+                .catch(err => {
+                    showErrorMessage("Failed to remove selected file.", err); //TBD: localize
+                })
+        }));
+
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
             SaveProject()
-            .then(prjPath => {
-                vscode.window.showInformationMessage("Project file saved"); //TBD: localize
-            })
-            .catch(err => {
-                showErrorMessage("Failed to save project:", err); //TBD: localize
-            });
+                .then(prjPath => {
+                    vscode.window.showInformationMessage("Project file saved"); //TBD: localize
+                })
+                .catch(err => {
+                    showErrorMessage("Failed to save project:", err); //TBD: localize
+                });
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.loadAllFiles', async () => {
@@ -56,9 +67,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(vscode.commands.registerCommand(ProjectTreeProvider.TreeItemClicked, (treeItem) => {
             openLspFile(treeItem)
-            .catch(err => {
-                showErrorMessage("Failed to open file.", err); //TBD: localize
-            })
+                .catch(err => {
+                    showErrorMessage("Failed to open file.", err); //TBD: localize
+                })
         }));
 
         IconUris.initialize();
@@ -69,8 +80,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
     }
 }
 
-function showErrorMessage(description:string, detail:string) {
-    if(!detail) {
+function showErrorMessage(description: string, detail: string) {
+    if (!detail) {
         vscode.window.showErrorMessage(description);
     } else {
         vscode.window.showErrorMessage(description + "\r\n" + detail);
