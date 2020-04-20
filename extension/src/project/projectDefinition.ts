@@ -21,6 +21,21 @@ export class ProjectDefinition {
 
     metaData: object = {};
 
+    public static CreateEmpty(prjName: string): ProjectDefinition {
+        if (!prjName)
+            return null;
+
+        let ret = new ProjectDefinition();
+        ret.metaData[ProjectDefinition.key_name] = prjName;
+        ret.metaData[ProjectDefinition.key_own_list] = 'nil';
+        ret.metaData[ProjectDefinition.key_fas_dir] = 'nil';
+        ret.metaData[ProjectDefinition.key_tmp_dir] = 'nil';
+        ret.metaData[ProjectDefinition.key_proj_keys] = '(:BUILD (:standard))';
+        ret.metaData[ProjectDefinition.key_cxt_id] = ':AUTOLISP';
+
+        return ret;
+    }
+
     public static Create(prjExpr: Sexpression): ProjectDefinition {
         if (!prjExpr)
             return null;

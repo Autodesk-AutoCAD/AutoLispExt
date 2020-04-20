@@ -11,6 +11,10 @@ export async function AddFile2Project() {
             return; //user has cancelled the open file dialog
 
         for (let file of selectedFiles) {
+            let fileUpper = file.fsPath.toUpperCase();
+            if (fileUpper.endsWith(".LSP") == false)
+                return Promise.reject("Only .lsp file is allowed."); //TBD: localize
+
             if (ProjectTreeProvider.instance().addFileNode(file.fsPath) == false) {
                 vscode.window.showInformationMessage("File already in project: " + file.fsPath); //TBD: localize
             }

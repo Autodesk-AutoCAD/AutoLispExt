@@ -6,12 +6,26 @@ import { IconUris } from './icons';
 import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
+import { getNewProjectFilePath, createProject } from './createProject';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.createProject', async () => {
-            vscode.window.showInformationMessage("[Create Project] Not implemented yet");
+            try {
+                let prjPath = await getNewProjectFilePath();
+                if (!prjPath)
+                    return;
+
+                let prjNode = await createProject(prjPath.fsPath);
+
+                ProjectTreeProvider.instance().updateData(prjNode);
+
+                await SaveProject(false);
+            }
+            catch (err) {
+                showErrorMessage("Failed to create project.", err);//TBD: localize
+            }
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.openProject', async () => {
@@ -51,7 +65,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
-            SaveProject()
+            SaveProject(true)
                 .then(prjPath => {
                     vscode.window.showInformationMessage("Project file saved"); //TBD: localize
                 })

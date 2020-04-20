@@ -14,6 +14,10 @@ export async function OpenProject() {
         let prjUri = await SelectProjectFile();
         if (!prjUri)
             return;
+        
+        let prjPathUpper = prjUri.fsPath.toUpperCase();
+        if(prjPathUpper.endsWith(".PRJ") == false)
+            return Promise.reject("Only .PRJ file is allowed"); //TBD: localization
 
         return OpenProjectFile(prjUri);
     }
@@ -40,8 +44,7 @@ async function SelectProjectFile() {
         canSelectMany: false,
         openLabel: 'Open Project',
         filters: {
-            'Autolisp project files': ['prj'],
-            'All files': ['*']
+            'Autolisp project files': ['prj']
         }
     };
 

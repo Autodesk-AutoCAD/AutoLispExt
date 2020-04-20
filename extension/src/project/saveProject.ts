@@ -7,7 +7,7 @@ import * as path from 'path'
 import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 
-export async function SaveProject() {
+export async function SaveProject(refresh:boolean) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
             return Promise.reject("No project opened yet"); //TBD: localize
@@ -29,8 +29,11 @@ export async function SaveProject() {
         fs.removeSync(targetPath);
         fs.writeFileSync(targetPath, formatedText);
 
-        //at the end, reopen the given project
-        return OpenProjectFile(vscode.Uri.file(targetPath));
+        if(refresh)
+            //at the end, reopen the given project
+            return OpenProjectFile(vscode.Uri.file(targetPath));
+
+        return Promise.resolve(targetPath);
     }
     catch (e) {
         return Promise.reject(e);
