@@ -9,7 +9,8 @@ const fs = require('fs');
 export interface DisplayNode {
     getDisplayText: () => string;
     getTooltip: () => string;
-    getIconUri: () => vscode.Uri;
+    getIconUri: () => vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri };
+    getNodeType: () => string;
     isCollapsible: () => Boolean;
 }
 
@@ -33,11 +34,15 @@ export class ProjectNode implements DisplayNode {
         return this.projectFilePath;
     }
 
+    getNodeType(): string {
+        return "project"
+    }
+
     isCollapsible(): Boolean {
         return true;
     }
 
-    getIconUri(): vscode.Uri {
+    getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } {
         return null;//currently we don't provide icon for project node
     }
 }
@@ -59,11 +64,15 @@ export class LspFileNode implements DisplayNode {
             return "File doesn't exist: " + this.filePath; //TBD: localize
     }
 
+    getNodeType(): string {
+        return "lspFile"
+    }
+
     isCollapsible(): Boolean {
         return false;
     }
 
-    getIconUri(): vscode.Uri {
+    getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } {
         if (this.fileExists)
             return IconUris.lspFile();
         else
@@ -136,6 +145,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         treeNode.collapsibleState = element.isCollapsible() ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
         treeNode.tooltip = element.getTooltip();
         treeNode.iconPath = element.getIconUri();
+        treeNode.contextValue = element.getNodeType();
 
         treeNode.command = {
             title: treeNode.label,

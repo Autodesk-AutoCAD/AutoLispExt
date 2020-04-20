@@ -69,9 +69,10 @@
 			{
 				"command": "autolisp.SaveProject",
 				"title": "Save current project",
+				"category": "AutoLispExt",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/project_save.svg",
+					"light": "images/light/project_save.svg"
 				}
 			},
 			{
@@ -203,6 +204,15 @@
 					".dcl"
 				],
 				"configuration": "./extension/smartBracket/language-configuration-dcl.json"
+			},
+			{
+				"id": "autolispprj",
+				"aliases": [
+					"AutoLISPPRJ"
+				],
+				"extensions": [
+					".prj"
+				]
 			}
 		],
 		"grammars": [
@@ -371,7 +381,7 @@
 				{
 					"id": "Autolisp-PMSideBar",
 					"title": "Autolisp Project Manager",
-					"icon": "images/adsk_lisp.png"
+					"icon": "images/project_manager.svg"
 				}
 			]
 		},
@@ -393,33 +403,45 @@
 			"view/title": [
 				{
 					"command": "autolisp.createProject",
-					"alt": "autolisp.createProject",
 					"group": "navigation@1",
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
 					"command": "autolisp.openProject",
-					"alt": "autolisp.openProject",
 					"group": "navigation@2",
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
 					"command": "autolisp.addFile2Project",
-					"alt": "autolisp.addFile2Project",
 					"group": "navigation@3",
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
 					"command": "autolisp.SaveProject",
-					"alt": "autolisp.SaveProject",
 					"group": "navigation@4",
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
 					"command": "autolisp.loadAllFiles",
-					"alt": "autolisp.loadAllFiles",
 					"group": "navigation@5",
 					"when": "view == Autolisp-ProjectView"
+				}
+			],
+			"view/item/context": [
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.addFile2Project",
+					"group": "navigation@1"
+				},
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.SaveProject",
+					"group": "navigation@2"
+				},
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.loadAllFiles",
+					"group": "navigation@3"
 				}
 			]
 		}
