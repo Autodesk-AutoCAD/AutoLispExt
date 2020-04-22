@@ -58,6 +58,7 @@ export class LspFileNode implements DisplayNode {
     }
 
     getTooltip(): string {
+        this.fileExists = fs.existsSync(this.filePath);
         if (this.fileExists)
             return this.filePath;
         else
@@ -73,6 +74,7 @@ export class LspFileNode implements DisplayNode {
     }
 
     getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } {
+        this.fileExists = fs.existsSync(this.filePath);
         if (this.fileExists)
             return IconUris.lspFile();
         else
@@ -103,8 +105,8 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         this.onChanged.fire();
     }
 
-    public refreshData() {
-        this.onChanged.fire();
+    public refreshData(data?: DisplayNode) {
+        this.onChanged.fire(data);
     }
 
     public get projectNode(): ProjectNode {

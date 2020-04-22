@@ -79,6 +79,13 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage("[Load all files] Not implemented yet");
         }));
 
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
+            try {
+                ProjectTreeProvider.instance().refreshData();
+            } catch (err) {
+                showErrorMessage("Failed to refresh file status.", err); //TBD: localize
+            }
+        }));
 
         context.subscriptions.push(vscode.commands.registerCommand(ProjectTreeProvider.TreeItemClicked, (treeItem) => {
             openLspFile(treeItem)
