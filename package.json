@@ -92,6 +92,14 @@
 				}
 			},
 			{
+				"command": "autolisp.refreshFileStatus",
+				"title": "Refresh file status",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
+			},
+			{
 				"command": "autolisp.findInProject",
 				"title": "Find in Project",
 				"icon": {
@@ -443,6 +451,11 @@
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
+					"command": "autolisp.refreshFileStatus",
+					"group": "navigation@6",
+					"when": "view == Autolisp-ProjectView"
+				},
+				{
 					"command": "autolisp.findInProject",
 					"group": "navigation@1",
 					"when": "view == Autolisp-FindReplaceView"
@@ -463,6 +476,11 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.loadAllFiles",
 					"group": "navigation@3"
+				},
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.refreshFileStatus",
+					"group": "navigation@4"
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",

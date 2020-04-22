@@ -1,5 +1,7 @@
 import * as vscode from 'vscode'
-import { DisplayNode, LspFileNode } from './projectTree'
+import { DisplayNode, LspFileNode, ProjectTreeProvider } from './projectTree'
+
+const fs = require('fs')
 
 export async function openLspFile(clickedTreeItem: DisplayNode) {
 
@@ -9,7 +11,12 @@ export async function openLspFile(clickedTreeItem: DisplayNode) {
             return;
 
         let lspNode = clickedTreeItem as LspFileNode;
-        if (lspNode.fileExists == false) {
+        const exists = fs.existsSync(lspNode.filePath);
+        if (exists != lspNode.fileExists) {
+            ProjectTreeProvider.instance().refreshData();
+        }
+
+        if (exists == false) {
             return Promise.reject("File doesn't exist: " + lspNode.filePath); //TBD: localize
         }
 
