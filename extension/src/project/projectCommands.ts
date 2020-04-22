@@ -7,6 +7,7 @@ import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
+import { getSearchOption } from '../findReplace/options';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -84,6 +85,19 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 .catch(err => {
                     showErrorMessage("Failed to open file.", err); //TBD: localize
                 })
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.findInProject', async () => {
+            try {
+                let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
+                if (opt.completed == false)
+                    return;
+
+                //TO DO: do the search with the option that the user has provided
+            }
+            catch (err) {
+                showErrorMessage("Failed to search in project.", err); //TBD: localize
+            }
         }));
 
         IconUris.initialize();

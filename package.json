@@ -90,6 +90,14 @@
 					"dark": "images/adsk_lisp.png",
 					"light": "images/adsk_lisp.png"
 				}
+			},
+			{
+				"command": "autolisp.findInProject",
+				"title": "Find in Project",
+				"icon": {
+					"dark": "images/adsk_lisp.png",
+					"light": "images/adsk_lisp.png"
+				}
 			}
 		],
 		"configuration": {
@@ -433,6 +441,11 @@
 					"command": "autolisp.loadAllFiles",
 					"group": "navigation@5",
 					"when": "view == Autolisp-ProjectView"
+				},
+				{
+					"command": "autolisp.findInProject",
+					"group": "navigation@1",
+					"when": "view == Autolisp-FindReplaceView"
 				}
 			],
 			"view/item/context": [
