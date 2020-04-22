@@ -13,7 +13,7 @@ export async function openLspFile(clickedTreeItem: DisplayNode) {
         let lspNode = clickedTreeItem as LspFileNode;
         const exists = fs.existsSync(lspNode.filePath);
         if (exists != lspNode.fileExists) {
-            ProjectTreeProvider.instance().refreshData();
+            ProjectTreeProvider.instance().refreshData(clickedTreeItem);
         }
 
         if (exists == false) {

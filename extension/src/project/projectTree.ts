@@ -105,8 +105,8 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         this.onChanged.fire();
     }
 
-    public refreshData() {
-        this.onChanged.fire();
+    public refreshData(data?: DisplayNode) {
+        this.onChanged.fire(data);
     }
 
     public get projectNode(): ProjectNode {
