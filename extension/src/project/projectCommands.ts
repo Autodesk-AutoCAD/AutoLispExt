@@ -7,7 +7,7 @@ import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
-import { getSearchOption } from '../findReplace/options';
+import { getSearchOption } from './findReplace/options';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {

@@ -517,6 +517,7 @@
 		"vscode-languageclient": "4.1.4",
 		"vscode-nls": "3.2.5",
 		"vscode-i18n": "0.2.0",
-		"fs-extra": "^8.1.0"
+		"fs-extra": "^8.1.0",
+		"vscode-ripgrep": "^1.5.8"
 	}
 }

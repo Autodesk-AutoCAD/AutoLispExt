@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { IconUris } from '../project/icons';
+import { IconUris } from '../icons';
 import { SearchOption } from './options';
 
 export class optionButton implements vscode.QuickInputButton {
