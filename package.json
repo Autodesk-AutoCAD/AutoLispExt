@@ -40,10 +40,12 @@
 		"commands": [
 			{
 				"command": "autolisp.loadActiveFile",
+				"category": "AutoLISP",
 				"title": "%autolispext.loadcurrentfile.title%"
 			},
 			{
 				"command": "autolisp.createProject",
+				"category": "AutoLISP",
 				"title": "Create a New Project",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -52,6 +54,7 @@
 			},
 			{
 				"command": "autolisp.openProject",
+				"category": "AutoLISP",
 				"title": "Open an existing Project",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -60,6 +63,7 @@
 			},
 			{
 				"command": "autolisp.addFile2Project",
+				"category": "AutoLISP",
 				"title": "Add file to current project",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -68,6 +72,7 @@
 			},
 			{
 				"command": "autolisp.removeFileFromProject",
+				"category": "AutoLISP",
 				"title": "Remove file from current project",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -77,7 +82,7 @@
 			{
 				"command": "autolisp.SaveProject",
 				"title": "Save current project",
-				"category": "AutoLispExt",
+				"category": "AutoLISP",
 				"icon": {
 					"dark": "images/dark/project_save.svg",
 					"light": "images/light/project_save.svg"
@@ -86,6 +91,7 @@
 			{
 				"command": "autolisp.loadAllFiles",
 				"title": "Load all files",
+				"category": "AutoLISP",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
 					"light": "images/adsk_lisp.png"
@@ -93,6 +99,7 @@
 			},
 			{
 				"command": "autolisp.refreshFileStatus",
+				"category": "AutoLISP",
 				"title": "Refresh file status",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -101,6 +108,7 @@
 			},
 			{
 				"command": "autolisp.findInProject",
+				"category": "AutoLISP",
 				"title": "Find in Project",
 				"icon": {
 					"dark": "images/adsk_lisp.png",
@@ -404,7 +412,7 @@
 			"activitybar": [
 				{
 					"id": "Autolisp-PMSideBar",
-					"title": "Autolisp Project Manager",
+					"title": "AutoLISP Project Manager",
 					"icon": "images/project_manager.svg"
 				}
 			]

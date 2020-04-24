@@ -8,6 +8,8 @@ import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
 import { getSearchOption } from './findReplace/options';
+import { FindInProject } from './findReplace/findInProject';
+import { SearchTreeProvider } from './findReplace/searchTree';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -96,11 +98,19 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.findInProject', async () => {
             try {
+                if (ProjectTreeProvider.hasProjectOpened() == false) {
+                    vscode.window.showInformationMessage("Please open or create a project first"); //TBD: localize
+                    return;
+                }
+
                 let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
                 if (opt.completed == false)
                     return;
 
-                //TO DO: do the search with the option that the user has provided
+                let finder = new FindInProject();
+                await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
+
+                SearchTreeProvider.instance.reset(finder.resultByFile);
             }
             catch (err) {
                 showErrorMessage("Failed to search in project.", err); //TBD: localize

@@ -110,14 +110,14 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     }
 
     public get projectNode(): ProjectNode {
-        if (!ProjectTreeProvider.currentInstance)
-            return null;
-
-        return ProjectTreeProvider.currentInstance.rootNode;
+        return this.rootNode;
     }
 
 
     public static hasProjectOpened(): Boolean {
+        if (!ProjectTreeProvider.currentInstance)
+            return false;
+
         if (!ProjectTreeProvider.currentInstance.projectNode)
             return false;
 
@@ -143,38 +143,50 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 
     public static TreeItemClicked = 'LispProjectNodeClicked';
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<import("vscode").TreeItem> {
-        let treeNode = new vscode.TreeItem(element.getDisplayText());
-        treeNode.collapsibleState = element.isCollapsible() ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
-        treeNode.tooltip = element.getTooltip();
-        treeNode.iconPath = element.getIconUri();
-        treeNode.contextValue = element.getNodeType();
+        try {
+            let treeNode = new vscode.TreeItem(element.getDisplayText());
+            treeNode.collapsibleState = element.isCollapsible() ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
+            treeNode.tooltip = element.getTooltip();
+            treeNode.iconPath = element.getIconUri();
+            treeNode.contextValue = element.getNodeType();
 
-        treeNode.command = {
-            title: treeNode.label,
-            command: ProjectTreeProvider.TreeItemClicked,
-            tooltip: treeNode.tooltip,
-            arguments: [
-                element
-            ]
+            treeNode.command = {
+                title: treeNode.label,
+                command: ProjectTreeProvider.TreeItemClicked,
+                tooltip: treeNode.tooltip,
+                arguments: [
+                    element
+                ]
+            }
+            return treeNode;
         }
-        return treeNode;
+        catch (err) {
+            console.log(err);
+            return null;
+        }
     }
 
     public getChildren(element?: DisplayNode): vscode.ProviderResult<DisplayNode[]> {
-        if (!this.rootNode)
+        try {
+            if (!this.rootNode)
+                return null;
+
+            if (!element) {
+                //it's asking for the root node
+                let ret: DisplayNode[] = [this.rootNode];
+                return ret;
+            }
+
+            if (element == this.rootNode) {
+                return this.rootNode.sourceFiles;
+            }
+
             return null;
-
-        if (!element) {
-            //it's asking for the root node
-            let ret: DisplayNode[] = [this.rootNode];
-            return ret;
         }
-
-        if (element == this.rootNode) {
-            return this.rootNode.sourceFiles;
+        catch (err) {
+            console.log(err);
+            return null;
         }
-
-        return null;
     }
 
 }
