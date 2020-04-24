@@ -70,6 +70,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
             SaveProject(true)
                 .then(prjPath => {
+                    ProjectTreeProvider.instance().refreshData();
                     vscode.window.showInformationMessage("Project file saved"); //TBD: localize
                 })
                 .catch(err => {

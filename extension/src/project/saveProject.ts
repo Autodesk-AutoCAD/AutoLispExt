@@ -28,6 +28,7 @@ export async function SaveProject(refresh:boolean) {
         let targetPath = root.projectFilePath;
         fs.removeSync(targetPath);
         fs.writeFileSync(targetPath, formatedText);
+        root.projectModified = false;
 
         if(refresh)
             //at the end, reopen the given project

@@ -9,7 +9,8 @@ export async function AddFile2Project() {
         let selectedFiles = await SelectLspFiles();
         if (!selectedFiles)
             return; //user has cancelled the open file dialog
-
+        
+        let addedFiles = [];
         for (let file of selectedFiles) {
             let fileUpper = file.fsPath.toUpperCase();
             if (fileUpper.endsWith(".LSP") == false)
@@ -17,10 +18,15 @@ export async function AddFile2Project() {
 
             if (ProjectTreeProvider.instance().addFileNode(file.fsPath) == false) {
                 vscode.window.showInformationMessage("File already in project: " + file.fsPath); //TBD: localize
+            } else {
+                addedFiles.push(file);
             }
         }
+        
+        if (!addedFiles.length)
+            return;
 
-        return Promise.resolve(selectedFiles);
+        return Promise.resolve(addedFiles);
     }
     catch (e) {
         console.log(e);

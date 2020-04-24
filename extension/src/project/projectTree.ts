@@ -27,7 +27,11 @@ export class ProjectNode implements DisplayNode {
     projectMetadata: ProjectDefinition = null;
 
     getDisplayText(): string {
-        return this.projectName;
+        if (this.projectModified) {
+            return this.projectName + " (UNSAVED)";
+        } else {
+            return this.projectName;
+        }
     }
 
     getTooltip(): string {
