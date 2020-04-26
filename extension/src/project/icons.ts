@@ -4,7 +4,7 @@ import * as path from 'path'
 export class IconUris {
     private static extRootDir: string = null;
     private static lspFileUri = undefined;
-    private static missingFileUri: vscode.Uri = null;
+    private static missingFileUri = undefined;
  
     private static matchCaseOnUri = undefined;
     private static matchCaseOffUri = undefined;
@@ -18,8 +18,6 @@ export class IconUris {
     public static initialize() {
         if (!IconUris.extRootDir) {
             IconUris.extRootDir = vscode.extensions.getExtension("Autodesk.autolispext").extensionPath;
-            //TBD: update with real icons from PD
-            IconUris.missingFileUri = vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png'));
         }
 
         return IconUris.extRootDir;
@@ -29,8 +27,8 @@ export class IconUris {
         if(IconUris.lspFileUri == undefined) {
             IconUris.lspFileUri = {
                 //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'project_save.svg')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'project_save.svg'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Hide_Path.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Hide_Path.svg'))
             };
         }
 
@@ -40,17 +38,15 @@ export class IconUris {
     public static matchCase(on:boolean): vscode.Uri {
         if(IconUris.matchCaseOnUri == undefined) {
             IconUris.matchCaseOnUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'project_save.svg')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'project_save.svg'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Match_Case_On.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Match_Case_On.svg'))
             };
         }
 
         if(IconUris.matchCaseOffUri == undefined) {
             IconUris.matchCaseOffUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Match_Case_Off.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Match_Case_Off.svg'))
             };
         }
 
@@ -63,17 +59,15 @@ export class IconUris {
     public static matchWord(on:boolean): vscode.Uri {
         if(IconUris.matchWordOnUri == undefined) {
             IconUris.matchWordOnUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'project_save.svg')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'project_save.svg'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Match_Whole_Word_On.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Match_Whole_Word_On.svg'))
             };
         }
 
         if(IconUris.matchWordOffUri == undefined) {
             IconUris.matchWordOffUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Match_Whole_Word_Off.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Match_Whole_Word_Off.svg'))
             };
         }
 
@@ -86,17 +80,15 @@ export class IconUris {
     public static useRegularExpr(on:boolean): vscode.Uri {
         if(IconUris.useRegularExprOnUri == undefined) {
             IconUris.useRegularExprOnUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'project_save.svg')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'project_save.svg'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Regular_Expression_On.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Regular_Expression_On.svg'))
             };
         }
 
         if(IconUris.useRegularExprOffUri == undefined) {
             IconUris.useRegularExprOffUri = {
-                //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'adsk_lisp.png'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Regular_Expression_Off.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Regular_Expression_Off.svg'))
             };
         }
 
@@ -107,6 +99,13 @@ export class IconUris {
     }
 
     public static missingFile(): vscode.Uri {
+        if(IconUris.missingFileUri == undefined) {
+            IconUris.missingFileUri = {
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Error_LISP_File.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Error_LISP_File.svg'))
+            };
+        }
+
         return IconUris.missingFileUri;
     }
 

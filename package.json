@@ -48,8 +48,8 @@
 				"category": "AutoLISP",
 				"title": "Create a New Project",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Create_Project.svg",
+					"light": "images/light/Create_Project.svg"
 				}
 			},
 			{
@@ -57,8 +57,8 @@
 				"category": "AutoLISP",
 				"title": "Open an existing Project",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Open_Project.svg",
+					"light": "images/light/Open_Project.svg"
 				}
 			},
 			{
@@ -66,8 +66,8 @@
 				"category": "AutoLISP",
 				"title": "Add file to current project",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Add_LISP_File.svg",
+					"light": "images/light/Add_LISP_File.svg"
 				}
 			},
 			{
@@ -75,8 +75,8 @@
 				"category": "AutoLISP",
 				"title": "Remove file from current project",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Remove_LISP_File.svg",
+					"light": "images/light/Remove_LISP_File.svg"
 				}
 			},
 			{
@@ -84,8 +84,8 @@
 				"title": "Save current project",
 				"category": "AutoLISP",
 				"icon": {
-					"dark": "images/dark/project_save.svg",
-					"light": "images/light/project_save.svg"
+					"dark": "images/dark/Save_Project.svg",
+					"light": "images/light/Save_Project.svg"
 				}
 			},
 			{
@@ -93,8 +93,8 @@
 				"title": "Load all files",
 				"category": "AutoLISP",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Load_to_AutoCAD.svg",
+					"light": "images/light/Load_to_AutoCAD.svg"
 				}
 			},
 			{
@@ -111,8 +111,26 @@
 				"category": "AutoLISP",
 				"title": "Find in Project",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Find.svg",
+					"light": "images/light/Find.svg"
+				}
+			},
+			{
+				"command": "autolisp.replaceInProject",
+				"category": "AutoLISP",
+				"title": "Replace in Project",
+				"icon": {
+					"dark": "images/dark/Replace.svg",
+					"light": "images/light/Replace.svg"
+				}
+			},
+			{
+				"command": "autolisp.cleanSearchResult",
+				"category": "AutoLISP",
+				"title": "Clear Results",
+				"icon": {
+					"dark": "images/dark/Clean.svg",
+					"light": "images/light/Clean.svg"
 				}
 			}
 		],
@@ -413,7 +431,7 @@
 				{
 					"id": "Autolisp-PMSideBar",
 					"title": "AutoLISP Project Manager",
-					"icon": "images/project_manager.svg"
+					"icon": "images/Project_Management.svg"
 				}
 			]
 		},
@@ -466,6 +484,16 @@
 				{
 					"command": "autolisp.findInProject",
 					"group": "navigation@1",
+					"when": "view == Autolisp-FindReplaceView"
+				},
+				{
+					"command": "autolisp.replaceInProject",
+					"group": "navigation@2",
+					"when": "view == Autolisp-FindReplaceView"
+				},
+				{
+					"command": "autolisp.cleanSearchResult",
+					"group": "navigation@3",
 					"when": "view == Autolisp-FindReplaceView"
 				}
 			],

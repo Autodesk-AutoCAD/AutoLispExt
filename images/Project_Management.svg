@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>Artboard 16 to 24 White</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Artboard-16-to-24-White" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(0.000000, 2.000000)">
+            <path d="M7.5,0 L10.5,3 L22.5,3 L24,4.5 L24,18 L22.5,19.5 L1.5,19.5 L0,18 L0,1.5 L1.5,0 L7.5,0 Z M22.5,7.5 L1.5,7.5 L1.5,18 L22.5,18 L22.5,7.5 Z M6.75,1.5 L1.5,1.5 L1.5,6 L22.5,6 L22.5,4.5 L9.75,4.5 L6.75,1.5 Z" id="Combined-Shape" fill="#FFFFFF"></path>
+            <path d="M17.25,12.75 L18.75,12.75 C19.75,12.75 20.25,12.25 20.25,11.25 C20.25,10.25 19.75,9.75 18.75,9.75 L17.25,9.75 L17.25,16.5" id="Path-7" stroke="#FFFFFF" stroke-width="1.5"></path>
+            <polyline id="Path-8" stroke="#FFFFFF" stroke-width="1.5" points="8.5 15.75 4.75 15.75 4.75 9"></polyline>
+            <path d="M14.5,9.75 L12.25,9.75 C11.25,9.75 10.75,10.25 10.75,11.25 C10.75,12.25 11.25,12.75 12.25,12.75 C13.25,12.75 13.75,13.25 13.75,14.25 C13.75,15.25 13.25,15.75 12.25,15.75 L10,15.75" id="Path-6" stroke="#FFFFFF" stroke-width="1.5"></path>
+        </g>
+    </g>
+</svg>
