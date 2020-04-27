@@ -14,15 +14,15 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         "--no-heading"
     ];
 
-    if (SearchOption.matchCase)
+    if (SearchOption.activeInstance.matchCase)
         commandArgs.push('--case-sensitive');
     else
         commandArgs.push('--ignore-case');
 
-    if (SearchOption.matchWholeWord)
+    if (SearchOption.activeInstance.matchWholeWord)
         commandArgs.push('--word-regexp');
 
-    if (SearchOption.useRegularExpr)
+    if (SearchOption.activeInstance.useRegularExpr)
         commandArgs.push('--no-fixed-strings');
     else
         commandArgs.push('--fixed-strings');

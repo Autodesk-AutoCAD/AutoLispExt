@@ -2,9 +2,11 @@ import * as vscode from 'vscode';
 import { optionButton } from './optionButton';
 
 export class SearchOption {
-    static matchCase: boolean = false;
-    static matchWholeWord: boolean = false;
-    static useRegularExpr: boolean = false;
+    static activeInstance:SearchOption = new SearchOption;//the one bound to search UI
+
+    matchCase: boolean = false;
+    matchWholeWord: boolean = false;
+    useRegularExpr: boolean = false;
 
     keyword: string;
     completed: boolean = false;
@@ -14,8 +16,6 @@ export class SearchOption {
 export async function getSearchOption(title: string, hint: string) {
     const quickpick = vscode.window.createQuickPick();
 
-    let searchOptInst: SearchOption = new SearchOption();
-
     try {
         await new Promise<SearchOption>(resolve => {
 
@@ -23,8 +23,8 @@ export async function getSearchOption(title: string, hint: string) {
             quickpick.placeholder = hint;
             quickpick.buttons = optionButton.getButtons();
             quickpick.onDidAccept(async () => {
-                searchOptInst.keyword = quickpick.value;
-                searchOptInst.completed = true;
+                SearchOption.activeInstance.keyword = quickpick.value;
+                SearchOption.activeInstance.completed = true;
             });
 
             quickpick.onDidTriggerButton(async e => {
@@ -32,19 +32,19 @@ export async function getSearchOption(title: string, hint: string) {
                     let btn = e as optionButton;
 
                     if (btn.name == optionButton.name_MatchCase) {
-                        SearchOption.matchCase = !SearchOption.matchCase;
+                        SearchOption.activeInstance.matchCase = !SearchOption.activeInstance.matchCase;
                         quickpick.buttons = optionButton.getButtons();
 
                         return;
                     }
                     else if (btn.name == optionButton.name_MatchWord) {
-                        SearchOption.matchWholeWord = !SearchOption.matchWholeWord;
+                        SearchOption.activeInstance.matchWholeWord = !SearchOption.activeInstance.matchWholeWord;
                         quickpick.buttons = optionButton.getButtons();
 
                         return;
                     }
                     else if (btn.name == optionButton.name_UseRegularExpr) {
-                        SearchOption.useRegularExpr = !SearchOption.useRegularExpr;
+                        SearchOption.activeInstance.useRegularExpr = !SearchOption.activeInstance.useRegularExpr;
                         quickpick.buttons = optionButton.getButtons();
 
                         return;
@@ -53,17 +53,17 @@ export async function getSearchOption(title: string, hint: string) {
             });
 
             quickpick.onDidAccept(async () => {
-                searchOptInst.completed = true;
-                searchOptInst.keyword = quickpick.value;
+                SearchOption.activeInstance.completed = true;
+                SearchOption.activeInstance.keyword = quickpick.value;
 
-                resolve(searchOptInst);
+                resolve(SearchOption.activeInstance);
             })
 
             quickpick.onDidHide(async () => {
-                if (searchOptInst.completed)
+                if (SearchOption.activeInstance.completed)
                     return;
 
-                resolve(searchOptInst);
+                resolve(SearchOption.activeInstance);
             });
 
             quickpick.show();
@@ -73,5 +73,5 @@ export async function getSearchOption(title: string, hint: string) {
         quickpick.dispose();
     }
 
-    return Promise.resolve(searchOptInst);
+    return Promise.resolve(SearchOption.activeInstance);
 }

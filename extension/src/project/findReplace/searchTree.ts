@@ -2,6 +2,7 @@ import { DisplayNode } from '../projectTree';
 import { IconUris } from '../icons';
 
 import * as vscode from 'vscode';
+import { SearchOption } from './options';
 
 export class FileNode implements DisplayNode {
     filePath: string = '';
@@ -33,6 +34,7 @@ export class FindingNode implements DisplayNode {
     line: number = -1;
     column: number = -1;
     text: string = '';
+    filePath: string = '';
 
     getDisplayText(): string {
         return this.text;
@@ -68,14 +70,19 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
     }
 
     public static instance: SearchTreeProvider = new SearchTreeProvider();
+    public static showResult: string = "showSearchResult";
 
     private onChanged: vscode.EventEmitter<DisplayNode> = new vscode.EventEmitter<DisplayNode>();
     public readonly onDidChangeTreeData?: vscode.Event<DisplayNode> = this.onChanged.event;
 
     private rootNodes: DisplayNode[] = null;
 
-    public reset(newResult: DisplayNode[]) {
+    public lastSearchOption: SearchOption = null;
+
+    public reset(newResult: DisplayNode[], opt: SearchOption) {
         this.rootNodes = newResult;
+        this.lastSearchOption = opt;
+
         this.onChanged.fire();
     }
 
@@ -86,6 +93,15 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
             treeNode.tooltip = element.getTooltip();
             treeNode.iconPath = element.getIconUri();
             treeNode.contextValue = element.getNodeType();
+
+            treeNode.command = {
+                title: treeNode.label,
+                command: SearchTreeProvider.showResult,
+                tooltip: treeNode.tooltip,
+                arguments: [
+                    element
+                ]
+            }
 
             return treeNode;
         }

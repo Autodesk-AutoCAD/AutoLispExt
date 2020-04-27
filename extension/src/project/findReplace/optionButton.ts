@@ -34,17 +34,17 @@ export class optionButton implements vscode.QuickInputButton {
     public static getButtons() {
         if (!optionButton.matchCaseBtn) {
             optionButton.matchCaseBtn =
-                new optionButton(IconUris.matchCase(true), IconUris.matchCase(false), SearchOption.matchCase,
+                new optionButton(IconUris.matchCase(true), IconUris.matchCase(false), SearchOption.activeInstance.matchCase,
                     'Match Case', //TBD: localize
                     optionButton.name_MatchCase);
 
             optionButton.matchWordBtn =
-                new optionButton(IconUris.matchWord(true), IconUris.matchWord(false), SearchOption.matchWholeWord,
+                new optionButton(IconUris.matchWord(true), IconUris.matchWord(false), SearchOption.activeInstance.matchWholeWord,
                     'Match Whole Word', //TBD: localize
                     optionButton.name_MatchWord);
 
             optionButton.useRegularExprBtn =
-                new optionButton(IconUris.useRegularExpr(true), IconUris.useRegularExpr(false), SearchOption.useRegularExpr,
+                new optionButton(IconUris.useRegularExpr(true), IconUris.useRegularExpr(false), SearchOption.activeInstance.useRegularExpr,
                     'Use Regular Expression', //TBD: localize
                     optionButton.name_UseRegularExpr);
         }
@@ -52,9 +52,9 @@ export class optionButton implements vscode.QuickInputButton {
         let len = optionButton.buttons.length;
         optionButton.buttons.splice(0, len);
 
-        optionButton.buttons.push(optionButton.matchCaseBtn.updateStatus(SearchOption.matchCase));
-        optionButton.buttons.push(optionButton.matchWordBtn.updateStatus(SearchOption.matchWholeWord));
-        optionButton.buttons.push(optionButton.useRegularExprBtn.updateStatus(SearchOption.useRegularExpr));
+        optionButton.buttons.push(optionButton.matchCaseBtn.updateStatus(SearchOption.activeInstance.matchCase));
+        optionButton.buttons.push(optionButton.matchWordBtn.updateStatus(SearchOption.activeInstance.matchWholeWord));
+        optionButton.buttons.push(optionButton.useRegularExprBtn.updateStatus(SearchOption.activeInstance.useRegularExpr));
 
         return optionButton.buttons;
     }

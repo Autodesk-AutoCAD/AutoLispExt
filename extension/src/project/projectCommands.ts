@@ -7,9 +7,10 @@ import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
-import { getSearchOption } from './findReplace/options';
+import { getSearchOption, SearchOption } from './findReplace/options';
 import { FindInProject } from './findReplace/findInProject';
 import { SearchTreeProvider } from './findReplace/searchTree';
+import { openSearchResult } from './findReplace/openSearchResult';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -111,11 +112,18 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 let finder = new FindInProject();
                 await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
 
-                SearchTreeProvider.instance.reset(finder.resultByFile);
+                SearchTreeProvider.instance.reset(finder.resultByFile, opt);
             }
             catch (err) {
                 showErrorMessage("Failed to search in project.", err); //TBD: localize
             }
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand(SearchTreeProvider.showResult, (treeItem) => {
+            openSearchResult(treeItem, SearchTreeProvider.instance.lastSearchOption)
+                .catch(err => {
+                    showErrorMessage("Failed to open search result.", err); //TBD: localize
+                })
         }));
 
         IconUris.initialize();

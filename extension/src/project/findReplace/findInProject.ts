@@ -31,7 +31,7 @@ export class FindInProject {
                     if (ret.failed || ret.killed || ret.timedOut || (ret.code != 0))
                         return Promise.reject(ret.stderr);
 
-                    let findings = this.parseResult(ret.stdout);
+                    let findings = this.parseResult(ret.stdout, srcFile.filePath);
                     if (findings.length <= 0)
                         continue;
 
@@ -59,7 +59,7 @@ export class FindInProject {
         }
     }
 
-    private parseResult(result: string) {
+    private parseResult(result: string, file: string) {
         let stdout = result.replace('\r\n', '\n');
 
         let lines = stdout.split('\n');
@@ -79,6 +79,7 @@ export class FindInProject {
             single.line = line;
             single.column = col;
             single.text = text;
+            single.filePath = file;
 
             findings.push(single);
         }
