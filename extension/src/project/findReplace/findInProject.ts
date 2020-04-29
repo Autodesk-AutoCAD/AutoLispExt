@@ -3,8 +3,9 @@ import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
 import { FileNode, FindingNode, SearchTreeProvider } from './searchTree';
 import * as vscode from 'vscode'
+import { saveUnsavedDoc2Tmp } from '../../utils';
 
-const fs = require('fs')
+const fs = require('fs-extra')
 
 export async function findInProject() {
     //check if there's a opened project
@@ -49,8 +50,9 @@ export class FindInProject {
                 if (fs.existsSync(srcFile.filePath) == false)
                     continue;
 
+                let file2Search = saveUnsavedDoc2Tmp(srcFile.filePath);
                 try {
-                    let ret = await findInFile(searchOption, srcFile.filePath);
+                    let ret = await findInFile(searchOption, file2Search);
                     if (ret.failed || ret.killed || ret.timedOut || (ret.code != 0))
                         return Promise.reject(ret.stderr);
 
@@ -72,7 +74,12 @@ export class FindInProject {
 
                     throw ex;
                 }
-
+                finally {
+                    if((file2Search != srcFile.filePath) && fs.existsSync(file2Search)) {
+                        //the file searched is a temp file; remove it;
+                        fs.removeSync(file2Search);
+                    }
+                }
             }
 
             return Promise.resolve();

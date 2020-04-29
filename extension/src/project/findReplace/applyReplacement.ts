@@ -1,13 +1,9 @@
-import { FindInProject } from './findInProject';
-import { FileNode } from './searchTree';
-
 import * as fs from 'fs-extra';
 import * as vscode from 'vscode'
-import * as crypto from 'crypto';
-import * as path from 'path'
-import { getFullDocRange } from '../../utils';
 
-var os = require('os');
+import { FindInProject } from './findInProject';
+import { FileNode } from './searchTree';
+import { getFullDocRange, getTmpFilePath, getEditor } from '../../utils';
 
 export async function applyReplacement(projectPlan: FindInProject) {
     try {
@@ -30,7 +26,13 @@ async function applyReplacementInFile(filePlan: FileNode) {
             return;
         }
 
-        let data = fs.readFileSync(filePlan.filePath).toString();
+        let editor = getEditor(filePlan.filePath);
+
+        let data = null;
+        if(editor != null)
+            data = editor.document.getText();//it's possible that the editor has latest changes that are not saved
+        else
+            data = fs.readFileSync(filePlan.filePath).toString();
 
         let newFileContent = '';
         for (let lineNum = 0; lineNum >= 0; lineNum++) {
@@ -76,18 +78,9 @@ async function applyReplacementInFile(filePlan: FileNode) {
 //otherwise returns false, and leave the file content unchanged
 //throws an error if the editor failed to replace text
 async function applyChangeInEditor(filePath: string, fileContent: string) {
-    let editors = vscode.window.visibleTextEditors;
-    if ((!editors) || (editors.length == 0))
-        return Promise.resolve(false);
 
-    let targetFilePath = filePath.toLowerCase().split('/').join("\\")
-
-    for (let editor of editors) {
-        let editorFilePath = editor.document.fileName.toLowerCase().split('/').join("\\")
-
-        if (editorFilePath != targetFilePath)
-            continue;
-
+    let editor = getEditor(filePath);
+    if(editor != null) {
         //ok, there's an editor shown for the same file
 
         let docRange = getFullDocRange(editor);
@@ -110,11 +103,6 @@ async function applyChangeInEditor(filePath: string, fileContent: string) {
 function applyChangeByFile(filePath: string, fileContent: string): string {
     try {
         let tmpFile = getTmpFilePath();
-
-        while (fs.existsSync(tmpFile)) {
-            //in case the file path is occupied
-            tmpFile = getTmpFilePath();
-        }
 
         fs.writeFileSync(tmpFile, fileContent);
         fs.copyFileSync(tmpFile, filePath);
@@ -140,8 +128,4 @@ function chooseLineContent(line: number, oldLineText: string, replNode: FileNode
 
     //it's not in the replace plan; continue using the old text
     return oldLineText;
-}
-
-function getTmpFilePath() {
-    return path.join(os.tmpdir(), `archive.${crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.tmp`);
 }
