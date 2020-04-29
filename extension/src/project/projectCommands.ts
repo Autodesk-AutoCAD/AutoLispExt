@@ -7,10 +7,10 @@ import { AddFile2Project } from './addFile2Project';
 import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
-import { getSearchOption, SearchOption } from './findReplace/options';
-import { FindInProject } from './findReplace/findInProject';
+import { findInProject } from './findReplace/findInProject';
 import { SearchTreeProvider } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
+import { replaceInProject } from './findReplace/replaceInProject';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -98,25 +98,18 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 })
         }));
 
+        //register the handler of "find in project"
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.findInProject', async () => {
-            try {
-                if (ProjectTreeProvider.hasProjectOpened() == false) {
-                    vscode.window.showInformationMessage("Please open or create a project first"); //TBD: localize
-                    return;
-                }
-
-                let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
-                if (opt.completed == false)
-                    return;
-
-                let finder = new FindInProject();
-                await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
-
-                SearchTreeProvider.instance.reset(finder.resultByFile, opt);
-            }
-            catch (err) {
+            findInProject().catch(err => {
                 showErrorMessage("Failed to search in project.", err); //TBD: localize
-            }
+            });
+        }));
+
+        //register the handler of "replace in project"
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.replaceInProject', async () => {
+            replaceInProject().catch(err => {
+                showErrorMessage("Failed to replace in project.", err); //TBD: localize
+            })
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand(SearchTreeProvider.showResult, (treeItem) => {

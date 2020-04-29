@@ -21,17 +21,24 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
         let line = finding.line - 1; //rp line starts with 1 but vscode starts with 0
         let col = finding.column - 1;
 
-        let textLen = searchOpt.keyword.length;
-        if (searchOpt.useRegularExpr) {
-            let flags = searchOpt.matchCase ? null : 'i';
-            let reg = new RegExp(searchOpt.keyword, flags);
-            let matches = reg.exec(finding.text);
-            if (matches.length <= 0) {
-                console.log("can't detect keyword length with regular expression on");
-            } else {
-                textLen = matches[0].length;
+        let textLen = 0;
+        if (searchOpt.isReplace == false) {
+            textLen = searchOpt.keyword.length;
+            if (searchOpt.useRegularExpr) {
+				//it's a finding with regular expression; need to get the matched text to work out the length
+                let flags = searchOpt.matchCase ? null : 'i';
+                let reg = new RegExp(searchOpt.keyword, flags);
+                let matches = reg.exec(finding.text);
+                if (matches.length <= 0) {
+                    console.log("can't detect keyword length with regular expression on");
+                } else {
+                    textLen = matches[0].length;
+                }
             }
-        }
+		}
+		else {
+			textLen = searchOpt.replacement.length;
+		}
 
         let opt = { "selection": new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + textLen)) }
         return vscode.commands.executeCommand("vscode.open",

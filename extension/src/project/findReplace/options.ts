@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { optionButton } from './optionButton';
 
 export class SearchOption {
-    static activeInstance:SearchOption = new SearchOption;//the one bound to search UI
+    static activeInstance: SearchOption = new SearchOption;//the one bound to search UI
 
     matchCase: boolean = false;
     matchWholeWord: boolean = false;
@@ -10,6 +10,9 @@ export class SearchOption {
 
     keyword: string;
     completed: boolean = false;
+
+    isReplace: boolean = false;
+    replacement: string = null;
 }
 
 
@@ -74,4 +77,27 @@ export async function getSearchOption(title: string, hint: string) {
     }
 
     return Promise.resolve(SearchOption.activeInstance);
+}
+
+export async function getString(title: string, hint: string) {
+    const quickpick = vscode.window.createQuickPick();
+
+    try {
+        return await new Promise<string>(resolve => {
+
+            quickpick.title = title
+            quickpick.placeholder = hint;
+
+            quickpick.onDidAccept(async () => {
+                let keyword = quickpick.value;
+
+                resolve(keyword)
+            });
+
+            quickpick.show();
+        });
+    }
+    finally {
+        quickpick.dispose();
+    }
 }

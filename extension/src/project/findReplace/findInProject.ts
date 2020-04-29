@@ -1,9 +1,32 @@
-import { SearchOption } from './options';
-import { ProjectNode } from '../projectTree';
+import { SearchOption, getSearchOption } from './options';
+import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
-import { FileNode, FindingNode } from './searchTree';
+import { FileNode, FindingNode, SearchTreeProvider } from './searchTree';
+import * as vscode from 'vscode'
 
 const fs = require('fs')
+
+export async function findInProject() {
+    //check if there's a opened project
+    if (ProjectTreeProvider.hasProjectOpened() == false) {
+        vscode.window.showInformationMessage("Please open or create a project first"); //TBD: localize
+        return;
+    }
+
+    //get search option
+    let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
+    if (opt.completed == false)
+        return;
+
+    opt.isReplace = false;
+
+    //find in project
+    let finder = new FindInProject();
+    await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
+
+    //update the UI
+    SearchTreeProvider.instance.reset(finder.resultByFile, opt);
+}
 
 export class FindInProject {
 
@@ -60,7 +83,7 @@ export class FindInProject {
     }
 
     private parseResult(result: string, file: string) {
-        let stdout = result.replace('\r\n', '\n');
+        let stdout = result.split('\r\n').join('\n');
 
         let lines = stdout.split('\n');
 

@@ -27,6 +27,11 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
     else
         commandArgs.push('--fixed-strings');
 
+    if (SearchOption.activeInstance.isReplace && (SearchOption.activeInstance.replacement != null)) {
+        commandArgs.push('--replace');
+        commandArgs.push(SearchOption.activeInstance.replacement);
+    }
+
     return execa(
         rgPath,
         commandArgs

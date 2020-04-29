@@ -1,13 +1,15 @@
 import { DisplayNode } from '../projectTree';
 import { IconUris } from '../icons';
+import { SearchOption } from './options';
 
 import * as vscode from 'vscode';
-import { SearchOption } from './options';
 
 export class FileNode implements DisplayNode {
     filePath: string = '';
     shortPath: string = '';
     findings: FindingNode[] = [];
+
+    errorInReplace: string = '';//error message provided when replace in file
 
     getDisplayText(): string {
         return this.shortPath;
@@ -35,6 +37,8 @@ export class FindingNode implements DisplayNode {
     column: number = -1;
     text: string = '';
     filePath: string = '';
+
+    errorInReplace: string = '';//error message provided when replace in file
 
     getDisplayText(): string {
         return this.text;
