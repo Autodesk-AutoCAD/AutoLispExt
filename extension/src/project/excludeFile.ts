@@ -1,17 +1,16 @@
 import { LspFileNode, ProjectTreeProvider } from './projectTree';
+import { pathEqual } from '../utils';
 
 export async function excludeFromProject(selected: LspFileNode) {
     if (ProjectTreeProvider.hasProjectOpened() == false) {
         return Promise.reject("Please open a project first."); //TBD: localize
     }
 
-    let selectedUpperPath = selected.filePath.toUpperCase();
-
     let index2Del = -1;
     for (let i = 0; i < ProjectTreeProvider.instance().projectNode.sourceFiles.length; i++) {
         let fileNode = ProjectTreeProvider.instance().projectNode.sourceFiles[i];
-        let upperPath = fileNode.filePath.toUpperCase();
-        if (upperPath != selectedUpperPath)
+
+        if(pathEqual(selected.filePath, fileNode.filePath, false) == false)
             continue;
 
         //found it

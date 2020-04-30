@@ -6,6 +6,7 @@ import { LispFormatter } from '../format/formatter';
 import * as path from 'path'
 import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
+import { pathEqual } from '../utils';
 
 export async function SaveProject(refresh:boolean) {
     try {
@@ -100,8 +101,6 @@ function makeSourceFileList(root: ProjectNode): string {
         fileList = ' nil ';
     }
     else {
-        let prjDir = path.normalize(root.projectDirectory).toUpperCase();
-
         fileList = ' (';
 
         for (let file of root.sourceFiles) {
@@ -112,9 +111,7 @@ function makeSourceFileList(root: ProjectNode): string {
             }
 
             let fileDir = path.dirname(file.filePath);
-            fileDir = path.normalize(fileDir).toUpperCase();
-
-            if (fileDir != prjDir) {
+            if (pathEqual(root.projectDirectory, fileDir, true) == false) {
                 //in this case, we use absolute path, and file extension will be ignored
                 let str2Add = path.normalize(file.filePath).split('\\').join('/');// "/" is used in file path in .prj file
                 str2Add = str2Add.substring(0, str2Add.length - 4);//to remove the extension

@@ -1,6 +1,7 @@
 import { SaveProject } from './saveProject';
 import { ProjectTreeProvider } from './projectTree';
 import * as vscode from 'vscode';
+import { pathEqual } from '../utils';
 
 //return false if no project is opened or there are no unsaved changes or user select "Save" or "Don't Save" the changes
 //return true if there are unsaved changes and user select "Cancel" or just close the dialog
@@ -14,7 +15,7 @@ export async function CheckUnsavedChanges(): Promise<boolean> {
     const unsavedFiles = vscode.workspace.textDocuments.filter(file => {
         if (file.isDirty) {
             for (let fileNode of root.sourceFiles) {
-                if (fileNode.filePath == file.fileName) {
+                if (pathEqual(fileNode.filePath, file.fileName, false)) {
                     return true;
                 }
             }

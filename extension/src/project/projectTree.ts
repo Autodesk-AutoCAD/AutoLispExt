@@ -3,6 +3,7 @@ import { ProjectDefinition } from './projectDefinition';
 
 import * as vscode from 'vscode'
 import * as path from 'path'
+import { pathEqual } from '../utils';
 
 const fs = require('fs');
 
@@ -202,12 +203,8 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 //return false if the file is already in project;
 //return true in all other cases
 export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string, rawFilePath: string): Boolean {
-    let file2Add = path.normalize(fileName).toUpperCase();
-
     for (let fileNode of root.sourceFiles) {
-        let addedFile = path.normalize(fileNode.filePath).toUpperCase();
-
-        if (file2Add == addedFile)
+        if(pathEqual(fileName, fileNode.filePath, false))
             return false;
     }
 

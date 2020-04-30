@@ -35,45 +35,60 @@ export function acitiveDocHasValidLanguageId(): Boolean {
 
 //get the editor opened for the given file;
 //return null if there's no editor for this file
-export function getEditor(filePath: string): vscode.TextEditor {
-    let editors = vscode.window.visibleTextEditors;
-    if ((!editors) || (editors.length == 0))
+export function getDocument(filePath: string): vscode.TextDocument {
+    let docs = vscode.workspace.textDocuments;
+    if(!docs)
         return null;
 
-    let targetFilePath = filePath.toLowerCase().split('/').join("\\")
-  
-    for (let editor of editors) {
-        if(!editor.document)
-            continue;
-
-        if(!editor.document.fileName)
+    for (let doc of docs) {
+        if(doc.isClosed || doc.isUntitled || !doc.fileName)
             continue;
             
-        let editorFilePath = editor.document.fileName.toLowerCase().split('/').join("\\")
-
-        if (editorFilePath != targetFilePath)
+        if (pathEqual(filePath, doc.fileName, false) == false)
             continue;
 
-        return editor;
+        return doc;
     }
 
     return null;
+}
+
+let isWindows = undefined;
+
+export function pathEqual(path1:string, path2:string, isDir:boolean): boolean {
+    let p1 = path.normalize(path1);
+    let p2 = path.normalize(path2);
+
+    if(isDir) {
+        //for directory, eliminate the trailing slash if it exists
+        p1 = path.format(path.parse(p1));
+        p2 = path.format(path.parse(p2));
+    }
+
+    if(isWindows == undefined) {
+        isWindows = (os.type() == 'Windows_NT');
+    }
+        
+    if(isWindows)
+        return p1.toLocaleLowerCase() == p2.toLocaleLowerCase();
+    else
+        return p1 == p2;
 }
 
 //if the given file is opened in an editor with unsaved changes, save its latest content into a temp file,
 //  and return the file path of this temp file
 //otherwise return the original file path
 export function saveUnsavedDoc2Tmp(filePath:string): string {
-    let editor = getEditor(filePath);
-    if(editor == null)
+    let doc = getDocument(filePath);
+    if(doc == null)
         return filePath;
     
-    if(editor.document.isDirty == false)
+    if(doc.isDirty == false)
         return filePath;
 
     let tmpFile = getTmpFilePath();
 
-    fs.writeFileSync(tmpFile, editor.document.getText());
+    fs.writeFileSync(tmpFile, doc.getText());
 
     return tmpFile;
 }

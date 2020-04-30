@@ -3,7 +3,7 @@ import * as vscode from 'vscode'
 
 import { FindInProject } from './findInProject';
 import { FileNode } from './searchTree';
-import { getFullDocRange, getTmpFilePath, getEditor } from '../../utils';
+import { getTmpFilePath, getDocument } from '../../utils';
 
 export async function applyReplacement(projectPlan: FindInProject) {
     try {
@@ -26,11 +26,11 @@ async function applyReplacementInFile(filePlan: FileNode) {
             return;
         }
 
-        let editor = getEditor(filePlan.filePath);
+        let doc = getDocument(filePlan.filePath);
 
         let data = null;
-        if(editor != null)
-            data = editor.document.getText();//it's possible that the editor has latest changes that are not saved
+        if (doc != null)
+            data = doc.getText();//it's possible that the editor has latest changes that are not saved
         else
             data = fs.readFileSync(filePlan.filePath).toString();
 
@@ -79,14 +79,18 @@ async function applyReplacementInFile(filePlan: FileNode) {
 //throws an error if the editor failed to replace text
 async function applyChangeInEditor(filePath: string, fileContent: string) {
 
-    let editor = getEditor(filePath);
-    if(editor != null) {
+    let doc = getDocument(filePath);
+    if (doc != null) {
         //ok, there's an editor shown for the same file
 
-        let docRange = getFullDocRange(editor);
+        let docRange = doc.validateRange(
+            new vscode.Range(
+                new vscode.Position(0, 0),
+                new vscode.Position(Number.MAX_VALUE, Number.MAX_VALUE)
+            ));
 
         let edit = new vscode.WorkspaceEdit();
-        edit.replace(editor.document.uri, docRange, fileContent);
+        edit.replace(doc.uri, docRange, fileContent);
 
         let succ = await vscode.workspace.applyEdit(edit);
         if (!succ)
