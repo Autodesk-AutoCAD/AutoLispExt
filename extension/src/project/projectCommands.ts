@@ -11,12 +11,17 @@ import { findInProject } from './findReplace/findInProject';
 import { SearchTreeProvider } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
+import { CheckUnsavedChanges } from './checkUnsavedChanges';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.createProject', async () => {
             try {
+                if (await CheckUnsavedChanges()) {
+                    return;
+                }
+                
                 let prjPath = await getNewProjectFilePath();
                 if (!prjPath)
                     return;

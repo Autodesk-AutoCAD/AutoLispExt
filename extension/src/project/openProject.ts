@@ -2,6 +2,7 @@ import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree } from './project
 import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../format/sexpression';
 import { ProjectDefinition } from './projectDefinition';
+import { CheckUnsavedChanges } from './checkUnsavedChanges';
 
 import * as vscode from 'vscode'
 import * as path from 'path'
@@ -9,8 +10,11 @@ import * as path from 'path'
 const fs = require('fs');
 
 export async function OpenProject() {
-
     try {
+        if (await CheckUnsavedChanges()) {
+            return;
+        }
+        
         let prjUri = await SelectProjectFile();
         if (!prjUri)
             return;
