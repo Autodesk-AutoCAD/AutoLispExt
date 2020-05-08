@@ -102,8 +102,32 @@ export class FindInProject {
 
             let cells = oneLilne.split(':');
             let line = Number(cells[0]);
-            let col = Number(cells[1]);
             let text = cells[2];
+            for (let i = 3; i < cells.length; i++) {
+                text = text.concat(':');
+                text = text.concat(cells[i]);
+            }
+
+            //get column by character index instead of byte index
+            let colInBytes = Number(cells[1]);
+            let col = -1;
+            let bytes = 1;
+            for (let j = 0; j < text.length; j++) {
+                if (bytes == colInBytes) {
+                    col = j + 1;
+                    break;
+                }
+                let code = text.charCodeAt(j);
+                if (code <= 0x007f) {
+                    bytes += 1;
+                } else if (code <= 0x07ff) {
+                    bytes += 2;
+                } else if (code <= 0xffff) {
+                    bytes += 3;
+                } else {
+                    bytes += 4;
+                }
+            }
 
             let single = new FindingNode();
             single.line = line;

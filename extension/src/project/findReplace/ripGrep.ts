@@ -11,7 +11,9 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         "--line-number",
         "--color",
         "never",
-        "--no-heading"
+        "--no-heading",
+        "--encoding",
+        "utf8"
     ];
 
     if (SearchOption.activeInstance.matchCase)
