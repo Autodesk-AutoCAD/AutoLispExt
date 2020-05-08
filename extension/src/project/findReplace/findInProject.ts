@@ -2,8 +2,10 @@ import { SearchOption, getSearchOption } from './options';
 import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
 import { FileNode, FindingNode, SearchTreeProvider } from './searchTree';
-import * as vscode from 'vscode'
 import { saveUnsavedDoc2Tmp } from '../../utils';
+
+import * as vscode from 'vscode'
+import * as os from 'os';
 
 const fs = require('fs-extra')
 
@@ -36,6 +38,12 @@ export class FindInProject {
     public resultByFile: FileNode[] = [];
 
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
+        if(os.platform() == 'win32' ) {
+            if(os.arch() != 'x64') {
+                return Promise.reject('Find & Replace only works on x64 system'); //TBD: localization work
+            }
+        }
+
         try {
             this.keyword = searchOption.keyword;
             this.projectName = prjNode.projectName;
