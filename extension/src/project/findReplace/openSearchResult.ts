@@ -1,6 +1,6 @@
 import { SearchOption } from './options';
 import { FindingNode } from './searchTree';
-
+import { getDocument } from '../../utils';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 
@@ -40,7 +40,26 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
 			textLen = searchOpt.replacement.length;
 		}
 
-        let opt = { "selection": new vscode.Range(new vscode.Position(line, col), new vscode.Position(line, col + textLen)) }
+        // get document of the file or open the file if it's not opened
+        let doc = getDocument(finding.filePath);
+        if (!doc) {
+            doc = await vscode.workspace.openTextDocument(vscode.Uri.file(finding.filePath));
+            if (!doc) {
+                return Promise.reject("Cannot open " + finding.filePath);
+            }
+        }
+
+        // get text inside the searched range of the document and don't select the range if the text is changed since last search
+        let start = new vscode.Position(line, col);
+        let end = new vscode.Position(line, col + textLen);
+        let range = new vscode.Range(start, end);
+        let text = doc.getText(range);
+        let textFound = finding.text.substr(col, textLen)
+        if (text != textFound) {
+            range = range.with(start, start);
+        }
+
+        let opt = { "selection": range}
         return vscode.commands.executeCommand("vscode.open",
             vscode.Uri.file(finding.filePath),
             opt);
