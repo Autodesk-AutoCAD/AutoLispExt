@@ -3,6 +3,7 @@ import { FindingNode } from './searchTree';
 import { getDocument } from '../../utils';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
+import { ReadonlyDocument } from '../readOnlyDocument';
 
 export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: SearchOption) {
 
@@ -43,7 +44,7 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
         // get document of the file or open the file if it's not opened
         let doc = getDocument(finding.filePath);
         if (!doc) {
-            doc = await vscode.workspace.openTextDocument(vscode.Uri.file(finding.filePath));
+            doc = ReadonlyDocument.open(finding.filePath);
             if (!doc) {
                 return Promise.reject("Cannot open " + finding.filePath);
             }

@@ -6,6 +6,7 @@ import { CheckUnsavedChanges } from './checkUnsavedChanges';
 
 import * as vscode from 'vscode'
 import * as path from 'path'
+import { ReadonlyDocument } from './readOnlyDocument';
 
 const fs = require('fs');
 
@@ -14,32 +15,33 @@ export async function OpenProject() {
         if (await CheckUnsavedChanges()) {
             return;
         }
-        
+
         let prjUri = await SelectProjectFile();
         if (!prjUri)
             return;
-        
+
         let prjPathUpper = prjUri.fsPath.toUpperCase();
-        if(prjPathUpper.endsWith(".PRJ") == false)
+        if (prjPathUpper.endsWith(".PRJ") == false)
             return Promise.reject("Only .PRJ file is allowed"); //TBD: localization
 
-        return OpenProjectFile(prjUri);
+        let prjNode = OpenProjectFile(prjUri);
+        return Promise.resolve(prjNode);
     }
     catch (e) {
         return Promise.reject(e);
     }
 }
 
-export async function OpenProjectFile(prjUri: vscode.Uri) {
-    let document = await vscode.workspace.openTextDocument(prjUri);
+export function OpenProjectFile(prjUri: vscode.Uri): ProjectNode {
+    let document = ReadonlyDocument.open(prjUri.fsPath);
     if (!document)
-        return Promise.reject("can't read project file: " + prjUri.fsPath); //TBD: localization
+        throw new Error("can't read project file: " + prjUri.fsPath); //TBD: localization
 
     let ret = ParseProjectDocument(prjUri.fsPath, document);
-    if (ret)
-        return Promise.resolve(ret);
+    if (!ret)
+        throw new Error("malformed project file: " + prjUri.fsPath); //TBD: localization
 
-    return Promise.reject("malformed project file: " + prjUri.fsPath); //TBD: localization
+    return ret;
 }
 
 async function SelectProjectFile() {

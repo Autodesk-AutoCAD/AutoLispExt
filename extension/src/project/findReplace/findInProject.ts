@@ -18,7 +18,7 @@ export async function findInProject() {
 
     //get search option
     let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
-    if (opt.completed == false)
+    if (opt.isKeywordProvided() == false)
         return;
 
     opt.isReplace = false;

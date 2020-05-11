@@ -14,7 +14,7 @@ export async function replaceInProject() {
 
     //get find options: keyword, match case, etc.
     let opt = await getSearchOption('Replace in Project', 'type keyword, and press ENTER'); //TBD: localize
-    if (opt.completed == false)
+    if (opt.isKeywordProvided() == false)
         return;
 
     //get the replacment of given keyword

@@ -7,8 +7,9 @@ import * as path from 'path'
 import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 import { pathEqual } from '../utils';
+import { ReadonlyDocument } from './readOnlyDocument';
 
-export async function SaveProject(refresh:boolean) {
+export async function SaveProject(refresh: boolean) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
             return Promise.reject("No project opened yet"); //TBD: localize
@@ -22,7 +23,7 @@ export async function SaveProject(refresh:boolean) {
             return Promise.reject("Failed to compose project text"); //TBD: localize
 
         //format the text before writing to file
-        let doc = await vscode.workspace.openTextDocument({ "content": prjFileText, "language": "autolisp" });
+        let doc = ReadonlyDocument.createProject(prjFileText);
         let formatedText = LispFormatter.format(doc, null);
 
         //write to file
@@ -31,7 +32,7 @@ export async function SaveProject(refresh:boolean) {
         fs.writeFileSync(targetPath, formatedText);
         root.projectModified = false;
 
-        if(refresh)
+        if (refresh)
             //at the end, reopen the given project
             return OpenProjectFile(vscode.Uri.file(targetPath));
 

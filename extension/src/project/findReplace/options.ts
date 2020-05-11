@@ -13,6 +13,16 @@ export class SearchOption {
 
     isReplace: boolean = false;
     replacement: string = null;
+
+    isKeywordProvided(): boolean {
+        if (!this.completed)
+            return false;
+
+        if (!this.keyword)
+            return false;
+
+        return true;
+    }
 }
 
 
@@ -25,10 +35,7 @@ export async function getSearchOption(title: string, hint: string) {
             quickpick.title = title;
             quickpick.placeholder = hint;
             quickpick.buttons = optionButton.getButtons();
-            quickpick.onDidAccept(async () => {
-                SearchOption.activeInstance.keyword = quickpick.value;
-                SearchOption.activeInstance.completed = true;
-            });
+            quickpick.value = null;
 
             quickpick.onDidTriggerButton(async e => {
                 if (e instanceof optionButton) {
@@ -63,7 +70,7 @@ export async function getSearchOption(title: string, hint: string) {
             })
 
             quickpick.onDidHide(async () => {
-                if (SearchOption.activeInstance.completed)
+                if (SearchOption.activeInstance.completed)//it will get here on both ENTER and on ESC
                     return;
 
                 resolve(SearchOption.activeInstance);
