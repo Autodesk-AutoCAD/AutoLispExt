@@ -89,21 +89,12 @@
 				}
 			},
 			{
-				"command": "autolisp.loadAllFiles",
-				"title": "Load all files",
-				"category": "AutoLISP",
-				"icon": {
-					"dark": "images/dark/Load_to_AutoCAD.svg",
-					"light": "images/light/Load_to_AutoCAD.svg"
-				}
-			},
-			{
 				"command": "autolisp.refreshFileStatus",
 				"category": "AutoLISP",
 				"title": "Refresh file status",
 				"icon": {
-					"dark": "images/adsk_lisp.png",
-					"light": "images/adsk_lisp.png"
+					"dark": "images/dark/Refresh.svg",
+					"light": "images/light/Refresh.svg"
 				}
 			},
 			{

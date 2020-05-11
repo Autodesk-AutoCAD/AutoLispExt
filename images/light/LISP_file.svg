@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>16</title>
+    <desc>Created with Sketch.</desc>
+    <g id="16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Path-9" fill="#F5F5F5" points="9 1 10 1 10 5 14 5 14 6 13 6 13 9 3 9 3 2 9 2"></polygon>
+        <polygon id="Path-14" fill="#666666" points="10 1 10 5 14 5"></polygon>
+        <polygon id="Path-13" fill="#666666" points="2 1 9 1 9 2 3 2 3 9 13 9 13 6 14 6 14 15 2 15"></polygon>
+        <path d="M10.5,14 L10.5,10.5 L11.5,10.5 C12.1666667,10.5 12.5,10.8333333 12.5,11.5 C12.5,12.1666667 12.1666667,12.5 11.5,12.5 L10.5,12.5" id="Path-2" stroke="#FFFFFF"></path>
+        <path d="M9,10.5 L7.5,10.5 C6.83333333,10.5 6.5,10.8333333 6.5,11.5 C6.5,12 8.5,12 8.5,12.5 C8.5,13.1666667 8.16666667,13.5 7.5,13.5 L6,13.5" id="Path-3" stroke="#FFFFFF"></path>
+        <polyline id="Path-4" stroke="#FFFFFF" points="3.5 10 3.5 13.5 5 13.5"></polyline>
+        <rect id="Rectangle-Copy-3" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
+    </g>
+</svg>

@@ -27,8 +27,8 @@ export class IconUris {
         if(IconUris.lspFileUri == undefined) {
             IconUris.lspFileUri = {
                 //TBD: update with real icons from PD
-                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'Hide_Path.svg')),
-                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'Hide_Path.svg'))
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'LISP_file.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'LISP_file.svg'))
             };
         }
 

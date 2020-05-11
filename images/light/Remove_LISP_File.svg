@@ -1,1 +1,17 @@
-<svg id="layer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><defs><style>.cls-1{fill:#f3f3f3;}.cls-2{fill:#666;}.cls-3{fill:#f33;}.cls-4{fill:#fff;}.cls-5{fill:none;}</style></defs><title>Delete LISP File</title><polygon class="cls-1" points="7.59 4.89 9 3.47 9 2.53 8.47 2 2 2 2 4 2 14 12 14 12 5.53 10.11 7.41 7.59 4.89"/><polygon class="cls-2" points="12 5.53 12 14 2 14 2 2 8.47 2 7.59 1.11 7.7 1 1 1 1 15 13 15 13 6.53 12 5.53"/><polygon class="cls-3" points="15 1.11 13.89 0 12 1.89 10.11 0 9 1.11 10.89 3 9 4.89 10.11 6 12 4.11 13.89 6 15 4.89 13.11 3 15 1.11"/><rect class="cls-2" x="1" y="9" width="12" height="6"/><path class="cls-4" d="M4.46,13.3V14H2V10h.76v3.3Z"/><path class="cls-4" d="M5,13.5l.36-.41.34.2A.93.93,0,0,0,6,13.4a1.75,1.75,0,0,0,.43,0,1.13,1.13,0,0,0,.63-.16.48.48,0,0,0,.21-.38v-.07a.42.42,0,0,0-.13-.33,1.18,1.18,0,0,0-.48-.23l-.58-.19c-.62-.2-.94-.52-.94-1V11a.81.81,0,0,1,.17-.49,1.18,1.18,0,0,1,.49-.37A2,2,0,0,1,6.58,10a2.13,2.13,0,0,1,.78.13A2,2,0,0,1,8,10.5l-.35.38a2.08,2.08,0,0,0-.5-.27,1.39,1.39,0,0,0-.52-.08.9.9,0,0,0-.54.13.38.38,0,0,0-.19.32v.09a.34.34,0,0,0,.15.27,1.35,1.35,0,0,0,.48.22l.53.17a1.77,1.77,0,0,1,.71.38.86.86,0,0,1,.25.66v.14a.87.87,0,0,1-.19.57,1.2,1.2,0,0,1-.54.38,1.94,1.94,0,0,1-.78.14A2.16,2.16,0,0,1,5,13.5Z"/><path class="cls-4" d="M11.58,10.3a1,1,0,0,1,.42.84v.33a1,1,0,0,1-.45.85,2.07,2.07,0,0,1-1.21.31H9.79V14H9V10h1.44A1.93,1.93,0,0,1,11.58,10.3Zm-.37.88a.54.54,0,0,0-.21-.47.94.94,0,0,0-.59-.16H9.79v1.53h.52c.6,0,.9-.22.9-.64Z"/><rect class="cls-5" width="16" height="16"/><rect class="cls-5" width="16" height="16"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 61 (89581) - https://sketch.com -->
+    <title>16</title>
+    <desc>Created with Sketch.</desc>
+    <g id="16" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <polygon id="Path" fill="#F3F3F3" fill-rule="nonzero" points="2 2 2 4 2 14 12 14 12 2"></polygon>
+        <polygon id="Path" fill="#666666" fill-rule="nonzero" points="12 14 2 14 2 2 8.5 2 8.5 1 1 1 1 15 13 15 13 6.53 12 6.5"></polygon>
+        <rect id="Rectangle" fill="#666666" fill-rule="nonzero" x="1" y="9" width="12" height="6"></rect>
+        <path d="M9.5,14 L9.5,10.5 L10.5,10.5 C11.1666667,10.5 11.5,10.8333333 11.5,11.5 C11.5,12.1666667 11.1666667,12.5 10.5,12.5 L9.5,12.5" id="Path-2" stroke="#FFFFFF"></path>
+        <path d="M8,10.5 L6.5,10.5 C5.83333333,10.5 5.5,10.8333333 5.5,11.5 C5.5,12 7.5,12 7.5,12.5 C7.5,13.1666667 7.16666667,13.5 6.5,13.5 L5,13.5" id="Path-3" stroke="#FFFFFF"></path>
+        <polyline id="Path-4" stroke="#FFFFFF" points="2.5 10 2.5 13.5 4 13.5"></polyline>
+        <line x1="10" y1="1" x2="15" y2="6" id="Path-19" stroke="#FF3333" stroke-width="2"></line>
+        <line x1="15" y1="1" x2="10" y2="6" id="Path-20" stroke="#FF3333" stroke-width="2"></line>
+        <rect id="Rectangle-Copy-2" fill="#D8D8D8" opacity="0" x="0" y="0" width="16" height="16"></rect>
+    </g>
+</svg>

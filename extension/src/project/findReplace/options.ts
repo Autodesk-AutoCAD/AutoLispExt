@@ -66,7 +66,8 @@ export async function getSearchOption(title: string, hint: string) {
                 SearchOption.activeInstance.completed = true;
                 SearchOption.activeInstance.keyword = quickpick.value;
 
-                resolve(SearchOption.activeInstance);
+                if(quickpick.value)
+                    resolve(SearchOption.activeInstance);
             })
 
             quickpick.onDidHide(async () => {
