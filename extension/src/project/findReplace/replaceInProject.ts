@@ -33,6 +33,6 @@ export async function replaceInProject() {
     await applyReplacement(finder);
 
     //update the search tree
-    SearchTreeProvider.instance.reset(finder.resultByFile, opt);
+    SearchTreeProvider.instance.reset(finder.resultByFile, finder.summaryNode, opt);
 
 }

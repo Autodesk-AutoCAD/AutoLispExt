@@ -68,6 +68,31 @@ export class FindingNode implements DisplayNode {
     }
 }
 
+export class SummaryNode implements DisplayNode {
+    summary:string = '';
+    tooltip:string = '';
+
+    getDisplayText(): string {
+        return this.summary;
+    }
+
+    getTooltip(): string {
+        return this.tooltip;
+    }
+
+    getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri; } {
+        return null;
+    }
+
+    getNodeType (): string {
+        return "summary"
+    }
+
+    isCollapsible(): Boolean {
+        return false;
+    }
+}
+
 export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> {
     private constructor() {
         vscode.window.registerTreeDataProvider('Autolisp-FindReplaceView', this);
@@ -83,8 +108,9 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
 
     public lastSearchOption: SearchOption = null;
 
-    public reset(newResult: DisplayNode[], opt: SearchOption) {
+    public reset(newResult: DisplayNode[], summary: SummaryNode, opt: SearchOption) {
         this.rootNodes = newResult;
+        this.rootNodes.splice(0, 0, summary);
         this.lastSearchOption = opt;
 
         this.onChanged.fire();

@@ -1,7 +1,7 @@
 import { SearchOption, getSearchOption } from './options';
 import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
-import { FileNode, FindingNode, SearchTreeProvider } from './searchTree';
+import { FileNode, FindingNode, SearchTreeProvider, SummaryNode } from './searchTree';
 import { saveUnsavedDoc2Tmp } from '../../utils';
 
 import * as vscode from 'vscode'
@@ -28,7 +28,7 @@ export async function findInProject() {
     await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
 
     //update the UI
-    SearchTreeProvider.instance.reset(finder.resultByFile, opt);
+    SearchTreeProvider.instance.reset(finder.resultByFile, finder.summaryNode, opt);
 }
 
 export class FindInProject {
@@ -36,6 +36,7 @@ export class FindInProject {
     public keyword: string = '';
     public projectName: string = '';
     public resultByFile: FileNode[] = [];
+    public summaryNode: SummaryNode = null;
 
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
         if(os.platform() == 'win32' ) {
@@ -49,10 +50,14 @@ export class FindInProject {
             this.projectName = prjNode.projectName;
 
             this.resultByFile.splice(0, this.resultByFile.length);
+            this.summaryNode = new SummaryNode();
 
             if (prjNode.sourceFiles.length <= 0) {
                 return Promise.resolve();
             }
+
+            let totalFiles = 0;
+            let totalLines = 0;
 
             for (let srcFile of prjNode.sourceFiles) {
                 if (fs.existsSync(srcFile.filePath) == false)
@@ -74,6 +79,9 @@ export class FindInProject {
                     fileNode.findings = findings;
 
                     this.resultByFile.push(fileNode);
+
+                    totalFiles ++;
+                    totalLines += findings.length;
                 }
                 catch (ex) {
                     if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
@@ -88,6 +96,13 @@ export class FindInProject {
                         fs.removeSync(file2Search);
                     }
                 }
+            }
+
+            if(totalLines <= 0) {
+                this.summaryNode.summary = 'No results found.' //TBD: localization
+            }
+            else {
+                this.summaryNode.summary = `${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
             }
 
             return Promise.resolve();
