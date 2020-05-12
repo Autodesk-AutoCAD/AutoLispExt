@@ -90,6 +90,12 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
         this.onChanged.fire();
     }
 
+    public clear() {
+        this.rootNodes = null;
+
+        this.onChanged.fire();
+    }
+
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
         try {
             let treeNode = new vscode.TreeItem(element.getDisplayText());

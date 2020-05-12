@@ -12,6 +12,7 @@ import { SearchTreeProvider } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
+import { clearSearchResults } from './findReplace/clearResults';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -122,6 +123,15 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 .catch(err => {
                     showErrorMessage("Failed to open search result.", err); //TBD: localize
                 })
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.clearSearchResults', (treeItem) => {
+            try {
+                clearSearchResults();
+            }
+            catch(err) {
+                showErrorMessage("Failed to clear search results.", err); //TBD localize
+            }
         }));
 
         IconUris.initialize();
