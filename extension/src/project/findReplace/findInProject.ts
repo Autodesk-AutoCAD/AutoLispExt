@@ -51,6 +51,7 @@ export class FindInProject {
 
             this.resultByFile.splice(0, this.resultByFile.length);
             this.summaryNode = new SummaryNode();
+            this.summaryNode.makeTooltip(searchOption);
 
             if (prjNode.sourceFiles.length <= 0) {
                 return Promise.resolve();
@@ -58,6 +59,8 @@ export class FindInProject {
 
             let totalFiles = 0;
             let totalLines = 0;
+
+            let totalLinesShown = 0;
 
             for (let srcFile of prjNode.sourceFiles) {
                 if (fs.existsSync(srcFile.filePath) == false)
@@ -82,6 +85,14 @@ export class FindInProject {
 
                     totalFiles ++;
                     totalLines += findings.length;
+
+                    if(totalLines - totalLinesShown >= 100) {
+                        totalLinesShown = totalLines;
+
+                        //update the search tree with some progress
+                        this.summaryNode.summary = `In progress ... ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
+                        SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
+                    }
                 }
                 catch (ex) {
                     if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {

@@ -72,6 +72,25 @@ export class SummaryNode implements DisplayNode {
     summary:string = '';
     tooltip:string = '';
 
+    makeTooltip(opt:SearchOption) {
+        this.tooltip = '';
+        if(opt.isReplace) {
+            this.tooltip = `Replace \"${opt.keyword}\" with \"${opt.replacement}\";`; //TBD: localization 
+        }
+        else {
+            this.tooltip = `Find \"${opt.keyword}\";`; //TBD: localization
+        }
+        if(opt.matchCase) {
+            this.tooltip += '\r\nMatch case: ON';//TBD: localization
+        }
+        if(opt.matchWholeWord) {
+            this.tooltip += '\r\nMatch whole word: ON' //TBD: localization
+        }
+        if(opt.useRegularExpr) {
+            this.tooltip += '\r\nUse regular expression: ON' //TBD: localization
+        }
+    }
+
     getDisplayText(): string {
         return this.summary;
     }
@@ -85,12 +104,14 @@ export class SummaryNode implements DisplayNode {
     }
 
     getNodeType (): string {
-        return "summary"
+        return SummaryNode.nodeTypeString;
     }
 
     isCollapsible(): Boolean {
         return false;
     }
+
+    static readonly nodeTypeString = "summary";
 }
 
 export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> {
@@ -109,8 +130,14 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
     public lastSearchOption: SearchOption = null;
 
     public reset(newResult: DisplayNode[], summary: SummaryNode, opt: SearchOption) {
-        this.rootNodes = newResult;
-        this.rootNodes.splice(0, 0, summary);
+        this.rootNodes = new Array<DisplayNode>();
+        this.rootNodes.push(summary);
+        if(newResult != null) {
+            for(let fileNode of newResult) {
+                this.rootNodes.push(fileNode);
+            }
+        }
+        
         this.lastSearchOption = opt;
 
         this.onChanged.fire();

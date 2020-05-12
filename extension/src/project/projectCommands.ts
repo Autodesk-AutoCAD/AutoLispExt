@@ -8,11 +8,11 @@ import { SaveProject } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
 import { findInProject } from './findReplace/findInProject';
-import { SearchTreeProvider } from './findReplace/searchTree';
+import { SearchTreeProvider, SummaryNode } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
-import { clearSearchResults } from './findReplace/clearResults';
+import { clearSearchResults, clearSearchResultWithError } from './findReplace/clearResults';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -22,7 +22,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 if (await CheckUnsavedChanges()) {
                     return;
                 }
-                
+
                 let prjPath = await getNewProjectFilePath();
                 if (!prjPath)
                     return;
@@ -85,10 +85,6 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 });
         }));
 
-        context.subscriptions.push(vscode.commands.registerCommand('autolisp.loadAllFiles', async () => {
-            vscode.window.showInformationMessage("[Load all files] Not implemented yet");
-        }));
-
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
             try {
                 ProjectTreeProvider.instance().refreshData();
@@ -107,7 +103,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         //register the handler of "find in project"
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.findInProject', async () => {
             findInProject().catch(err => {
-                showErrorMessage("Failed to search in project.", err); //TBD: localize
+                showErrorMessage("Failed to find in project.", err); //TBD: localize
+                clearSearchResultWithError("Failed to find in project. " + (err ? err.toString() : ''));//TBD: localize
             });
         }));
 
@@ -115,6 +112,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.replaceInProject', async () => {
             replaceInProject().catch(err => {
                 showErrorMessage("Failed to replace in project.", err); //TBD: localize
+                clearSearchResultWithError("Failed to replace in project. " + (err ? err.toString() : ''));//TBD: localize
             })
         }));
 
@@ -129,7 +127,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             try {
                 clearSearchResults();
             }
-            catch(err) {
+            catch (err) {
                 showErrorMessage("Failed to clear search results.", err); //TBD localize
             }
         }));

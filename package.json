@@ -430,7 +430,7 @@
 			"Autolisp-PMSideBar": [
 				{
 					"id": "Autolisp-ProjectView",
-					"name": "Project Manager",
+					"name": "Project",
 					"when": ""
 				},
 				{
@@ -460,11 +460,6 @@
 				{
 					"command": "autolisp.SaveProject",
 					"group": "navigation@4",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
-					"command": "autolisp.loadAllFiles",
-					"group": "navigation@5",
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
@@ -498,11 +493,6 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.SaveProject",
 					"group": "navigation@2"
-				},
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.loadAllFiles",
-					"group": "navigation@3"
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == project",

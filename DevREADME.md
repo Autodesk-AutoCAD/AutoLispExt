@@ -11,6 +11,7 @@ AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Ext
 [extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
 
 ## How to setup the Dev Env
+npm install -g yarn (if it's not installed yet)
 You could setup the develop environment by:
 ```
 cd AutoLispExt
