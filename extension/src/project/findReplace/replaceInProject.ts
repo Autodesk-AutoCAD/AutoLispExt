@@ -25,6 +25,7 @@ export async function replaceInProject() {
     //get the plan of replace in project
     opt.isReplace = true;
     opt.replacement = repl;
+    opt.stopRequested = false;
 
     let finder = new FindInProject();
     await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
@@ -33,6 +34,8 @@ export async function replaceInProject() {
     await applyReplacement(finder);
 
     //update the search tree
+    //note that we want to do it even if the user has stopped the request;
+    //all matches found before the point of time should be replaced.
     SearchTreeProvider.instance.reset(finder.resultByFile, finder.summaryNode, opt);
 
 }

@@ -14,6 +14,8 @@ export class SearchOption {
     isReplace: boolean = false;
     replacement: string = null;
 
+    stopRequested: boolean = false;
+
     isKeywordProvided(): boolean {
         if (!this.completed)
             return false;

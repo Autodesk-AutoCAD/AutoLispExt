@@ -12,7 +12,7 @@ import { SearchTreeProvider, SummaryNode } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
-import { clearSearchResults, clearSearchResultWithError } from './findReplace/clearResults';
+import { clearSearchResults, clearSearchResultWithError, stopSearching } from './findReplace/clearResults';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -129,6 +129,17 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             }
             catch (err) {
                 showErrorMessage("Failed to clear search results.", err); //TBD localize
+            }
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.stopSearch', () => {
+            try {
+                stopSearching();
+            }
+            catch (err) {
+                console.log("failed to stop searching;")
+                if (err)
+                    console.log(err.toString());
             }
         }));
 

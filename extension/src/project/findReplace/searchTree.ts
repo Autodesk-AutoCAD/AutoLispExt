@@ -1,4 +1,4 @@
-import { DisplayNode } from '../projectTree';
+import { DisplayNode, ProjectNode } from '../projectTree';
 import { IconUris } from '../icons';
 import { SearchOption } from './options';
 
@@ -72,14 +72,24 @@ export class SummaryNode implements DisplayNode {
     summary:string = '';
     tooltip:string = '';
 
-    makeTooltip(opt:SearchOption) {
+    makeTooltip(opt:SearchOption, prjNode:ProjectNode) {
         this.tooltip = '';
+
+        let prjNameClause = '';
+        let prjPathStatement = '';
+        if(prjNode) {
+            prjNameClause = ` in ${prjNode.projectName}`;
+            prjPathStatement = `\r\nProject file: ${prjNode.projectFilePath}`; //TBD: localize
+        }
+
         if(opt.isReplace) {
-            this.tooltip = `Replace \"${opt.keyword}\" with \"${opt.replacement}\";`; //TBD: localization 
+            this.tooltip = `Replace \"${opt.keyword}\" with \"${opt.replacement}\"${prjNameClause};`; //TBD: localization 
         }
         else {
-            this.tooltip = `Find \"${opt.keyword}\";`; //TBD: localization
+            this.tooltip = `Find \"${opt.keyword}\"${prjNameClause};`; //TBD: localization
         }
+        this.tooltip += prjPathStatement;
+        
         if(opt.matchCase) {
             this.tooltip += '\r\nMatch case: ON';//TBD: localization
         }

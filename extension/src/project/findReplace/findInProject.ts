@@ -22,6 +22,7 @@ export async function findInProject() {
         return;
 
     opt.isReplace = false;
+    opt.stopRequested = false;
 
     //find in project
     let finder = new FindInProject();
@@ -39,8 +40,8 @@ export class FindInProject {
     public summaryNode: SummaryNode = null;
 
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
-        if(os.platform() == 'win32' ) {
-            if(os.arch() != 'x64') {
+        if (os.platform() == 'win32') {
+            if (os.arch() != 'x64') {
                 return Promise.reject('Find & Replace only works on x64 system'); //TBD: localization work
             }
         }
@@ -51,10 +52,14 @@ export class FindInProject {
 
             this.resultByFile.splice(0, this.resultByFile.length);
             this.summaryNode = new SummaryNode();
-            this.summaryNode.makeTooltip(searchOption);
+            this.summaryNode.makeTooltip(searchOption, prjNode);
+
+            //update the search tree with some progress
+            this.summaryNode.summary = 'In progress ... ';//TBD: localization
+            SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
 
             if (prjNode.sourceFiles.length <= 0) {
-                return Promise.resolve();
+                return Promise.resolve();//there's no source file in this project
             }
 
             let totalFiles = 0;
@@ -63,6 +68,9 @@ export class FindInProject {
             let totalLinesShown = 0;
 
             for (let srcFile of prjNode.sourceFiles) {
+                if (SearchOption.activeInstance.stopRequested)
+                    break;
+
                 if (fs.existsSync(srcFile.filePath) == false)
                     continue;
 
@@ -71,6 +79,9 @@ export class FindInProject {
                     let ret = await findInFile(searchOption, file2Search);
                     if (ret.failed || ret.killed || ret.timedOut || (ret.code != 0))
                         return Promise.reject(ret.stderr);
+
+                    if (SearchOption.activeInstance.stopRequested)
+                        break; //if user has requested to stop, there's no need to create finding nodes
 
                     let findings = this.parseResult(ret.stdout, srcFile.filePath);
                     if (findings.length <= 0)
@@ -83,10 +94,10 @@ export class FindInProject {
 
                     this.resultByFile.push(fileNode);
 
-                    totalFiles ++;
+                    totalFiles++;
                     totalLines += findings.length;
 
-                    if(totalLines - totalLinesShown >= 100) {
+                    if (totalLines - totalLinesShown >= 100) {
                         totalLinesShown = totalLines;
 
                         //update the search tree with some progress
@@ -102,18 +113,23 @@ export class FindInProject {
                     throw ex;
                 }
                 finally {
-                    if((file2Search != srcFile.filePath) && fs.existsSync(file2Search)) {
+                    if ((file2Search != srcFile.filePath) && fs.existsSync(file2Search)) {
                         //the file searched is a temp file; remove it;
                         fs.removeSync(file2Search);
                     }
                 }
             }
 
-            if(totalLines <= 0) {
-                this.summaryNode.summary = 'No results found.' //TBD: localization
+            if (SearchOption.activeInstance.stopRequested)
+                this.summaryNode.summary = 'Stopped. '; //TBD: localization
+            else
+                this.summaryNode.summary = '';
+
+            if (totalLines <= 0) {
+                this.summaryNode.summary += 'No results found.' //TBD: localization
             }
             else {
-                this.summaryNode.summary = `${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
+                this.summaryNode.summary += `Found ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
             }
 
             return Promise.resolve();

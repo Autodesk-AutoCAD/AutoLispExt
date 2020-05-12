@@ -116,6 +116,15 @@
 				}
 			},
 			{
+				"command": "autolisp.stopSearch",
+				"category": "AutoLISP",
+				"title": "Stop Searching",
+				"icon": {
+					"dark": "images/dark/search-stop.svg",
+					"light": "images/light/search-stop.svg"
+				}
+			},
+			{
 				"command": "autolisp.clearSearchResults",
 				"category": "AutoLISP",
 				"title": "Clear All",
@@ -478,8 +487,13 @@
 					"when": "view == Autolisp-FindReplaceView"
 				},
 				{
-					"command": "autolisp.clearSearchResults",
+					"command": "autolisp.stopSearch",
 					"group": "navigation@3",
+					"when": "view == Autolisp-FindReplaceView"
+				},
+				{
+					"command": "autolisp.clearSearchResults",
+					"group": "navigation@4",
 					"when": "view == Autolisp-FindReplaceView"
 				}
 			],
