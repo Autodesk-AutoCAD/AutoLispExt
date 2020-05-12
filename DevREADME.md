@@ -15,7 +15,7 @@ You could setup the develop environment by:
 ```
 cd AutoLispExt
 npm install --global gulp-cli
-npm install 
+yarn install 
 ```
 
 ## How to compile the code

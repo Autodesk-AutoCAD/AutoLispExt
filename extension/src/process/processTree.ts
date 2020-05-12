@@ -17,7 +17,6 @@
 
 import { spawn, ChildProcess } from 'child_process';
 import { join } from 'path';
-import * as _ from 'lodash';
 
 import { ProcessPathCache } from "./processCache";
 

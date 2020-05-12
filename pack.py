@@ -5,7 +5,7 @@ import shutil
 import errno
 import shlex
 import platform
-
+import sys
 # init
 
 
@@ -14,15 +14,18 @@ def init():
     print("             try to install gulp-cli globally")
     os.system("npm install --global gulp-cli") # nosec
 
-    os.system("npm install --unsafe-perm") # nosec
+    os.system("yarn install --unsafe-perm") # nosec
 
     print("===============================================")
-    print("             complete npm install")
+    print("             complete yarn install")
     print("===============================================")
     print("\n\n")
 
     # "build" means to generate i18n content
-    os.system("gulp build") # nosec
+    ret = os.system("gulp build") # nosec
+    if (ret != 0):
+        return ret
+
 
     print("===============================================")
     print("          complete i18n build")
@@ -32,6 +35,7 @@ def init():
     copyAcadProcFinder()
 
     copyRipGrep()
+    return 0
 
 def copyRipGrep():
     #copy exe of vscode-ripgrep into bin folder for both Windows and Mac
@@ -67,6 +71,8 @@ def copyFile(src, dst, description):
         print("\n\n")
     except IOError, e:
         print "Unable to copy file. %s" % e
+    
+    return 0
 
 def makepackage_vsix():
     print("===============================================")
@@ -76,17 +82,20 @@ def makepackage_vsix():
     os.system(vsce + " package" + output_opt) # nosec
     if (os.path.exists('autolispext.vsix')):
         print("It created autolispext.vsix file sucessfully")
+        ret = 0
     else:
         print("It failed to create autolispext.vsix file")
+        ret = 1
     print("end tp make visx file")
     print("===============================================")
+    return ret
 
 if __name__ == "__main__":
-    init()
-
-    print("===============================================")
-    print("      generate vsix package start")
-    print("===============================================")
-    print("\n\n")
-    makepackage_vsix()
-    print("\n\n")
+    ret = 1
+    if (init() == 0):
+        print("===============================================")
+        print("      generate vsix package start")
+        print("===============================================")
+        print("\n\n")
+        ret= makepackage_vsix()
+    sys.exit(ret)        

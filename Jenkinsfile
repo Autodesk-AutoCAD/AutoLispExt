@@ -174,5 +174,20 @@ timestamps {
 
             }
         }
+        if(!params.publish2VsCodeMarket) {
+            stage ('Whitesource check'){
+                scan = new ors.security.CommonAppsec(steps, env)
+                scan.run_oast_scan(
+                    "repo": "AutoLispExt",
+                    "branch": env.BRANCH_NAME,
+                    "mainline": "master",
+                    "team": "AutoCAD",
+                    "scan_dir": ["$WORKSPACE/vendor/npm-cache"],
+                    "fail_on_oast": "True",
+                    "excludes":"lodash*.tgz", //this is used by devDependency. Need to update later when new verison is available.
+                    "includes": "*.tgz"
+                    )
+            }
+        }
     }
 }
