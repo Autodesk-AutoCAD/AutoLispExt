@@ -7,6 +7,7 @@ import { saveUnsavedDoc2Tmp } from '../../utils';
 import * as vscode from 'vscode'
 import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
+import { setIsSearching } from './clearResults';
 
 const fs = require('fs-extra')
 
@@ -46,6 +47,8 @@ export class FindInProject {
                 return Promise.reject('Find & Replace only works on x64 system'); //TBD: localization work
             }
         }
+
+        setIsSearching(true);
 
         try {
             this.keyword = searchOption.keyword;
@@ -143,6 +146,9 @@ export class FindInProject {
         }
         catch (err) {
             return Promise.reject(err);
+        }
+        finally {
+            setIsSearching(false);
         }
     }
 

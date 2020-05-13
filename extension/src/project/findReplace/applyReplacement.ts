@@ -58,7 +58,7 @@ export async function applyReplacementInFile(filePlan: FileNode) {
     catch (err) {
         filePlan.errorInReplace = err;
     }
-} 
+}
 
 //If this file is shown in VS Code editor, change its content in editor and return true;
 //otherwise returns false, and leave the file content unchanged

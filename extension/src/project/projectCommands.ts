@@ -12,13 +12,19 @@ import { SearchTreeProvider, SummaryNode } from './findReplace/searchTree';
 import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
-import { clearSearchResults, clearSearchResultWithError, stopSearching } from './findReplace/clearResults';
+import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnIsSearching } from './findReplace/clearResults';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
 
+        SearchTreeProvider.instance.updateTitle(true);
+        ProjectTreeProvider.instance().updateTitle(true);
+
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.createProject', async () => {
             try {
+                if (getWarnIsSearching())
+                    return;
+
                 if (await CheckUnsavedChanges()) {
                     return;
                 }
@@ -39,6 +45,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.openProject', async () => {
+            if (getWarnIsSearching())
+                return;
+
             OpenProject()
                 .then(prjNode => {
                     if (!prjNode)
@@ -52,6 +61,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.addFile2Project', async () => {
+            if (getWarnIsSearching())
+                return;
+
             AddFile2Project()
                 .then(addedFiles => {
                     if (!addedFiles)
@@ -65,6 +77,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.removeFileFromProject', async (selected) => {
+            if (getWarnIsSearching())
+                return;
+
             excludeFromProject(selected)
                 .then(() => {
                     ProjectTreeProvider.instance().refreshData();
@@ -75,6 +90,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
+            if (getWarnIsSearching())
+                return;
+
             SaveProject(true)
                 .then(prjPath => {
                     ProjectTreeProvider.instance().refreshData();
@@ -102,6 +120,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
         //register the handler of "find in project"
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.findInProject', async () => {
+            if (getWarnIsSearching())
+                return;
+
             findInProject().catch(err => {
                 showErrorMessage("Failed to find in project.", err); //TBD: localize
                 clearSearchResultWithError("Failed to find in project. " + (err ? err.toString() : ''));//TBD: localize
@@ -110,6 +131,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
         //register the handler of "replace in project"
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.replaceInProject', async () => {
+            if (getWarnIsSearching())
+                return;
+
             replaceInProject().catch(err => {
                 showErrorMessage("Failed to replace in project.", err); //TBD: localize
                 clearSearchResultWithError("Failed to replace in project. " + (err ? err.toString() : ''));//TBD: localize
@@ -124,6 +148,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.clearSearchResults', (treeItem) => {
+            if (getWarnIsSearching())
+                return;
+
             try {
                 clearSearchResults();
             }
@@ -137,7 +164,6 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 stopSearching();
             }
             catch (err) {
-                console.log("failed to stop searching;")
                 if (err)
                     console.log(err.toString());
             }
@@ -156,5 +182,16 @@ function showErrorMessage(description: string, detail: string) {
         vscode.window.showErrorMessage(description);
     } else {
         vscode.window.showErrorMessage(description + "\r\n" + detail);
+    }
+}
+
+export function unregisterProjectManager() {
+    try {
+        SearchTreeProvider.instance.updateTitle(false);
+        ProjectTreeProvider.instance().updateTitle(false);
+    }
+    catch (err) {
+        if (err)
+            console.log(err);
     }
 }

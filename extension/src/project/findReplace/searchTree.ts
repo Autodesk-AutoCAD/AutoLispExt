@@ -69,34 +69,34 @@ export class FindingNode implements DisplayNode {
 }
 
 export class SummaryNode implements DisplayNode {
-    summary:string = '';
-    tooltip:string = '';
+    summary: string = '';
+    tooltip: string = '';
 
-    makeTooltip(opt:SearchOption, prjNode:ProjectNode) {
+    makeTooltip(opt: SearchOption, prjNode: ProjectNode) {
         this.tooltip = '';
 
         let prjNameClause = '';
         let prjPathStatement = '';
-        if(prjNode) {
+        if (prjNode) {
             prjNameClause = ` in ${prjNode.projectName}`;
             prjPathStatement = `\r\nProject file: ${prjNode.projectFilePath}`; //TBD: localize
         }
 
-        if(opt.isReplace) {
+        if (opt.isReplace) {
             this.tooltip = `Replace \"${opt.keyword}\" with \"${opt.replacement}\"${prjNameClause};`; //TBD: localization 
         }
         else {
             this.tooltip = `Find \"${opt.keyword}\"${prjNameClause};`; //TBD: localization
         }
         this.tooltip += prjPathStatement;
-        
-        if(opt.matchCase) {
+
+        if (opt.matchCase) {
             this.tooltip += '\r\nMatch case: ON';//TBD: localization
         }
-        if(opt.matchWholeWord) {
+        if (opt.matchWholeWord) {
             this.tooltip += '\r\nMatch whole word: ON' //TBD: localization
         }
-        if(opt.useRegularExpr) {
+        if (opt.useRegularExpr) {
             this.tooltip += '\r\nUse regular expression: ON' //TBD: localization
         }
     }
@@ -113,7 +113,7 @@ export class SummaryNode implements DisplayNode {
         return null;
     }
 
-    getNodeType (): string {
+    getNodeType(): string {
         return SummaryNode.nodeTypeString;
     }
 
@@ -126,8 +126,11 @@ export class SummaryNode implements DisplayNode {
 
 export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> {
     private constructor() {
-        this.treeControl = vscode.window.createTreeView('Autolisp-FindReplaceView', {treeDataProvider: this});
-        this.treeControl.title = 'Find & Replace'; //TBD: localization
+        this.treeControl = vscode.window.createTreeView('Autolisp-FindReplaceView', { treeDataProvider: this });
+        this.treeControl.onDidChangeVisibility( visible => {
+            if(visible)
+                this.updateTitle(true);
+        })
     }
 
     public static instance: SearchTreeProvider = new SearchTreeProvider();
@@ -144,15 +147,22 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
     public reset(newResult: DisplayNode[], summary: SummaryNode, opt: SearchOption) {
         this.rootNodes = new Array<DisplayNode>();
         this.rootNodes.push(summary);
-        if(newResult != null) {
-            for(let fileNode of newResult) {
+        if (newResult != null) {
+            for (let fileNode of newResult) {
                 this.rootNodes.push(fileNode);
             }
         }
-        
+
         this.lastSearchOption = opt;
 
         this.onChanged.fire();
+    }
+
+    public updateTitle(active) {
+        if(active)
+            this.treeControl.title = 'Find & Replace'; //TBD: localization
+        else
+            this.treeControl.title = 'Activating ...'; //TBD: localization
     }
 
     public clear() {

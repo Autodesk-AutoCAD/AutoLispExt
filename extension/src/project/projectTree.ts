@@ -95,7 +95,17 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         ProjectTreeProvider.currentInstance = this;
 
         this.treeControl = vscode.window.createTreeView('Autolisp-ProjectView', { treeDataProvider: this });
-        this.treeControl.title = 'Project'; //TBD: localization    
+        this.treeControl.onDidChangeVisibility(visible => {
+            if(visible)
+                this.updateTitle(true);
+        })
+    }
+
+    public updateTitle(active) {
+        if(active)
+            this.treeControl.title = 'Project'; //TBD: localization
+        else
+            this.treeControl.title = 'Activating ...'; //TBD: localization
     }
 
     private static currentInstance: ProjectTreeProvider = new ProjectTreeProvider();
