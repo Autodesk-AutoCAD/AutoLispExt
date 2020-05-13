@@ -1,5 +1,4 @@
 import { SearchTreeProvider } from './searchTree';
-import { applyReplacement } from './applyReplacement';
 import { FindInProject } from './findInProject';
 import { ProjectTreeProvider } from '../projectTree';
 import { getSearchOption, getString } from './options';
@@ -29,9 +28,6 @@ export async function replaceInProject() {
 
     let finder = new FindInProject();
     await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
-
-    //execute the planned replacement
-    await applyReplacement(finder);
 
     //update the search tree
     //note that we want to do it even if the user has stopped the request;

@@ -6,6 +6,7 @@ import { saveUnsavedDoc2Tmp } from '../../utils';
 
 import * as vscode from 'vscode'
 import * as os from 'os';
+import { applyReplacementInFile } from './applyReplacement';
 
 const fs = require('fs-extra')
 
@@ -65,7 +66,7 @@ export class FindInProject {
             let totalFiles = 0;
             let totalLines = 0;
 
-            let totalLinesShown = 0;
+            let timeStarted = Date.now();
 
             for (let srcFile of prjNode.sourceFiles) {
                 if (SearchOption.activeInstance.stopRequested)
@@ -94,16 +95,22 @@ export class FindInProject {
 
                     this.resultByFile.push(fileNode);
 
+                    if (searchOption.isReplace)
+                        await applyReplacementInFile(fileNode);
+
                     totalFiles++;
                     totalLines += findings.length;
 
-                    if (totalLines - totalLinesShown >= 100) {
-                        totalLinesShown = totalLines;
+                    let now = Date.now();
+                    if (now - timeStarted < 500)
+                        continue;//less than 0.5 second since the last UI update
 
-                        //update the search tree with some progress
-                        this.summaryNode.summary = `In progress ... ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
-                        SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
-                    }
+                    //update the search tree with some progress
+                    timeStarted = now;
+
+                    this.summaryNode.summary = 'In progress ... ' //TBD: localization
+                        + `Found ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
+                    SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
                 }
                 catch (ex) {
                     if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {

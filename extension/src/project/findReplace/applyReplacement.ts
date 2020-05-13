@@ -1,25 +1,11 @@
 import * as fs from 'fs-extra';
 import * as vscode from 'vscode'
 
-import { FindInProject } from './findInProject';
 import { FileNode } from './searchTree';
 import { getTmpFilePath, getDocument } from '../../utils';
 
-export async function applyReplacement(projectPlan: FindInProject) {
-    try {
-        if (projectPlan.resultByFile.length == 0)
-            return Promise.resolve();
 
-        for (let fileNode of projectPlan.resultByFile) {
-            await applyReplacementInFile(fileNode);
-        }
-    }
-    catch (err) {
-        Promise.reject(err);
-    }
-}
-
-async function applyReplacementInFile(filePlan: FileNode) {
+export async function applyReplacementInFile(filePlan: FileNode) {
     try {
         if (fs.existsSync(filePlan.filePath) == false) {
             filePlan.errorInReplace = "File doesn't exist"; //TBD: localize
@@ -72,7 +58,7 @@ async function applyReplacementInFile(filePlan: FileNode) {
     catch (err) {
         filePlan.errorInReplace = err;
     }
-}
+} 
 
 //If this file is shown in VS Code editor, change its content in editor and return true;
 //otherwise returns false, and leave the file content unchanged
