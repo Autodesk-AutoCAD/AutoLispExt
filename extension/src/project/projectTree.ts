@@ -89,18 +89,17 @@ export class LspFileNode implements DisplayNode {
 
 export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>{
     private rootNode: ProjectNode = null;
+    private treeControl: vscode.TreeView<DisplayNode> = null;
 
     private constructor() {
+        ProjectTreeProvider.currentInstance = this;
+
+        this.treeControl = vscode.window.createTreeView('Autolisp-ProjectView', { treeDataProvider: this });
+        this.treeControl.title = 'Project'; //TBD: localization    
     }
 
-    private static currentInstance: ProjectTreeProvider = null;
+    private static currentInstance: ProjectTreeProvider = new ProjectTreeProvider();
     static instance(): ProjectTreeProvider {
-        if (ProjectTreeProvider.currentInstance == null) {
-            let inst = new ProjectTreeProvider();
-            ProjectTreeProvider.currentInstance = inst
-            vscode.window.registerTreeDataProvider('Autolisp-ProjectView', inst);
-        }
-
         return ProjectTreeProvider.currentInstance;
     }
 
@@ -204,7 +203,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 //return true in all other cases
 export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string, rawFilePath: string): Boolean {
     for (let fileNode of root.sourceFiles) {
-        if(pathEqual(fileName, fileNode.filePath, false))
+        if (pathEqual(fileName, fileNode.filePath, false))
             return false;
     }
 

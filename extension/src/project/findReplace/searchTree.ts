@@ -126,7 +126,8 @@ export class SummaryNode implements DisplayNode {
 
 export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> {
     private constructor() {
-        vscode.window.registerTreeDataProvider('Autolisp-FindReplaceView', this);
+        this.treeControl = vscode.window.createTreeView('Autolisp-FindReplaceView', {treeDataProvider: this});
+        this.treeControl.title = 'Find & Replace'; //TBD: localization
     }
 
     public static instance: SearchTreeProvider = new SearchTreeProvider();
@@ -136,6 +137,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
     public readonly onDidChangeTreeData?: vscode.Event<DisplayNode> = this.onChanged.event;
 
     private rootNodes: DisplayNode[] = null;
+    private treeControl: vscode.TreeView<DisplayNode> = null;
 
     public lastSearchOption: SearchOption = null;
 
