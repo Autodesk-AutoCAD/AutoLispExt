@@ -7,7 +7,7 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
     let commandArgs: string[] = [
         searchOption.keyword,
         file2Search,
-        "--column",
+        "--vimgrep",
         "--line-number",
         "--color",
         "never",

@@ -154,19 +154,21 @@ export class FindInProject {
         let findings: FindingNode[] = [];
 
         for (let oneLilne of lines) {
-            if (oneLilne.length <= 4)
+            if (oneLilne.length <= 8)
                 continue;
 
             let cells = oneLilne.split(':');
-            let line = Number(cells[0]);
-            let text = cells[2];
-            for (let i = 3; i < cells.length; i++) {
+            // cells[0] is drive letter, cells[1] is file path
+            // cells[2] is line number, cells[3] is column number by bytes, the rest is text.
+            let line = Number(cells[2]);
+            let text = cells[4];
+            for (let i = 5; i < cells.length; i++) {
                 text = text.concat(':');
                 text = text.concat(cells[i]);
             }
 
             //get column by character index instead of byte index
-            let colInBytes = Number(cells[1]);
+            let colInBytes = Number(cells[3]);
             let col = -1;
             let bytes = 1;
             for (let j = 0; j < text.length; j++) {
