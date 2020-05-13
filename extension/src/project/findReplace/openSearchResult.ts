@@ -27,8 +27,12 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
             textLen = searchOpt.keyword.length;
             if (searchOpt.useRegularExpr) {
 				//it's a finding with regular expression; need to get the matched text to work out the length
-                let flags = searchOpt.matchCase ? null : 'i';
-                let reg = new RegExp(searchOpt.keyword, flags);
+                let reg: RegExp;
+                if (searchOpt.matchCase) {
+                    reg = new RegExp(searchOpt.keyword);
+                } else {
+                    reg = new RegExp(searchOpt.keyword, 'i');
+                }
                 let matches = reg.exec(finding.text);
                 if (matches.length <= 0) {
                     console.log("can't detect keyword length with regular expression on");
