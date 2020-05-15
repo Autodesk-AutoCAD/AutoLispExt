@@ -159,22 +159,27 @@ export class FindInProject {
 
         let findings: FindingNode[] = [];
 
-        for (let oneLilne of lines) {
-            if (oneLilne.length <= 8)
+        for (let oneLine of lines) {
+            if (!oneLine) {
+                console.log("an empty match is not expected.");
                 continue;
-
-            let cells = oneLilne.split(':');
-            // cells[0] is drive letter, cells[1] is file path
-            // cells[2] is line number, cells[3] is column number by bytes, the rest is text.
-            let line = Number(cells[2]);
-            let text = cells[4];
-            for (let i = 5; i < cells.length; i++) {
-                text = text.concat(':');
-                text = text.concat(cells[i]);
             }
 
+            //it's [line]:[column]:[text]
+            let cells = oneLine.split(':');
+
+            if ((!cells) || (cells.length < 3)) {
+                console.log("a match is in unexpected format.");
+                continue;
+            }
+
+            let line = Number(cells[0]);
+            let colInBytes = Number(cells[1]);
+
+            cells.splice(0, 2);
+            let text = cells.join(':');//it's possible that the matched line text contains ":"
+
             //get column by character index instead of byte index
-            let colInBytes = Number(cells[3]);
             let col = -1;
             let bytes = 1;
             for (let j = 0; j < text.length; j++) {

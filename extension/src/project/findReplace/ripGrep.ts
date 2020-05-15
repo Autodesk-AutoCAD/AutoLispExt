@@ -12,6 +12,7 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         "--color",
         "never",
         "--no-heading",
+        "--no-filename",
         "--encoding",
         "utf8"
     ];
