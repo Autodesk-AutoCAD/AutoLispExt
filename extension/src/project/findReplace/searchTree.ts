@@ -10,7 +10,7 @@ export class FileNode implements DisplayNode {
     findings: FindingNode[] = [];
 
     errorInReplace: string = '';//error message provided when replace in file
-
+    collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
     getDisplayText(): string {
         return this.shortPath;
     }
@@ -27,8 +27,12 @@ export class FileNode implements DisplayNode {
         return "findinggroup";
     }
 
-    isCollapsible(): Boolean {
-        return true;
+    getCollapsibleState(): vscode.TreeItemCollapsibleState {
+        return this.collapsibleState;
+    }
+
+    setCollapsibleState(state: vscode.TreeItemCollapsibleState) {
+        this.collapsibleState = state;
     }
 }
 
@@ -63,8 +67,11 @@ export class FindingNode implements DisplayNode {
         return "finding";
     }
 
-    isCollapsible(): Boolean {
-        return false;
+    getCollapsibleState(): vscode.TreeItemCollapsibleState{
+        return vscode.TreeItemCollapsibleState.None;
+    }
+
+    setCollapsibleState() {
     }
 }
 
@@ -117,8 +124,11 @@ export class SummaryNode implements DisplayNode {
         return SummaryNode.nodeTypeString;
     }
 
-    isCollapsible(): Boolean {
-        return false;
+    getCollapsibleState(): vscode.TreeItemCollapsibleState{
+        return vscode.TreeItemCollapsibleState.None;
+    }
+
+    setCollapsibleState() {
     }
 
     static readonly nodeTypeString = "summary";
@@ -130,6 +140,12 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
         this.treeControl.onDidChangeVisibility( visible => {
             if(visible)
                 this.updateTitle(true);
+        })
+        this.treeControl.onDidCollapseElement(e => {
+            e.element.setCollapsibleState(vscode.TreeItemCollapsibleState.Collapsed);
+        })
+        this.treeControl.onDidExpandElement(e => {
+            e.element.setCollapsibleState(vscode.TreeItemCollapsibleState.Expanded);
         })
     }
 
@@ -174,7 +190,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
         try {
             let treeNode = new vscode.TreeItem(element.getDisplayText());
-            treeNode.collapsibleState = element.isCollapsible() ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
+            treeNode.collapsibleState = element.getCollapsibleState();
             treeNode.tooltip = element.getTooltip();
             treeNode.iconPath = element.getIconUri();
             treeNode.contextValue = element.getNodeType();

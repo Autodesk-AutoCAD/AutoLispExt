@@ -12,7 +12,8 @@ export interface DisplayNode {
     getTooltip: () => string;
     getIconUri: () => vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri };
     getNodeType: () => string;
-    isCollapsible: () => Boolean;
+    getCollapsibleState: () => vscode.TreeItemCollapsibleState;
+    setCollapsibleState(state: vscode.TreeItemCollapsibleState): void;
 }
 
 export class ProjectNode implements DisplayNode {
@@ -26,6 +27,7 @@ export class ProjectNode implements DisplayNode {
     projectModified: Boolean = false;
 
     projectMetadata: ProjectDefinition = null;
+    collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Expanded;
 
     getDisplayText(): string {
         if (this.projectModified) {
@@ -43,8 +45,12 @@ export class ProjectNode implements DisplayNode {
         return "project"
     }
 
-    isCollapsible(): Boolean {
-        return true;
+    getCollapsibleState(): vscode.TreeItemCollapsibleState {
+        return this.collapsibleState;
+    }
+
+    setCollapsibleState(state: vscode.TreeItemCollapsibleState) {
+        this.collapsibleState = state;
     }
 
     getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } {
@@ -74,8 +80,11 @@ export class LspFileNode implements DisplayNode {
         return "lspFile"
     }
 
-    isCollapsible(): Boolean {
-        return false;
+    getCollapsibleState(): vscode.TreeItemCollapsibleState {
+        return vscode.TreeItemCollapsibleState.None;
+    }
+
+    setCollapsibleState() {
     }
 
     getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri } {
@@ -98,6 +107,12 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         this.treeControl.onDidChangeVisibility(visible => {
             if(visible)
                 this.updateTitle(true);
+        })
+        this.treeControl.onDidCollapseElement(e => {
+            e.element.setCollapsibleState(vscode.TreeItemCollapsibleState.Collapsed);
+        })
+        this.treeControl.onDidExpandElement(e => {
+            e.element.setCollapsibleState(vscode.TreeItemCollapsibleState.Expanded);
         })
     }
 
@@ -159,7 +174,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<import("vscode").TreeItem> {
         try {
             let treeNode = new vscode.TreeItem(element.getDisplayText());
-            treeNode.collapsibleState = element.isCollapsible() ? vscode.TreeItemCollapsibleState.Collapsed : vscode.TreeItemCollapsibleState.None;
+            treeNode.collapsibleState = element.getCollapsibleState();
             treeNode.tooltip = element.getTooltip();
             treeNode.iconPath = element.getIconUri();
             treeNode.contextValue = element.getNodeType();
