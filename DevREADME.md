@@ -48,6 +48,13 @@ You could do all above steps  by the script pack.py, it is python2
 cd AutoLispExt
 python pack.py
 ```
+## Run tests
+You have two ways to run the tests:
+  - Run inside the VS Code and begin debugging by choosing "Extension Tests"
+  - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation) 
+```
+yarn test
+```
 
 ## How to publish the extension to vscode market
 

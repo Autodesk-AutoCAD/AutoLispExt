@@ -21,12 +21,11 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/extension/out/test"
+                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
             ],
             "outFiles": [
-                "${workspaceFolder}/extension/out/test/**/*.js"
-            ],
-            "preLaunchTask": "npm: watch"
+                "${workspaceFolder}/out/test/**/*.js"
+            ]
         }
     ],
     "compounds": [
