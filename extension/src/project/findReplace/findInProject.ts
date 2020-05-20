@@ -8,6 +8,7 @@ import * as vscode from 'vscode'
 import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
 import { setIsSearching } from './clearResults';
+import { detectEncoding } from './encoding';
 
 const fs = require('fs-extra')
 
@@ -80,7 +81,25 @@ export class FindInProject {
 
                 let file2Search = saveUnsavedDoc2Tmp(srcFile.filePath);
                 try {
-                    let ret = await findInFile(searchOption, file2Search);
+                    let ret = null;
+                    try {
+                        ret = await findInFile(searchOption, file2Search);
+                    } catch (ex) {
+                        if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
+                            //nothing found with utf8, so refind with guessed encoding
+                            const buffer = fs.readFileSync(file2Search);
+                            const encoding = detectEncoding(buffer);
+                            if (encoding) {
+                                ret = await findInFile(searchOption, file2Search, encoding);
+                            }
+                        } else {
+                            throw ex;
+                        }
+                    }
+
+                    if (!ret) 
+                        continue;
+
                     if (ret.failed || ret.killed || ret.timedOut || (ret.code != 0))
                         return Promise.reject(ret.stderr);
 

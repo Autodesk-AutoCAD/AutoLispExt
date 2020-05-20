@@ -3,7 +3,7 @@ import { SearchOption } from './options';
 
 import * as execa from "execa";
 
-export async function findInFile(searchOption: SearchOption, file2Search: string) {
+export async function findInFile(searchOption: SearchOption, file2Search: string, encoding: string = "utf8") {
     let commandArgs: string[] = [
         searchOption.keyword,
         file2Search,
@@ -14,7 +14,7 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         "--no-heading",
         "--no-filename",
         "--encoding",
-        "utf8"
+        encoding
     ];
 
     if (SearchOption.activeInstance.matchCase)
