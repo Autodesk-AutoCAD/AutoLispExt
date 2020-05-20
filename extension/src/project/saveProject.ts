@@ -33,8 +33,7 @@ export async function SaveProject(refresh: boolean) {
         root.projectModified = false;
 
         if (refresh)
-            //at the end, reopen the given project
-            return OpenProjectFile(vscode.Uri.file(targetPath));
+            ProjectTreeProvider.instance().refreshData();
 
         return Promise.resolve(targetPath);
     }

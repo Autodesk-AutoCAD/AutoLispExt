@@ -69,7 +69,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     if (!addedFiles)
                         return;//it's possible that the user cancelled the operation
 
-                    ProjectTreeProvider.instance().refreshData();
+                    SaveProject(true);
                 })
                 .catch(err => {
                     showErrorMessage("Failed to add selected files to project.", err);//TBD: localize
@@ -82,7 +82,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
             excludeFromProject(selected)
                 .then(() => {
-                    ProjectTreeProvider.instance().refreshData();
+                    SaveProject(true);
                 })
                 .catch(err => {
                     showErrorMessage("Failed to remove selected file.", err); //TBD: localize
@@ -95,7 +95,6 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
             SaveProject(true)
                 .then(prjPath => {
-                    ProjectTreeProvider.instance().refreshData();
                     vscode.window.showInformationMessage("Project file saved"); //TBD: localize
                 })
                 .catch(err => {

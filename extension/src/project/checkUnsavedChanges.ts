@@ -35,7 +35,6 @@ export async function CheckUnsavedChanges(): Promise<boolean> {
             }
             if (root.projectModified) {
                 await SaveProject(true);
-                ProjectTreeProvider.instance().refreshData();
             }
         }
         return false;
