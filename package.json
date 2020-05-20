@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.2.3",
+	"version": "1.2.4",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -165,6 +165,21 @@
 					],
 					"default": "Fill to margin",
 					"description": "%autolispext.configuration.longlistformatstyle%"
+				},
+				"autolispext.AttachProcess": {
+					"type": "string",
+					"default": "",
+					"description": "Process name used to filter when attach"
+				},
+				"autolispext.LaunchProgram": {
+					"type": "string",
+					"default": "",
+					"description": "Absolute path to the AutoCAD executable"
+				},
+				"autolispext.LaunchParameters": {
+					"type": "string",
+					"default": "",
+					"description": "AutoCAD command line startup switches"
 				}
 			}
 		},
@@ -335,9 +350,7 @@
 						"type": "attachlisp",
 						"request": "attach",
 						"name": "AutoLISP Debug: Attach",
-						"attributes": {
-							"process": ""
-						}
+						"help": "https://www.autodesk.com/autolisp-extension"
 					}
 				],
 				"configurationSnippets": [
@@ -348,9 +361,7 @@
 							"type": "attachlisp",
 							"request": "attach",
 							"name": "AutoLISP Debug: Attach",
-							"attributes": {
-								"process": ""
-							}
+							"help": "https://www.autodesk.com/autolisp-extension"
 						}
 					}
 				]
@@ -403,10 +414,7 @@
 						"type": "launchlisp",
 						"request": "launch",
 						"name": "AutoLISP Debug: Launch",
-						"attributes": {
-							"path": "",
-							"params": ""
-						}
+						"help": "https://www.autodesk.com/autolisp-extension"
 					}
 				],
 				"configurationSnippets": [
@@ -417,10 +425,7 @@
 							"type": "launchlisp",
 							"request": "launch",
 							"name": "AutoLISP Debug: Launch",
-							"attributes": {
-								"path": "",
-								"params": ""
-							}
+							"help": "https://www.autodesk.com/autolisp-extension"
 						}
 					}
 				]

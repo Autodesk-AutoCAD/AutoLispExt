@@ -30,6 +30,10 @@ function need2AddDefaultConfig(config: vscode.DebugConfiguration): Boolean {
     return true;
 }
 
+const LAUNCH_PROC:string = 'LaunchProgram';
+const LAUNCH_PARM:string = 'LaunchParameters';
+const ATTACH_PROC:string = 'AttachProcess';
+
 export function registerLispDebugProviders(context: vscode.ExtensionContext) {
     //-----------------------------------------------------------
     //4. debug adapter
@@ -104,9 +108,17 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
             // 1. get acad and adapter path
             //2. get acadRoot path
             //2.1 get acadRoot path from launch.json
+
             let productPath = "";
-            if (config["attributes"])
+            if (config["attributes"]) {
                 productPath = config["attributes"]["path"] ? config["attributes"]["path"] : "";
+            }
+
+            if (!productPath) {
+                let path = getExtensionSettingString(LAUNCH_PROC);
+                if (path)
+                    productPath = path;
+            }
 
             if (!productPath) {
                 let info = localize("autolispext.debug.launchjson.path",
@@ -117,15 +129,18 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                     let msg = localize("autolispext.debug.prod.path.win",
                         "Specify the absolute path for the product. For example, C://Program Files//Autodesk//AutoCAD//acad.exe.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
+                    rememberLaunchPath(productPath);
                 }
                 else if (platform === 'Darwin') {
                     let msg = localize("autolispext.debug.prod.path.osx",
                         "Specify the absolute path for the product. For example, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
+                    rememberLaunchPath(productPath);
                 }
                 else {
                     let msg = localize("autolispext.debug.prod.path.other", "Specify the absolute path for the product.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
+                    rememberLaunchPath(productPath);
                 }
             }
             //3. get acad startup params
@@ -138,8 +153,14 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                 return undefined;
             } else {
                 let params = "";
-                if (config["attributes"])
+                if (config["attributes"]) {
                     params = config["attributes"]["params"] ? config["attributes"]["params"] : "";
+                }
+                else {
+                    let text = getExtensionSettingString(LAUNCH_PARM);
+                    if (text)
+                        params = text;
+                }
                 ProcessPathCache.globalParameter = params;
             }
             //4. get debug adapter path
@@ -180,8 +201,14 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
         if (vscode.window.activeTextEditor)
             config.program = vscode.window.activeTextEditor.document.fileName;
 
+        ProcessPathCache.globalAcadNameInUserAttachConfig = '';
         if (config && config.attributes && config.attributes.process) {
             ProcessPathCache.globalAcadNameInUserAttachConfig = config.attributes.process;
+        }
+        else {
+            let name = getExtensionSettingString(ATTACH_PROC);
+            if (name)
+                ProcessPathCache.globalAcadNameInUserAttachConfig = name;
         }
 
         ProcessPathCache.clearProductProcessPathArr();
@@ -210,4 +237,34 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
             this._server.close();
         }
     }
+}
+
+function getExtensionSettingString(settingName: string): string {
+    let settingGroup = vscode.workspace.getConfiguration('autolispext');
+    if (!settingGroup)
+        return null;
+
+    let setting = settingGroup.get(settingName);
+    if (!setting)
+        return null;
+
+    return setting.toString();
+}
+
+function rememberLaunchPath(path: string) {
+    if (existsSync(path) == false)
+        return;
+
+    let settingGroup = vscode.workspace.getConfiguration('autolispext');
+    if (!settingGroup)
+        return null;
+
+    settingGroup.update(LAUNCH_PROC, path, true).then(
+        () => {
+            console.log("Launch path stored in extension setting");
+        },
+        (err) => {
+            if(err)
+                vscode.window.showErrorMessage(err.toString());
+        });
 }

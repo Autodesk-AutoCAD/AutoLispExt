@@ -55,63 +55,22 @@ Note: To avoid specifying this path each time you click Debug > Start Debugging 
 For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
 
 ## How to configure the AutoCAD path
-To specify the path to the AutoCAD executable that is used with launch debug, update the “path” attribute of the launchlisp configuration in launch.json.
-Note: In the following configurations, substitute <release> based on the AutoCAD application installed on your workstation.
+1. In Visual Studio Code "File" menu, select "Preferences" -> "Settings".
+2. Expand "Extensions" in "User" tab, and click on "AutoCAD® AutoLISP Configuration".
+3. Update the "Attach Process" attribute to specify the process name used to filter when attach.
+4. Update the "Launch Program" attribute to specify the path of AutoCAD executable that is used with launch debug.
+5. Update the "Launch Parameters" attribute to specify the AutoCAD startup parameters.
 
-launch.json file on Windows
-```
-{
-    "version": "0.1.4",
-    "configurations": [
-        {
-            "type": "attachlisp",
-            "request": "attach",
-            "name": "AutoLISP Debug: Attach",
-            "attributes": {
-                "process":"acad"       //process name used to filter when attach
-            }
-        },
-        {
-            "type": "launchlisp",
-            "request": "launch",
-            "name": "AutoLISP Debug: Launch",
-            "attributes":{
-                "path": "C:\\Program Files\\Autodesk\\AutoCAD <release>\\acad.exe", // absolute path of acad.exe
-                "params": ""                                                        // AutoCAD startup parameter
-            }
-        }
-    ]
-}
-```
-launch.json file on Mac
-```
-{
-    "version": "0.1.4",
-    "configurations":
-    [
-        {
-            "type": "launchlisp",
-            "request": "launch",
-            "name": "Autolisp Debug: Launch",
-            "attributes": {
-                // Absolute path to the AutoCAD executable (AutoCAD)
-                "path": "/Applications/Autodesk/AutoCAD <release>/AutoCAD <release>.app/Contents/MacOS/AutoCAD",
-                // AutoCAD command line startup switches
-                "params": ""
-            }
-        },
-        {
-            "type": "attachlisp",
-            "request": "attach",
-            "name": "Autolisp Debug: Attach",
-            "attributes": {
-                // Process name to filter on when trying to attach
-                "process": "AutoCAD"
-            }
-        }
-    ]
-}
-```
+NOTE:
+In the following configurations, substitute <release> based on the AutoCAD application installed on your workstation.
+
+Example (on Windows):
+Launch Program: C:\Program Files\Autodesk\AutoCAD <release>\acad.exe
+Attach Process: acad
+
+Example (on Mac):
+Launch Program: /Applications/Autodesk/AutoCAD <release>/AutoCAD <release>.app/Contents/MacOS/AutoCAD
+Attach Process: AutoCAD
 
 ## Notes
 

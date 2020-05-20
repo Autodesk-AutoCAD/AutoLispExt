@@ -49,7 +49,7 @@ export class FindingNode implements DisplayNode {
     }
 
     getTooltip(): string {
-        let tooltip = `${this.line}:${this.column} ${this.text}`;
+        let tooltip = `${this.line}: ${this.text}`;
         if ((this.line <= 0) || (this.column <= 0)) {
             //in rg, the line/column number starts with 1
             console.log("invalid finding node: " + tooltip);
