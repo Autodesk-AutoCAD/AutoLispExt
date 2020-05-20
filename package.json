@@ -435,12 +435,12 @@
 			"Autolisp-PMSideBar": [
 				{
 					"id": "Autolisp-ProjectView",
-					"name": "Activating ...",
+					"name": "Project",
 					"when": ""
 				},
 				{
 					"id": "Autolisp-FindReplaceView",
-					"name": "Activating ...",
+					"name": "Find & Replace",
 					"when": ""
 				}
 			]

@@ -81,8 +81,6 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate(): Thenable<void> | undefined {
-	pmCmds.unregisterProjectManager();
-	
 	if (!client) {
 		return undefined;
 	}

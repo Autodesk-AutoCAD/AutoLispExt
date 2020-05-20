@@ -9,6 +9,7 @@ import * as path from 'path'
 import { ReadonlyDocument } from './readOnlyDocument';
 
 const fs = require('fs');
+import * as os from 'os';
 
 export async function OpenProject() {
     try {
@@ -166,7 +167,7 @@ function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
     fileName = fileName.substr(1, fileName.length - 2);
 
     //make sure it's absolute path
-    if (path.isAbsolute(fileName) == false)
+    if (isAbsolutePath(fileName) == false)
         fileName = path.join(prjDir, fileName);
 
     //add the file extension back if necessary
@@ -178,6 +179,30 @@ function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
     }
 
     return fileName;
+}
+
+let platform = os.type();
+
+function isAbsolutePath(fileName: string): boolean {
+    if (path.isAbsolute(fileName))
+        return true;
+
+    if (platform != 'Windows_NT') {
+        //a full path on Windows like c:\... will be incorrectly considered as relative path on Mac
+        if (fileName.length < 3)
+            return false;
+
+        let char2 = fileName.charAt(1);
+        let char3 = fileName.charAt(2);
+
+        if ((char2 == ':') && (char3 == '\\'))
+            return true;
+
+        if ((char2 == ':') && (char3 == '/'))
+            return true;
+    }
+
+    return false;
 }
 
 function IsValidProjectExpression(metaData: ProjectDefinition): Boolean {

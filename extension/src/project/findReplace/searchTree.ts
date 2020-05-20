@@ -137,10 +137,6 @@ export class SummaryNode implements DisplayNode {
 export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> {
     private constructor() {
         this.treeControl = vscode.window.createTreeView('Autolisp-FindReplaceView', { treeDataProvider: this });
-        this.treeControl.onDidChangeVisibility( visible => {
-            if(visible)
-                this.updateTitle(true);
-        })
         this.treeControl.onDidCollapseElement(e => {
             e.element.setCollapsibleState(vscode.TreeItemCollapsibleState.Collapsed);
         })
@@ -172,13 +168,6 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
         this.lastSearchOption = opt;
 
         this.onChanged.fire();
-    }
-
-    public updateTitle(active) {
-        if(active)
-            this.treeControl.title = 'Find & Replace'; //TBD: localization
-        else
-            this.treeControl.title = 'Activating ...'; //TBD: localization
     }
 
     public clear() {

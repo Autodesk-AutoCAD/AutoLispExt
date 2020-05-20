@@ -17,9 +17,6 @@ import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnI
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
 
-        SearchTreeProvider.instance.updateTitle(true);
-        ProjectTreeProvider.instance().updateTitle(true);
-
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.createProject', async () => {
             try {
                 if (getWarnIsSearching())
@@ -183,16 +180,5 @@ function showErrorMessage(description: string, detail: string) {
         vscode.window.showErrorMessage(description, showErrOpt);
     } else {
         vscode.window.showErrorMessage(description + "\r\n" + detail, showErrOpt);
-    }
-}
-
-export function unregisterProjectManager() {
-    try {
-        SearchTreeProvider.instance.updateTitle(false);
-        ProjectTreeProvider.instance().updateTitle(false);
-    }
-    catch (err) {
-        if (err)
-            console.log(err);
     }
 }
