@@ -80,15 +80,6 @@
 				}
 			},
 			{
-				"command": "autolisp.SaveProject",
-				"title": "Save current project",
-				"category": "AutoLISP",
-				"icon": {
-					"dark": "images/dark/Save_Project.svg",
-					"light": "images/light/Save_Project.svg"
-				}
-			},
-			{
 				"command": "autolisp.refreshFileStatus",
 				"category": "AutoLISP",
 				"title": "Refresh file status",
@@ -472,11 +463,6 @@
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
-					"command": "autolisp.SaveProject",
-					"group": "navigation@4",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
 					"command": "autolisp.refreshFileStatus",
 					"group": "navigation@6",
 					"when": "view == Autolisp-ProjectView"
@@ -510,13 +496,8 @@
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.SaveProject",
-					"group": "navigation@2"
-				},
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.refreshFileStatus",
-					"group": "navigation@4"
+					"group": "navigation@2"
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",

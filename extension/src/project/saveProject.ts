@@ -28,16 +28,17 @@ export async function SaveProject(refresh: boolean) {
 
         //write to file
         let targetPath = root.projectFilePath;
-        fs.removeSync(targetPath);
         fs.writeFileSync(targetPath, formatedText);
         root.projectModified = false;
 
         if (refresh)
             ProjectTreeProvider.instance().refreshData();
-
         return Promise.resolve(targetPath);
     }
     catch (e) {
+        if (refresh)
+            ProjectTreeProvider.instance().refreshData();
+
         return Promise.reject(e);
     }
 }

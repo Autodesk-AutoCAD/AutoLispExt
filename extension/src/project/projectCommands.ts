@@ -64,42 +64,42 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             if (getWarnIsSearching())
                 return;
 
-            AddFile2Project()
-                .then(addedFiles => {
-                    if (!addedFiles)
-                        return;//it's possible that the user cancelled the operation
+            try {
+                let addedFiles = await AddFile2Project();
+                if (!addedFiles)
+                    return;//it's possible that the user cancelled the operation
+            }
+            catch (err) {
+                showErrorMessage("Failed to add selected files to project.", err);//TBD: localize
+                return;
+            }
 
-                    SaveProject(true);
-                })
-                .catch(err => {
-                    showErrorMessage("Failed to add selected files to project.", err);//TBD: localize
-                })
+            try {
+                await SaveProject(true);
+            }
+            catch (err) {
+                showErrorMessage("Failed to save project:", err); //TBD: localize
+            }
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.removeFileFromProject', async (selected) => {
             if (getWarnIsSearching())
                 return;
 
-            excludeFromProject(selected)
-                .then(() => {
-                    SaveProject(true);
-                })
-                .catch(err => {
-                    showErrorMessage("Failed to remove selected file.", err); //TBD: localize
-                })
-        }));
-
-        context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
-            if (getWarnIsSearching())
+            try {
+                await excludeFromProject(selected);
+            }
+            catch (err) {
+                showErrorMessage("Failed to remove selected file.", err); //TBD: localize
                 return;
+            }
 
-            SaveProject(true)
-                .then(prjPath => {
-                    vscode.window.showInformationMessage("Project file saved"); //TBD: localize
-                })
-                .catch(err => {
-                    showErrorMessage("Failed to save project:", err); //TBD: localize
-                });
+            try {
+                await SaveProject(true);
+            }
+            catch (err) {
+                showErrorMessage("Failed to save project:", err); //TBD: localize
+            }
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
@@ -176,11 +176,13 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
     }
 }
 
+const showErrOpt = { modal: true };
+
 function showErrorMessage(description: string, detail: string) {
     if (!detail) {
-        vscode.window.showErrorMessage(description);
+        vscode.window.showErrorMessage(description, showErrOpt);
     } else {
-        vscode.window.showErrorMessage(description + "\r\n" + detail);
+        vscode.window.showErrorMessage(description + "\r\n" + detail, showErrOpt);
     }
 }
 
