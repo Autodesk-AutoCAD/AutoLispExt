@@ -99,6 +99,19 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             }
         }));
 
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveProject', async () => {
+            if (getWarnIsSearching())
+                return;
+
+            SaveProject(true)
+                .then(prjPath => {
+                    vscode.window.showInformationMessage("Project file saved"); //TBD: localize
+                })
+                .catch(err => {
+                    showErrorMessage("Failed to save project:", err); //TBD: localize
+                })
+        }));
+
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
             try {
                 ProjectTreeProvider.instance().refreshData();

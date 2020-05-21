@@ -79,6 +79,15 @@
 					"light": "images/light/Remove_LISP_File.svg"
 				}
 			},
+			{	
+				"command": "autolisp.SaveProject",	
+				"title": "Save current project",	
+				"category": "AutoLISP",	
+				"icon": {	
+					"dark": "images/dark/Save_Project.svg",	
+					"light": "images/light/Save_Project.svg"	
+				}	
+			},
 			{
 				"command": "autolisp.refreshFileStatus",
 				"category": "AutoLISP",
@@ -157,17 +166,17 @@
 					"default": "Fill to margin",
 					"description": "%autolispext.configuration.longlistformatstyle%"
 				},
-				"autolispext.AttachProcess": {
+				"autolispext.debug.AttachProcess": {
 					"type": "string",
 					"default": "",
 					"description": "Process name used to filter when attach"
 				},
-				"autolispext.LaunchProgram": {
+				"autolispext.debug.LaunchProgram": {
 					"type": "string",
 					"default": "",
 					"description": "Absolute path to the AutoCAD executable"
 				},
-				"autolispext.LaunchParameters": {
+				"autolispext.debug.LaunchParameters": {
 					"type": "string",
 					"default": "",
 					"description": "AutoCAD command line startup switches"
@@ -498,6 +507,11 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.refreshFileStatus",
 					"group": "navigation@2"
+				},
+				{	
+					"when": "view == Autolisp-ProjectView && viewItem == project",	
+					"command": "autolisp.SaveProject",	
+					"group": "navigation@3"	
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",
