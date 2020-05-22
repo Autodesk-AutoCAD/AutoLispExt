@@ -1,0 +1,5 @@
+{
+	"autolispext.project.findreplace.optionbutton.matchcase": "Match Case",
+	"autolispext.project.findreplace.optionbutton.matchwholeword": "Match Whole Word",
+	"autolispext.project.findreplace.optionbutton.regexp": "Use Regular Expression"
+}

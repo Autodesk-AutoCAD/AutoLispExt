@@ -4,6 +4,8 @@ import { getDocument } from '../../utils';
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import { ReadonlyDocument } from '../readOnlyDocument';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: SearchOption) {
 
@@ -16,7 +18,8 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
         const exists = fs.existsSync(finding.filePath);
 
         if (exists == false) {
-            return Promise.reject("File doesn't exist: " + finding.filePath); //TBD: localize
+            let msg = localize("autolispext.project.findreplace.opensearchresult.filenotexist", "File doesn't exist: ");
+            return Promise.reject(msg + finding.filePath);
         }
 
         let line = finding.line - 1; //rp line starts with 1 but vscode starts with 0
@@ -35,7 +38,7 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
                 }
                 let matches = reg.exec(finding.text);
                 if (matches.length <= 0) {
-                    console.log("can't detect keyword length with regular expression on");
+                    console.log("Can't determine keyword length with regular expression enabled.");
                 } else {
                     textLen = matches[0].length;
                 }
@@ -50,7 +53,8 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
         if (!doc) {
             doc = ReadonlyDocument.open(finding.filePath);
             if (!doc) {
-                return Promise.reject("Cannot open " + finding.filePath);
+                let msg = localize("autolispext.project.findreplace.opensearchresult.openfailed", "File couldn't be opened: ");
+                return Promise.reject(msg + finding.filePath);
             }
         }
 

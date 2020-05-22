@@ -5,6 +5,8 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import { pathEqual } from '../utils';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 const fs = require('fs');
 
 export interface DisplayNode {
@@ -31,7 +33,8 @@ export class ProjectNode implements DisplayNode {
 
     getDisplayText(): string {
         if (this.projectModified) {
-            return this.projectName + " (UNSAVED)";
+            let unsaved = localize("autolispext.project.tree.unsaved", " (UNSAVED)");
+            return this.projectName + unsaved;
         } else {
             return this.projectName;
         }
@@ -70,10 +73,12 @@ export class LspFileNode implements DisplayNode {
 
     getTooltip(): string {
         this.fileExists = fs.existsSync(this.filePath);
-        if (this.fileExists)
+        if (this.fileExists) {
             return this.filePath;
-        else
-            return "File doesn't exist: " + this.filePath; //TBD: localize
+        } else {
+            let msg = localize("autolispext.project.tree.filenotexist", "File doesn't exist: ");
+            return msg + this.filePath;
+        }
     }
 
     getNodeType(): string {

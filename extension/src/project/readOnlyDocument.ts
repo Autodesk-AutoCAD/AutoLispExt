@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
-import * as path from 'path'
 import * as fs from 'fs'
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
     private constructor() {
@@ -185,7 +186,8 @@ export class ReadonlyDocument implements vscode.TextDocument {
         }
 
         //the code shouldn't get here because it should have returned in the for loop when line == this.lineCount - 1
-        throw new Error("can't convert offset to position");
+        let msg = localize("autolispext.project.readonlydocument.convertoffsettopositionfailed", "Failed to convert offset to position.");
+        throw new Error(msg);
     }
 
     getText(range?: vscode.Range): string {

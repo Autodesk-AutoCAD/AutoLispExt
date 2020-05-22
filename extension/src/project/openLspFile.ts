@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 import { DisplayNode, LspFileNode, ProjectTreeProvider } from './projectTree'
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 const fs = require('fs')
 
 export async function openLspFile(clickedTreeItem: DisplayNode) {
@@ -17,7 +19,8 @@ export async function openLspFile(clickedTreeItem: DisplayNode) {
         }
 
         if (exists == false) {
-            return Promise.reject("File doesn't exist: " + lspNode.filePath); //TBD: localize
+            let msg = localize("autolispext.project.openlspfile.filenotexist", "File doesn't exist: ");
+            return Promise.reject(msg + lspNode.filePath);
         }
 
         let options = { "preview": false };

@@ -1,10 +1,15 @@
 import * as vscode from 'vscode'
 import { ProjectTreeProvider } from './projectTree';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
 export async function AddFile2Project() {
     try {
-        if (ProjectTreeProvider.hasProjectOpened() == false)
-            return Promise.reject("Please open a project first."); //TBD: localize
+        if (ProjectTreeProvider.hasProjectOpened() == false) {
+            let msg = localize("autolispext.project.addfile.openproject", "A project must be open before you can add a file.");
+            return Promise.reject(msg);
+        }
 
         let selectedFiles = await SelectLspFiles();
         if (!selectedFiles)
@@ -13,11 +18,14 @@ export async function AddFile2Project() {
         let addedFiles = [];
         for (let file of selectedFiles) {
             let fileUpper = file.fsPath.toUpperCase();
-            if (fileUpper.endsWith(".LSP") == false)
-                return Promise.reject("Only .lsp file is allowed."); //TBD: localize
+            if (fileUpper.endsWith(".LSP") == false) {
+                let msg = localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
+                return Promise.reject(msg);
+            }
 
             if (ProjectTreeProvider.instance().addFileNode(file.fsPath) == false) {
-                vscode.window.showInformationMessage("File already in project: " + file.fsPath); //TBD: localize
+                let msg = localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project.");
+                vscode.window.showInformationMessage(msg + file.fsPath);
             } else {
                 addedFiles.push(file);
             }
@@ -35,10 +43,11 @@ export async function AddFile2Project() {
 }
 
 async function SelectLspFiles() {
+    let label = localize("autolispext.project.addfile.openlabel", "Add to Project");
     const options: vscode.OpenDialogOptions = {
         //TBD: globalize
         canSelectMany: true,
-        openLabel: 'Add to Project',
+        openLabel: label,
         filters: {
             'Autolisp source files': ['lsp']
         }

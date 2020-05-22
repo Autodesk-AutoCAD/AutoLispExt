@@ -8,6 +8,8 @@ import * as vscode from 'vscode'
 import * as path from 'path'
 import { ReadonlyDocument } from './readOnlyDocument';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 const fs = require('fs');
 import * as os from 'os';
 
@@ -22,8 +24,10 @@ export async function OpenProject() {
             return;
 
         let prjPathUpper = prjUri.fsPath.toUpperCase();
-        if (prjPathUpper.endsWith(".PRJ") == false)
-            return Promise.reject("Only .PRJ file is allowed"); //TBD: localization
+        if (prjPathUpper.endsWith(".PRJ") == false) {
+            let msg = localize("autolispext.project.openproject.onlyprjallowed", "Only PRJ files are allowed.");
+            return Promise.reject(msg);
+        }
 
         let prjNode = OpenProjectFile(prjUri);
         return Promise.resolve(prjNode);
@@ -35,21 +39,26 @@ export async function OpenProject() {
 
 export function OpenProjectFile(prjUri: vscode.Uri): ProjectNode {
     let document = ReadonlyDocument.open(prjUri.fsPath);
-    if (!document)
-        throw new Error("can't read project file: " + prjUri.fsPath); //TBD: localization
+    if (!document) {
+        let msg = localize("autolispext.project.openproject.readfailed", "Can't read project file: ");
+        throw new Error(msg + prjUri.fsPath);
+    }
 
     let ret = ParseProjectDocument(prjUri.fsPath, document);
-    if (!ret)
-        throw new Error("malformed project file: " + prjUri.fsPath); //TBD: localization
+    if (!ret) {
+        let msg = localize("autolispext.project.openproject.malformedfile", "Malformed project file: ");
+        throw new Error(msg + prjUri.fsPath);
+    }
 
     return ret;
 }
 
 async function SelectProjectFile() {
+    let label = localize("autolispext.project.openproject.label", "Open Project");
     const options: vscode.OpenDialogOptions = {
         //TBD: globalize
         canSelectMany: false,
-        openLabel: 'Open Project',
+        openLabel: label,
         filters: {
             'Autolisp project files': ['prj']
         }

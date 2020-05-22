@@ -46,7 +46,7 @@
 			{
 				"command": "autolisp.createProject",
 				"category": "AutoLISP",
-				"title": "Create a New Project",
+				"title": "%autolispext.project.createproject.title%",
 				"icon": {
 					"dark": "images/dark/Create_Project.svg",
 					"light": "images/light/Create_Project.svg"
@@ -55,7 +55,7 @@
 			{
 				"command": "autolisp.openProject",
 				"category": "AutoLISP",
-				"title": "Open an existing Project",
+				"title": "%autolispext.project.openproject.title%",
 				"icon": {
 					"dark": "images/dark/Open_Project.svg",
 					"light": "images/light/Open_Project.svg"
@@ -64,7 +64,7 @@
 			{
 				"command": "autolisp.addFile2Project",
 				"category": "AutoLISP",
-				"title": "Add file to current project",
+				"title": "%autolispext.project.addfile.title%",
 				"icon": {
 					"dark": "images/dark/Add_LISP_File.svg",
 					"light": "images/light/Add_LISP_File.svg"
@@ -73,25 +73,25 @@
 			{
 				"command": "autolisp.removeFileFromProject",
 				"category": "AutoLISP",
-				"title": "Remove file from current project",
+				"title": "%autolispext.project.removefile.title%",
 				"icon": {
 					"dark": "images/dark/Remove_LISP_File.svg",
 					"light": "images/light/Remove_LISP_File.svg"
 				}
 			},
-			{	
-				"command": "autolisp.SaveProject",	
-				"title": "Save current project",	
-				"category": "AutoLISP",	
-				"icon": {	
-					"dark": "images/dark/Save_Project.svg",	
-					"light": "images/light/Save_Project.svg"	
-				}	
+			{
+				"command": "autolisp.SaveProject",
+				"title": "%autolispext.project.saveproject.title%",
+				"category": "AutoLISP",
+				"icon": {
+					"dark": "images/dark/Save_Project.svg",
+					"light": "images/light/Save_Project.svg"
+				}
 			},
 			{
 				"command": "autolisp.refreshFileStatus",
 				"category": "AutoLISP",
-				"title": "Refresh file status",
+				"title": "%autolispext.project.refreshfilestatus.title%",
 				"icon": {
 					"dark": "images/dark/Refresh.svg",
 					"light": "images/light/Refresh.svg"
@@ -100,7 +100,7 @@
 			{
 				"command": "autolisp.findInProject",
 				"category": "AutoLISP",
-				"title": "Find in Project",
+				"title": "%autolispext.project.findinproject.title%",
 				"icon": {
 					"dark": "images/dark/Find.svg",
 					"light": "images/light/Find.svg"
@@ -109,7 +109,7 @@
 			{
 				"command": "autolisp.replaceInProject",
 				"category": "AutoLISP",
-				"title": "Replace in Project",
+				"title": "%autolispext.project.replaceinproject.title%",
 				"icon": {
 					"dark": "images/dark/Replace.svg",
 					"light": "images/light/Replace.svg"
@@ -118,7 +118,7 @@
 			{
 				"command": "autolisp.stopSearch",
 				"category": "AutoLISP",
-				"title": "Stop Searching",
+				"title": "%autolispext.project.stopsearch.title%",
 				"icon": {
 					"dark": "images/dark/search-stop.svg",
 					"light": "images/light/search-stop.svg"
@@ -127,7 +127,7 @@
 			{
 				"command": "autolisp.clearSearchResults",
 				"category": "AutoLISP",
-				"title": "Clear All",
+				"title": "%autolispext.project.clearsearchresults.title%",
 				"icon": {
 					"dark": "images/dark/Clean.svg",
 					"light": "images/light/Clean.svg"
@@ -169,17 +169,17 @@
 				"autolispext.debug.AttachProcess": {
 					"type": "string",
 					"default": "",
-					"description": "Process name used to filter when attach"
+					"description": "%autolispext.configuration.attachprocess.desc%"
 				},
 				"autolispext.debug.LaunchProgram": {
 					"type": "string",
 					"default": "",
-					"description": "Absolute path to the AutoCAD executable"
+					"description": "%autolispext.configuration.launchprogram.desc%"
 				},
 				"autolispext.debug.LaunchParameters": {
 					"type": "string",
 					"default": "",
-					"description": "AutoCAD command line startup switches"
+					"description": "%autolispext.configuration.launchparameters.desc%"
 				}
 			}
 		},
@@ -435,7 +435,7 @@
 			"activitybar": [
 				{
 					"id": "Autolisp-PMSideBar",
-					"title": "AutoLISP Project Manager",
+					"title": "%autolispext.project.projectmanager.title%",
 					"icon": "images/Project_Management.svg"
 				}
 			]
@@ -444,12 +444,12 @@
 			"Autolisp-PMSideBar": [
 				{
 					"id": "Autolisp-ProjectView",
-					"name": "Project",
+					"name": "%autolispext.project.projectview.name%",
 					"when": ""
 				},
 				{
 					"id": "Autolisp-FindReplaceView",
-					"name": "Find & Replace",
+					"name": "%autolispext.project.findreplaceview.name%",
 					"when": ""
 				}
 			]

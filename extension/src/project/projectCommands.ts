@@ -14,6 +14,9 @@ import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
 import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnIsSearching } from './findReplace/clearResults';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
 
@@ -37,7 +40,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 await SaveProject(false);
             }
             catch (err) {
-                showErrorMessage("Failed to create project.", err);//TBD: localize
+                let msg = localize("autolispext.project.commands.createprojectfailed", "Failed to create the new project.");
+                showErrorMessage(msg, err);
             }
         }));
 
@@ -53,7 +57,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     ProjectTreeProvider.instance().updateData(prjNode);
                 })
                 .catch(err => {
-                    showErrorMessage("Failed to open the given project.", err);//TBD: localize
+                    let msg = localize("autolispext.project.commands.openprojectfailed", "Failed to open the specified project.");
+                    showErrorMessage(msg, err);
                 });
         }));
 
@@ -67,7 +72,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     return;//it's possible that the user cancelled the operation
             }
             catch (err) {
-                showErrorMessage("Failed to add selected files to project.", err);//TBD: localize
+                let msg = localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
+                showErrorMessage(msg, err);
                 return;
             }
 
@@ -75,7 +81,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 await SaveProject(true);
             }
             catch (err) {
-                showErrorMessage("Failed to save project:", err); //TBD: localize
+                let msg = localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                showErrorMessage(msg, err);
             }
         }));
 
@@ -87,7 +94,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 await excludeFromProject(selected);
             }
             catch (err) {
-                showErrorMessage("Failed to remove selected file.", err); //TBD: localize
+                let msg = localize("autolispext.project.commands.removefilefailed", "Failed to remove selected file.");
+                showErrorMessage(msg, err);
                 return;
             }
 
@@ -95,7 +103,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 await SaveProject(true);
             }
             catch (err) {
-                showErrorMessage("Failed to save project:", err); //TBD: localize
+                let msg = localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                showErrorMessage(msg, err);
             }
         }));
 
@@ -105,25 +114,29 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
             SaveProject(true)
                 .then(prjPath => {
-                    vscode.window.showInformationMessage("Project file saved"); //TBD: localize
+                    let msg = localize("autolispext.project.commands.projectsaved", "Project file saved.");
+                    vscode.window.showInformationMessage(msg);
                 })
                 .catch(err => {
-                    showErrorMessage("Failed to save project:", err); //TBD: localize
-                })
+                    let msg = localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                    showErrorMessage(msg, err);
+                });
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
             try {
                 ProjectTreeProvider.instance().refreshData();
             } catch (err) {
-                showErrorMessage("Failed to refresh file status.", err); //TBD: localize
+                let msg = localize("autolispext.project.commands.refreshstatusfailed", "Failed to refresh the status of the files.");
+                showErrorMessage(msg, err);
             }
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand(ProjectTreeProvider.TreeItemClicked, (treeItem) => {
             openLspFile(treeItem)
                 .catch(err => {
-                    showErrorMessage("Failed to open file.", err); //TBD: localize
+                    let msg = localize("autolispext.project.commands.openfilefailed", "Failed to open the file.");
+                    showErrorMessage(msg, err);
                 })
         }));
 
@@ -133,8 +146,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 return;
 
             findInProject().catch(err => {
-                showErrorMessage("Failed to find in project.", err); //TBD: localize
-                clearSearchResultWithError("Failed to find in project. " + (err ? err.toString() : ''));//TBD: localize
+                let msg = localize("autolispext.project.commands.findfailed", "Failed to find in project.");
+                showErrorMessage(msg, err);
+                clearSearchResultWithError(msg + (err ? err.toString() : ''));
             });
         }));
 
@@ -144,15 +158,17 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 return;
 
             replaceInProject().catch(err => {
-                showErrorMessage("Failed to replace in project.", err); //TBD: localize
-                clearSearchResultWithError("Failed to replace in project. " + (err ? err.toString() : ''));//TBD: localize
+                let msg = localize("autolispext.project.commands.replacefailed", "Failed to replace text string in project.");
+                showErrorMessage(msg, err);
+                clearSearchResultWithError(msg + (err ? err.toString() : ''));
             })
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand(SearchTreeProvider.showResult, (treeItem) => {
             openSearchResult(treeItem, SearchTreeProvider.instance.lastSearchOption)
                 .catch(err => {
-                    showErrorMessage("Failed to open search result.", err); //TBD: localize
+                    let msg = localize("autolispext.project.commands.openresultfailed", "Failed to open search results.");
+                    showErrorMessage(msg, err);
                 })
         }));
 
@@ -164,7 +180,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 clearSearchResults();
             }
             catch (err) {
-                showErrorMessage("Failed to clear search results.", err); //TBD localize
+                let msg = localize("autolispext.project.commands.clearresultfailed", "Failed to clear search results.");
+                showErrorMessage(msg, err);
             }
         }));
 
@@ -181,7 +198,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         IconUris.initialize();
     }
     catch (e) {
-        vscode.window.showErrorMessage("Failed to initialize Autolisp project manager.");//TBD: localize
+        let msg = localize("autolispext.project.commands.initializefailed", "Failed to initalize the AutoLISP Project Manager.");
+        vscode.window.showErrorMessage(msg);
         console.log(e);
     }
 }

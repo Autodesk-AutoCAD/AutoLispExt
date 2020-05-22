@@ -1,0 +1,6 @@
+{
+	"autolispext.project.findreplace.replace.openproject": "A project must be open before you can replace a text string.",
+	"autolispext.project.findreplace.replace.title": "Replace in Project",
+	"autolispext.project.findreplace.replace.hint.keyword": "Type a text string to find, and press Enter.",
+	"autolispext.project.findreplace.replace.hint.replacement": "Type a text string to replace with, and press Enter."
+}

@@ -3,6 +3,8 @@ import { IconUris } from '../icons';
 import { SearchOption } from './options';
 
 import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class FileNode implements DisplayNode {
     filePath: string = '';
@@ -85,26 +87,31 @@ export class SummaryNode implements DisplayNode {
         let prjNameClause = '';
         let prjPathStatement = '';
         if (prjNode) {
-            prjNameClause = ` in ${prjNode.projectName}`;
-            prjPathStatement = `\r\nProject file: ${prjNode.projectFilePath}`; //TBD: localize
+            let inStr = localize("autolispext.project.findreplace.searchtree.in", " in ");
+            let prjFileStr = localize("autolispext.project.findreplace.searchtree.prjfile", "\r\nProject file: ");
+            prjNameClause = inStr + `${prjNode.projectName}`;
+            prjPathStatement = prjFileStr + `${prjNode.projectFilePath}`;
         }
 
         if (opt.isReplace) {
-            this.tooltip = `Replace \"${opt.keyword}\" with \"${opt.replacement}\"${prjNameClause};`; //TBD: localization 
+            let replace = localize("autolispext.project.findreplace.searchtree.replace", "Replace ");
+            let withStr = localize("autolispext.project.findreplace.searchtree.with", " with ");
+            this.tooltip = replace + `\"${opt.keyword}\"` + withStr + `\"${opt.replacement}\"${prjNameClause};`;
         }
         else {
-            this.tooltip = `Find \"${opt.keyword}\"${prjNameClause};`; //TBD: localization
+            let findStr = localize("autolispext.project.findreplace.searchtree.find", "Find ");
+            this.tooltip = findStr + `\"${opt.keyword}\"${prjNameClause};`;
         }
         this.tooltip += prjPathStatement;
 
         if (opt.matchCase) {
-            this.tooltip += '\r\nMatch case: ON';//TBD: localization
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.matchcaseon", "\r\nMatch case: ON");
         }
         if (opt.matchWholeWord) {
-            this.tooltip += '\r\nMatch whole word: ON' //TBD: localization
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.matchwholewordon", "\r\nMatch whole word: ON");
         }
         if (opt.useRegularExpr) {
-            this.tooltip += '\r\nUse regular expression: ON' //TBD: localization
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.regexpon", "\r\nUse regular expression: ON");
         }
     }
 

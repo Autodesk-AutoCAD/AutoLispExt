@@ -6,10 +6,14 @@ import * as path from 'path'
 import { ProjectNode, LspFileNode } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
 export async function getNewProjectFilePath() {
+    let label = localize("autolispext.project.createproject.createlabel", "Create");
     const options: vscode.SaveDialogOptions = {
         //TBD: globalize
-        saveLabel: 'Create',
+        saveLabel: label,
         filters: {
             'Autolisp project files': ['prj']
         }
@@ -24,8 +28,10 @@ export async function getNewProjectFilePath() {
 
 export async function createProject(prjFilePath: string) {
     let prjPathUpper = prjFilePath.toUpperCase();
-    if (prjPathUpper.endsWith(".PRJ") == false)
-        return Promise.reject("Only .prj file is allowed.")//TBD: localize
+    if (prjPathUpper.endsWith(".PRJ") == false) {
+        let msg = localize("autolispext.project.createproject.onlyprjallowed", "Only PRJ files are allowed.");
+        return Promise.reject(msg)
+    }
 
     if (fs.existsSync(prjFilePath))
         fs.removeSync(prjFilePath);

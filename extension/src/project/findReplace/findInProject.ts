@@ -9,18 +9,23 @@ import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
 import { setIsSearching } from './clearResults';
 import { detectEncoding } from './encoding';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 const fs = require('fs-extra')
 
 export async function findInProject() {
     //check if there's a opened project
     if (ProjectTreeProvider.hasProjectOpened() == false) {
-        vscode.window.showInformationMessage("Please open or create a project first"); //TBD: localize
+        let msg = localize("autolispext.project.find.openproject", "A project must be open before you can search for a text string.");
+        vscode.window.showInformationMessage(msg);
         return;
     }
 
     //get search option
-    let opt = await getSearchOption('Find in Project', 'type keyword, and press ENTER'); //TBD: localize
+    let title = localize("autolispext.project.find.title", "Find in Project");
+    let hint = localize("autolispext.project.find.hint", "Type a text string to find, and press Enter.");
+    let opt = await getSearchOption(title, hint);
     if (opt.isKeywordProvided() == false)
         return;
 
@@ -45,7 +50,8 @@ export class FindInProject {
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
         if (os.platform() == 'win32') {
             if (os.arch() != 'x64') {
-                return Promise.reject('Find & Replace only works on x64 system'); //TBD: localization work
+                let msg = localize("autolispext.project.find.supportos", "Find & Replace is supported only on 64-bit systems.");
+                return Promise.reject(msg);
             }
         }
 
@@ -60,7 +66,8 @@ export class FindInProject {
             this.summaryNode.makeTooltip(searchOption, prjNode);
 
             //update the search tree with some progress
-            this.summaryNode.summary = 'In progress ... ';//TBD: localization
+            let summary = localize("autolispext.project.find.inprogress", "In progress... ");
+            this.summaryNode.summary = summary;
             SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
 
             if (prjNode.sourceFiles.length <= 0) {
@@ -72,6 +79,9 @@ export class FindInProject {
 
             let timeStarted = Date.now();
 
+            let found = localize("autolispext.project.find.found", "Found ");
+            let lines = localize("autolispext.project.find.lines", " line(s) in ");
+            let files = localize("autolispext.project.find.files", " file(s):");
             for (let srcFile of prjNode.sourceFiles) {
                 if (SearchOption.activeInstance.stopRequested)
                     break;
@@ -130,8 +140,8 @@ export class FindInProject {
                     //update the search tree with some progress
                     timeStarted = now;
 
-                    this.summaryNode.summary = 'In progress ... ' //TBD: localization
-                        + `Found ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
+                    this.summaryNode.summary = summary
+                        + found + `${totalLines}` + lines + `${totalFiles}` + files;
                     SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
                 }
                 catch (ex) {
@@ -149,16 +159,17 @@ export class FindInProject {
                 }
             }
 
-            if (SearchOption.activeInstance.stopRequested)
-                this.summaryNode.summary = 'Stopped. '; //TBD: localization
-            else
+            if (SearchOption.activeInstance.stopRequested) {
+                this.summaryNode.summary = localize("autolispext.project.find.stopped", "Find stopped.");
+            } else {
                 this.summaryNode.summary = '';
+            }
 
             if (totalLines <= 0) {
-                this.summaryNode.summary += 'No results found.' //TBD: localization
+                this.summaryNode.summary += localize("autolispext.project.find.noresults", "No results found.");
             }
             else {
-                this.summaryNode.summary += `Found ${totalLines} line(s) in ${totalFiles} file(s):`;//TBD: localization
+                this.summaryNode.summary += found + `${totalLines}` + lines + `${totalFiles}` + files;
             }
 
             return Promise.resolve();

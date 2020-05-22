@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { IconUris } from '../icons';
 import { SearchOption } from './options';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class optionButton implements vscode.QuickInputButton {
     private constructor(iconUriOn: vscode.Uri, iconUriOff: vscode.Uri, isOn: boolean,
@@ -33,19 +35,22 @@ export class optionButton implements vscode.QuickInputButton {
 
     public static getButtons() {
         if (!optionButton.matchCaseBtn) {
+            let matchCase = localize("autolispext.project.findreplace.optionbutton.matchcase", "Match Case");
             optionButton.matchCaseBtn =
                 new optionButton(IconUris.matchCase(true), IconUris.matchCase(false), SearchOption.activeInstance.matchCase,
-                    'Match Case', //TBD: localize
+                    matchCase,
                     optionButton.name_MatchCase);
 
+            let matchWholeWord = localize("autolispext.project.findreplace.optionbutton.matchwholeword", "Match Whole Word");
             optionButton.matchWordBtn =
                 new optionButton(IconUris.matchWord(true), IconUris.matchWord(false), SearchOption.activeInstance.matchWholeWord,
-                    'Match Whole Word', //TBD: localize
+                    matchWholeWord,
                     optionButton.name_MatchWord);
 
+            let regExp = localize("autolispext.project.findreplace.optionbutton.regexp", "Use Regular Expression");
             optionButton.useRegularExprBtn =
                 new optionButton(IconUris.useRegularExpr(true), IconUris.useRegularExpr(false), SearchOption.activeInstance.useRegularExpr,
-                    'Use Regular Expression', //TBD: localize
+                    regExp,
                     optionButton.name_UseRegularExpr);
         }
 

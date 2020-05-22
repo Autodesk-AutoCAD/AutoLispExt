@@ -1,9 +1,13 @@
 import { LspFileNode, ProjectTreeProvider } from './projectTree';
 import { pathEqual } from '../utils';
 
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
 export async function excludeFromProject(selected: LspFileNode) {
     if (ProjectTreeProvider.hasProjectOpened() == false) {
-        return Promise.reject("Please open a project first."); //TBD: localize
+        let msg = localize("autolispext.project.excludefile.openproject", "A project must be open before you can exclude a file.");
+        return Promise.reject(msg);
     }
 
     let index2Del = -1;
@@ -19,7 +23,8 @@ export async function excludeFromProject(selected: LspFileNode) {
     }
 
     if (index2Del < 0) {
-        return Promise.reject("The file to exclude doesn't belong to current project.");
+        let msg = localize("autolispext.project.excludefile.filenotexist", "File to exclude doesn't exist in the current project.");
+        return Promise.reject(msg);
     }
 
     ProjectTreeProvider.instance().projectNode.sourceFiles.splice(index2Del, 1);

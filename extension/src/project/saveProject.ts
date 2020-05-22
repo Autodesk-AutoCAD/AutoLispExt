@@ -8,19 +8,24 @@ import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 import { pathEqual } from '../utils';
 import { ReadonlyDocument } from './readOnlyDocument';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function SaveProject(refresh: boolean) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
-            return Promise.reject("No project opened yet"); //TBD: localize
+            let msg = localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
+            return Promise.reject(msg);
         }
 
         let root = ProjectTreeProvider.instance().projectNode;
 
         //work out the correct project file text
         let prjFileText = generateProjectText(root);
-        if (!prjFileText)
-            return Promise.reject("Failed to compose project text"); //TBD: localize
+        if (!prjFileText) {
+            let msg = localize("autolispext.project.saveproject.generateprjcontentfailed", "Failed to generate project content.");
+            return Promise.reject(msg);
+        }
 
         //format the text before writing to file
         let doc = ReadonlyDocument.createProject(prjFileText);

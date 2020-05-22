@@ -1,4 +1,6 @@
 import { Sexpression } from '../format/sexpression';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ProjectDefinition {
     static key_name: string = ":NAME";
@@ -43,7 +45,7 @@ export class ProjectDefinition {
         let atomNum = prjExpr.atoms.length;
         if (atomNum % 2 != 1) {
             //project expression is something like (VLISP-PROJECT-LIST key1 value1 key2 value2)
-            console.log("malfored project expression");
+            console.log("Malformed project expression.");
             return null;
         }
 
