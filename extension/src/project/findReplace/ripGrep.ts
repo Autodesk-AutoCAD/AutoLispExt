@@ -17,6 +17,10 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         encoding
     ];
 
+    if(searchOption.keyword.startsWith('-')) {
+        commandArgs.splice(0, 0, '-e');
+    }
+
     if (SearchOption.activeInstance.matchCase)
         commandArgs.push('--case-sensitive');
     else
