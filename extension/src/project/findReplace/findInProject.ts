@@ -70,10 +70,6 @@ export class FindInProject {
             this.summaryNode.summary = summary;
             SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
 
-            if (prjNode.sourceFiles.length <= 0) {
-                return Promise.resolve();//there's no source file in this project
-            }
-
             let totalFiles = 0;
             let totalLines = 0;
 
