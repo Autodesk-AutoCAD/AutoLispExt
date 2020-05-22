@@ -1,3 +1,7 @@
+## [1.3.0] - 2020-??-??
+Support AutoLISP project editing. Support find and replace in the open project.
+Manage debug configuration with VS Code settings. The use of Launch.json for debug configuration is deprecated, but existing, legacy configrations in Launch.json still work with the highest priority.
+
 ## [1.2.0] - 2020-03-23
 Support extension localization, support AutoCAD commands and sysvars in autocompletion within the string expression like (command "_line").
 

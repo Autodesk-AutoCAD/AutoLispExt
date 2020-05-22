@@ -30,9 +30,9 @@ function need2AddDefaultConfig(config: vscode.DebugConfiguration): Boolean {
     return true;
 }
 
-const LAUNCH_PROC:string = 'LaunchProgram';
-const LAUNCH_PARM:string = 'LaunchParameters';
-const ATTACH_PROC:string = 'AttachProcess';
+const LAUNCH_PROC:string = 'debug.LaunchProgram';
+const LAUNCH_PARM:string = 'debug.LaunchParameters';
+const ATTACH_PROC:string = 'debug.AttachProcess';
 
 export function registerLispDebugProviders(context: vscode.ExtensionContext) {
     //-----------------------------------------------------------
@@ -248,7 +248,7 @@ function getExtensionSettingString(settingName: string): string {
     if (!setting)
         return null;
 
-    return setting.toString();
+    return setting.toString().trim();
 }
 
 function rememberLaunchPath(path: string) {

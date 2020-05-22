@@ -25,6 +25,13 @@ The extension is distributed under the [Autodesk Terms of Use](https://www.autod
     * Document/selection formatting using narrow or wide style
     * Auto indent
 
+3. AutoLISP Project
+    * Open a project (.prj)
+    * Create a project
+    * Add .lsp files into a project
+    * Remove files from a project
+    * Find & Search in a project
+
 ## Getting started
 - Step 1. Install a supported AutoCAD release on your system.
 - Step 2. Install this extension.
@@ -51,8 +58,7 @@ To debug an AutoLISP source file:
      * AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file.
     If prompted, specify the absolute path to the AutoCAD executable (acad.exe on Windows or AutoCAD on Mac).
 
-Note: To avoid specifying this path each time you click Debug > Start Debugging (or press F5), configure launch.json to include the absolute path to the AutoCAD executable.
-For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
+Note: To avoid specifying this path each time you click Debug > Start Debugging (or press F5), this path is automatically saved into extension setting. The details are in the following session:
 
 ## How to configure the AutoCAD path
 1. In Visual Studio Code "File" menu, select "Preferences" -> "Settings".
@@ -61,7 +67,7 @@ For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.
 4. Update the "Launch Program" attribute to specify the path of AutoCAD executable that is used with launch debug.
 5. Update the "Launch Parameters" attribute to specify the AutoCAD startup parameters.
 
-NOTE:
+Note:
 In the following configurations, substitute <release> based on the AutoCAD application installed on your workstation.
 
 Example (on Windows):
@@ -72,11 +78,13 @@ Example (on Mac):
 Launch Program: /Applications/Autodesk/AutoCAD <release>/AutoCAD <release>.app/Contents/MacOS/AutoCAD
 Attach Process: AutoCAD
 
+For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
+
 ## Notes
 
 1.	Other AutoLISP extensions may conflict with this extension. If you are unable to set a breakpoint in a LSP file or you can’t use the launch/attach debug configurations, you should disable or uninstall all other AutoLISP extensions.
-2.	When using this extension on Mac® OS, the "path" attribute in launch.json should be ".../AutoCAD <release>.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD <release>.app.
-3.	For AutoCAD specialized toolsets or OEM-based products, the product name might not be the same as AutoCAD or acad.exe. To use this extension with those products, set the value of the “path” attribute in launch.json to properly reflect the product you have installed.
+2.	When using this extension on Mac® OS, the "Launch Program" attribute in extension setting should be ".../AutoCAD <release>.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD <release>.app.
+3.	For AutoCAD specialized toolsets or OEM-based products, the product name might not be the same as AutoCAD or acad.exe. To use this extension with those products, set the value of the "Launch Program" attribute in extension setting based on the product you want to debug with.
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
