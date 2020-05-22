@@ -5,7 +5,7 @@
 	"autolispext.project.find.supportos": "Find & Replace is supported only on 64-bit systems.",
 	"autolispext.project.find.inprogress": "In progress... ",
 	"autolispext.project.find.found": "Found ",
-	"autolispext.project.find.lines": " line(s) in ",
+	"autolispext.project.find.results": " result(s) in ",
 	"autolispext.project.find.files": " file(s):",
 	"autolispext.project.find.stopped": "Find stopped.",
 	"autolispext.project.find.noresults": "No results found."

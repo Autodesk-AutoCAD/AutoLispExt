@@ -76,7 +76,7 @@ export class FindInProject {
             let timeStarted = Date.now();
 
             let found = localize("autolispext.project.find.found", "Found ");
-            let lines = localize("autolispext.project.find.lines", " line(s) in ");
+            let lines = localize("autolispext.project.find.results", " result(s) in ");
             let files = localize("autolispext.project.find.files", " file(s):");
             for (let srcFile of prjNode.sourceFiles) {
                 if (SearchOption.activeInstance.stopRequested)
