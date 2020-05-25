@@ -518,6 +518,13 @@
 					"command": "autolisp.removeFileFromProject",
 					"group": "navigation@1"
 				}
+			],
+			"editor/context": [
+				{
+					"when": "resourceLangId == autolisp",
+					"command": "autolisp.loadActiveFile",
+					"group": "navigation@1"
+				}				
 			]
 		}
 	},
