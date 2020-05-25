@@ -7,6 +7,6 @@
 	"autolispext.project.find.found": "Found ",
 	"autolispext.project.find.results": " result(s) in ",
 	"autolispext.project.find.files": " file(s):",
-	"autolispext.project.find.stopped": "Find stopped.",
+	"autolispext.project.find.stopped": "Find stopped. ",
 	"autolispext.project.find.noresults": "No results found."
 }

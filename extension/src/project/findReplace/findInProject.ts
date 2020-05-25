@@ -47,6 +47,8 @@ export class FindInProject {
     public resultByFile: FileNode[] = [];
     public summaryNode: SummaryNode = null;
 
+    private timeStarted = undefined;
+
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
         if (os.platform() == 'win32') {
             if (os.arch() != 'x64') {
@@ -54,6 +56,8 @@ export class FindInProject {
                 return Promise.reject(msg);
             }
         }
+
+        this.timeStarted = Date.now();
 
         setIsSearching(true);
 
@@ -73,14 +77,14 @@ export class FindInProject {
             let totalFiles = 0;
             let totalLines = 0;
 
-            let timeStarted = Date.now();
-
             let found = localize("autolispext.project.find.found", "Found ");
             let lines = localize("autolispext.project.find.results", " result(s) in ");
             let files = localize("autolispext.project.find.files", " file(s):");
             for (let srcFile of prjNode.sourceFiles) {
                 if (SearchOption.activeInstance.stopRequested)
                     break;
+
+                this.updateProgress(summary, found, lines, files, totalLines, totalFiles, searchOption);
 
                 if (fs.existsSync(srcFile.filePath) == false)
                     continue;
@@ -103,7 +107,7 @@ export class FindInProject {
                         }
                     }
 
-                    if (!ret) 
+                    if (!ret)
                         continue;
 
                     if (ret.failed || ret.killed || ret.timedOut || (ret.code != 0))
@@ -128,17 +132,6 @@ export class FindInProject {
 
                     totalFiles++;
                     totalLines += findings.length;
-
-                    let now = Date.now();
-                    if (now - timeStarted < 500)
-                        continue;//less than 0.5 second since the last UI update
-
-                    //update the search tree with some progress
-                    timeStarted = now;
-
-                    this.summaryNode.summary = summary
-                        + found + `${totalLines}` + lines + `${totalFiles}` + files;
-                    SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
                 }
                 catch (ex) {
                     if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
@@ -156,7 +149,7 @@ export class FindInProject {
             }
 
             if (SearchOption.activeInstance.stopRequested) {
-                this.summaryNode.summary = localize("autolispext.project.find.stopped", "Find stopped.");
+                this.summaryNode.summary = localize("autolispext.project.find.stopped", "Find stopped. ");
             } else {
                 this.summaryNode.summary = '';
             }
@@ -176,6 +169,21 @@ export class FindInProject {
         finally {
             setIsSearching(false);
         }
+    }
+
+    private updateProgress(summary: string, found: string, lines: string, files: string,
+        totalLines: number, totalFiles: number, searchOption: SearchOption) {
+
+        let now = Date.now();
+        if (now - this.timeStarted < 500)
+            return;//less than 0.5 second since the last UI update
+
+        //update the search tree with some progress
+        this.timeStarted = now;
+
+        this.summaryNode.summary = summary
+            + found + `${totalLines}` + lines + `${totalFiles}` + files;
+        SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
     }
 
     private parseResult(result: string, file: string) {
