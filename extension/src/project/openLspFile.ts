@@ -23,7 +23,7 @@ export async function openLspFile(clickedTreeItem: DisplayNode) {
             return Promise.reject(msg + lspNode.filePath);
         }
 
-        let options = { "preview": false };
+        let options = { "preview": false, "preserveFocus": true };
 
         return vscode.commands.executeCommand("vscode.open", vscode.Uri.file(lspNode.filePath), options);
     }
