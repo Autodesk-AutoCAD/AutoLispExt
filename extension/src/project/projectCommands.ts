@@ -13,6 +13,7 @@ import { openSearchResult } from './findReplace/openSearchResult';
 import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
 import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnIsSearching } from './findReplace/clearResults';
+import { RefreshProject } from './refreshProject';
 
 import * as nls from 'vscode-nls';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
@@ -123,11 +124,11 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 });
         }));
 
-        context.subscriptions.push(vscode.commands.registerCommand('autolisp.refreshFileStatus', async () => {
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.refresh', async () => {
             try {
-                ProjectTreeProvider.instance().refreshData();
+                RefreshProject();
             } catch (err) {
-                let msg = localize("autolispext.project.commands.refreshstatusfailed", "Failed to refresh the status of the files.");
+                let msg = localize("autolispext.project.commands.refreshfailed", "Failed to refresh the whole project.");
                 showErrorMessage(msg, err);
             }
         }));

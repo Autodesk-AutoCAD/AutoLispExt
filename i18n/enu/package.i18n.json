@@ -17,7 +17,7 @@
 	"autolispext.project.addfile.title": "Add File to Project",
 	"autolispext.project.removefile.title": "Remove File from Project",
 	"autolispext.project.saveproject.title": "Save Project",
-	"autolispext.project.refreshfilestatus.title": "Refresh File Status",
+	"autolispext.project.refresh.title": "Refresh",
 	"autolispext.project.findinproject.title": "Find in Project",
 	"autolispext.project.replaceinproject.title": "Replace in Project",
 	"autolispext.project.stopsearch.title": "Stop Search",

@@ -89,9 +89,9 @@
 				}
 			},
 			{
-				"command": "autolisp.refreshFileStatus",
+				"command": "autolisp.refresh",
 				"category": "AutoLISP",
-				"title": "%autolispext.project.refreshfilestatus.title%",
+				"title": "%autolispext.project.refresh.title%",
 				"icon": {
 					"dark": "images/dark/Refresh.svg",
 					"light": "images/light/Refresh.svg"
@@ -472,7 +472,7 @@
 					"when": "view == Autolisp-ProjectView"
 				},
 				{
-					"command": "autolisp.refreshFileStatus",
+					"command": "autolisp.refresh",
 					"group": "navigation@6",
 					"when": "view == Autolisp-ProjectView"
 				},
@@ -505,7 +505,7 @@
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.refreshFileStatus",
+					"command": "autolisp.refresh",
 					"group": "navigation@2"
 				},
 				{	
