@@ -147,18 +147,12 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
         return true;
     }
 
-    //return false if file already belongs to given project;
-    //return true in all other cases
-    public addFileNode(filePath: string): Boolean {
+    public addFileNode(filePath: string) {
         if (!this.rootNode)
             return;
 
-        let ret = addLispFileNode2ProjectTree(this.rootNode, filePath, null);
-        if (ret) {
-            this.rootNode.projectModified = true;
-        }
-
-        return ret;
+        addLispFileNode2ProjectTree(this.rootNode, filePath, null);
+        this.rootNode.projectModified = true;
     }
 
     private onChanged: vscode.EventEmitter<DisplayNode> = new vscode.EventEmitter<DisplayNode>();
@@ -214,23 +208,35 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 
 }
 
+export function isFileAlreadyInProject(fileName: string, root: ProjectNode): boolean {
+    for (let fileNode of root.sourceFiles) {
+        if (pathEqual(fileName, fileNode.filePath, false))
+            return true;
+    }
+
+    return false;
+}
+
+export function hasFileWithSameName(fileName: string, root: ProjectNode): boolean {
+    let lowerLeft = path.basename(fileName).toLocaleLowerCase();
+
+    for (let fileNode of root.sourceFiles) {
+        let lowerRight = path.basename(fileNode.filePath).toLocaleLowerCase();
+
+        if(lowerLeft == lowerRight)
+            return true;
+    }
+
+    return false;
+}
+
 //root: node of the owner project
 //fileName: the absolute file path of the lsp file to add
 //rawFilePath: the raw string of file path read from .prj file; for new added file, it should be null
-
-//return false if the file is already in project;
-//return true in all other cases
-export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string, rawFilePath: string): Boolean {
-    for (let fileNode of root.sourceFiles) {
-        if (pathEqual(fileName, fileNode.filePath, false))
-            return false;
-    }
-
+export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string, rawFilePath: string) {
     let fileNode = new LspFileNode();
     fileNode.filePath = fileName;
     fileNode.fileExists = fs.existsSync(fileName);
     fileNode.rawFilePath = rawFilePath;
     root.sourceFiles.push(fileNode);
-
-    return true;
 }

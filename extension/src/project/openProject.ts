@@ -1,4 +1,4 @@
-import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree } from './projectTree'
+import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree, isFileAlreadyInProject } from './projectTree'
 import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../format/sexpression';
 import { ProjectDefinition } from './projectDefinition';
@@ -117,6 +117,9 @@ function ParseProjectDocument(prjPath: string, document: vscode.TextDocument): P
             let fileName = Convert2AbsoluteLspFilePath(fileList.atoms[j].symbol, root.projectDirectory);
             if (!fileName)
                 return undefined;
+
+            if(isFileAlreadyInProject(fileName, root))
+                continue;
 
             addLispFileNode2ProjectTree(root, fileName, fileList.atoms[j].symbol);
         }

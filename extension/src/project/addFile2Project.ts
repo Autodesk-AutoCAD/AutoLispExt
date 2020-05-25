@@ -1,8 +1,10 @@
 import * as vscode from 'vscode'
-import { ProjectTreeProvider } from './projectTree';
+import { ProjectTreeProvider, isFileAlreadyInProject, hasFileWithSameName } from './projectTree';
 
 import * as nls from 'vscode-nls';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
+import * as path from 'path'
 
 export async function AddFile2Project() {
     try {
@@ -14,7 +16,7 @@ export async function AddFile2Project() {
         let selectedFiles = await SelectLspFiles();
         if (!selectedFiles)
             return; //user has cancelled the open file dialog
-        
+
         let addedFiles = [];
         for (let file of selectedFiles) {
             let fileUpper = file.fsPath.toUpperCase();
@@ -23,14 +25,25 @@ export async function AddFile2Project() {
                 return Promise.reject(msg);
             }
 
-            if (ProjectTreeProvider.instance().addFileNode(file.fsPath) == false) {
-                let msg = localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project.");
+            if (isFileAlreadyInProject(file.fsPath, ProjectTreeProvider.instance().projectNode)) {
+                let msg = localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project: ");
                 vscode.window.showInformationMessage(msg + file.fsPath);
-            } else {
-                addedFiles.push(file);
+
+                continue;
             }
+
+            if(hasFileWithSameName(file.fsPath, ProjectTreeProvider.instance().projectNode)) {
+                let msg = localize("autolispext.project.addfile.samenameexist", "File with the same name already exists in this project: ");
+                vscode.window.showInformationMessage(msg + path.basename(file.fsPath));
+
+                continue;
+            }
+ 
+            ProjectTreeProvider.instance().addFileNode(file.fsPath);
+            addedFiles.push(file);
+
         }
-        
+
         if (!addedFiles.length)
             return;
 
