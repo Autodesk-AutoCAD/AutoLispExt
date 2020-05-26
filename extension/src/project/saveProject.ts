@@ -48,6 +48,39 @@ export async function SaveProject(refresh: boolean) {
     }
 }
 
+//Save a project and all of its unsaved LSP files that are opened in VS Code
+//As we save changes of project automatcially, project is not "dirty" in most cases
+//So it mainly helps user to save unsaved files of current project
+export async function SaveAll() {
+    const root = ProjectTreeProvider.instance().projectNode;
+    if (!root) {
+        let msg = localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
+        return Promise.reject(msg);
+    }
+
+    // get unsaved source files
+    const unsavedFiles = vscode.workspace.textDocuments.filter(file => {
+        if (file.isDirty) {
+            for (let fileNode of root.sourceFiles) {
+                if (pathEqual(fileNode.filePath, file.fileName, false)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    });
+
+    for (let file of unsavedFiles) {
+        file.save();
+    }
+
+    if (root.projectModified) {
+        await SaveProject(true);
+    }
+
+    return Promise.resolve();
+}
+
 //return the raw text of project file, using the latest source file list to replace the original one;
 //return null on error
 function generateProjectText(root: ProjectNode): string {

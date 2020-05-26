@@ -89,6 +89,15 @@
 				}
 			},
 			{
+				"command": "autolisp.SaveAll",
+				"title": "%autolispext.project.saveall.title%",
+				"category": "AutoLISP",
+				"icon": {
+					"dark": "images/dark/Save_Project.svg",
+					"light": "images/light/Save_Project.svg"
+				}
+			},
+			{
 				"command": "autolisp.refresh",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.refresh.title%",
@@ -512,6 +521,11 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",	
 					"command": "autolisp.SaveProject",	
 					"group": "navigation@3"	
+				},
+				{	
+					"when": "view == Autolisp-ProjectView && viewItem == project",	
+					"command": "autolisp.SaveAll",	
+					"group": "navigation@4"	
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",

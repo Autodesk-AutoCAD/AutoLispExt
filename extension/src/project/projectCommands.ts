@@ -4,7 +4,7 @@ import { ProjectTreeProvider } from './projectTree';
 import { openLspFile } from './openLspFile';
 import { IconUris } from './icons';
 import { AddFile2Project } from './addFile2Project';
-import { SaveProject } from './saveProject';
+import { SaveProject, SaveAll } from './saveProject';
 import { excludeFromProject } from './excludeFile';
 import { getNewProjectFilePath, createProject } from './createProject';
 import { findInProject } from './findReplace/findInProject';
@@ -120,6 +120,21 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 })
                 .catch(err => {
                     let msg = localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                    showErrorMessage(msg, err);
+                });
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.SaveAll', async () => {
+            if (getWarnIsSearching())
+                return;
+
+            SaveAll()
+                .then(() => {
+                    let msg = localize("autolispext.project.commands.allsaved", "All files of the project are saved.");
+                    vscode.window.showInformationMessage(msg);
+                })
+                .catch(err => {
+                    let msg = localize("autolispext.project.commands.saveallfailed", "Failed to save all.");
                     showErrorMessage(msg, err);
                 });
         }));
