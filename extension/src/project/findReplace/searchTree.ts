@@ -12,9 +12,9 @@ export class FileNode implements DisplayNode {
     findings: FindingNode[] = [];
 
     errorInReplace: string = '';//error message provided when replace in file
-    collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Collapsed;
+    collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     getDisplayText(): string {
-        return this.shortPath;
+        return this.shortPath + " (" + this.findings.length + ")";
     }
 
     getTooltip(): string {
