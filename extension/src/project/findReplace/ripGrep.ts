@@ -3,7 +3,7 @@ import { SearchOption } from './options';
 
 import * as execa from "execa";
 
-export async function findInFile(searchOption: SearchOption, file2Search: string, encoding: string = "utf8") {
+export async function findInFile(searchOption: SearchOption, file2Search: string, encoding: string) {
     let commandArgs: string[] = [
         searchOption.keyword,
         file2Search,

@@ -8,11 +8,13 @@ import * as vscode from 'vscode'
 import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
 import { setIsSearching } from './clearResults';
-import { detectEncoding } from './encoding';
 import * as nls from 'vscode-nls';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 const fs = require('fs-extra')
+
+const osLocale = require('os-locale');	
+const encodings = new Map([["zh-CN", "gb2312"], ["zh-TW", "big5"], ["ja-JP", "shift-jis"], ["ko-KR", "ksc5601"]]);	
 
 export async function findInProject() {
     //check if there's a opened project
@@ -91,20 +93,12 @@ export class FindInProject {
 
                 let file2Search = saveUnsavedDoc2Tmp(srcFile.filePath);
                 try {
-                    let ret = null;
-                    try {
-                        ret = await findInFile(searchOption, file2Search);
-                    } catch (ex) {
-                        if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
-                            //nothing found with utf8, so refind with guessed encoding
-                            const buffer = fs.readFileSync(file2Search);
-                            const encoding = detectEncoding(buffer);
-                            if (encoding) {
-                                ret = await findInFile(searchOption, file2Search, encoding);
-                            }
-                        } else {
-                            throw ex;
-                        }
+                    //try to find with utf8
+                    let ret = await this.findWithEncoding(searchOption, file2Search);
+                    if (!ret) {
+
+                        //nothing found with utf8, so try to find with system locale/vs code display language	
+                        ret = await this.findWithLocaleOrLanguage(searchOption, file2Search);	
                     }
 
                     if (!ret)
@@ -132,13 +126,6 @@ export class FindInProject {
 
                     totalFiles++;
                     totalLines += findings.length;
-                }
-                catch (ex) {
-                    if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
-                        continue;//the ripgrep throws exception when nothing is found
-                    }
-
-                    throw ex;
                 }
                 finally {
                     if ((file2Search != srcFile.filePath) && fs.existsSync(file2Search)) {
@@ -184,6 +171,30 @@ export class FindInProject {
         this.summaryNode.summary = summary
             + found + `${totalLines}` + lines + `${totalFiles}` + files;
         SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
+    }
+
+    private async findWithEncoding(searchOption: SearchOption, file2Search: string, encoding: string = "utf8") {
+        try {
+            let ret = await findInFile(searchOption, file2Search, encoding);
+            return ret;
+        } catch (ex) {
+            if (ex.hasOwnProperty('stderr') && (!ex.stderr) && (ex.code == 1) && ex.failed) {
+                return null;
+            }
+            throw ex;
+        }
+    }
+
+    private async findWithLocaleOrLanguage(searchOption: SearchOption, file2Search: string) {
+        const loc = await osLocale();	
+        let encoding = encodings.get(loc);
+	
+        if (!encoding) {
+            encoding = "windows-1252";		
+        }
+        
+        let ret = await this.findWithEncoding(searchOption, file2Search, encoding);	
+        return ret;
     }
 
     private parseResult(result: string, file: string) {

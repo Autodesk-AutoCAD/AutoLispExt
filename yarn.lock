@@ -665,6 +665,15 @@ cross-spawn@^5.0.1:
     shebang-command "^1.2.0"
     which "^1.2.9"
 
+cross-spawn@^7.0.0:
+  version "7.0.3"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/cross-spawn/-/cross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
+  integrity sha1-9zqFudXUHQRVUcF34ogtSshXKKY=
+  dependencies:
+    path-key "^3.1.0"
+    shebang-command "^2.0.0"
+    which "^2.0.1"
+
 css-select@~1.2.0:
   version "1.2.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/css-select/-/css-select-1.2.0.tgz#2b3a110539c5355f1cd8d314623e870b121ec858"
@@ -1056,6 +1065,21 @@ execa@0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
+execa@^4.0.0:
+  version "4.0.2"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/execa/-/execa-4.0.2.tgz#ad87fb7b2d9d564f70d2b62d511bee41d5cbb240"
+  integrity sha1-rYf7ey2dVk9w0rYtURvuQdXLskA=
+  dependencies:
+    cross-spawn "^7.0.0"
+    get-stream "^5.0.0"
+    human-signals "^1.1.1"
+    is-stream "^2.0.0"
+    merge-stream "^2.0.0"
+    npm-run-path "^4.0.0"
+    onetime "^5.1.0"
+    signal-exit "^3.0.2"
+    strip-final-newline "^2.0.0"
+
 expand-brackets@^2.1.4:
   version "2.1.4"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/expand-brackets/-/expand-brackets-2.1.4.tgz#b77735e315ce30f6b6eff0f83b04151a22449622"
@@ -1300,6 +1324,13 @@ get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
   integrity sha1-jpQ9E1jcN1VQVOy+LtsFqhdO3hQ=
+
+get-stream@^5.0.0:
+  version "5.1.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/get-stream/-/get-stream-5.1.0.tgz#01203cdc92597f9b909067c3e656cc1f4d3c4dc9"
+  integrity sha1-ASA83JJZf5uQkGfD5lbMH008Tck=
+  dependencies:
+    pump "^3.0.0"
 
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
@@ -1593,6 +1624,11 @@ https-proxy-agent@^2.2.4:
     agent-base "^4.3.0"
     debug "^3.1.0"
 
+human-signals@^1.1.1:
+  version "1.1.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
+  integrity sha1-xbHNFPUK6uCatsWf5jujOV/k36M=
+
 iconv-lite@^0.4.19:
   version "0.4.24"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
@@ -1627,6 +1663,11 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
   integrity sha1-EEqOSqym09jNFXqO+L+rLXo//bY=
+
+invert-kv@^3.0.0:
+  version "3.0.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/invert-kv/-/invert-kv-3.0.1.tgz#a93c7a3d4386a1dc8325b97da9bb1620c0282523"
+  integrity sha1-qTx6PUOGodyDJbl9qbsWIMAoJSM=
 
 is-absolute@^1.0.0:
   version "1.0.0"
@@ -1824,6 +1865,11 @@ is-stream@^1.1.0:
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/is-stream/-/is-stream-1.1.0.tgz#12d4a3dd4e68e0b79ceb8dbc84173ae80d91ca44"
   integrity sha1-EtSj3U5o4Lec6428hBc66A2RykQ=
 
+is-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/is-stream/-/is-stream-2.0.0.tgz#bde9c32680d6fae04129d6ac9d921ce7815f78e3"
+  integrity sha1-venDJoDW+uBBKdasnZIc54FfeOM=
+
 is-symbol@^1.0.2:
   version "1.0.3"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/is-symbol/-/is-symbol-1.0.3.tgz#38e1014b9e6329be0de9d24a414fd7441ec61937"
@@ -1893,11 +1939,6 @@ js-yaml@3.13.1, js-yaml@^3.7.0:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
-jschardet@2.1.1:
-  version "2.1.1"
-  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/jschardet/-/jschardet-2.1.1.tgz#af6f8fd0b3b0f5d46a8fd9614a4fce490575c184"
-  integrity sha1-r2+P0LOw9dRqj9lhSk/OSQV1wYQ=
-
 json-stable-stringify-without-jsonify@^1.0.1:
   version "1.0.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
@@ -1965,6 +2006,13 @@ lcid@^1.0.0:
   integrity sha1-MIrMr6C8SDo4Z7S28rlQYlHRuDU=
   dependencies:
     invert-kv "^1.0.0"
+
+lcid@^3.0.0:
+  version "3.1.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/lcid/-/lcid-3.1.1.tgz#9030ec479a058fc36b5e8243ebaac8b6ac582fd0"
+  integrity sha1-kDDsR5oFj8NrXoJD66rItqxYL9A=
+  dependencies:
+    invert-kv "^3.0.0"
 
 lead@^1.0.0:
   version "1.0.0"
@@ -2047,6 +2095,13 @@ make-iterator@^1.0.0:
   dependencies:
     kind-of "^6.0.2"
 
+map-age-cleaner@^0.1.3:
+  version "0.1.3"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/map-age-cleaner/-/map-age-cleaner-0.1.3.tgz#7d583a7306434c055fe474b0f45078e6e1b4b92a"
+  integrity sha1-fVg6cwZDTAVf5HSw9FB45uG0uSo=
+  dependencies:
+    p-defer "^1.0.0"
+
 map-cache@^0.2.0, map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"
@@ -2090,6 +2145,15 @@ mdurl@^1.0.1:
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/mdurl/-/mdurl-1.0.1.tgz#fe85b2ec75a59037f2adfec100fd6c601761152e"
   integrity sha1-/oWy7HWlkDfyrf7BAP1sYBdhFS4=
 
+mem@^5.0.0:
+  version "5.1.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/mem/-/mem-5.1.1.tgz#7059b67bf9ac2c924c9f1cff7155a064394adfb3"
+  integrity sha1-cFm2e/msLJJMnxz/cVWgZDlK37M=
+  dependencies:
+    map-age-cleaner "^0.1.3"
+    mimic-fn "^2.1.0"
+    p-is-promise "^2.1.0"
+
 memoizee@0.4.X:
   version "0.4.14"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/memoizee/-/memoizee-0.4.14.tgz#07a00f204699f9a95c2d9e77218271c7cd610d57"
@@ -2103,6 +2167,11 @@ memoizee@0.4.X:
     lru-queue "0.1"
     next-tick "1"
     timers-ext "^0.1.5"
+
+merge-stream@^2.0.0:
+  version "2.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/merge-stream/-/merge-stream-2.0.0.tgz#52823629a14dd00c9770fb6ad47dc6310f2c1f60"
+  integrity sha1-UoI2KaFN0AyXcPtq1H3GMQ8sH2A=
 
 micromatch@^3.0.4, micromatch@^3.1.10, micromatch@^3.1.4:
   version "3.1.10"
@@ -2127,6 +2196,11 @@ mime@^1.3.4:
   version "1.6.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/mime/-/mime-1.6.0.tgz#32cd9e5c64553bd58d19a568af452acff04981b1"
   integrity sha1-Ms2eXGRVO9WNGaVor0Uqz/BJgbE=
+
+mimic-fn@^2.1.0:
+  version "2.1.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
+  integrity sha1-ftLCzMyvhNP/y3pptXcR/CCDQBs=
 
 minimatch@3.0.4, minimatch@^3.0.0, minimatch@^3.0.3, minimatch@^3.0.4:
   version "3.0.4"
@@ -2295,6 +2369,13 @@ npm-run-path@^2.0.0:
   dependencies:
     path-key "^2.0.0"
 
+npm-run-path@^4.0.0:
+  version "4.0.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/npm-run-path/-/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
+  integrity sha1-t+zR5e1T2o43pV4cImnguX7XSOo=
+  dependencies:
+    path-key "^3.0.0"
+
 nth-check@~1.0.1:
   version "1.0.2"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/nth-check/-/nth-check-1.0.2.tgz#b2bd295c37e3dd58a3bf0700376663ba4d9cf05c"
@@ -2396,6 +2477,13 @@ once@^1.3.0, once@^1.3.1, once@^1.3.2, once@^1.4.0:
   dependencies:
     wrappy "1"
 
+onetime@^5.1.0:
+  version "5.1.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/onetime/-/onetime-5.1.0.tgz#fff0f3c91617fe62bb50189636e99ac8a6df7be5"
+  integrity sha1-//DzyRYX/mK7UBiWNumayKbfe+U=
+  dependencies:
+    mimic-fn "^2.1.0"
+
 ordered-read-streams@^1.0.0:
   version "1.0.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/ordered-read-streams/-/ordered-read-streams-1.0.1.tgz#77c0cb37c41525d64166d990ffad7ec6a0e1363e"
@@ -2407,6 +2495,15 @@ os-homedir@^1.0.0:
   version "1.0.2"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/os-homedir/-/os-homedir-1.0.2.tgz#ffbc4988336e0e833de0c168c7ef152121aa7fb3"
   integrity sha1-/7xJiDNuDoM94MFox+8VISGqf7M=
+
+os-locale@5.0.0:
+  version "5.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/os-locale/-/os-locale-5.0.0.tgz#6d26c1d95b6597c5d5317bf5fba37eccec3672e0"
+  integrity sha1-bSbB2Vtll8XVMXv1+6N+zOw2cuA=
+  dependencies:
+    execa "^4.0.0"
+    lcid "^3.0.0"
+    mem "^5.0.0"
 
 os-locale@^1.4.0:
   version "1.4.0"
@@ -2428,10 +2525,20 @@ osenv@^0.1.3:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
+p-defer@^1.0.0:
+  version "1.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
+  integrity sha1-n26xgvbJqozXQwBKfU+WsZaw+ww=
+
 p-finally@^1.0.0:
   version "1.0.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/p-finally/-/p-finally-1.0.0.tgz#3fbcfb15b899a44123b34b6dcc18b724336a2cae"
   integrity sha1-P7z7FbiZpEEjs0ttzBi3JDNqLK4=
+
+p-is-promise@^2.1.0:
+  version "2.1.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/p-is-promise/-/p-is-promise-2.1.0.tgz#918cebaea248a62cf7ffab8e3bca8c5f882fc42e"
+  integrity sha1-kYzrrqJIpiz3/6uOO8qMX4gvxC4=
 
 p-limit@^2.0.0:
   version "2.3.0"
@@ -2533,6 +2640,11 @@ path-key@^2.0.0:
   version "2.0.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/path-key/-/path-key-2.0.1.tgz#411cadb574c5a140d3a4b1910d40d80cc9f40b40"
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
+
+path-key@^3.0.0, path-key@^3.1.0:
+  version "3.1.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/path-key/-/path-key-3.1.1.tgz#581f6ade658cbba65a0d3380de7753295054f375"
+  integrity sha1-WB9q3mWMu6ZaDTOA3ndTKVBU83U=
 
 path-parse@^1.0.6:
   version "1.0.6"
@@ -2644,6 +2756,14 @@ pump@^2.0.0:
   version "2.0.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/pump/-/pump-2.0.1.tgz#12399add6e4cf7526d973cbc8b5ce2e2908b3909"
   integrity sha1-Ejma3W5M91Jtlzy8i1zi4pCLOQk=
+  dependencies:
+    end-of-stream "^1.1.0"
+    once "^1.3.1"
+
+pump@^3.0.0:
+  version "3.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/pump/-/pump-3.0.0.tgz#b4a2116815bde2f4e1ea602354e8c75565107a64"
+  integrity sha1-tKIRaBW94vTh6mAjVOjHVWUQemQ=
   dependencies:
     end-of-stream "^1.1.0"
     once "^1.3.1"
@@ -2902,12 +3022,24 @@ shebang-command@^1.2.0:
   dependencies:
     shebang-regex "^1.0.0"
 
+shebang-command@^2.0.0:
+  version "2.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/shebang-command/-/shebang-command-2.0.0.tgz#ccd0af4f8835fbdc265b82461aaf0c36663f34ea"
+  integrity sha1-zNCvT4g1+9wmW4JGGq8MNmY/NOo=
+  dependencies:
+    shebang-regex "^3.0.0"
+
 shebang-regex@^1.0.0:
   version "1.0.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/shebang-regex/-/shebang-regex-1.0.0.tgz#da42f49740c0b42db2ca9728571cb190c98efea3"
   integrity sha1-2kL0l0DAtC2yypcoVxyxkMmO/qM=
 
-signal-exit@^3.0.0:
+shebang-regex@^3.0.0:
+  version "3.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/shebang-regex/-/shebang-regex-3.0.0.tgz#ae16f1644d873ecad843b0307b143362d4c42172"
+  integrity sha1-rhbxZE2HPsrYQ7AwexQzYtTEIXI=
+
+signal-exit@^3.0.0, signal-exit@^3.0.2:
   version "3.0.3"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/signal-exit/-/signal-exit-3.0.3.tgz#a1410c2edd8f077b08b4e253c8eacfcaf057461c"
   integrity sha1-oUEMLt2PB3sItOJTyOrPyvBXRhw=
@@ -3180,6 +3312,11 @@ strip-eof@^1.0.0:
   version "1.0.0"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/strip-eof/-/strip-eof-1.0.0.tgz#bb43ff5598a6eb05d89b59fcd129c983313606bf"
   integrity sha1-u0P/VZim6wXYm1n80SnJgzE2Br8=
+
+strip-final-newline@^2.0.0:
+  version "2.0.0"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/strip-final-newline/-/strip-final-newline-2.0.0.tgz#89b852fb2fcbe936f6f4b3187afb0a12c1ab58ad"
+  integrity sha1-ibhS+y/L6Tb29LMYevsKEsGrWK0=
 
 strip-json-comments@2.0.1:
   version "2.0.1"
@@ -3610,7 +3747,7 @@ vscode-nls@3.2.5:
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/vscode-nls/-/vscode-nls-3.2.5.tgz#25520c1955108036dec607c85e00a522f247f1a4"
   integrity sha1-JVIMGVUQgDbexgfIXgClIvJH8aQ=
 
-vscode-ripgrep@^1.5.8:
+vscode-ripgrep@1.5.8:
   version "1.5.8"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/vscode-ripgrep/-/vscode-ripgrep-1.5.8.tgz#32cb33da6d1a9ca8f5de8c2813ed5114fd55fc11"
   integrity sha1-Mssz2m0anKj13owoE+1RFP1V/BE=
@@ -3648,6 +3785,13 @@ which@1.3.1, which@^1.2.14, which@^1.2.9:
   version "1.3.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/which/-/which-1.3.1.tgz#a45043d54f5805316da8d62f9f50918d3da70b0a"
   integrity sha1-pFBD1U9YBTFtqNYvn1CRjT2nCwo=
+  dependencies:
+    isexe "^2.0.0"
+
+which@^2.0.1:
+  version "2.0.2"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/which/-/which-2.0.2.tgz#7c6a8dd0a636a0327e10b59c9286eee93f3f51b1"
+  integrity sha1-fGqN0KY2oDJ+ELWckobu6T8/UbE=
   dependencies:
     isexe "^2.0.0"
 
