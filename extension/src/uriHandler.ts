@@ -50,12 +50,12 @@ export function onUriRequested(uri: vscode.Uri) {
     if (vscode.window.activeTextEditor) {
         if (acitiveDocHasValidLanguageId()) {
             let msg = localize("autolispext.urihandler.debug.start",
-                "From the menu bar, click Debug > Start Debugging to debug the current AutoLISP source file.");
+                "From the menu bar, click Run > Start Debugging to debug the current AutoLISP source file.");
             vscode.window.showInformationMessage(msg, modalMsgOption);
         }
         else {
             let msg = localize("autolispext.urihandler.debug.openfile",
-                "Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.");
+                "Open an AutoLISP source file and click Run > Start Debugging from the menu bar to debug the file.");
             vscode.window.showInformationMessage(msg, modalMsgOption);
         }
 
@@ -63,7 +63,7 @@ export function onUriRequested(uri: vscode.Uri) {
     }
 
     let msg = localize("autolispext.urihandler.debug.openfile",
-        "Open an AutoLISP source file and click Debug > Start Debugging from the menu bar to debug the file.");
+        "Open an AutoLISP source file and click Run > Start Debugging from the menu bar to debug the file.");
     vscode.window.showInformationMessage(msg, modalMsgOption);
 
     return;

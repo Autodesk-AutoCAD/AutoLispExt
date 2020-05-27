@@ -52,13 +52,13 @@ Windows | Mac | Linux |
 ## How to use the AutoCAD AutoLISP Extension
 To debug an AutoLISP source file:
 1.  Open a LSP file.
-2.  Click Debug > Start Debugging (or press F5). 
+2.  Click Run > Start Debugging (or press F5). 
 3.  Then choose one of the following debug configurations:
      * AutoLISP Debug: Launch – Launches a new instance of the AutoCAD application to debug the current LSP file.
      * AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file.
     If prompted, specify the absolute path to the AutoCAD executable (acad.exe on Windows or AutoCAD on Mac).
 
-Note: To avoid specifying this path each time you click Debug > Start Debugging (or press F5), this path is automatically saved into extension setting. The details are in the following session:
+Note: To avoid specifying this path each time you click Run > Start Debugging (or press F5), this path is automatically saved into extension setting. The details are in the following session:
 
 ## How to configure the AutoCAD path
 1. In Visual Studio Code "File" menu, select "Preferences" -> "Settings".
