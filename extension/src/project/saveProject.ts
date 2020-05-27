@@ -1,6 +1,5 @@
 import { ProjectNode, ProjectTreeProvider } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
-import { OpenProjectFile } from './openProject';
 import { LispFormatter } from '../format/formatter';
 
 import * as path from 'path'

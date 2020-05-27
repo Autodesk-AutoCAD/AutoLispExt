@@ -185,9 +185,7 @@ function Convert2AbsoluteLspFilePath(fileName: string, prjDir: string): string {
     //add the file extension back if necessary
     if (!path.extname(fileName)) {
         //it's possible that a lisp project file ignores the .lsp extension
-        //it's also possible that the source file has no extension
-        if (fs.existsSync(fileName) == false)
-            fileName = fileName + ".lsp";
+        fileName = fileName + ".lsp";
     }
 
     return fileName;
