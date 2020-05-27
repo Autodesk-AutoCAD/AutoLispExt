@@ -25,6 +25,15 @@ export async function AddFile2Project() {
                 return Promise.reject(msg);
             }
 
+            if(hasMultipleExtensions(fileUpper)) {
+                //File name like hello.lsp.lsp causes problem with legacy IDE.
+                //Legacy IDE doesn't allow user to add hello.lsp.lsp into a project, but if there happen to be a file
+                //  named hello.lsp, it will add hello.lsp into project, and this is wrong.
+                //To keep consistency with legacy IDE, we have to reject files of this kind.
+                let msg = localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
+                return Promise.reject(msg);
+            }
+
             if (isFileAlreadyInProject(file.fsPath, ProjectTreeProvider.instance().projectNode)) {
                 let msg = localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project: ");
                 vscode.window.showInformationMessage(msg + file.fsPath);
@@ -53,6 +62,20 @@ export async function AddFile2Project() {
         console.log(e);
         return Promise.reject(e);
     }
+}
+
+function hasMultipleExtensions(filePath:string):boolean {
+    let ext1 = path.extname(filePath);
+    if(!ext1)
+        return false;
+    
+    let leftSide = filePath.substr(0, filePath.length - ext1.length);
+    let ext2 = path.extname(leftSide);
+    
+    if(ext2)
+        return true;
+    else
+        return false;
 }
 
 async function SelectLspFiles() {
