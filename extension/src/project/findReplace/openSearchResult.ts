@@ -68,7 +68,7 @@ export async function openSearchResult(clickedTreeItem: FindingNode, searchOpt: 
             range = range.with(start, start);
         }
 
-        let opt = { "selection": range}
+        let opt = { "selection": range, "preserveFocus": true };
         return vscode.commands.executeCommand("vscode.open",
             vscode.Uri.file(finding.filePath),
             opt);
