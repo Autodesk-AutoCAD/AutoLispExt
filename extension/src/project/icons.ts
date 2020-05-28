@@ -15,6 +15,8 @@ export class IconUris {
     private static useRegularExprOnUri = undefined;
     private static useRegularExprOffUri = undefined;
 
+    private static close = undefined;
+
     public static initialize() {
         if (!IconUris.extRootDir) {
             IconUris.extRootDir = vscode.extensions.getExtension("Autodesk.autolispext").extensionPath;
@@ -107,6 +109,17 @@ export class IconUris {
         }
 
         return IconUris.missingFileUri;
+    }
+
+    public static closeUri(): vscode.Uri {
+        if(!IconUris.close) {
+            IconUris.close = {
+                "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'close.svg')),
+                "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'close.svg'))
+            };
+        }
+
+        return IconUris.close;
     }
 
 }

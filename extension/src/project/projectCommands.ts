@@ -130,7 +130,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
             SaveAll()
                 .then(() => {
-                    let msg = localize("autolispext.project.commands.allsaved", "All files of the project are saved.");
+                    let msg = localize("autolispext.project.commands.allsaved", "All files saved.");
                     vscode.window.showInformationMessage(msg);
                 })
                 .catch(err => {

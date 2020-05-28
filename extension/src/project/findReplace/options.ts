@@ -1,5 +1,8 @@
 import * as vscode from 'vscode';
 import { optionButton } from './optionButton';
+import { IconUris } from '../icons';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class SearchOption {
     static activeInstance: SearchOption = new SearchOption;//the one bound to search UI
@@ -38,6 +41,7 @@ export async function getSearchOption(title: string, hint: string) {
             quickpick.placeholder = hint;
             quickpick.buttons = optionButton.getButtons();
             quickpick.value = null;
+            quickpick.ignoreFocusOut = true;
 
             quickpick.onDidTriggerButton(async e => {
                 if (e instanceof optionButton) {
@@ -61,6 +65,10 @@ export async function getSearchOption(title: string, hint: string) {
 
                         return;
                     }
+                    else if (btn.name == optionButton.name_Close) {
+                        SearchOption.activeInstance.completed = false;
+                        quickpick.hide();
+                    }
                 }
             });
 
@@ -68,7 +76,7 @@ export async function getSearchOption(title: string, hint: string) {
                 SearchOption.activeInstance.completed = true;
                 SearchOption.activeInstance.keyword = quickpick.value;
 
-                if(quickpick.value)
+                if (quickpick.value)
                     resolve(SearchOption.activeInstance);
             })
 
@@ -92,16 +100,39 @@ export async function getSearchOption(title: string, hint: string) {
 export async function getString(title: string, hint: string) {
     const quickpick = vscode.window.createQuickPick();
 
+    let ret = undefined;
     try {
-        return await new Promise<string>(resolve => {
+        await new Promise<string>(resolve => {
 
             quickpick.title = title
             quickpick.placeholder = hint;
+            quickpick.value = '';
+            quickpick.ignoreFocusOut = true;
+
+            let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            let closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
+            quickpick.buttons = [closeBtn];
 
             quickpick.onDidAccept(async () => {
-                let keyword = quickpick.value;
+                ret = quickpick.value;
 
-                resolve(keyword)
+                resolve(ret);
+            });
+            quickpick.onDidHide(async () => {
+                if (ret != undefined)//it will get here on both ENTER and on ESC
+                    return;
+
+                resolve(undefined);
+            });
+
+            quickpick.onDidTriggerButton(async e => {
+                if (e instanceof optionButton) {
+                    let btn = e as optionButton;
+
+                    if (btn.name == optionButton.name_Close) {
+                        quickpick.hide();
+                    }
+                }
             });
 
             quickpick.show();
@@ -110,4 +141,6 @@ export async function getString(title: string, hint: string) {
     finally {
         quickpick.dispose();
     }
+
+    return ret;
 }

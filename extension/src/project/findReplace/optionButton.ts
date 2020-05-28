@@ -5,7 +5,7 @@ import * as nls from 'vscode-nls';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class optionButton implements vscode.QuickInputButton {
-    private constructor(iconUriOn: vscode.Uri, iconUriOff: vscode.Uri, isOn: boolean,
+    public constructor(iconUriOn: vscode.Uri, iconUriOff: vscode.Uri, isOn: boolean,
         tooltip: string, type: string) {
         this.iconPathOn = iconUriOn;
         this.iconPathOff = iconUriOff;
@@ -52,6 +52,9 @@ export class optionButton implements vscode.QuickInputButton {
                 new optionButton(IconUris.useRegularExpr(true), IconUris.useRegularExpr(false), SearchOption.activeInstance.useRegularExpr,
                     regExp,
                     optionButton.name_UseRegularExpr);
+
+            let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            optionButton.closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
         }
 
         let len = optionButton.buttons.length;
@@ -60,6 +63,7 @@ export class optionButton implements vscode.QuickInputButton {
         optionButton.buttons.push(optionButton.matchCaseBtn.updateStatus(SearchOption.activeInstance.matchCase));
         optionButton.buttons.push(optionButton.matchWordBtn.updateStatus(SearchOption.activeInstance.matchWholeWord));
         optionButton.buttons.push(optionButton.useRegularExprBtn.updateStatus(SearchOption.activeInstance.useRegularExpr));
+        optionButton.buttons.push(optionButton.closeBtn.updateStatus(true));
 
         return optionButton.buttons;
     }
@@ -67,10 +71,12 @@ export class optionButton implements vscode.QuickInputButton {
     public static name_MatchCase: string = "matchcase";
     public static name_MatchWord: string = "matchword";
     public static name_UseRegularExpr: string = "useregularexpr";
+    public static name_Close: string = "close";
 
     private static matchCaseBtn: optionButton = null;
     private static matchWordBtn: optionButton = null;
     private static useRegularExprBtn: optionButton = null;
+    private static closeBtn: optionButton = null;
 
     private static buttons: vscode.QuickInputButton[] = [];
 }
