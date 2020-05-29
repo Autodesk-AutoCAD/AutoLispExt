@@ -76,6 +76,7 @@ export class FindInProject {
             this.summaryNode.summary = summary;
             SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
 
+            let exceedMaxResults = false;
             let totalFiles = 0;
             let totalLines = 0;
 
@@ -114,6 +115,11 @@ export class FindInProject {
                     if (findings.length <= 0)
                         continue;
 
+                    if (totalLines + findings.length > 10000) {
+                        exceedMaxResults = true;
+                        break;
+                    }
+                    
                     let fileNode = new FileNode()
                     fileNode.filePath = srcFile.filePath;
                     fileNode.shortPath = srcFile.getDisplayText();
@@ -145,6 +151,9 @@ export class FindInProject {
                 this.summaryNode.summary += localize("autolispext.project.find.noresults", "No results found.");
             }
             else {
+                if (exceedMaxResults) {
+                    this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "The result set only contains a subset of all matches. Please be more specific in your search to narrow down the results. ");
+                }
                 this.summaryNode.summary += found + `${totalLines}` + lines + `${totalFiles}` + files;
             }
 
