@@ -359,7 +359,7 @@
 						"type": "attachlisp",
 						"request": "attach",
 						"name": "AutoLISP Debug: Attach",
-						"help": "Change extension setting: Attach Process. See https://www.autodesk.com/autolisp-extension"
+						"help": "%autolispext.packagejson.changeattachproc%"
 					}
 				],
 				"configurationSnippets": [
@@ -370,7 +370,7 @@
 							"type": "attachlisp",
 							"request": "attach",
 							"name": "AutoLISP Debug: Attach",
-							"help": "Change extension setting: Attach Process. See https://www.autodesk.com/autolisp-extension"
+							"help": "%autolispext.packagejson.changeattachproc%"
 						}
 					}
 				]
@@ -423,7 +423,7 @@
 						"type": "launchlisp",
 						"request": "launch",
 						"name": "AutoLISP Debug: Launch",
-						"help": "Change extension setting: Launch Program. See https://www.autodesk.com/autolisp-extension"
+						"help": "%autolispext.packagejson.changelaunchprog%"
 					}
 				],
 				"configurationSnippets": [
@@ -434,7 +434,7 @@
 							"type": "launchlisp",
 							"request": "launch",
 							"name": "AutoLISP Debug: Launch",
-							"help": "Change extension setting: Launch Program. See https://www.autodesk.com/autolisp-extension"
+							"help": "%autolispext.packagejson.changelaunchprog%"
 						}
 					}
 				]

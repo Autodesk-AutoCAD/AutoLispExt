@@ -25,5 +25,7 @@
 	"autolispext.project.clearsearchresults.title": "Clear All Search Results",
 	"autolispext.project.projectmanager.title": "AutoLISP Project Manager",
 	"autolispext.project.projectview.name": "Project",
-	"autolispext.project.findreplaceview.name": "Find & Replace"
+	"autolispext.project.findreplaceview.name": "Find & Replace",
+	"autolispext.packagejson.changeattachproc": "Launch.json deprecated. Please change VS Code setting: Attach Process.",
+	"autolispext.packagejson.changelaunchprog": "Launch.json deprecated. Please change VS Code settings: Launch Program, and Launch Parameters."
 }
