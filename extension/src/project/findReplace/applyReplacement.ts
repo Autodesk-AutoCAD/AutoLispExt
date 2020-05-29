@@ -57,7 +57,7 @@ export async function applyReplacementInFile(filePlan: FileNode) {
         filePlan.errorInReplace = applyChangeByFile(filePlan.filePath, newFileContent);
     }
     catch (err) {
-        filePlan.errorInReplace = err;
+        filePlan.errorInReplace = err.toString();
     }
 }
 
@@ -95,17 +95,12 @@ async function applyChangeInEditor(filePath: string, fileContent: string) {
 //return null on success
 function applyChangeByFile(filePath: string, fileContent: string): string {
     try {
-        let tmpFile = getTmpFilePath();
-
-        fs.writeFileSync(tmpFile, fileContent);
-        fs.copyFileSync(tmpFile, filePath);
-        fs.removeSync(tmpFile);
-
+        fs.writeFileSync(filePath, fileContent);
         return null;
     }
     catch (err) {
         console.log(err);
-        return err;
+        return err.toString();
     }
 }
 

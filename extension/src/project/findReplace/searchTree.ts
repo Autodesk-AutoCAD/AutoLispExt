@@ -11,26 +11,48 @@ export class FileNode implements DisplayNode {
     shortPath: string = '';
     findings: FindingNode[] = [];
 
-    errorInReplace: string = '';//error message provided when replace in file
+    errorInReplace: string = null;//error message provided when replace in file
     collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     getDisplayText(): string {
-        return this.shortPath + " (" + this.findings.length + ")";
+        let ret = this.shortPath + " (" + this.findings.length + ")";
+        if (this.errorInReplace) {
+            let failed = localize("autolispext.project.findreplace.searchtree.failed", "(FAILED) ");
+            ret = failed + ret;
+        }
+
+        return ret;
     }
 
     getTooltip(): string {
-        return this.filePath;
+        if (!this.errorInReplace)
+            return this.filePath;
+
+        return this.filePath + "\r\n" + this.errorInReplace;
     }
 
     getIconUri(): vscode.Uri | { light: string | vscode.Uri; dark: string | vscode.Uri; } {
-        return IconUris.lspFile();
+        if (!this.errorInReplace)
+            return IconUris.lspFile();
+
+        return IconUris.missingFile();
     }
 
     getNodeType(): string {
         return "findinggroup";
     }
 
+    getChildren(): FindingNode[] {
+        if (!this.errorInReplace)
+            return this.findings;
+
+        return null;
+    }
+
     getCollapsibleState(): vscode.TreeItemCollapsibleState {
-        return this.collapsibleState;
+        if (!this.errorInReplace)
+            return this.collapsibleState;
+
+        return vscode.TreeItemCollapsibleState.None;
     }
 
     setCollapsibleState(state: vscode.TreeItemCollapsibleState) {
@@ -69,7 +91,7 @@ export class FindingNode implements DisplayNode {
         return "finding";
     }
 
-    getCollapsibleState(): vscode.TreeItemCollapsibleState{
+    getCollapsibleState(): vscode.TreeItemCollapsibleState {
         return vscode.TreeItemCollapsibleState.None;
     }
 
@@ -131,7 +153,7 @@ export class SummaryNode implements DisplayNode {
         return SummaryNode.nodeTypeString;
     }
 
-    getCollapsibleState(): vscode.TreeItemCollapsibleState{
+    getCollapsibleState(): vscode.TreeItemCollapsibleState {
         return vscode.TreeItemCollapsibleState.None;
     }
 
@@ -218,7 +240,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
                 //asking for children of given element
                 if (element instanceof FileNode) {
                     let fileNode = element as FileNode;
-                    return fileNode.findings;
+                    return fileNode.getChildren();
                 }
 
                 return null;
