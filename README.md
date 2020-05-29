@@ -8,6 +8,8 @@ For information on creating lisp programs for AutoCAD with the AutoLISP programm
 
 The extension is distributed under the [Autodesk Terms of Use](https://www.autodesk.com/company/terms-of-use/en/general-terms#offerings).
 
+Your feedback is highly appreciated! Should you have any suggestions, please create an issue [here](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues).
+
 ## Features
 1. AutoLISP Debugger
     * Launch/Attach Debug
