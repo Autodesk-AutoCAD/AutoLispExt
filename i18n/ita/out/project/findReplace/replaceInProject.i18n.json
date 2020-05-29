@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Prima di poter sostituire una stringa di testo, è necessario che sia aperto un progetto.",
+  "autolispext.project.findreplace.replace.title": "Sostituisci nel progetto",
+  "autolispext.project.findreplace.replace.hint.keyword": "Digitare una stringa di testo da trovare e premere INVIO.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Digitare una stringa di testo da sostituire e premere INVIO."
+}

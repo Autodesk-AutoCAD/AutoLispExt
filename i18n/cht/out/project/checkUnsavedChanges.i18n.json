@@ -1,0 +1,5 @@
+{
+  "autolispext.project.checkunsavedchanges.message": "您是否要儲存對此專案所做的變更？\n\n如果未儲存，將捨棄所有變更。",
+  "autolispext.project.checkunsavedchanges.save": "儲存",
+  "autolispext.project.checkunsavedchanges.dontsave": "不儲存"
+}

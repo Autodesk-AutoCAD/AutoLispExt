@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Para reemplazar una cadena de texto, debe haber un proyecto abierto.",
+  "autolispext.project.findreplace.replace.title": "Reemplazar en el proyecto",
+  "autolispext.project.findreplace.replace.hint.keyword": "Escriba la cadena de texto que desee buscar y pulse Intro.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Escriba la cadena de texto para reemplazar y pulse Intro."
+}

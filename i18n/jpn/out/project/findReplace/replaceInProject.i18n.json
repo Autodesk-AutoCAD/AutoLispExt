@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "文字列を置換するには、プロジェクトを開く必要があります。",
+  "autolispext.project.findreplace.replace.title": "プロジェクト内で置換",
+  "autolispext.project.findreplace.replace.hint.keyword": "検索する文字列を入力し、[Enter]を押します。",
+  "autolispext.project.findreplace.replace.hint.replacement": "置換後の文字列を入力し、[Enter]を押します。"
+}

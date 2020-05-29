@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " 内 ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nプロジェクト ファイル: ",
+  "autolispext.project.findreplace.searchtree.replace": "置換",
+  "autolispext.project.findreplace.searchtree.with": " 置換後 ",
+  "autolispext.project.findreplace.searchtree.find": "検索 ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\n大/小文字を区別: オン",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\n完全一致: オン",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\n正規表現を使用: オン"
+}

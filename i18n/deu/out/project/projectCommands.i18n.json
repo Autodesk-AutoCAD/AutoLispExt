@@ -1,0 +1,15 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Erstellen des neuen Projekts fehlgeschlagen.",
+  "autolispext.project.commands.openprojectfailed": "Das angegebene Projekt konnte nicht geöffnet werden.",
+  "autolispext.project.commands.addfilefailed": "Fehler beim Hinzufügen der ausgewählten Dateien.",
+  "autolispext.project.commands.removefilefailed": "Die ausgewählte Datei konnte nicht entfernt werden.",
+  "autolispext.project.commands.projectsaved": "Projektdatei gespeichert.",
+  "autolispext.project.commands.saveprojectfailed": "Speichern des Projekts ist fehlgeschlagen.",
+  "autolispext.project.commands.refreshstatusfailed": "Aktualisieren des Status der Dateien fehlgeschlagen.",
+  "autolispext.project.commands.openfilefailed": "Fehler beim Öffnen der Datei.",
+  "autolispext.project.commands.findfailed": "Nicht in Projekt gefunden.",
+  "autolispext.project.commands.replacefailed": "Ersetzen der Textzeichenfolge im Projekt fehlgeschlagen.",
+  "autolispext.project.commands.openresultfailed": "Suchergebnisse konnten nicht geöffnet werden.",
+  "autolispext.project.commands.clearresultfailed": "Suchergebnisse konnten nicht gelöscht werden.",
+  "autolispext.project.commands.initializefailed": "Fehler beim Initialisieren des AutoLISP-Projektmanagers."
+}

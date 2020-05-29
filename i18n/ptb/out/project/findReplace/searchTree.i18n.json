@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " em ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nArquivo de projeto: ",
+  "autolispext.project.findreplace.searchtree.replace": "Substituir",
+  "autolispext.project.findreplace.searchtree.with": " por ",
+  "autolispext.project.findreplace.searchtree.find": "Localizar ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nDistinguir maiúsculas/minúsculas: ATIVADO",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nCoincidir palavra inteira: ATIVADO",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nUsar expressão regular: ATIVADO"
+}

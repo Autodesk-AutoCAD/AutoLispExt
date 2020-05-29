@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "必须先打开项目，然后才能排除文件。",
+  "autolispext.project.excludefile.filenotexist": "当前项目中不存在要排除的文件。"
+}

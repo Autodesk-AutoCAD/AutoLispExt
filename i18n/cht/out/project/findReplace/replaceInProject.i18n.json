@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "您必須先開啟專案，才能取代文字字串。",
+  "autolispext.project.findreplace.replace.title": "在專案中取代",
+  "autolispext.project.findreplace.replace.hint.keyword": "鍵入要尋找的文字字串，然後按 Enter。",
+  "autolispext.project.findreplace.replace.hint.replacement": "鍵入要取代為的文字字串，然後按 Enter。"
+}

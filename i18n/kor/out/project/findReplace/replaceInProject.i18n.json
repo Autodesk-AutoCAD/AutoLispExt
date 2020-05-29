@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "문자열을 대치하기 전에 프로젝트가 열려 있어야 합니다.",
+  "autolispext.project.findreplace.replace.title": "프로젝트에서 대치",
+  "autolispext.project.findreplace.replace.hint.keyword": "찾을 문자열을 입력하고 Enter 키를 누릅니다.",
+  "autolispext.project.findreplace.replace.hint.replacement": "대치할 문자열을 입력하고 Enter 키를 누릅니다."
+}

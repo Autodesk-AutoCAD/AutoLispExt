@@ -1,0 +1,12 @@
+{
+  "autolispext.project.find.openproject": "Перед поиском текстовой строки необходимо открыть проект.",
+  "autolispext.project.find.title": "Найти в проекте",
+  "autolispext.project.find.hint": "Введите текстовую строку для поиска и нажмите ENTER.",
+  "autolispext.project.find.supportos": "Функция «Найти и заменить» поддерживается только в 64-разрядных системах.",
+  "autolispext.project.find.inprogress": "Выполняется... ",
+  "autolispext.project.find.found": "Найдено ",
+  "autolispext.project.find.lines": " стр. в ",
+  "autolispext.project.find.files": " файл.:",
+  "autolispext.project.find.stopped": "Поиск остановлен.",
+  "autolispext.project.find.noresults": "Результаты не найдены."
+}

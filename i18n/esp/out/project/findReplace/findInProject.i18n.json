@@ -1,0 +1,12 @@
+{
+  "autolispext.project.find.openproject": "Para poder buscar una cadena de texto, debe haber un proyecto abierto.",
+  "autolispext.project.find.title": "Buscar en el proyecto",
+  "autolispext.project.find.hint": "Escriba la cadena de texto que desee buscar y pulse Intro.",
+  "autolispext.project.find.supportos": "La función Buscar y reemplazar solo se admite en sistemas de 64 bits.",
+  "autolispext.project.find.inprogress": "En curso... ",
+  "autolispext.project.find.found": "Encontrado(s) ",
+  "autolispext.project.find.lines": " línea(s) en ",
+  "autolispext.project.find.files": " archivo(s):",
+  "autolispext.project.find.stopped": "Búsqueda detenida.",
+  "autolispext.project.find.noresults": "No se han encontrado resultados."
+}

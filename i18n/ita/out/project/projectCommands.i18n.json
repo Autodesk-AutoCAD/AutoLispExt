@@ -1,0 +1,15 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Impossibile creare il nuovo progetto.",
+  "autolispext.project.commands.openprojectfailed": "Impossibile aprire il progetto specificato.",
+  "autolispext.project.commands.addfilefailed": "Impossibile aggiungere i file selezionati.",
+  "autolispext.project.commands.removefilefailed": "Impossibile rimuovere il file selezionato.",
+  "autolispext.project.commands.projectsaved": "File di progetto salvato.",
+  "autolispext.project.commands.saveprojectfailed": "Impossibile salvare il progetto.",
+  "autolispext.project.commands.refreshstatusfailed": "Impossibile aggiornare lo stato dei file.",
+  "autolispext.project.commands.openfilefailed": "Impossibile aprire il file.",
+  "autolispext.project.commands.findfailed": "Ricerca nel progetto non riuscita.",
+  "autolispext.project.commands.replacefailed": "Impossibile sostituire la stringa di testo nel progetto.",
+  "autolispext.project.commands.openresultfailed": "Impossibile aprire i risultati della ricerca.",
+  "autolispext.project.commands.clearresultfailed": "Impossibile cancellare i risultati della ricerca.",
+  "autolispext.project.commands.initializefailed": "Impossibile inizializzare Gestione progetti di AutoLISP."
+}

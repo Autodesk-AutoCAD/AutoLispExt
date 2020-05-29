@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "A szöveges karakterlánc cseréjéhez meg kell nyitnia egy projektet.",
+  "autolispext.project.findreplace.replace.title": "Csere a projektben",
+  "autolispext.project.findreplace.replace.hint.keyword": "Adja meg a keresett karakterláncot, majd nyomja le az Enter billentyűt.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Adja meg a csere során beilleszteni kívánt karakterláncot, majd nyomja le az Enter billentyűt."
+}

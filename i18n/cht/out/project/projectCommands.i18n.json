@@ -1,0 +1,15 @@
+{
+  "autolispext.project.commands.createprojectfailed": "無法建立新專案。",
+  "autolispext.project.commands.openprojectfailed": "無法開啟指定的專案。",
+  "autolispext.project.commands.addfilefailed": "無法加入選取的檔案。",
+  "autolispext.project.commands.removefilefailed": "無法移除選取的檔案。",
+  "autolispext.project.commands.projectsaved": "專案檔已儲存。",
+  "autolispext.project.commands.saveprojectfailed": "無法儲存專案。",
+  "autolispext.project.commands.refreshstatusfailed": "無法重新整理檔案的狀態。",
+  "autolispext.project.commands.openfilefailed": "無法開啟檔案。",
+  "autolispext.project.commands.findfailed": "無法在專案中尋找。",
+  "autolispext.project.commands.replacefailed": "無法取代專案中的文字字串。",
+  "autolispext.project.commands.openresultfailed": "無法開啟搜尋結果。",
+  "autolispext.project.commands.clearresultfailed": "無法清除搜尋結果。",
+  "autolispext.project.commands.initializefailed": "無法初始化 AutoLISP 專案管理員。"
+}

@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " helye: ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nProjektfájl: ",
+  "autolispext.project.findreplace.searchtree.replace": "Csere",
+  "autolispext.project.findreplace.searchtree.with": " ezzel: ",
+  "autolispext.project.findreplace.searchtree.find": "Keresés ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nKis- és nagybetű megkülönböztetése: BE",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nTeljes szó keresése: BE",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nReguláris kifejezés használata: BE"
+}

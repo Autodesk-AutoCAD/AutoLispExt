@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "파일을 제외하기 전에 프로젝트가 열려 있어야 합니다.",
+  "autolispext.project.excludefile.filenotexist": "제외할 파일이 현재 프로젝트에 존재하지 않습니다."
+}

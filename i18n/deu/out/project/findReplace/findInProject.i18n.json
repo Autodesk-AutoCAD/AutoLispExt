@@ -1,0 +1,12 @@
+{
+  "autolispext.project.find.openproject": "Bevor Sie nach einer Textzeichenfolge suchen können, muss ein Projekt geöffnet sein.",
+  "autolispext.project.find.title": "In Projekt suchen",
+  "autolispext.project.find.hint": "Geben Sie eine zu suchende Textzeichenfolge ein, und drücken Sie die EINGABETASTE.",
+  "autolispext.project.find.supportos": "Suchen und ersetzen wird nur auf 64-Bit-Systemen unterstützt.",
+  "autolispext.project.find.inprogress": "In Bearbeitung... ",
+  "autolispext.project.find.found": "Gefunden ",
+  "autolispext.project.find.lines": " Zeile(n) in ",
+  "autolispext.project.find.files": " Datei(en):",
+  "autolispext.project.find.stopped": "Suche angehalten.",
+  "autolispext.project.find.noresults": "Keine Ergebnisse gefunden."
+}

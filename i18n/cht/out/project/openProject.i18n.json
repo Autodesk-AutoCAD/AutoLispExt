@@ -1,0 +1,6 @@
+{
+  "autolispext.project.openproject.onlyprjallowed": "只允許 PRJ 檔。",
+  "autolispext.project.openproject.readfailed": "無法讀取專案檔: ",
+  "autolispext.project.openproject.malformedfile": "異常的專案檔: ",
+  "autolispext.project.openproject.label": "開啟專案"
+}

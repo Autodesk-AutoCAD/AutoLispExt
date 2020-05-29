@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " 在 ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\n專案檔: ",
+  "autolispext.project.findreplace.searchtree.replace": "取代",
+  "autolispext.project.findreplace.searchtree.with": " 為 ",
+  "autolispext.project.findreplace.searchtree.find": "尋找 ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\n大小寫須相符: 打開",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\n全字拼寫須相符: 打開",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\n使用正規表示式: 打開"
+}

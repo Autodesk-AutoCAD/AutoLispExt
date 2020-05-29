@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " 위치 ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\n프로젝트 파일: ",
+  "autolispext.project.findreplace.searchtree.replace": "대치",
+  "autolispext.project.findreplace.searchtree.with": " 내용 ",
+  "autolispext.project.findreplace.searchtree.find": "찾기 ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\n대소문자 구분: 켜기",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\n전체 단어 일치: 켜기",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\n정규식 사용: 켜기"
+}

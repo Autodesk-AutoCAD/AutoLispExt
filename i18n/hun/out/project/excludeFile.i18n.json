@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "Fájl kizárásához meg kell nyitnia egy projektet.",
+  "autolispext.project.excludefile.filenotexist": "A kizárni kívánt fájl nem létezik az aktuális projektben."
+}

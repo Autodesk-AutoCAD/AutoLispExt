@@ -1,0 +1,12 @@
+{
+  "autolispext.project.find.openproject": "您必須先開啟專案，才能搜尋文字字串。",
+  "autolispext.project.find.title": "在專案中尋找",
+  "autolispext.project.find.hint": "鍵入要尋找的文字字串，然後按 Enter。",
+  "autolispext.project.find.supportos": "只有 64 位元的系統才支援「尋找及取代」。",
+  "autolispext.project.find.inprogress": "正在進行中... ",
+  "autolispext.project.find.found": "找到 ",
+  "autolispext.project.find.lines": " 行，在 ",
+  "autolispext.project.find.files": " 檔案:",
+  "autolispext.project.find.stopped": "已停止尋找。",
+  "autolispext.project.find.noresults": "找不到任何結果。"
+}

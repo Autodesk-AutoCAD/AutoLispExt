@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "Un projet doit être ouvert pour que vous puissiez exclure un fichier.",
+  "autolispext.project.excludefile.filenotexist": "Le fichier à exclure n'existe pas dans le projet actuel."
+}

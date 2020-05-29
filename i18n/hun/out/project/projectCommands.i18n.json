@@ -1,0 +1,15 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Nem sikerült létrehozni az új projektet.",
+  "autolispext.project.commands.openprojectfailed": "Nem sikerült megnyitni a megadott projektet.",
+  "autolispext.project.commands.addfilefailed": "Nem sikerült hozzáadni a kiválasztott fájlokat.",
+  "autolispext.project.commands.removefilefailed": "Nem sikerült eltávolítani a kiválasztott fájlt.",
+  "autolispext.project.commands.projectsaved": "A projektfájl mentve.",
+  "autolispext.project.commands.saveprojectfailed": "Nem sikerült menteni a projektet.",
+  "autolispext.project.commands.refreshstatusfailed": "Nem sikerült frissíteni a fájlok állapotát.",
+  "autolispext.project.commands.openfilefailed": "Nem sikerült megnyitni a fájlt.",
+  "autolispext.project.commands.findfailed": "Nem sikerült keresni a projektben.",
+  "autolispext.project.commands.replacefailed": "Nem sikerült lecserélni a szöveges karakterláncot a projektben.",
+  "autolispext.project.commands.openresultfailed": "Nem sikerült megnyitni a keresési eredményeket.",
+  "autolispext.project.commands.clearresultfailed": "Nem sikerült törölni a keresési eredményeket.",
+  "autolispext.project.commands.initializefailed": "Az AutoLISP-projektkezelő inicializálása nem sikerült."
+}

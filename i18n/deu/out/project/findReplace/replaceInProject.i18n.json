@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Bevor Sie eine Textzeichenfolge ersetzen können, muss ein Projekt geöffnet sein.",
+  "autolispext.project.findreplace.replace.title": "In Projekt ersetzen",
+  "autolispext.project.findreplace.replace.hint.keyword": "Geben Sie eine zu suchende Textzeichenfolge ein, und drücken Sie die EINGABETASTE.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Geben Sie eine Textzeichenfolge ein, mit der der Suchtext ersetzt werden soll, und drücken Sie die EINGABETASTE."
+}

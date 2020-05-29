@@ -1,0 +1,5 @@
+{
+  "autolispext.project.findreplace.optionbutton.matchcase": "대소문자 구분",
+  "autolispext.project.findreplace.optionbutton.matchwholeword": "전체 단어 일치",
+  "autolispext.project.findreplace.optionbutton.regexp": "정규식 사용"
+}

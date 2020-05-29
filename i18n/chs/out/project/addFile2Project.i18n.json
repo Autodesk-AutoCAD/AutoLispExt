@@ -1,0 +1,6 @@
+{
+  "autolispext.project.addfile.openproject": "必须先打开项目，然后才能添加文件。",
+  "autolispext.project.addfile.onlylspallowed": "仅允许 LSP 文件。",
+  "autolispext.project.addfile.filealreadyexist": "此项目中已存在文件。",
+  "autolispext.project.addfile.openlabel": "添加到项目"
+}

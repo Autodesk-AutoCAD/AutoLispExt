@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Um projeto deve ser aberto para ser possível substituir uma sequência de texto.",
+  "autolispext.project.findreplace.replace.title": "Substituir no projeto",
+  "autolispext.project.findreplace.replace.hint.keyword": "Digite uma sequência de texto a ser encontrada e pressione Enter.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Insira uma sequência de texto para substituir e pressione Enter."
+}

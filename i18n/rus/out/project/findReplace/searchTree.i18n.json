@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " в ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nФайл проекта: ",
+  "autolispext.project.findreplace.searchtree.replace": "Заменить",
+  "autolispext.project.findreplace.searchtree.with": " на ",
+  "autolispext.project.findreplace.searchtree.find": "Найти ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nС учетом регистра: ВКЛ.",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nСлово целиком: ВКЛ.",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nИспользовать регулярное выражение: ВКЛ."
+}

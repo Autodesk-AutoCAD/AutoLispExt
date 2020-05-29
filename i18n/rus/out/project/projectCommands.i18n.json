@@ -1,0 +1,15 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Не удалось создать проект.",
+  "autolispext.project.commands.openprojectfailed": "Не удалось открыть указанный проект.",
+  "autolispext.project.commands.addfilefailed": "Не удалось добавить выбранные файлы.",
+  "autolispext.project.commands.removefilefailed": "Не удалось удалить выбранный файл.",
+  "autolispext.project.commands.projectsaved": "Файл проекта сохранен.",
+  "autolispext.project.commands.saveprojectfailed": "Не удалось сохранить проект.",
+  "autolispext.project.commands.refreshstatusfailed": "Не удалось обновить статус файлов.",
+  "autolispext.project.commands.openfilefailed": "Не удалось открыть файл.",
+  "autolispext.project.commands.findfailed": "Не удалось найти в проекте.",
+  "autolispext.project.commands.replacefailed": "Не удалось заменить текстовую строку в проекте.",
+  "autolispext.project.commands.openresultfailed": "Не удалось открыть результаты поиска.",
+  "autolispext.project.commands.clearresultfailed": "Не удалось очистить результаты поиска.",
+  "autolispext.project.commands.initializefailed": "Не удалось инициализировать Диспетчер проектов AutoLISP."
+}

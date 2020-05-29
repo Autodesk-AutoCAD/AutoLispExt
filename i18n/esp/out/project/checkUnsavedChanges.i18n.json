@@ -1,0 +1,5 @@
+{
+  "autolispext.project.checkunsavedchanges.message": "¿Desea guardar los cambios realizados en este proyecto?\n\nSi no se guardan, se descartarán todos los cambios realizados.",
+  "autolispext.project.checkunsavedchanges.save": "Guardar",
+  "autolispext.project.checkunsavedchanges.dontsave": "No guardar"
+}

@@ -1,0 +1,5 @@
+{
+  "autolispext.project.findreplace.optionbutton.matchcase": "区分大小写",
+  "autolispext.project.findreplace.optionbutton.matchwholeword": "全字匹配",
+  "autolispext.project.findreplace.optionbutton.regexp": "使用正则表达式"
+}

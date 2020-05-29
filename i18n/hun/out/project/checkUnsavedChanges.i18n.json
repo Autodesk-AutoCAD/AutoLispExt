@@ -1,0 +1,5 @@
+{
+  "autolispext.project.checkunsavedchanges.message": "Kívánja menteni a projekt változtatásait?\n\nAz összes módosítás elveszik, ha nem menti őket.",
+  "autolispext.project.checkunsavedchanges.save": "Mentés",
+  "autolispext.project.checkunsavedchanges.dontsave": "Nincs mentés"
+}

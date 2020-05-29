@@ -1,0 +1,6 @@
+{
+  "autolispext.project.openproject.onlyprjallowed": "PRJ ファイルのみが許可されます。",
+  "autolispext.project.openproject.readfailed": "プロジェクト ファイルを読み込めません: ",
+  "autolispext.project.openproject.malformedfile": "不正なプロジェクト ファイル: ",
+  "autolispext.project.openproject.label": "プロジェクトを開く"
+}

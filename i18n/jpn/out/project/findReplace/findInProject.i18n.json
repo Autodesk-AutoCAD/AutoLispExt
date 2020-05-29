@@ -1,0 +1,12 @@
+{
+  "autolispext.project.find.openproject": "文字列を検索するには、プロジェクトを開く必要があります。",
+  "autolispext.project.find.title": "プロジェクト内を検索",
+  "autolispext.project.find.hint": "検索する文字列を入力し、[Enter]を押します。",
+  "autolispext.project.find.supportos": "検索と置換は、64 ビット システムでのみサポートされています。",
+  "autolispext.project.find.inprogress": "進行中... ",
+  "autolispext.project.find.found": "検出 ",
+  "autolispext.project.find.lines": " 行 ",
+  "autolispext.project.find.files": " ファイル:",
+  "autolispext.project.find.stopped": "検索が停止しました。",
+  "autolispext.project.find.noresults": "結果が見つかりません。"
+}

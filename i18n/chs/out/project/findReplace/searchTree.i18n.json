@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": "在",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\n项目文件中: ",
+  "autolispext.project.findreplace.searchtree.replace": "替",
+  "autolispext.project.findreplace.searchtree.with": " 换 ",
+  "autolispext.project.findreplace.searchtree.find": "查找",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\n区分大小写: 开",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\n全字匹配: 开",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\n使用正则表达式: 开"
+}

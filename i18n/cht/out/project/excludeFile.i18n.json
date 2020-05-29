@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "您必須先開啟專案，才能排除檔案。",
+  "autolispext.project.excludefile.filenotexist": "要排除的檔案不在目前專案中。"
+}
