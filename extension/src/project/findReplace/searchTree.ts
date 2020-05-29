@@ -135,6 +135,8 @@ export class SummaryNode implements DisplayNode {
         if (opt.useRegularExpr) {
             this.tooltip += localize("autolispext.project.findreplace.searchtree.regexpon", "\r\nUse regular expression: ON");
         }
+
+        this.tooltip += "\r\n" + this.summary;
     }
 
     getDisplayText(): string {
