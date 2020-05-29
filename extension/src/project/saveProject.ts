@@ -3,11 +3,13 @@ import { ProjectDefinition } from './projectDefinition';
 import { LispFormatter } from '../format/formatter';
 
 import * as path from 'path'
-import * as vscode from 'vscode';
 import * as fs from 'fs-extra';
 import { pathEqual } from '../utils';
 import { ReadonlyDocument } from './readOnlyDocument';
 import * as nls from 'vscode-nls';
+
+import {longListFormatAsSingleColum, resetLongListFormatAsSingleColum} from '../format/sexpression'
+
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function SaveProject(refresh: boolean) {
@@ -28,7 +30,9 @@ export async function SaveProject(refresh: boolean) {
 
         //format the text before writing to file
         let doc = ReadonlyDocument.createProject(prjFileText);
+        longListFormatAsSingleColum();
         let formatedText = LispFormatter.format(doc, null);
+        resetLongListFormatAsSingleColum();
 
         //write to file
         let targetPath = root.projectFilePath;
@@ -43,6 +47,7 @@ export async function SaveProject(refresh: boolean) {
         if (refresh)
             ProjectTreeProvider.instance().refreshData();
 
+        resetLongListFormatAsSingleColum();
         return Promise.reject(e);
     }
 }

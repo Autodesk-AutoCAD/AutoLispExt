@@ -2,10 +2,25 @@ import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } 
 import { isInternalAutoLispOp } from '../completion/autocompletionProvider'
 import { Position } from 'vscode';
 
+enum  LongListFmts{
+  kSingleColumn,
+  kWideStyleSingleCol,
+  kFitToMargin
+};
+
 let gMaxLineChars = 80;
 let gIndentSpaces = 2;
 let gClosedParenInSameLine = true;
-let gLongListFormatAsSingleColumn = false;
+let gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+let gHasSetLongListFormat = false;
+export function longListFormatAsSingleColum() {
+    gLongListFormatAsSingleColumn = LongListFmts.kSingleColumn;
+    gHasSetLongListFormat = true;
+}
+export function resetLongListFormatAsSingleColum() {
+    gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+    gHasSetLongListFormat = false;
+}
 
 export function indentationForNarrowStyle(): number {
     return gIndentSpaces;
@@ -102,14 +117,14 @@ export class Sexpression extends LispAtom {
         this.atoms.push(item);
     }
 
-    static getRawText(sexpr:Sexpression): string {
+    static getRawText(sexpr: Sexpression): string {
         let ret = '';
 
-        if(!sexpr.atoms)
+        if (!sexpr.atoms)
             return ret;
 
-        for(let atom of sexpr.atoms) {
-            if(atom instanceof Sexpression) {
+        for (let atom of sexpr.atoms) {
+            if (atom instanceof Sexpression) {
                 ret += this.getRawText(atom as Sexpression);
             }
             else {
@@ -131,10 +146,9 @@ export class Sexpression extends LispAtom {
                 if (atom != null)
                     return atom;
             }
-            else 
-            {
-                if (line === this.atoms[i].line 
-                    && col >= this.atoms[i].column 
+            else {
+                if (line === this.atoms[i].line
+                    && col >= this.atoms[i].column
                     && col <= this.atoms[i].column + this.atoms[i].length())
                     return this.atoms[i];
             }
@@ -387,7 +401,7 @@ export class Sexpression extends LispAtom {
     }
 
     public formatListAsColumn(startColumn: number, alignCol?: number): string {
-        if (gLongListFormatAsSingleColumn)
+        if (gLongListFormatAsSingleColumn == LongListFmts.kWideStyleSingleCol)
             return this.formatList(startColumn, 2, false, 1);
 
         if (startColumn + this.length() + this.atomsCount() < gMaxLineChars)
@@ -679,7 +693,7 @@ export class Sexpression extends LispAtom {
             return false;
         }
         // function parameters long list is controled in defun formatter
-        if (this.isPureLongList() && gLongListFormatAsSingleColumn && !nearEndLine(startColumn))
+        if (this.isPureLongList() && gLongListFormatAsSingleColumn == LongListFmts.kWideStyleSingleCol && !nearEndLine(startColumn))
             return true;
 
         let op = this.getLispOperator();
@@ -731,7 +745,7 @@ export class Sexpression extends LispAtom {
         if (tryFmtStr.indexOf("\n") != -1)
             return false;
 
-        if (this.isPureLongList() && gLongListFormatAsSingleColumn)
+        if (this.isPureLongList() && gLongListFormatAsSingleColumn == LongListFmts.kWideStyleSingleCol)
             return false;
 
         if (startColumn + this.length() + this.atomsCount() < gMaxLineChars)
@@ -828,7 +842,7 @@ export class Sexpression extends LispAtom {
                 }
                 else if (opName == "defun" || opName == "defun-q") {
                     return this.formatDefun(startColumn);
-                } else if (this.isPureLongList() && !gLongListFormatAsSingleColumn)
+                } else if (this.isPureLongList() && gLongListFormatAsSingleColumn == LongListFmts.kFitToMargin)
                     return this.formatListAsColumn(startColumn, 3);
 
                 if (asCond) {
@@ -864,10 +878,12 @@ export class Sexpression extends LispAtom {
             gClosedParenInSameLine = true;
         else gClosedParenInSameLine = false;
 
-        let listFmtStyle = longListFormatStyle();
-        if (listFmtStyle.toString() == "Single column")
-            gLongListFormatAsSingleColumn = true;
-        else gLongListFormatAsSingleColumn = false;
+        if (!gHasSetLongListFormat) {
+            let listFmtStyle = longListFormatStyle();
+            if (listFmtStyle.toString() == "Single column")
+                gLongListFormatAsSingleColumn = LongListFmts.kWideStyleSingleCol;
+            else gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+        }
 
         if (linefeed)
             this.linefeed = linefeed;
