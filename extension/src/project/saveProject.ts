@@ -11,6 +11,7 @@ import * as nls from 'vscode-nls';
 import {longListFormatAsSingleColum, resetLongListFormatAsSingleColum} from '../format/sexpression'
 
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import * as vscode from 'vscode';
 
 export async function SaveProject(refresh: boolean) {
     try {
