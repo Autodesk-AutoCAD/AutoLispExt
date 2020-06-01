@@ -143,7 +143,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             try {
                 RefreshProject();
             } catch (err) {
-                let msg = localize("autolispext.project.commands.refreshfailed", "Failed to refresh the whole project.");
+                let msg = localize("autolispext.project.commands.refreshfailed", "Failed to refresh the project.");
                 showErrorMessage(msg, err);
             }
         }));

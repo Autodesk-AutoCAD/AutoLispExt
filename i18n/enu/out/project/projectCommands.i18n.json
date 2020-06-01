@@ -7,7 +7,7 @@
 	"autolispext.project.commands.allsaved": "All files saved.",
 	"autolispext.project.commands.saveprojectfailed": "Failed to save the project.",
 	"autolispext.project.commands.saveallfailed": "Failed to save all.",
-	"autolispext.project.commands.refreshfailed": "Failed to refresh the whole project.",
+	"autolispext.project.commands.refreshfailed": "Failed to refresh the project.",
 	"autolispext.project.commands.openfilefailed": "Failed to open the file.",
 	"autolispext.project.commands.findfailed": "Failed to find in project.",
 	"autolispext.project.commands.replacefailed": "Failed to replace text string in project.",

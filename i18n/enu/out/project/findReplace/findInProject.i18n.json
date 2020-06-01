@@ -9,5 +9,5 @@
 	"autolispext.project.find.files": " file(s):",
 	"autolispext.project.find.stopped": "Find stopped. ",
 	"autolispext.project.find.noresults": "No results found.",
-	"autolispext.project.find.exceedmaxresults": "The result set only contains a subset of all matches. Please be more specific in your search to narrow down the results. "
+	"autolispext.project.find.exceedmaxresults": "Limit of search results exceeded. Refine your search to narrow down the results. "
 }

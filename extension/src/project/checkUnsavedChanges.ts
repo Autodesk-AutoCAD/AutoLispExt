@@ -28,7 +28,7 @@ export async function CheckUnsavedChanges(): Promise<boolean> {
     
     // prompt user if there are unsaved changes
     if (root.projectModified || unsavedFiles.length > 0) {
-        let msg = localize("autolispext.project.checkunsavedchanges.message", "Do you want to save the changes?");
+        let msg = localize("autolispext.project.checkunsavedchanges.message", "Unsaved changes found with the project or the files in the project.\nDo you want to save the changes?");
         let save = localize("autolispext.project.checkunsavedchanges.save", "Save");
         let dontSave = localize("autolispext.project.checkunsavedchanges.dontsave", "Don't Save");
         const selection = await vscode.window.showWarningMessage(msg, {modal: true}, save, dontSave);

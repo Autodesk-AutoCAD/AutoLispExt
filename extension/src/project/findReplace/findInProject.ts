@@ -151,7 +151,7 @@ export class FindInProject {
             }
             else {
                 if (exceedMaxResults) {
-                    this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "The result set only contains a subset of all matches. Please be more specific in your search to narrow down the results. ");
+                    this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "Limit of search results exceeded. Refine your search to narrow down the results. ");
                 }
                 this.summaryNode.summary += found + `${totalLines}` + lines + `${totalFiles}` + files;
             }
