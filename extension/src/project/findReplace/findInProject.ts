@@ -69,7 +69,9 @@ export class FindInProject {
 
             this.resultByFile.splice(0, this.resultByFile.length);
             this.summaryNode = new SummaryNode();
-
+            // make default tooltip
+            this.summaryNode.makeTooltip(searchOption, prjNode);
+            
             //update the search tree with some progress
             let summary = localize("autolispext.project.find.inprogress", "In progress... ");
             this.summaryNode.summary = summary;
@@ -155,6 +157,7 @@ export class FindInProject {
                 }
                 this.summaryNode.summary += found + `${totalLines}` + lines + `${totalFiles}` + files;
             }
+            // update tooltip after search is done
             this.summaryNode.makeTooltip(searchOption, prjNode);
             return Promise.resolve();
         }
