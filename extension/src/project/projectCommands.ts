@@ -134,7 +134,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     vscode.window.showInformationMessage(msg);
                 })
                 .catch(err => {
-                    let msg = localize("autolispext.project.commands.saveallfailed", "Failed to save all.");
+                    let msg = localize("autolispext.project.commands.saveallfailed", "Failed to save all the files in the project.");
                     showErrorMessage(msg, err);
                 });
         }));

@@ -1,6 +1,6 @@
 {
 	"autolispext.description": "This is a vscode extension for AutoCAD AutoLISP",
-	"autolispext.loadcurrentfile.title": "AutoLISP: Load Active File",
+	"autolispext.loadcurrentfile.title": "Load File into AutoCAD",
 	"autolispext.configuration.title": "AutoCAD® AutoLISP configuration",
 	"autolispext.configuration.maxlinechars.desc": "Suggested maximum number of characters to display on each line. Value must be 60 or greater.",
 	"autolispext.configuration.narrowstyleindent.desc": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6.",
@@ -26,6 +26,6 @@
 	"autolispext.project.projectmanager.title": "AutoLISP Project Manager",
 	"autolispext.project.projectview.name": "Project",
 	"autolispext.project.findreplaceview.name": "Find & Replace",
-	"autolispext.packagejson.changeattachproc": "Launch.json deprecated. Please change VS Code setting: Attach Process.",
-	"autolispext.packagejson.changelaunchprog": "Launch.json deprecated. Please change VS Code settings: Launch Program, and Launch Parameters."
+	"autolispext.packagejson.changeattachproc": "This configuration has been deprecated. Instead use the Debug: Attach Process setting of the AutoCAD AutoLISP Extension.",
+	"autolispext.packagejson.changelaunchprog": "This configuration has been deprecated. Instead use the Debug: Launch Program and Debug: Launch Parameters settings of the AutoCAD AutoLISP Extension."
 }

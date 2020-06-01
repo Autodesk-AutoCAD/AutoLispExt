@@ -60,25 +60,24 @@ To debug an AutoLISP source file:
      * AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file.
     If prompted, specify the absolute path to the AutoCAD executable (acad.exe on Windows or AutoCAD on Mac).
 
-Note: To avoid specifying this path each time you click Run > Start Debugging (or press F5), this path is automatically saved into extension setting. The details are in the following session:
+Note: To avoid specifying this path each time you click Run > Start Debugging (or press F5), this path is automatically saved with the extension. For additional information on configuring the extension, see How to Configure the AutoCAD Path.
 
-## How to configure the AutoCAD path
-1. In Visual Studio Code "File" menu, select "Preferences" -> "Settings".
-2. Expand "Extensions" in "User" tab, and click on "AutoCAD® AutoLISP Configuration".
-3. Update the "Attach Process" attribute to specify the process name used to filter when attach.
-4. Update the "Launch Program" attribute to specify the path of AutoCAD executable that is used with launch debug.
-5. Update the "Launch Parameters" attribute to specify the AutoCAD startup parameters.
+## How to Configure the AutoCAD Path
+1.  In Visual Studio Code, click File > Preferences > Settings.
+2.  Under the User tab, expand Extensions and click AutoCAD® AutoLISP Configuration.
+3.  Update the Debug: Attach Process setting with the process name in which to filter on during Debug Attach.
+4.  Update the Debug: Launch Program setting to specify the path of the AutoCAD executable to use with Debug Launch.
+5.  Update the Debug: Launch Parameters setting to specify the AutoCAD startup parameters.
 
-Note:
-In the following configurations, substitute <release> based on the AutoCAD application installed on your workstation.
+Note: In the following examples, be sure to substitute the path with that of the AutoCAD application installed on your workstation.
 
 Example (on Windows):
-Launch Program: C:\Program Files\Autodesk\AutoCAD <release>\acad.exe
-Attach Process: acad
+•   Launch Program: C:\Program Files\Autodesk\AutoCAD <release>\acad.exe
+•   Attach Process: acad
 
-Example (on Mac):
-Launch Program: /Applications/Autodesk/AutoCAD <release>/AutoCAD <release>.app/Contents/MacOS/AutoCAD
-Attach Process: AutoCAD
+Example (on Mac OS):
+•   Launch Program: /Applications/Autodesk/AutoCAD /AutoCAD <release>.app/Contents/MacOS/AutoCAD
+•   Attach Process: AutoCAD
 
 For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
 
@@ -90,7 +89,7 @@ For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
-AutoCAD Lisp Extension © 2020 Autodesk, Inc. All rights reserved.
+AutoCAD AutoLISP Extension © 2020 Autodesk, Inc. All rights reserved.
 
 All use of this Software is subject to the Autodesk terms of service accepted accepted upon access or use of this Service or made available on the Autodesk webpage. Autodesk terms of service for Autodesk’s various web services can be found [here](https://www.autodesk.com/company/terms-of-use/en/general-terms).
 

@@ -14,13 +14,7 @@ export class FileNode implements DisplayNode {
     errorInReplace: string = null;//error message provided when replace in file
     collapsibleState: vscode.TreeItemCollapsibleState = vscode.TreeItemCollapsibleState.Expanded;
     getDisplayText(): string {
-        let ret = this.shortPath + " (" + this.findings.length + ")";
-        if (this.errorInReplace) {
-            let failed = localize("autolispext.project.findreplace.searchtree.failed", "(FAILED) ");
-            ret = failed + ret;
-        }
-
-        return ret;
+        return this.shortPath + " (" + this.findings.length + ")";
     }
 
     getTooltip(): string {
