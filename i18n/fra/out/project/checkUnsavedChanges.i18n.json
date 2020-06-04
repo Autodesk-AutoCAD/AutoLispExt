@@ -1,5 +1,5 @@
 {
-  "autolispext.project.checkunsavedchanges.message": "Voulez-vous enregistrer les modifications apportées à ce projet ?\n\nToutes les modifications seront perdues si elles ne sont pas enregistrées.",
+  "autolispext.project.checkunsavedchanges.message": "Il y a des modifications non enregistrées dans le projet ou dans les fichiers du projet.\nSouhaitez-vous enregistrer ces modifications?",
   "autolispext.project.checkunsavedchanges.save": "Enregistrer",
   "autolispext.project.checkunsavedchanges.dontsave": "Ne pas enregistrer"
 }

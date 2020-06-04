@@ -1,5 +1,6 @@
 {
   "autolispext.project.findreplace.optionbutton.matchcase": "Groß-/Kleinschreibung beachten",
   "autolispext.project.findreplace.optionbutton.matchwholeword": "Ganzes Wort suchen",
-  "autolispext.project.findreplace.optionbutton.regexp": "Regulären Ausdruck verwenden"
+  "autolispext.project.findreplace.optionbutton.regexp": "Regulären Ausdruck verwenden",
+  "autolispext.project.findreplace.optionbutton.close": "Schließen"
 }

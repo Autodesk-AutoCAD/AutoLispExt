@@ -1,5 +1,6 @@
 {
   "autolispext.project.findreplace.optionbutton.matchcase": "大小寫須相符",
   "autolispext.project.findreplace.optionbutton.matchwholeword": "全字拼寫須相符",
-  "autolispext.project.findreplace.optionbutton.regexp": "使用正規表示式"
+  "autolispext.project.findreplace.optionbutton.regexp": "使用正規表示式",
+  "autolispext.project.findreplace.optionbutton.close": "關閉"
 }

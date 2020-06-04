@@ -1,6 +1,7 @@
 {
   "autolispext.project.addfile.openproject": "Fájl hozzáadásához meg kell nyitnia egy projektet.",
   "autolispext.project.addfile.onlylspallowed": "Csak LSP-fájlok engedélyezettek.",
-  "autolispext.project.addfile.filealreadyexist": "A fájl már létezik ebben a projektben.",
+  "autolispext.project.addfile.filealreadyexist": "A fájl már létezik ebben a projektben: ",
+  "autolispext.project.addfile.samenameexist": "Már létezik ilyen nevű fájl a projektben: ",
   "autolispext.project.addfile.openlabel": "Hozzáadás a projekthez"
 }

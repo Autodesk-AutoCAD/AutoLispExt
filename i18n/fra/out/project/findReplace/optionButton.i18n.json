@@ -1,5 +1,6 @@
 {
   "autolispext.project.findreplace.optionbutton.matchcase": "Respecter la casse",
   "autolispext.project.findreplace.optionbutton.matchwholeword": "Mot entier",
-  "autolispext.project.findreplace.optionbutton.regexp": "Utiliser une 'expression régulière"
+  "autolispext.project.findreplace.optionbutton.regexp": "Utiliser une 'expression régulière",
+  "autolispext.project.findreplace.optionbutton.close": "Fermer"
 }

@@ -1,6 +1,6 @@
 {
   "autolispext.urihandler.invaid": "Appel incorrect à l'extension AutoCAD AutoLISP.",
   "autolispext.urihandler.activeddebugcfg": "Configuration de débogage actuelle: ",
-  "autolispext.urihandler.debug.start": "Dans la barre de menus, cliquez sur Déboguer > Démarrer le débogage pour déboguer le fichier source AutoLISP actuel.",
-  "autolispext.urihandler.debug.openfile": "Ouvrez un fichier source AutoLISP et cliquez sur Déboguer > Démarrer le débogage dans la barre de menus pour déboguer le fichier."
+  "autolispext.urihandler.debug.start": "Dans la barre de menus, cliquez sur Exécuter > Démarrer le débogage pour déboguer le fichier source AutoLISP actuel.",
+  "autolispext.urihandler.debug.openfile": "Ouvrez un fichier source AutoLISP et cliquez sur Exécuter > Démarrer le débogage dans la barre de menus pour déboguer le fichier."
 }

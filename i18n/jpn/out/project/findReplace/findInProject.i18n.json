@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "検索と置換は、64 ビット システムでのみサポートされています。",
   "autolispext.project.find.inprogress": "進行中... ",
   "autolispext.project.find.found": "検出 ",
-  "autolispext.project.find.lines": " 行 ",
+  "autolispext.project.find.results": " 個の結果: ",
   "autolispext.project.find.files": " ファイル:",
-  "autolispext.project.find.stopped": "検索が停止しました。",
-  "autolispext.project.find.noresults": "結果が見つかりません。"
+  "autolispext.project.find.stopped": "検索が停止しました。 ",
+  "autolispext.project.find.noresults": "結果が見つかりません。",
+  "autolispext.project.find.exceedmaxresults": "検索結果の上限を超えました。検索結果が少なくなるように、検索条件を変更してください。 "
 }

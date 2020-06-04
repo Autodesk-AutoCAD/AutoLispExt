@@ -1,5 +1,5 @@
 {
-  "autolispext.project.checkunsavedchanges.message": "Deseja salvar as alterações feitas neste projeto?\n\nTodas as alterações feitas serão descartadas se não forem salvas.",
+  "autolispext.project.checkunsavedchanges.message": "Foram encontradas alterações não salvas no projeto ou nos arquivos do projeto.\nDeseja salvar as alterações?",
   "autolispext.project.checkunsavedchanges.save": "Salvar",
   "autolispext.project.checkunsavedchanges.dontsave": "Não salvar"
 }

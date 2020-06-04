@@ -1,5 +1,6 @@
 {
   "autolispext.project.findreplace.optionbutton.matchcase": "Coincidir mayúsculas/minúsculas",
   "autolispext.project.findreplace.optionbutton.matchwholeword": "Coincidir palabra completa",
-  "autolispext.project.findreplace.optionbutton.regexp": "Utilizar expresión regular"
+  "autolispext.project.findreplace.optionbutton.regexp": "Utilizar expresión regular",
+  "autolispext.project.findreplace.optionbutton.close": "Cerrar"
 }

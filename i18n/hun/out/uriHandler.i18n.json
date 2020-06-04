@@ -1,6 +1,6 @@
 {
   "autolispext.urihandler.invaid": "Az AutoCAD AutoLISP-bővítmény hívása érvénytelen.",
   "autolispext.urihandler.activeddebugcfg": "Aktuális hibakeresés-konfiguráció: ",
-  "autolispext.urihandler.debug.start": "Az aktuális AutoLISP-forrásfájl hibakereséséhez kattintson a menüsor Debug (Hibakeresés) > Start Debugging (Hibakeresés) indítása elemére.",
-  "autolispext.urihandler.debug.openfile": "Nyisson meg egy AutoLISP-forrásfájlt, és kattintson a menüsor Debug (Hibakeresés) > Start Debugging (Hibakeresés) elemére a fájl hibakereséséhez."
+  "autolispext.urihandler.debug.start": "Az aktuális AutoLISP-forrásfájl hibakereséséhez kattintson a menüsor Run (Futtatás) > Start Debugging (Hibakeresés) indítása elemére.",
+  "autolispext.urihandler.debug.openfile": "Nyisson meg egy AutoLISP-forrásfájlt, és kattintson a menüsor Run (Futtatás) > Start Debugging (Hibakeresés) elemére a fájl hibakereséséhez."
 }

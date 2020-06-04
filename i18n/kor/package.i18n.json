@@ -1,6 +1,6 @@
 {
   "autolispext.description": "AutoCAD AutoLISP용 vscode 확장자입니다.",
-  "autolispext.loadcurrentfile.title": "이 명령은 현재 활성 lisp 문서를 로드하는 데 사용됩니다.",
+  "autolispext.loadcurrentfile.title": "파일을 AutoCAD로 로드",
   "autolispext.configuration.title": "AutoCAD® AutoLISP 구성",
   "autolispext.configuration.maxlinechars.desc": "각 행에 표시할 제안된 최대 문자 수입니다. 값은 60 이상이어야 합니다.",
   "autolispext.configuration.narrowstyleindent.desc": "함수 인수의 좁은 형식 스타일에 사용되는 들여쓰기 값입니다. 값은 1과 6 범위 내에 있어야 합니다.",
@@ -17,12 +17,15 @@
   "autolispext.project.addfile.title": "프로젝트에 파일 추가",
   "autolispext.project.removefile.title": "프로젝트에서 파일 제거",
   "autolispext.project.saveproject.title": "프로젝트 저장",
-  "autolispext.project.refreshfilestatus.title": "파일 상태 새로 고침",
+  "autolispext.project.saveall.title": "모두 저장",
+  "autolispext.project.refresh.title": "새로 고침",
   "autolispext.project.findinproject.title": "프로젝트에서 찾기",
   "autolispext.project.replaceinproject.title": "프로젝트에서 대치",
   "autolispext.project.stopsearch.title": "검색 중지",
   "autolispext.project.clearsearchresults.title": "모든 검색 결과 지우기",
   "autolispext.project.projectmanager.title": "AutoLISP 프로젝트 관리자",
   "autolispext.project.projectview.name": "프로젝트",
-  "autolispext.project.findreplaceview.name": "찾기 및 대치"
+  "autolispext.project.findreplaceview.name": "찾기 및 대치",
+  "autolispext.packagejson.changeattachproc": "이 구성은 더 이상 사용되지 않습니다. 대신 AutoCAD AutoLISP Extension의 디버그: 부착 프로세스 설정을 사용하십시오.",
+  "autolispext.packagejson.changelaunchprog": "이 구성은 더 이상 사용되지 않습니다. 대신 AutoCAD AutoLISP Extension의 디버그: 프로그램 시작 및 디버그: 매개변수 시작 설정을 사용하십시오."
 }

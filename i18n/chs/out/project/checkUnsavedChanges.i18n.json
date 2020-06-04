@@ -1,5 +1,5 @@
 {
-  "autolispext.project.checkunsavedchanges.message": "是否要保存对此项目所做的更改？\n\n如果不保存，所做的所有更改都将被放弃。",
+  "autolispext.project.checkunsavedchanges.message": "发现项目或项目中的文件有未保存的更改。\n是否要保存这些更改？",
   "autolispext.project.checkunsavedchanges.save": "保存",
   "autolispext.project.checkunsavedchanges.dontsave": "不保存"
 }

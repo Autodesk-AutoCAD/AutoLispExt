@@ -1,6 +1,6 @@
 {
   "autolispext.description": "Dies ist eine VS Code Extension für AutoCAD AutoLISP",
-  "autolispext.loadcurrentfile.title": "Mit diesem Befehl wird das aktuell aktive LISP-Dokument geladen.",
+  "autolispext.loadcurrentfile.title": "Datei in AutoCAD laden",
   "autolispext.configuration.title": "AutoCAD® AutoLISP-Konfiguration",
   "autolispext.configuration.maxlinechars.desc": "Empfohlene Höchstzahl an Zeichen für die Anzeige pro Zeile. Wert muss 60 oder höher sein.",
   "autolispext.configuration.narrowstyleindent.desc": "Einrückungswert für den schmalen Formatierungsstil der Funktionsargumente. Wert muss zwischen 1 und 6 liegen.",
@@ -17,12 +17,15 @@
   "autolispext.project.addfile.title": "Datei zu Projekt hinzufügen",
   "autolispext.project.removefile.title": "Datei aus Projekt entfernen",
   "autolispext.project.saveproject.title": "Projekt speichern",
-  "autolispext.project.refreshfilestatus.title": "Dateistatus aktualisieren",
+  "autolispext.project.saveall.title": "Alle speichern",
+  "autolispext.project.refresh.title": "Aktualisieren",
   "autolispext.project.findinproject.title": "In Projekt suchen",
   "autolispext.project.replaceinproject.title": "In Projekt ersetzen",
   "autolispext.project.stopsearch.title": "Suche beenden",
   "autolispext.project.clearsearchresults.title": "Alle Suchergebnisse löschen",
   "autolispext.project.projectmanager.title": "AutoLISP-Projektmanager",
   "autolispext.project.projectview.name": "Projekt",
-  "autolispext.project.findreplaceview.name": "Suchen und ersetzen"
+  "autolispext.project.findreplaceview.name": "Suchen und ersetzen",
+  "autolispext.packagejson.changeattachproc": "Diese Konfiguration wird nicht mehr unterstützt. Verwenden Sie stattdessen die Einstellung Debugging: Prozess zuordnen der AutoCAD AutoLISP Extension.",
+  "autolispext.packagejson.changelaunchprog": "Diese Konfiguration wird nicht mehr unterstützt. Verwenden Sie stattdessen die Einstellungen Debugging: Programm starten und Debugging: Parameter starten der AutoCAD AutoLISP Extension."
 }

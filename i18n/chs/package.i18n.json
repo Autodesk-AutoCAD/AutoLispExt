@@ -1,6 +1,6 @@
 {
   "autolispext.description": "这是适用于 AutoCAD AutoLISP 的 vscode 扩展",
-  "autolispext.loadcurrentfile.title": "此命令用于加载当前活动的 LISP 文档。",
+  "autolispext.loadcurrentfile.title": "加载文件到 AutoCAD",
   "autolispext.configuration.title": "AutoCAD® AutoLISP 配置",
   "autolispext.configuration.maxlinechars.desc": "建议每行显示的最大字符数。值必须为 60 或更大。",
   "autolispext.configuration.narrowstyleindent.desc": "函数参数的窄格式样式中使用的缩进值。值必须在 1 和 6 之间。",
@@ -17,12 +17,15 @@
   "autolispext.project.addfile.title": "向项目添加文件",
   "autolispext.project.removefile.title": "从项目中删除文件",
   "autolispext.project.saveproject.title": "保存项目",
-  "autolispext.project.refreshfilestatus.title": "刷新文件状态",
+  "autolispext.project.saveall.title": "全部保存",
+  "autolispext.project.refresh.title": "刷新",
   "autolispext.project.findinproject.title": "在项目中查找",
   "autolispext.project.replaceinproject.title": "在项目中替换",
   "autolispext.project.stopsearch.title": "停止搜索",
   "autolispext.project.clearsearchresults.title": "清除所有搜索结果",
   "autolispext.project.projectmanager.title": "AutoLISP 项目管理器",
   "autolispext.project.projectview.name": "项目",
-  "autolispext.project.findreplaceview.name": "查找和替换"
+  "autolispext.project.findreplaceview.name": "查找和替换",
+  "autolispext.packagejson.changeattachproc": "此配置已弃用。请改用 AutoCAD AutoLISP Extension 的“调试: 附着进程”设置。",
+  "autolispext.packagejson.changelaunchprog": "此配置已弃用。请改用 AutoCAD AutoLISP Extension 的“调试: 启动程序”和“调试: 启动参数”设置。"
 }

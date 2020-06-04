@@ -1,6 +1,6 @@
 {
   "autolispext.description": "Es una extensión de VS Code para AutoCAD AutoLISP.",
-  "autolispext.loadcurrentfile.title": "Este comando se utiliza para cargar el documento LISP activo.",
+  "autolispext.loadcurrentfile.title": "Cargar archivo en AutoCAD",
   "autolispext.configuration.title": "Configuración de AutoCAD® AutoLISP",
   "autolispext.configuration.maxlinechars.desc": "Número máximo de caracteres sugeridos que se mostrarán en cada línea. El valor debe ser 60 o superior.",
   "autolispext.configuration.narrowstyleindent.desc": "Valor de sangría utilizado en el estilo de formato estrecho de los argumentos de función. El valor debe encontrarse en el intervalo entre 1 y 6.",
@@ -17,12 +17,15 @@
   "autolispext.project.addfile.title": "Añadir archivo al proyecto",
   "autolispext.project.removefile.title": "Eliminar archivo del proyecto",
   "autolispext.project.saveproject.title": "Guardar proyecto",
-  "autolispext.project.refreshfilestatus.title": "Actualizar estado de archivo",
+  "autolispext.project.saveall.title": "Guardar todo",
+  "autolispext.project.refresh.title": "Actualizar",
   "autolispext.project.findinproject.title": "Buscar en el proyecto",
   "autolispext.project.replaceinproject.title": "Reemplazar en el proyecto",
   "autolispext.project.stopsearch.title": "Detener búsqueda",
   "autolispext.project.clearsearchresults.title": "Borrar todos los resultados de la búsqueda",
   "autolispext.project.projectmanager.title": "Administrador de proyectos de AutoLISP",
   "autolispext.project.projectview.name": "Proyecto",
-  "autolispext.project.findreplaceview.name": "Buscar y reemplazar"
+  "autolispext.project.findreplaceview.name": "Buscar y reemplazar",
+  "autolispext.packagejson.changeattachproc": "Esta configuración se ha dejado de utilizar. En su lugar, utilice el parámetro \"Debug: Attach Process\" de AutoCAD AutoLISP Extension.",
+  "autolispext.packagejson.changelaunchprog": "Esta configuración se ha dejado de utilizar. En su lugar, utilice los parámetros \"Debug: Launch Program\" y \"Debug: Launch Parameters\" de AutoCAD AutoLISP Extension."
 }

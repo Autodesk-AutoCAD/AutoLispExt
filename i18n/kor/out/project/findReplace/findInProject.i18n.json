@@ -4,9 +4,10 @@
   "autolispext.project.find.hint": "찾을 문자열을 입력하고 Enter 키를 누릅니다.",
   "autolispext.project.find.supportos": "찾기 및 대치는 64비트 시스템에서만 지원됩니다.",
   "autolispext.project.find.inprogress": "진행 중... ",
-  "autolispext.project.find.found": "행 ",
-  "autolispext.project.find.lines": " 개가 파일 ",
-  "autolispext.project.find.files": " 개에서 발견됨:",
-  "autolispext.project.find.stopped": "찾기가 중지되었습니다.",
-  "autolispext.project.find.noresults": "결과를 찾을 수 없습니다."
+  "autolispext.project.find.found": "발견됨( ",
+  "autolispext.project.find.results": " 개 결과/ ",
+  "autolispext.project.find.files": " 개 파일):",
+  "autolispext.project.find.stopped": "찾기가 중지되었습니다. ",
+  "autolispext.project.find.noresults": "결과를 찾을 수 없습니다.",
+  "autolispext.project.find.exceedmaxresults": "검색 결과 한계가 초과되었습니다. 검색을 구체화하여 결과 범위를 좁히십시오. "
 }

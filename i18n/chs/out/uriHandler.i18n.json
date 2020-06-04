@@ -1,6 +1,6 @@
 {
   "autolispext.urihandler.invaid": "对 AutoCAD AutoLISP 扩展的调用无效。",
   "autolispext.urihandler.activeddebugcfg": "当前调试配置：",
-  "autolispext.urihandler.debug.start": "从菜单栏中，单击“调试”>“启动调试”以调试当前 AutoLISP 源文件。",
-  "autolispext.urihandler.debug.openfile": "打开 AutoLISP 源文件，然后从菜单栏单击“调试”>“启动调试”以调试文件。"
+  "autolispext.urihandler.debug.start": "在菜单栏中，依次单击“运行”>“开始调试”以调试当前 AutoLISP 源文件。",
+  "autolispext.urihandler.debug.openfile": "打开 AutoLISP 源文件，然后在菜单栏中依次单击“运行”>“开始调试”以调试该文件。"
 }

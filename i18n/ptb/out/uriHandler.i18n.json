@@ -1,6 +1,6 @@
 {
   "autolispext.urihandler.invaid": "Chamada inválida para a extensão AutoCAD AutoLISP.",
   "autolispext.urihandler.activeddebugcfg": "Configuração de depuração atual: ",
-  "autolispext.urihandler.debug.start": "Na barra de menus, clique em Depurar > Iniciar depuração para depurar o arquivo de origem do AutoLISP atual.",
-  "autolispext.urihandler.debug.openfile": "Abra um arquivo de origem do AutoLISP e clique em Depurar > Iniciar depuração na barra de menus para depurar o arquivo."
+  "autolispext.urihandler.debug.start": "Na barra de menus, clique em Executar > Iniciar depuração para depurar o arquivo de origem do AutoLISP atual.",
+  "autolispext.urihandler.debug.openfile": "Abra um arquivo de origem do AutoLISP e clique em Executar > Iniciar depuração na barra de menus para depurar o arquivo."
 }

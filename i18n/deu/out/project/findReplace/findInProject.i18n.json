@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "Suchen und ersetzen wird nur auf 64-Bit-Systemen unterstützt.",
   "autolispext.project.find.inprogress": "In Bearbeitung... ",
   "autolispext.project.find.found": "Gefunden ",
-  "autolispext.project.find.lines": " Zeile(n) in ",
+  "autolispext.project.find.results": " Ergebnis(e) in ",
   "autolispext.project.find.files": " Datei(en):",
-  "autolispext.project.find.stopped": "Suche angehalten.",
-  "autolispext.project.find.noresults": "Keine Ergebnisse gefunden."
+  "autolispext.project.find.stopped": "Suche angehalten. ",
+  "autolispext.project.find.noresults": "Keine Ergebnisse gefunden.",
+  "autolispext.project.find.exceedmaxresults": "Die Höchstanzahl für Suchergebnisse wurde überschritten. Verfeinern Sie die Suche, um die Ergebnisse einzugrenzen. "
 }

@@ -1,6 +1,7 @@
 {
   "autolispext.project.addfile.openproject": "Un projet doit être ouvert pour que vous puissiez ajouter un fichier.",
   "autolispext.project.addfile.onlylspallowed": "Seuls les fichiers LSP sont autorisés.",
-  "autolispext.project.addfile.filealreadyexist": "Ce fichier existe déjà dans ce projet.",
+  "autolispext.project.addfile.filealreadyexist": "Ce fichier existe déjà dans ce projet: ",
+  "autolispext.project.addfile.samenameexist": "Un fichier portant le même nom existe déjà dans ce projet: ",
   "autolispext.project.addfile.openlabel": "Ajouter au projet"
 }

@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "只有 64 位元的系統才支援「尋找及取代」。",
   "autolispext.project.find.inprogress": "正在進行中... ",
   "autolispext.project.find.found": "找到 ",
-  "autolispext.project.find.lines": " 行，在 ",
+  "autolispext.project.find.results": " 個結果，在 ",
   "autolispext.project.find.files": " 檔案:",
   "autolispext.project.find.stopped": "已停止尋找。",
-  "autolispext.project.find.noresults": "找不到任何結果。"
+  "autolispext.project.find.noresults": "找不到任何結果。",
+  "autolispext.project.find.exceedmaxresults": "搜尋結果數超出限制。請縮小搜尋範圍，以減少結果數量。"
 }

@@ -1,5 +1,5 @@
 {
-  "autolispext.project.checkunsavedchanges.message": "Сохранить изменения в проекте?\n\nБез сохранения все внесенные изменения будут удалены.",
+  "autolispext.project.checkunsavedchanges.message": "В проекте или файлах проекта есть несохраненные изменения.\nСохранить изменения?",
   "autolispext.project.checkunsavedchanges.save": "Сохранить",
   "autolispext.project.checkunsavedchanges.dontsave": "Не сохранять"
 }

@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "Localizar e substituir é suportado somente em sistemas de 64 bits.",
   "autolispext.project.find.inprogress": "Em andamento... ",
   "autolispext.project.find.found": "Encontrado ",
-  "autolispext.project.find.lines": " linha(s) em ",
+  "autolispext.project.find.results": " resultado(s) em ",
   "autolispext.project.find.files": " arquivo(s):",
-  "autolispext.project.find.stopped": "Localizar parado.",
-  "autolispext.project.find.noresults": "Nenhum resultado encontrado."
+  "autolispext.project.find.stopped": "Localização interrompida. ",
+  "autolispext.project.find.noresults": "Nenhum resultado encontrado.",
+  "autolispext.project.find.exceedmaxresults": "Limite de resultados de pesquisa excedido. Refine a pesquisa para restringir os resultados. "
 }

@@ -1,6 +1,6 @@
 {
   "autolispext.urihandler.invaid": "Ungültiger Aufruf der AutoCAD AutoLISP Extension.",
   "autolispext.urihandler.activeddebugcfg": "Aktuelle Debug-Konfiguration: ",
-  "autolispext.urihandler.debug.start": "Klicken Sie in der Menüleiste auf Debugging > Debugging starten, um die aktuelle AutoLISP-Quelldatei zu debuggen.",
-  "autolispext.urihandler.debug.openfile": "Öffnen Sie eine AutoLISP-Quelldatei, und klicken Sie in der Menüleiste auf Debugging > Debugging starten, um die Datei zu debuggen."
+  "autolispext.urihandler.debug.start": "Klicken Sie in der Menüleiste auf Ausführen > Debugging starten, um die aktuelle AutoLISP-Quelldatei zu debuggen.",
+  "autolispext.urihandler.debug.openfile": "Öffnen Sie eine AutoLISP-Quelldatei, und klicken Sie in der Menüleiste auf Ausführen > Debugging starten, um die Datei zu debuggen."
 }

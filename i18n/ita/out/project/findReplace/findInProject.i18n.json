@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "La funzione Trova e sostituisci è supportata solo su sistemi a 64 bit.",
   "autolispext.project.find.inprogress": "In corso... ",
   "autolispext.project.find.found": "Trovato ",
-  "autolispext.project.find.lines": " riga/ghe in ",
+  "autolispext.project.find.results": " risultato/i in ",
   "autolispext.project.find.files": " file:",
-  "autolispext.project.find.stopped": "Ricerca interrotta.",
-  "autolispext.project.find.noresults": "Nessun risultato trovato."
+  "autolispext.project.find.stopped": "Ricerca interrotta. ",
+  "autolispext.project.find.noresults": "Nessun risultato trovato.",
+  "autolispext.project.find.exceedmaxresults": "Limite di risultati della ricerca superato. Affinare la ricerca per restringere i risultati. "
 }

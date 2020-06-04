@@ -1,6 +1,7 @@
 {
   "autolispext.project.addfile.openproject": "您必須先開啟專案，才能加入檔案。",
   "autolispext.project.addfile.onlylspallowed": "只允許 LSP 檔。",
-  "autolispext.project.addfile.filealreadyexist": "檔案已經在此專案中。",
+  "autolispext.project.addfile.filealreadyexist": "此專案中已經有檔案: ",
+  "autolispext.project.addfile.samenameexist": "此專案中已經有名稱相同的檔案: ",
   "autolispext.project.addfile.openlabel": "加入至專案"
 }

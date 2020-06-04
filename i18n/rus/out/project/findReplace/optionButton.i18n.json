@@ -1,5 +1,6 @@
 {
   "autolispext.project.findreplace.optionbutton.matchcase": "С учетом регистра",
   "autolispext.project.findreplace.optionbutton.matchwholeword": "Слово целиком",
-  "autolispext.project.findreplace.optionbutton.regexp": "Использовать регулярное выражение"
+  "autolispext.project.findreplace.optionbutton.regexp": "Использовать регулярное выражение",
+  "autolispext.project.findreplace.optionbutton.close": "Закрыть"
 }

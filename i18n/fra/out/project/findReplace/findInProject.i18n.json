@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "La fonction Rechercher et remplacer n'est prise en charge que sur les systèmes 64 bits.",
   "autolispext.project.find.inprogress": "En cours... ",
   "autolispext.project.find.found": "Détection de ",
-  "autolispext.project.find.lines": " ligne(s) dans ",
+  "autolispext.project.find.results": " résultat(s) dans ",
   "autolispext.project.find.files": " fichier(s):",
-  "autolispext.project.find.stopped": "Recherche arrêtée.",
-  "autolispext.project.find.noresults": "Aucun résultat."
+  "autolispext.project.find.stopped": "Recherche arrêtée. ",
+  "autolispext.project.find.noresults": "Aucun résultat.",
+  "autolispext.project.find.exceedmaxresults": "Limite des résultats de recherche dépassée. Affinez votre recherche pour limiter les résultats. "
 }

@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "La función Buscar y reemplazar solo se admite en sistemas de 64 bits.",
   "autolispext.project.find.inprogress": "En curso... ",
   "autolispext.project.find.found": "Encontrado(s) ",
-  "autolispext.project.find.lines": " línea(s) en ",
+  "autolispext.project.find.results": " resultado(s) en ",
   "autolispext.project.find.files": " archivo(s):",
-  "autolispext.project.find.stopped": "Búsqueda detenida.",
-  "autolispext.project.find.noresults": "No se han encontrado resultados."
+  "autolispext.project.find.stopped": "Búsqueda detenida. ",
+  "autolispext.project.find.noresults": "No se han encontrado resultados.",
+  "autolispext.project.find.exceedmaxresults": "Se ha superado el límite de resultados de búsqueda. Ajuste de forma más precisa la búsqueda para restringir los resultados. "
 }

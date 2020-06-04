@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "Функция «Найти и заменить» поддерживается только в 64-разрядных системах.",
   "autolispext.project.find.inprogress": "Выполняется... ",
   "autolispext.project.find.found": "Найдено ",
-  "autolispext.project.find.lines": " стр. в ",
+  "autolispext.project.find.results": " результ. в ",
   "autolispext.project.find.files": " файл.:",
-  "autolispext.project.find.stopped": "Поиск остановлен.",
-  "autolispext.project.find.noresults": "Результаты не найдены."
+  "autolispext.project.find.stopped": "Поиск остановлен. ",
+  "autolispext.project.find.noresults": "Результаты не найдены.",
+  "autolispext.project.find.exceedmaxresults": "Превышен предел результатов поиска. Уточните критерии поиска, чтобы сократить количество результатов. "
 }

@@ -5,8 +5,9 @@
   "autolispext.project.find.supportos": "仅 64 位系统支持“查找和替换”。",
   "autolispext.project.find.inprogress": "正在进行中... ",
   "autolispext.project.find.found": "找到 ",
-  "autolispext.project.find.lines": " 行(在 ",
+  "autolispext.project.find.results": " 结果在 ",
   "autolispext.project.find.files": " 文件中):",
-  "autolispext.project.find.stopped": "查找已停止。",
-  "autolispext.project.find.noresults": "找不到结果。"
+  "autolispext.project.find.stopped": "查找已停止。 ",
+  "autolispext.project.find.noresults": "找不到结果。",
+  "autolispext.project.find.exceedmaxresults": "超出了搜索结果的限制。请优化搜索以缩小结果范围。 "
 }

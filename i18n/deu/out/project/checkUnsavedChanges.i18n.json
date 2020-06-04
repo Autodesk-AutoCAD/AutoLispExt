@@ -1,5 +1,5 @@
 {
-  "autolispext.project.checkunsavedchanges.message": "Möchten Sie die Änderungen an diesem Projekt speichern?\n\nAlle Änderungen werden verworfen, wenn Sie sie nicht speichern.",
+  "autolispext.project.checkunsavedchanges.message": "Für das Projekt oder Dateien im Projekt wurden nicht gespeicherte Änderungen gefunden.\nMöchten Sie die Änderungen speichern?",
   "autolispext.project.checkunsavedchanges.save": "Speichern",
   "autolispext.project.checkunsavedchanges.dontsave": "Nicht speichern"
 }
