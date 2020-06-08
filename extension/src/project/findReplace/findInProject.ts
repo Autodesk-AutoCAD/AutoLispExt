@@ -133,6 +133,12 @@ export class FindInProject {
 
                     totalFiles++;
                     totalLines += findings.length;
+                } catch (ex) {
+                    if (ex.message === "stdout maxBuffer exceeded") {
+                        exceedMaxResults = true;
+                        break;
+                    }
+                    throw ex;
                 }
                 finally {
                     if ((file2Search != srcFile.filePath) && fs.existsSync(file2Search)) {
@@ -148,13 +154,16 @@ export class FindInProject {
                 this.summaryNode.summary = '';
             }
 
+            if (exceedMaxResults) {
+                this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "Limit of search results exceeded. Refine your search to narrow down the results. ");
+            }
+
             if (totalLines <= 0) {
-                this.summaryNode.summary += localize("autolispext.project.find.noresults", "No results found.");
+                if (!exceedMaxResults) {
+                    this.summaryNode.summary += localize("autolispext.project.find.noresults", "No results found.");
+                }
             }
             else {
-                if (exceedMaxResults) {
-                    this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "Limit of search results exceeded. Refine your search to narrow down the results. ");
-                }
                 this.summaryNode.summary += found + `${totalLines}` + lines + `${totalFiles}` + files;
             }
             // update tooltip after search is done
