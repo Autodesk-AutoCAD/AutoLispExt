@@ -359,7 +359,9 @@
 						"type": "attachlisp",
 						"request": "attach",
 						"name": "AutoLISP Debug: Attach",
-						"help": "%autolispext.packagejson.changeattachproc%"
+						"attributes" : {
+							"//": "%autolispext.packagejson.changeattachproc%"
+						}
 					}
 				],
 				"configurationSnippets": [
@@ -370,7 +372,9 @@
 							"type": "attachlisp",
 							"request": "attach",
 							"name": "AutoLISP Debug: Attach",
-							"help": "%autolispext.packagejson.changeattachproc%"
+							"attributes" : {
+								"//": "%autolispext.packagejson.changeattachproc%"
+							}
 						}
 					}
 				]
@@ -423,7 +427,9 @@
 						"type": "launchlisp",
 						"request": "launch",
 						"name": "AutoLISP Debug: Launch",
-						"help": "%autolispext.packagejson.changelaunchprog%"
+						"attributes": {
+							"//" : "%autolispext.packagejson.changelaunchprog%"
+						}
 					}
 				],
 				"configurationSnippets": [
@@ -434,7 +440,9 @@
 							"type": "launchlisp",
 							"request": "launch",
 							"name": "AutoLISP Debug: Launch",
-							"help": "%autolispext.packagejson.changelaunchprog%"
+							"attributes": {
+								"//" : "%autolispext.packagejson.changelaunchprog%"
+							}
 						}
 					}
 				]
