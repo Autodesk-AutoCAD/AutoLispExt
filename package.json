@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.2.8",
+	"version": "1.2.9",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://knowledge.autodesk.com/contact-support"
@@ -147,17 +147,17 @@
 			"type": "object",
 			"title": "%autolispext.configuration.title%",
 			"properties": {
-				"autolispext.MaxLineChars": {
+				"autolispext.format.MaxLineChars": {
 					"type": "number",
 					"default": 85,
 					"description": "%autolispext.configuration.maxlinechars.desc%"
 				},
-				"autolispext.NarrowStyleIndent": {
+				"autolispext.format.NarrowStyleIndent": {
 					"type": "number",
 					"default": 2,
 					"description": "%autolispext.configuration.narrowstyleindent.desc%"
 				},
-				"autolispext.CloseParenthesisStyle": {
+				"autolispext.format.CloseParenthesisStyle": {
 					"type": "string",
 					"enum": [
 						"Same line",
@@ -166,7 +166,7 @@
 					"default": "New line with outer indentation",
 					"description": "%autolispext.configuration.closeparenstyle.desc%"
 				},
-				"autolispext.LongListFormatStyle": {
+				"autolispext.format.LongListFormatStyle": {
 					"type": "string",
 					"enum": [
 						"Single column",
