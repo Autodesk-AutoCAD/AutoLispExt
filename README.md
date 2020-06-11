@@ -72,19 +72,19 @@ Note: To avoid specifying this path each time you click Run > Start Debugging (o
 Note: In the following examples, be sure to substitute the path with that of the AutoCAD application installed on your workstation.
 
 Example (on Windows):
-•   Launch Program: C:\Program Files\Autodesk\AutoCAD <release>\acad.exe
-•   Attach Process: acad
+* Launch Program: C:\Program Files\Autodesk\AutoCAD &lt;release&gt;\acad.exe
+* Attach Process: acad
 
 Example (on Mac OS):
-•   Launch Program: /Applications/Autodesk/AutoCAD /AutoCAD <release>.app/Contents/MacOS/AutoCAD
-•   Attach Process: AutoCAD
+* Launch Program: /Applications/Autodesk/AutoCAD /AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD
+* Attach Process: AutoCAD
 
 For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
 
 ## Notes
 
 1.	Other AutoLISP extensions may conflict with this extension. If you are unable to set a breakpoint in a LSP file or you can’t use the launch/attach debug configurations, you should disable or uninstall all other AutoLISP extensions.
-2.	When using this extension on Mac® OS, the "Launch Program" attribute in extension setting should be ".../AutoCAD <release>.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD <release>.app.
+2.	When using this extension on Mac® OS, the "Launch Program" attribute in extension setting should be ".../AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD &lt;release&gt;.app.
 3.	For AutoCAD specialized toolsets or OEM-based products, the product name might not be the same as AutoCAD or acad.exe. To use this extension with those products, set the value of the "Launch Program" attribute in extension setting based on the product you want to debug with.
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
