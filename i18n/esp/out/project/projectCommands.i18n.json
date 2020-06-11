@@ -5,7 +5,7 @@
   "autolispext.project.commands.removefilefailed": "No se ha podido eliminar el archivo seleccionado.",
   "autolispext.project.commands.projectsaved": "Archivo de proyecto guardado.",
   "autolispext.project.commands.allsaved": "Se han guardado todos los archivos.",
-  "autolispext.project.commands.saveprojectfailed": "No se ha podido guardar el proyecto",
+  "autolispext.project.commands.saveprojectfailed": "No se ha podido guardar el proyecto.",
   "autolispext.project.commands.saveallfailed": "No se han podido guardar todos los archivos del proyecto.",
   "autolispext.project.commands.refreshfailed": "No se ha podido actualizar el proyecto.",
   "autolispext.project.commands.openfilefailed": "No se ha podido abrir el archivo.",
