@@ -39,8 +39,9 @@ export async function findInFile(searchOption: SearchOption, file2Search: string
         commandArgs.push(SearchOption.activeInstance.replacement);
     }
 
-    return execa(
-        rgPath,
-        commandArgs
-    );
+    if (process.platform === 'darwin') {
+        return execa(rgPath + '.app', commandArgs);
+    }
+
+    return execa(rgPath, commandArgs);
 }

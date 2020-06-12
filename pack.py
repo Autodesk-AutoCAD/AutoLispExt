@@ -40,11 +40,12 @@ def init():
 def copyRipGrep():
     #copy exe of vscode-ripgrep into bin folder for both Windows and Mac
     srcWin = os.path.join(os.path.curdir, 'utils', 'vscode-ripgrep', 'ripgrep-v11.0.1-2-x86_64-pc-windows-msvc', 'rg.exe')
-    srcOSX = os.path.join(os.path.curdir, 'utils', 'vscode-ripgrep', 'ripgrep-v11.0.1-2-x86_64-apple-darwin', 'rg')
+    srcOSX = os.path.join(os.path.curdir, 'utils', 'vscode-ripgrep', 'ripgrep-v11.0.1-2-x86_64-apple-darwin', 'rg.app')
     dst = os.path.join(os.path.curdir, 'node_modules', 'vscode-ripgrep', 'bin')
 
     removeFile(dst, 'rg.exe')
-    removeFile(dst, 'rg')
+    removeFile(dst, 'rg.app')
+    removeFile(dst, 'rg') #remove the discarded copy in case it's there
     copyFile(srcWin, dst, 'copied rg.exe for Windows')
     copyFile(srcOSX, dst, 'copied rg for OS X')
 
