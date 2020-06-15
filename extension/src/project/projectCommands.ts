@@ -16,6 +16,7 @@ import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnI
 import { RefreshProject } from './refreshProject';
 
 import * as nls from 'vscode-nls';
+import { grantExePermission } from './findReplace/ripGrep';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
@@ -212,6 +213,8 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         IconUris.initialize();
+
+        grantExePermission();
     }
     catch (e) {
         let msg = localize("autolispext.project.commands.initializefailed", "Failed to initalize the AutoLISP Project Manager.");
