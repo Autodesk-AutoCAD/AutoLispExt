@@ -1,20 +1,8 @@
 import * as path from 'path';
 import { OpenProjectFile } from '../../project/openProject';
 import { createProject } from '../../project/createProject';
-import { excludeFromProject } from '../../project/excludeFile';
-import { ProjectTreeProvider } from '../../project/projectTree';
-import { makeSourceFileList } from '../../project/saveProject';
-import { FindInProject } from '../../project/findReplace/findInProject';
-import { replaceInProject } from '../../project/findReplace/replaceInProject';
-import { SearchTreeProvider, FileNode } from '../../project/findReplace/searchTree';
-import { SearchOption, getString } from '../../project/findReplace/options';
-
 import { Uri } from 'vscode';
-import { LspFileNode } from '../../project/projectTree';
-import * as vscode from 'vscode';
 
-
-const fs = require('fs');
 var expect = require('chai').expect;
 
 suite("Project related Tests", function () {
