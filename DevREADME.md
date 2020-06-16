@@ -30,7 +30,7 @@ copy utils\acadProcessFinder\bin\acadProcessFinder.exe extension\out\process
 If you only want to build the ts file and debug it via F5, you can run:
 ```
 => Windows:   winCompile.bat
-=> Otherwise: npm run compile
+=> Otherwise: ./macCompile.sh
 ```
 
 ## How to package the extension
