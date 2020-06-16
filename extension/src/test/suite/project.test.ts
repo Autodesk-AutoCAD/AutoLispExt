@@ -14,8 +14,7 @@ suite("Project related Tests", function () {
 				OpenProjectFile(Uri.file("empty.prj"));
 			}
 			catch (err) {
-				let ret = err.message.startsWith("Can't read project file:");
-				expect(ret).to.be.true;
+				expect(err.message.startsWith("Can't read project file:")).to.be.true;
 			}
 		});
 
@@ -24,9 +23,8 @@ suite("Project related Tests", function () {
 			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
 			let ret = Uri.file(project_path);
 			try {
-				let getReturn = OpenProjectFile(ret);
 				//OpenProjectFile() is different with OpenProject()
-				expect(getReturn.projectName).to.be.equals("project_test_file");
+				expect(OpenProjectFile(ret).projectName).to.be.equals("project_test_file");
 			}
 			catch (err) {
 				console.log(err);
@@ -58,8 +56,7 @@ suite("Project related Tests", function () {
 				createProject(project_path_err);
 			}
 			catch (err) {
-				let ret = err.message.startsWith("Only PRJ files are allowed.");
-				expect(ret).to.be.true;
+				expect(err.message.startsWith("Only PRJ files are allowed.")).to.be.true;
 			}
 		});
 	});

@@ -138,7 +138,7 @@ function makeKeyValuePair(metaData: ProjectDefinition, key: string): string {
     return key + '\r\n' + metaData.getProperty(key) + '\r\n';
 }
 
-export function makeSourceFileList(root: ProjectNode): string {
+function makeSourceFileList(root: ProjectNode): string {
     let fileList = '';
 
     if (root.sourceFiles.length == 0) {
