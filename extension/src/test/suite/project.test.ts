@@ -33,28 +33,40 @@ suite("Project related Tests", function () {
 
 		// Defines a Mocha unit test, test case: open an existing project file
 		test("open an existing project file", function () {
-			//“__dirname” indicates the absolute path of the directory where the current file is located
 			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
 			let ret = Uri.file(project_path);
-			let getReturn = OpenProjectFile(ret);
-			//OpenProjectFile() is different with OpenProject()
-			expect(getReturn.projectName).to.be.equals("project_test_file");
+			try {
+				let getReturn = OpenProjectFile(ret);
+				//OpenProjectFile() is different with OpenProject()
+				expect(getReturn.projectName).to.be.equals("project_test_file");
+			}
+			catch (err) {
+				console.log(err);
+				expect(err).to.be.equals("");
+			}
+			
 		});
 	});
 
 	suite("Project create Tests", function () {
 		// Defines a Mocha unit test, test case: Successed to create a new project
 		test("create a new project", async function () {
-			let project_path = path.join(__dirname + "\\test_case\\createPrj.prj");
+			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\createPrj.prj");
 			let returnValue = await createProject(project_path);
-			//after createproject(), need to click "create" button. So under the "__dirname" folder, which don't contains createPrj.prj
-			expect(returnValue.projectName).to.be.equals("createPrj");
+			try {
+				//after createproject(), need to click "create" button. So under the "__dirname" folder, which don't contains createPrj.prj
+				expect(returnValue.projectName).to.be.equals("createPrj");
+			}
+			catch (err) {
+				console.log(err);
+				expect(err).to.be.equals("");
+			}
 		});
 
 		// Defines a Mocha unit test, test case: Failed to create a new project, only PRJ files are allowed.
 		test("failed to create a new project", function () {
 			try {
-				let project_path_err = path.join(__dirname + "\\test_case\\createPr.pr");
+				let project_path_err = path.join(__dirname + "\\..\\..\\..\\test_case\\createPr.pr");
 				createProject(project_path_err);
 			}
 			catch (err) {
