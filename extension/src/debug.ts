@@ -72,7 +72,17 @@ export function registerLispDebugProviders(context: vscode.ExtensionContext) {
         console.log(event);
         if (event.session && (event.session.type === "launchlisp" || event.session.type === attachCfgType)) {
             if (event.event === "runtimeerror") {
-                // handle runtime diagnostics errors
+                /*
+                    struct runtimeerror
+                    {
+                         string file;
+                         int  startline;
+                         int  startcol;
+                         int  endline;
+                         int  endcol;
+                         string message;
+                    }
+                */
                 DiagnosticsCtrl.addDocumentDiagnostics(event.body.file, event.body.message, event.body.startline, event.body.startcol, event.body.endline, event.body.endcol);
             }
             else if (event.event === "clearcache") {
@@ -82,6 +92,16 @@ export function registerLispDebugProviders(context: vscode.ExtensionContext) {
                 let msg = localize("autolispext.debug.acad.nosupport",
                     "This instance of AutoCAD doesn’t support debugging AutoLISP files, use a release later than AutoCAD 2020.");
                 vscode.window.showErrorMessage(msg);
+            }
+            else if (event.event === "dgbfatalerr") {
+                 /*
+                    struct dgbfatalerr
+                    {
+                         string message;
+                    }
+                */ 
+               let msg = event.body.message;
+               vscode.window.showErrorMessage(msg);
             }
         }
     }));
