@@ -38,8 +38,8 @@ suite("Project related Tests", function () {
 		// Defines a Mocha unit test, test case: Successed to create a new project
 		test("create a new project", async function () {
 			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\createPrj.prj");
-			let returnValue = await createProject(project_path);
 			try {
+				let returnValue = await createProject(project_path);
 				//after createproject(), need to click "create" button. So under the "__dirname" folder, which don't contains createPrj.prj
 				expect(returnValue.projectName).to.be.equals("createPrj");
 			}
@@ -51,8 +51,8 @@ suite("Project related Tests", function () {
 
 		// Defines a Mocha unit test, test case: Failed to create a new project, only PRJ files are allowed.
 		test("failed to create a new project", function () {
+			let project_path_err = path.join(__dirname + "\\..\\..\\..\\test_case\\createPr.pr");
 			try {
-				let project_path_err = path.join(__dirname + "\\..\\..\\..\\test_case\\createPr.pr");
 				createProject(project_path_err);
 			}
 			catch (err) {
