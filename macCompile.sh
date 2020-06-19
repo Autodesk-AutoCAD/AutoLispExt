@@ -21,6 +21,10 @@ echo "copying rg.app from  utils to target folder ..."
 cp ./utils/vscode-ripgrep/ripgrep-v11.0.1-2-x86_64-apple-darwin/rg.app ./node_modules/vscode-ripgrep/bin
 
 echo ""
+echo "removing out ..."
+rm -rf out
+
+echo ""
 echo "start to compile AutoLispExt ..."
 npm run compile
 

@@ -581,7 +581,8 @@
 		"vscode-languageclient": "4.2.0",
 		"vscode-nls": "3.2.5",
 		"vscode-ripgrep": "1.5.8",	
-		"os-locale": "5.0.0"
+		"os-locale": "5.0.0",
+		"jschardet": "2.1.1"
 	},
 	"resolutions": {
 		"yargs-parser": "18.1.3"

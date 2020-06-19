@@ -1,4 +1,4 @@
-del extension\out /S /Q /F
+del out /S /Q /F
 
 call npm run compile
 

@@ -2,19 +2,20 @@ import { SearchOption, getSearchOption } from './options';
 import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
 import { FileNode, FindingNode, SearchTreeProvider, SummaryNode } from './searchTree';
-import { saveUnsavedDoc2Tmp } from '../../utils';
+import { saveOpenDoc2Tmp } from '../../utils';
 
 import * as vscode from 'vscode'
 import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
 import { setIsSearching } from './clearResults';
 import * as nls from 'vscode-nls';
+import { detectEncoding } from './encoding';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 const fs = require('fs-extra')
 
-const osLocale = require('os-locale');	
-const encodings = new Map([["zh-CN", "gb2312"], ["zh-TW", "big5"], ["ja-JP", "shift-jis"], ["ko-KR", "ksc5601"]]);	
+const osLocale = require('os-locale');
+const encodings = new Map([["zh-CN", "gb2312"], ["zh-TW", "big5"], ["ja-JP", "shift-jis"], ["ko-KR", "ksc5601"]]);
 
 export async function findInProject() {
     //check if there's a opened project
@@ -71,7 +72,7 @@ export class FindInProject {
             this.summaryNode = new SummaryNode();
             // make default tooltip
             this.summaryNode.makeTooltip(searchOption, prjNode);
-            
+
             //update the search tree with some progress
             let summary = localize("autolispext.project.find.inprogress", "In progress... ");
             this.summaryNode.summary = summary;
@@ -93,14 +94,18 @@ export class FindInProject {
                 if (fs.existsSync(srcFile.filePath) == false)
                     continue;
 
-                let file2Search = saveUnsavedDoc2Tmp(srcFile.filePath);
+                let file2Search = saveOpenDoc2Tmp(srcFile.filePath);
                 try {
-                    //try to find with utf8
-                    let ret = await this.findWithEncoding(searchOption, file2Search);
-                    if (!ret) {
+                    let encodingName = detectEncoding(file2Search);
 
-                        //nothing found with utf8, so try to find with system locale/vs code display language	
-                        ret = await this.findWithLocaleOrLanguage(searchOption, file2Search);	
+                    let ret = null;
+                    if (encodingName) {
+                        ret = await this.findWithEncoding(searchOption, file2Search, encodingName);
+                    }
+
+                    if (!ret) {
+                        //try to find with system locale:
+                        ret = await this.findWithLocale(searchOption, file2Search);
                     }
 
                     if (!ret)
@@ -120,7 +125,7 @@ export class FindInProject {
                         exceedMaxResults = true;
                         break;
                     }
-                    
+
                     let fileNode = new FileNode()
                     fileNode.filePath = srcFile.filePath;
                     fileNode.shortPath = srcFile.getDisplayText();
@@ -205,15 +210,19 @@ export class FindInProject {
         }
     }
 
-    private async findWithLocaleOrLanguage(searchOption: SearchOption, file2Search: string) {
-        const loc = await osLocale();	
+    //for Mac OS, the "system locale" is determined by both of the preferred language + region
+    //e.g., to get "zh-CN" from osLocale() on Mac OS, the settings are:
+    //  1. preferred language: Simplified Chinese
+    //  2. region: China Mainland
+    private async findWithLocale(searchOption: SearchOption, file2Search: string) {
+        const loc = await osLocale();
         let encoding = encodings.get(loc);
-	
+
         if (!encoding) {
-            encoding = "windows-1252";		
+            encoding = "windows-1252";
         }
-        
-        let ret = await this.findWithEncoding(searchOption, file2Search, encoding);	
+
+        let ret = await this.findWithEncoding(searchOption, file2Search, encoding);
         return ret;
     }
 

@@ -75,17 +75,18 @@ export function pathEqual(path1:string, path2:string, isDir:boolean): boolean {
         return p1 == p2;
 }
 
-//if the given file is opened in an editor with unsaved changes, save its latest content into a temp file,
-//  and return the file path of this temp file
-//otherwise return the original file path
-export function saveUnsavedDoc2Tmp(filePath:string): string {
+//if the given file is opened in an editor, save its latest content into a temp file,
+//  and return the file path of this temp file;
+//  otherwise return the original file path
+
+//the reason why we save open doc to tmp:
+//  1. we need to search in the unsaved text;
+//  2. the user might manually override the encoding on VS Code editor;
+export function saveOpenDoc2Tmp(filePath:string): string {
     let doc = getDocument(filePath);
     if(doc == null)
         return filePath;
     
-    if(doc.isDirty == false)
-        return filePath;
-
     let tmpFile = getTmpFilePath();
 
     fs.writeFileSync(tmpFile, doc.getText());

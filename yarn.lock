@@ -1939,6 +1939,11 @@ js-yaml@3.13.1, js-yaml@^3.7.0:
     argparse "^1.0.7"
     esprima "^4.0.0"
 
+jschardet@2.1.1:
+  version "2.1.1"
+  resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/jschardet/-/jschardet-2.1.1.tgz#af6f8fd0b3b0f5d46a8fd9614a4fce490575c184"
+  integrity sha1-r2+P0LOw9dRqj9lhSk/OSQV1wYQ=
+
 json-stable-stringify-without-jsonify@^1.0.1:
   version "1.0.1"
   resolved "https://art-bobcat.autodesk.com:443/artifactory/api/npm/team-autocad-npm-virtual/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
