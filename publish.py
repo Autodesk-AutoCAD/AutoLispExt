@@ -10,7 +10,7 @@ def download_artifactory_vsix():
 
     vsixUri = sys.argv[2]
 
-    print("downloading " + vsixUri);
+    print("downloading " + vsixUri)
 
     os.system("curl -k -O " + vsixUri) # nosec
 

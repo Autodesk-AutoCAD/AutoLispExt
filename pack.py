@@ -70,8 +70,8 @@ def copyFile(src, dst, description):
         print("          " + description)
         print("===============================================")
         print("\n\n")
-    except IOError, e:
-        print "Unable to copy file. %s" % e
+    except IOError as e:
+        print("Unable to copy file. %s" % e)
     
     return 0
 

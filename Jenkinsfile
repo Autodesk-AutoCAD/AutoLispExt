@@ -150,6 +150,7 @@ timestamps {
                     if(!params.publish2VsCodeMarket) {
                         sh """
                         cd $WORKSPACE
+                        python --version
                         npm config set registry https://art-bobcat.autodesk.com/artifactory/api/npm/team-autocad-npm-virtual
                         python pack.py
                         ls -lh
