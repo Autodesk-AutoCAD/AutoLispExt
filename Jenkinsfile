@@ -37,7 +37,7 @@ def publish2VsCode() {
 
     downScript = '''
     cd $WORKSPACE
-    python publish.py down ${vsixUriOnArtifactory}
+    python3.5 publish.py down ${vsixUriOnArtifactory}
     ls -lh
     '''
 
@@ -150,9 +150,9 @@ timestamps {
                     if(!params.publish2VsCodeMarket) {
                         sh """
                         cd $WORKSPACE
-                        python --version
+                        python3.5 --version
                         npm config set registry https://art-bobcat.autodesk.com/artifactory/api/npm/team-autocad-npm-virtual
-                        python pack.py
+                        python3.5 pack.py
                         ls -lh
                         """
                     }
