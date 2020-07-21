@@ -58,6 +58,8 @@ yarn test
 
 ## How to publish the extension to vscode market
 
+The following steps require access to Autodesk network resources and therefore can only be done by Autodesk employees.
+
 You need to see the details to the page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 
 1. Create a tag on GIT, with the correct commit ID selected
@@ -71,7 +73,7 @@ You need to see the details to the page <https://code.visualstudio.com/api/worki
 2.5 After a few minutes, visit https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext to make sure it's done.
 
 You can also do it by hand:
-1. Download the signed version pacakage from Artifactory to local machine and unzip it
+1. Download the signed version package from Artifactory to local machine and unzip it
 2. Change path to the path in step 3, and run command "vsce login Autodesk"; it will prompt you input the PAT.
 3. Run command "vsce publish --packagePath autolispextxxx.vsix"
 4. Check the [extension web page](https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext) to see if it is updated.

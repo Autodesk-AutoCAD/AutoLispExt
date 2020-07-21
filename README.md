@@ -1,4 +1,4 @@
-# AutoCAD® AutoLISP® Extension for Visual Studio Code
+# Visual Studio Code Extension for AutoCAD® AutoLISP
 
 This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your lisp programs with AutoCAD 2021.
 For information on creating lisp programs for AutoCAD with the AutoLISP programming language, see the:
@@ -6,7 +6,7 @@ For information on creating lisp programs for AutoCAD with the AutoLISP programm
    - AutoCAD AutoLISP: [Reference](https://www.autodesk.com/autolisp-reference)
    - AutoCAD AutoLISP: [Tutorials](https://www.autodesk.com/autolisp-tutorials)
 
-The extension is distributed under the [Autodesk Terms of Use](https://www.autodesk.com/company/terms-of-use/en/general-terms#offerings).
+The extension is open source and distributed under Apache License v2.0.
 
 Your feedback is highly appreciated! Should you have any suggestions, please create an issue [here](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues).
 
@@ -51,7 +51,7 @@ Windows | Mac | Linux |
 :-------: | :---: | :-------: |
 <font color=green>√</font> | <font color=green>√</font> | <font color=red>x</font> |
 
-## How to use the AutoCAD AutoLISP Extension
+## How to use the extension
 To debug an AutoLISP source file:
 1.  Open a LSP file.
 2.  Click Run > Start Debugging (or press F5). 
@@ -79,7 +79,7 @@ Example (on Mac OS):
 * Launch Program: /Applications/Autodesk/AutoCAD /AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD
 * Attach Process: AutoCAD
 
-For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.com/autolisp-extension) documentation online.
+For more information, see the [documentation online](https://www.autodesk.com/autolisp-extension).
 
 ## Notes
 
@@ -89,9 +89,7 @@ For more information, see the [AutoCAD AutoLISP extension](https://www.autodesk.
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
-AutoCAD AutoLISP Extension © 2020 Autodesk, Inc. All rights reserved.
-
-All use of this Software is subject to the Autodesk terms of service accepted accepted upon access or use of this Service or made available on the Autodesk webpage. Autodesk terms of service for Autodesk’s various web services can be found [here](https://www.autodesk.com/company/terms-of-use/en/general-terms).
+Visual Studio Code Extensio for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
 
 ### Privacy 
 To learn more about Autodesk’s online and offline privacy practices, please see the [Autodesk Privacy Statement](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement).
@@ -101,120 +99,6 @@ The license does not grant permission to use the trade names, trademarks, servic
 
 All other brand names, product names or trademarks belong to their respective holders.
 
-### Patents
-This Service is protected by patents listed on the [Autodesk Patents](https://www.autodesk.com/company/legal-notices-trademarks/patents) page.
-
-### Autodesk Cloud and Desktop Components
-
-This Service may incorporate or use background Autodesk online and desktop technology components. For information about these components, see [Autodesk Cloud Platform Components](https://www.autodesk.com/company/legal-notices-trademarks/autodesk-cloud-platform-components) and [Autodesk Desktop Platform Components](https://www.autodesk.com/company/legal-notices-trademarks/autodesk-desktop-platform-components).
-
 ### Third-Party Trademarks, Software Credits and Attributions
 
-#### https://github.com/request/request:
-Licensed under the Apache License, Version 2.0 (the
-“License”); you may not use this file except in compliance
-with the License. You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on 
-Autodesk Confidential - Internal Use Only
-Autodesk Internal Use Only
-an “AS IS” BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing
-permissions and limitations under the License.
-
-#### https://github.com/palantir/tslint:
-Licensed under the Apache License, Version 2.0 (the
-“License”); you may not use this file except in compliance
-with the License. You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on 
-Autodesk Confidential - Internal Use Only
-Autodesk Internal Use Only
-an “AS IS” BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing
-permissions and limitations under the License.
-
-#### https://github.com/microsoft/TypeScript:
-Copyright (c) Microsoft Corporation. All rights reserved. 
-
-Licensed under the Apache License, Version 2.0 (the
-“License”); you may not use this file except in compliance
-with the License. You may obtain a copy of the License at
-http://www.apache.org/licenses/LICENSE-2.0
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on 
-Autodesk Confidential - Internal Use Only
-Autodesk Internal Use Only
-an “AS IS” BASIS, WITHOUT WARRANTIES OR
-CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing
-permissions and limitations under the License.
-
-#### https://github.com/microsoft/vscode-vsce:
-Copyright (c) Microsoft Corporation. All rights reserved. 
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software 
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT 
-OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-#### https://github.com/Microsoft/vscode-languageserver-node:
-Copyright (c) Microsoft Corporation. All rights reserved. 
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation 
-files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
-modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software 
-is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS 
-BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT 
-OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-#### https://www.npmjs.com/package/os-locale:
-MIT License
-
-Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com)
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-#### https://github.com/microsoft/vscode-ripgrep
-Copyright (c) Microsoft Corporation
-
-All rights reserved.
-
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the ""Software""), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-#### https://github.com/microsoft/vscode-icons
-Microsoft and any contributors grant you a license to the Microsoft documentation and other content in this repository under the Creative Commons Attribution 4.0 International Public License, see the LICENSE file, and grant you a license to any code in the repository under the MIT License, see the LICENSE-CODE file.
-
-Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services referenced in the documentation may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries. The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks. Microsoft's general trademark guidelines can be found at http://go.microsoft.com/fwlink/?LinkID=254653.
-
-Privacy information can be found at https://privacy.microsoft.com/en-us/
-
-Microsoft and any contributors reserve all other rights, whether under their respective copyrights, patents, or trademarks, whether by implication, estoppel or otherwise.
-
-#### https://github.com/aadsm/jschardet
+See [here](NOTICE.md).
