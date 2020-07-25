@@ -29,10 +29,11 @@ const languages = [
     { id: "ru", folderName: "rus" },
     //{ id: "bg", folderName: "bul" }, // VS Code supports Bulgarian, but VS is not currently localized for it
 	{ id: "hu", folderName: "hun" }, // VS Code supports Hungarian, but VS is not currently localized for it
-    { id: "pt-br", folderName: "ptb", transifexId: "pt-BR" },
-    { id: "tr", folderName: "trk" },
-    { id: "cs", folderName: "csy" },
-    { id: "pl", folderName: "plk" }];
+    { id: "pt-br", folderName: "ptb", transifexId: "pt-BR" }
+    //{ id: "tr", folderName: "trk" },
+    //{ id: "cs", folderName: "csy" },
+	//{ id: "pl", folderName: "plk" }
+];
 
 const cleanTask = function () {
 	return del(['out/**', 'package.nls.*.json', ' Autodesk.autolispext*.vsix']);

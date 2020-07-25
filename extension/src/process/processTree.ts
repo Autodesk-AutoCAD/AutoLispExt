@@ -1,11 +1,3 @@
-// $ts: processTree.ts#2 $ $Change: 385917 $ $DateTime: 2018/12/05 11:52:14 $ $Author: yunjian.zhang $
-// $NoKeywords: $
-//
-//  Copyright 2018 Autodesk, Inc.  All rights reserved.
-//
-//  Use of this software is subject to the terms of the Autodesk license 
-//  agreement provided at the time of installation or download, or which 
-//  otherwise accompanies this software in either electronic or hard copy form.   
 //
 // processTree.ts
 //
