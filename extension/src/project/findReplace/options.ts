@@ -109,7 +109,9 @@ export async function getString(title: string, hint: string) {
             quickpick.value = '';
             quickpick.ignoreFocusOut = true;
 
-            let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            // TODO: do localization latter, now it has no enu\out\project\findReplace\options.i18n.json
+            //let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            let closeTooltip = "Close";
             let closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
             quickpick.buttons = [closeBtn];
 
