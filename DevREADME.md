@@ -2,14 +2,6 @@
 
 AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Extension plays the roles of both debug adapter and language server which could enable you debug lisp with AutoCAD. The following description is for developers.
 
-## Build status
-
-[![Build Status](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master)](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master/)
-
-## package location
-
-[extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
-
 ## How to setup the Dev Env
 npm install -g yarn (if it's not installed yet)
 
@@ -33,7 +25,16 @@ If you only want to build the ts file and debug it via F5, you can run:
 => Otherwise: ./macCompile.sh
 ```
 
+## How to debug the extension
+
+1. open the source codes folder "AutoLispExt" in the vscode.
+2. add some breakpoints as needed.
+3. hit F5 and select "Extension Client", then it will start another vscode instance with running the extension. 
+4. Do some operations to invoke the codes which are added breakpoints, vscode will stop in the first instance.
+
+
 ## How to package the extension
+
 You could package the extension by:
 ```
 cd AutoLispExt
@@ -43,12 +44,15 @@ Note that don't run "publish" command otherwise you make sure you want to do.
 For the publish command it will release current version extension to vscode market. 
 
 ## The Script pack.py
+
 You could do all above steps  by the script pack.py, it is python2
 ```
 cd AutoLispExt
 python pack.py
 ```
+
 ## Run tests
+
 You have two ways to run the tests:
   - Run inside the VS Code and begin debugging by choosing "Extension Tests"
   - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation) 
@@ -56,9 +60,17 @@ You have two ways to run the tests:
 yarn test
 ```
 
-## How to publish the extension to vscode market
+### The following steps require access to Autodesk network resources and therefore can only be done by Autodesk employees
 
-The following steps require access to Autodesk network resources and therefore can only be done by Autodesk employees.
+## Build status
+
+[![Build Status](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master)](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master/)
+
+## package location
+
+[extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
+
+## How to publish the extension to vscode market
 
 You need to see the details to the page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
 
