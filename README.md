@@ -89,7 +89,7 @@ For more information, see the [documentation online](https://www.autodesk.com/au
 4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
-Visual Studio Code Extensio for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
+Visual Studio Code Extension for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
 
 ### Privacy 
 To learn more about Autodesk’s online and offline privacy practices, please see the [Autodesk Privacy Statement](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement).
