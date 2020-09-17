@@ -1,594 +1,581 @@
 {
-	"name": "autolispext",
-	"displayName": "AutoCAD AutoLISP Extension",
-	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.3.0",
-	"license": "SEE LICENSE IN LICENSE.md",
-	"bugs": {
-		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt"
-	},
-	"homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
-	"engines": {
-		"vscode": "^1.31.1"
-	},
-	"publisher": "Autodesk",
-	"keywords": [
-		"lisp",
-		"autolisp",
-		"dcl"
-	],
-	"categories": [
-		"Debuggers",
-		"Programming Languages",
-		"Formatters",
-		"Snippets"
-	],
-	"icon": "images/adsk_lisp.png",
-	"main": "./out/extension",
-	"files": [
-		"autolispext.vsix"
-	],
-	"activationEvents": [
-		"onDebug",
-		"onUri",
-		"onCommand:autolisp.loadActiveFile",
-		"onLanguage:autolisp",
-		"onLanguage:autolispdcl",
-		"onView:Autolisp-ProjectView"
-	],
-	"contributes": {
-		"commands": [
-			{
-				"command": "autolisp.loadActiveFile",
-				"category": "AutoLISP",
-				"title": "%autolispext.loadcurrentfile.title%"
-			},
-			{
-				"command": "autolisp.createProject",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.createproject.title%",
-				"icon": {
-					"dark": "images/dark/Create_Project.svg",
-					"light": "images/light/Create_Project.svg"
-				}
-			},
-			{
-				"command": "autolisp.openProject",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.openproject.title%",
-				"icon": {
-					"dark": "images/dark/Open_Project.svg",
-					"light": "images/light/Open_Project.svg"
-				}
-			},
-			{
-				"command": "autolisp.addFile2Project",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.addfile.title%",
-				"icon": {
-					"dark": "images/dark/Add_LISP_File.svg",
-					"light": "images/light/Add_LISP_File.svg"
-				}
-			},
-			{
-				"command": "autolisp.removeFileFromProject",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.removefile.title%",
-				"icon": {
-					"dark": "images/dark/Remove_LISP_File.svg",
-					"light": "images/light/Remove_LISP_File.svg"
-				}
-			},
-			{
-				"command": "autolisp.SaveProject",
-				"title": "%autolispext.project.saveproject.title%",
-				"category": "AutoLISP",
-				"icon": {
-					"dark": "images/dark/Save_Project.svg",
-					"light": "images/light/Save_Project.svg"
-				}
-			},
-			{
-				"command": "autolisp.SaveAll",
-				"title": "%autolispext.project.saveall.title%",
-				"category": "AutoLISP",
-				"icon": {
-					"dark": "images/dark/Save_Project.svg",
-					"light": "images/light/Save_Project.svg"
-				}
-			},
-			{
-				"command": "autolisp.refresh",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.refresh.title%",
-				"icon": {
-					"dark": "images/dark/Refresh.svg",
-					"light": "images/light/Refresh.svg"
-				}
-			},
-			{
-				"command": "autolisp.findInProject",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.findinproject.title%",
-				"icon": {
-					"dark": "images/dark/Find.svg",
-					"light": "images/light/Find.svg"
-				}
-			},
-			{
-				"command": "autolisp.replaceInProject",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.replaceinproject.title%",
-				"icon": {
-					"dark": "images/dark/Replace.svg",
-					"light": "images/light/Replace.svg"
-				}
-			},
-			{
-				"command": "autolisp.stopSearch",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.stopsearch.title%",
-				"icon": {
-					"dark": "images/dark/search-stop.svg",
-					"light": "images/light/search-stop.svg"
-				}
-			},
-			{
-				"command": "autolisp.clearSearchResults",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.clearsearchresults.title%",
-				"icon": {
-					"dark": "images/dark/Clean.svg",
-					"light": "images/light/Clean.svg"
-				}
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "%autolispext.configuration.title%",
-			"properties": {
-				"autolispext.format.MaxLineChars": {
-					"type": "number",
-					"default": 85,
-					"description": "%autolispext.configuration.maxlinechars.desc%"
-				},
-				"autolispext.format.NarrowStyleIndent": {
-					"type": "number",
-					"default": 2,
-					"description": "%autolispext.configuration.narrowstyleindent.desc%"
-				},
-				"autolispext.format.CloseParenthesisStyle": {
-					"type": "string",
-					"enum": [
-						"Same line",
-						"New line with outer indentation"
-					],
-					"default": "New line with outer indentation",
-					"description": "%autolispext.configuration.closeparenstyle.desc%"
-				},
-				"autolispext.format.LongListFormatStyle": {
-					"type": "string",
-					"enum": [
-						"Single column",
-						"Fill to margin"
-					],
-					"default": "Fill to margin",
-					"description": "%autolispext.configuration.longlistformatstyle%"
-				},
-				"autolispext.debug.AttachProcess": {
-					"type": "string",
-					"default": "",
-					"description": "%autolispext.configuration.attachprocess.desc%"
-				},
-				"autolispext.debug.LaunchProgram": {
-					"type": "string",
-					"default": "",
-					"description": "%autolispext.configuration.launchprogram.desc%"
-				},
-				"autolispext.debug.LaunchParameters": {
-					"type": "string",
-					"default": "",
-					"description": "%autolispext.configuration.launchparameters.desc%"
-				}
-			}
-		},
-		"configurationDefaults": {
-			"[lisp]": {
-				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
-				"editor.detectIndentation": false,
-				"editor.quickSuggestions": {
-					"other": true,
-					"comments": false,
-					"strings": true
-				},
-				"editor.wordBasedSuggestions": true,
-				"editor.autoIndent": "none",
-				"editor.formatOnType": true,
-				"files.encoding": "utf8",
-				"editor.suggest.localityBonus": true,
-				"editor.wordSeparators": "&#^()[]|;'\".",
-				"editor.suggestSelection": "recentlyUsed"
-			},
-			"[autolisp]": {
-				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
-				"editor.wordBasedSuggestions": true,
-				"editor.detectIndentation": false,
-				"editor.quickSuggestions": {
-					"other": true,
-					"comments": false,
-					"strings": true
-				},
-				"editor.autoIndent": "none",
-				"editor.formatOnType": true,
-				"files.encoding": "utf8",
-				"editor.suggest.localityBonus": true,
-				"editor.wordSeparators": "&#^()[]|;'\".",
-				"editor.suggestSelection": "recentlyUsed"
-			},
-			"[autolispdcl]": {
-				"files.autoGuessEncoding": true,
-				"editor.tabSize": 2,
-				"editor.detectIndentation": false,
-				"editor.quickSuggestions": {
-					"other": true,
-					"comments": false,
-					"strings": true
-				},
-				"editor.wordBasedSuggestions": true,
-				"editor.autoIndent": "brackets",
-				"files.encoding": "utf8",
-				"editor.suggest.localityBonus": true,
-				"editor.wordSeparators": "=;{}\":",
-				"editor.suggestSelection": "recentlyUsed"
-			}
-		},
-		"breakpoints": [
-			{
-				"language": "autolisp"
-			},
-			{
-				"language": "autolispdcl"
-			},
-			{
-				"language": "lisp"
-			}
-		],
-		"languages": [
-			{
-				"id": "autolisp",
-				"aliases": [
-					"AutoLISP",
-					"autolisp"
-				],
-				"extensions": [
-					".lsp",
-					".mnl"
-				],
-				"configuration": "./extension/smartBracket/language-configuration.json"
-			},
-			{
-				"id": "autolispdcl",
-				"aliases": [
-					"AutoLISPDCL",
-					"autolispdcl"
-				],
-				"extensions": [
-					".dcl"
-				],
-				"configuration": "./extension/smartBracket/language-configuration-dcl.json"
-			},
-			{
-				"id": "autolispprj",
-				"aliases": [
-					"AutoLISPPRJ"
-				],
-				"extensions": [
-					".prj"
-				]
-			}
-		],
-		"grammars": [
-			{
-				"language": "autolisp",
-				"scopeName": "source.autolisp",
-				"path": "./extension/syntaxes/autolisp.tmLanguage.json"
-			},
-			{
-				"language": "autolispdcl",
-				"scopeName": "source.autolispdcl",
-				"path": "./extension/syntaxes/autolispdcl.tmLanguage.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "autolisp",
-				"path": "./snippets/snippets.json"
-			}
-		],
-		"debuggers": [
-			{
-				"type": "attachlisp",
-				"label": "AutoLISP Debug: Attach",
-				"windows": {
-					"program": "${lispadapterpath}"
-				},
-				"adapterExecutableCommand": "extension.lispAttachAdapterExecutableCommand",
-				"languages": [
-					{
-						"id": "autolisp",
-						"aliases": [
-							"AutoLISP",
-							"autolisp"
-						],
-						"extensions": [
-							".lsp",
-							".mnl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration.json"
-					},
-					{
-						"id": "autolispdcl",
-						"aliases": [
-							"AutoLISPDCL",
-							"autolispdcl"
-						],
-						"extensions": [
-							".dcl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
-					}
-				],
-				"configurationAttributes": {
-					"attach": {
-						"required": [
-							"attributes"
-						],
-						"properties": {
-							"attributes": {
-								"type": "object",
-								"description": "%autolispext.debug.attachconfig.desc%",
-								"default": ""
-							}
-						}
-					}
-				},
-				"initialConfigurations": [
-					{
-						"type": "attachlisp",
-						"request": "attach",
-						"name": "AutoLISP Debug: Attach",
-						"attributes" : {
-							"//": "%autolispext.packagejson.changeattachproc%"
-						}
-					}
-				],
-				"configurationSnippets": [
-					{
-						"label": "AutoLISP Debug: Attach",
-						"description": "%autolispext.debug.config.snippet.desc%",
-						"body": {
-							"type": "attachlisp",
-							"request": "attach",
-							"name": "AutoLISP Debug: Attach",
-							"attributes" : {
-								"//": "%autolispext.packagejson.changeattachproc%"
-							}
-						}
-					}
-				]
-			},
-			{
-				"type": "launchlisp",
-				"label": "AutoLISP Debug: Launch",
-				"languages": [
-					{
-						"id": "autolisp",
-						"aliases": [
-							"AutoLISP",
-							"autolisp"
-						],
-						"extensions": [
-							".lsp",
-							".mnl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration.json"
-					},
-					{
-						"id": "autolispdcl",
-						"aliases": [
-							"AutoLISPDCL",
-							"autolispdcl"
-						],
-						"extensions": [
-							".dcl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
-					}
-				],
-				"adapterExecutableCommand": "extension.lispLaunchAdapterExecutableCommand",
-				"configurationAttributes": {
-					"launch": {
-						"required": [
-							"attributes"
-						],
-						"properties": {
-							"attributes": {
-								"type": "object",
-								"description": "%autolispext.debug.launchconfig.desc%",
-								"default": ""
-							}
-						}
-					}
-				},
-				"initialConfigurations": [
-					{
-						"type": "launchlisp",
-						"request": "launch",
-						"name": "AutoLISP Debug: Launch",
-						"attributes": {
-							"//" : "%autolispext.packagejson.changelaunchprog%"
-						}
-					}
-				],
-				"configurationSnippets": [
-					{
-						"label": "AutoLISP Debug: Launch",
-						"description": "%autolispext.debug.config.snippet.desc%",
-						"body": {
-							"type": "launchlisp",
-							"request": "launch",
-							"name": "AutoLISP Debug: Launch",
-							"attributes": {
-								"//" : "%autolispext.packagejson.changelaunchprog%"
-							}
-						}
-					}
-				]
-			}
-		],
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "Autolisp-PMSideBar",
-					"title": "%autolispext.project.projectmanager.title%",
-					"icon": "images/Project_Management.svg"
-				}
-			]
-		},
-		"views": {
-			"Autolisp-PMSideBar": [
-				{
-					"id": "Autolisp-ProjectView",
-					"name": "%autolispext.project.projectview.name%",
-					"when": ""
-				},
-				{
-					"id": "Autolisp-FindReplaceView",
-					"name": "%autolispext.project.findreplaceview.name%",
-					"when": ""
-				}
-			]
-		},
-		"menus": {
-			"view/title": [
-				{
-					"command": "autolisp.createProject",
-					"group": "navigation@1",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
-					"command": "autolisp.openProject",
-					"group": "navigation@2",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
-					"command": "autolisp.addFile2Project",
-					"group": "navigation@3",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
-					"command": "autolisp.refresh",
-					"group": "navigation@6",
-					"when": "view == Autolisp-ProjectView"
-				},
-				{
-					"command": "autolisp.findInProject",
-					"group": "navigation@1",
-					"when": "view == Autolisp-FindReplaceView"
-				},
-				{
-					"command": "autolisp.replaceInProject",
-					"group": "navigation@2",
-					"when": "view == Autolisp-FindReplaceView"
-				},
-				{
-					"command": "autolisp.stopSearch",
-					"group": "navigation@3",
-					"when": "view == Autolisp-FindReplaceView"
-				},
-				{
-					"command": "autolisp.clearSearchResults",
-					"group": "navigation@4",
-					"when": "view == Autolisp-FindReplaceView"
-				}
-			],
-			"view/item/context": [
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.addFile2Project",
-					"group": "navigation@1"
-				},
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.refresh",
-					"group": "navigation@2"
-				},
-				{	
-					"when": "view == Autolisp-ProjectView && viewItem == project",	
-					"command": "autolisp.SaveProject",	
-					"group": "navigation@3"	
-				},
-				{	
-					"when": "view == Autolisp-ProjectView && viewItem == project",	
-					"command": "autolisp.SaveAll",	
-					"group": "navigation@4"	
-				},
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == lspFile",
-					"command": "autolisp.removeFileFromProject",
-					"group": "navigation@1"
-				}
-			],
-			"editor/context": [
-				{
-					"when": "resourceLangId == autolisp",
-					"command": "autolisp.loadActiveFile",
-					"group": "navigation@1"
-				}				
-			]
-		}
-	},
-	"scripts": {
-		"compile": "tsc -p ./",
-		"watch": "tsc -p -watch ./",
-		"test": "npm run compile && node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/mocha": "^5.2.7",
-		"@types/node": "8.10.18",
-		"@types/vscode": "^1.44.0",
-		"del": "^4.1.1",
-		"event-stream": "^4.0.1",
-		"gulp": "^4.0.2",
-		"gulp-filter": "^5.1.0",
-		"gulp-sourcemaps": "^2.6.5",
-		"gulp-typescript": "^5.0.1",
-		"run-sequence": "^2.2.1",
-		"tslint": "5.11.0",
-		"typescript": "3.2.4",
-		"vscode-test": "^1.3.0",
-		"mocha": "^6.1.4",
-		"chai": "^4.2.0",
-		"source-map-resolve": "0.6.0",
-		"vscode-nls-dev": "^3.2.6"
-	},
-	"dependencies": {
-		"execa": "0.7.0",
-		"fs-extra": "^8.1.0",
-		"vsce": "1.57.0",
-		"vscode-languageclient": "4.2.0",
-		"vscode-nls": "3.2.5",
-		"vscode-ripgrep": "1.5.8",	
-		"os-locale": "5.0.0",
-		"jschardet": "2.1.1"
-	},
-	"resolutions": {
-		"yargs-parser": "^18.1.3"
-	}
+    "name": "autolispext",
+    "displayName": "AutoCAD AutoLISP Extension",
+    "description": "This is a vscode extension for AutoCAD AutoLISP",
+    "version": "1.3.0",
+    "license": "SEE LICENSE IN LICENSE.md",
+    "bugs": {
+        "url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Autodesk-AutoCAD/AutoLispExt"
+    },
+    "homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
+    "engines": {
+        "vscode": "^1.31.1"
+    },
+    "publisher": "Autodesk",
+    "keywords": [
+        "lisp",
+        "autolisp",
+        "dcl"
+    ],
+    "categories": [
+        "Debuggers",
+        "Programming Languages",
+        "Formatters",
+        "Snippets"
+    ],
+    "icon": "images/adsk_lisp.png",
+    "main": "./out/extension",
+    "files": [
+        "autolispext.vsix"
+    ],
+    "activationEvents": [
+        "onDebug",
+        "onUri",
+        "onCommand:autolisp.loadActiveFile",
+        "onLanguage:autolisp",
+        "onLanguage:autolispdcl",
+        "onView:Autolisp-ProjectView"
+    ],
+    "contributes": {
+        "commands": [{
+                "command": "autolisp.loadActiveFile",
+                "category": "AutoLISP",
+                "title": "%autolispext.loadcurrentfile.title%"
+            },
+            {
+                "command": "autolisp.openWebHelp",
+                "category": "AutoLISP",
+                "title": "Open Web Help"
+            },
+            {
+                "command": "autolisp.createProject",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.createproject.title%",
+                "icon": {
+                    "dark": "images/dark/Create_Project.svg",
+                    "light": "images/light/Create_Project.svg"
+                }
+            },
+            {
+                "command": "autolisp.openProject",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.openproject.title%",
+                "icon": {
+                    "dark": "images/dark/Open_Project.svg",
+                    "light": "images/light/Open_Project.svg"
+                }
+            },
+            {
+                "command": "autolisp.addFile2Project",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.addfile.title%",
+                "icon": {
+                    "dark": "images/dark/Add_LISP_File.svg",
+                    "light": "images/light/Add_LISP_File.svg"
+                }
+            },
+            {
+                "command": "autolisp.removeFileFromProject",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.removefile.title%",
+                "icon": {
+                    "dark": "images/dark/Remove_LISP_File.svg",
+                    "light": "images/light/Remove_LISP_File.svg"
+                }
+            },
+            {
+                "command": "autolisp.SaveProject",
+                "title": "%autolispext.project.saveproject.title%",
+                "category": "AutoLISP",
+                "icon": {
+                    "dark": "images/dark/Save_Project.svg",
+                    "light": "images/light/Save_Project.svg"
+                }
+            },
+            {
+                "command": "autolisp.SaveAll",
+                "title": "%autolispext.project.saveall.title%",
+                "category": "AutoLISP",
+                "icon": {
+                    "dark": "images/dark/Save_Project.svg",
+                    "light": "images/light/Save_Project.svg"
+                }
+            },
+            {
+                "command": "autolisp.refresh",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.refresh.title%",
+                "icon": {
+                    "dark": "images/dark/Refresh.svg",
+                    "light": "images/light/Refresh.svg"
+                }
+            },
+            {
+                "command": "autolisp.findInProject",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.findinproject.title%",
+                "icon": {
+                    "dark": "images/dark/Find.svg",
+                    "light": "images/light/Find.svg"
+                }
+            },
+            {
+                "command": "autolisp.replaceInProject",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.replaceinproject.title%",
+                "icon": {
+                    "dark": "images/dark/Replace.svg",
+                    "light": "images/light/Replace.svg"
+                }
+            },
+            {
+                "command": "autolisp.stopSearch",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.stopsearch.title%",
+                "icon": {
+                    "dark": "images/dark/search-stop.svg",
+                    "light": "images/light/search-stop.svg"
+                }
+            },
+            {
+                "command": "autolisp.clearSearchResults",
+                "category": "AutoLISP",
+                "title": "%autolispext.project.clearsearchresults.title%",
+                "icon": {
+                    "dark": "images/dark/Clean.svg",
+                    "light": "images/light/Clean.svg"
+                }
+            }
+        ],
+        "configuration": {
+            "type": "object",
+            "title": "%autolispext.configuration.title%",
+            "properties": {
+                "autolispext.format.MaxLineChars": {
+                    "type": "number",
+                    "default": 85,
+                    "description": "%autolispext.configuration.maxlinechars.desc%"
+                },
+                "autolispext.format.NarrowStyleIndent": {
+                    "type": "number",
+                    "default": 2,
+                    "description": "%autolispext.configuration.narrowstyleindent.desc%"
+                },
+                "autolispext.format.CloseParenthesisStyle": {
+                    "type": "string",
+                    "enum": [
+                        "Same line",
+                        "New line with outer indentation"
+                    ],
+                    "default": "New line with outer indentation",
+                    "description": "%autolispext.configuration.closeparenstyle.desc%"
+                },
+                "autolispext.format.LongListFormatStyle": {
+                    "type": "string",
+                    "enum": [
+                        "Single column",
+                        "Fill to margin"
+                    ],
+                    "default": "Fill to margin",
+                    "description": "%autolispext.configuration.longlistformatstyle%"
+                },
+                "autolispext.debug.AttachProcess": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%autolispext.configuration.attachprocess.desc%"
+                },
+                "autolispext.debug.LaunchProgram": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%autolispext.configuration.launchprogram.desc%"
+                },
+                "autolispext.debug.LaunchParameters": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%autolispext.configuration.launchparameters.desc%"
+                }
+            }
+        },
+        "configurationDefaults": {
+            "[lisp]": {
+                "files.autoGuessEncoding": true,
+                "editor.tabSize": 2,
+                "editor.detectIndentation": false,
+                "editor.quickSuggestions": {
+                    "other": true,
+                    "comments": false,
+                    "strings": true
+                },
+                "editor.wordBasedSuggestions": true,
+                "editor.autoIndent": "none",
+                "editor.formatOnType": true,
+                "files.encoding": "utf8",
+                "editor.suggest.localityBonus": true,
+                "editor.wordSeparators": "&#^()[]|;'\".",
+                "editor.suggestSelection": "recentlyUsed"
+            },
+            "[autolisp]": {
+                "files.autoGuessEncoding": true,
+                "editor.tabSize": 2,
+                "editor.wordBasedSuggestions": true,
+                "editor.detectIndentation": false,
+                "editor.quickSuggestions": {
+                    "other": true,
+                    "comments": false,
+                    "strings": true
+                },
+                "editor.autoIndent": "none",
+                "editor.formatOnType": true,
+                "files.encoding": "utf8",
+                "editor.suggest.localityBonus": true,
+                "editor.wordSeparators": "&#^()[]|;'\".",
+                "editor.suggestSelection": "recentlyUsed"
+            },
+            "[autolispdcl]": {
+                "files.autoGuessEncoding": true,
+                "editor.tabSize": 2,
+                "editor.detectIndentation": false,
+                "editor.quickSuggestions": {
+                    "other": true,
+                    "comments": false,
+                    "strings": true
+                },
+                "editor.wordBasedSuggestions": true,
+                "editor.autoIndent": "brackets",
+                "files.encoding": "utf8",
+                "editor.suggest.localityBonus": true,
+                "editor.wordSeparators": "=;{}\":",
+                "editor.suggestSelection": "recentlyUsed"
+            }
+        },
+        "breakpoints": [{
+                "language": "autolisp"
+            },
+            {
+                "language": "autolispdcl"
+            },
+            {
+                "language": "lisp"
+            }
+        ],
+        "languages": [{
+                "id": "autolisp",
+                "aliases": [
+                    "AutoLISP",
+                    "autolisp"
+                ],
+                "extensions": [
+                    ".lsp",
+                    ".mnl"
+                ],
+                "configuration": "./extension/smartBracket/language-configuration.json"
+            },
+            {
+                "id": "autolispdcl",
+                "aliases": [
+                    "AutoLISPDCL",
+                    "autolispdcl"
+                ],
+                "extensions": [
+                    ".dcl"
+                ],
+                "configuration": "./extension/smartBracket/language-configuration-dcl.json"
+            },
+            {
+                "id": "autolispprj",
+                "aliases": [
+                    "AutoLISPPRJ"
+                ],
+                "extensions": [
+                    ".prj"
+                ]
+            }
+        ],
+        "grammars": [{
+                "language": "autolisp",
+                "scopeName": "source.autolisp",
+                "path": "./extension/syntaxes/autolisp.tmLanguage.json"
+            },
+            {
+                "language": "autolispdcl",
+                "scopeName": "source.autolispdcl",
+                "path": "./extension/syntaxes/autolispdcl.tmLanguage.json"
+            }
+        ],
+        "snippets": [{
+            "language": "autolisp",
+            "path": "./snippets/snippets.json"
+        }],
+        "debuggers": [{
+                "type": "attachlisp",
+                "label": "AutoLISP Debug: Attach",
+                "windows": {
+                    "program": "${lispadapterpath}"
+                },
+                "adapterExecutableCommand": "extension.lispAttachAdapterExecutableCommand",
+                "languages": [{
+                        "id": "autolisp",
+                        "aliases": [
+                            "AutoLISP",
+                            "autolisp"
+                        ],
+                        "extensions": [
+                            ".lsp",
+                            ".mnl"
+                        ],
+                        "configuration": "./extension/smartBracket/language-configuration.json"
+                    },
+                    {
+                        "id": "autolispdcl",
+                        "aliases": [
+                            "AutoLISPDCL",
+                            "autolispdcl"
+                        ],
+                        "extensions": [
+                            ".dcl"
+                        ],
+                        "configuration": "./extension/smartBracket/language-configuration-dcl.json"
+                    }
+                ],
+                "configurationAttributes": {
+                    "attach": {
+                        "required": [
+                            "attributes"
+                        ],
+                        "properties": {
+                            "attributes": {
+                                "type": "object",
+                                "description": "%autolispext.debug.attachconfig.desc%",
+                                "default": ""
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [{
+                    "type": "attachlisp",
+                    "request": "attach",
+                    "name": "AutoLISP Debug: Attach",
+                    "attributes": {
+                        "//": "%autolispext.packagejson.changeattachproc%"
+                    }
+                }],
+                "configurationSnippets": [{
+                    "label": "AutoLISP Debug: Attach",
+                    "description": "%autolispext.debug.config.snippet.desc%",
+                    "body": {
+                        "type": "attachlisp",
+                        "request": "attach",
+                        "name": "AutoLISP Debug: Attach",
+                        "attributes": {
+                            "//": "%autolispext.packagejson.changeattachproc%"
+                        }
+                    }
+                }]
+            },
+            {
+                "type": "launchlisp",
+                "label": "AutoLISP Debug: Launch",
+                "languages": [{
+                        "id": "autolisp",
+                        "aliases": [
+                            "AutoLISP",
+                            "autolisp"
+                        ],
+                        "extensions": [
+                            ".lsp",
+                            ".mnl"
+                        ],
+                        "configuration": "./extension/smartBracket/language-configuration.json"
+                    },
+                    {
+                        "id": "autolispdcl",
+                        "aliases": [
+                            "AutoLISPDCL",
+                            "autolispdcl"
+                        ],
+                        "extensions": [
+                            ".dcl"
+                        ],
+                        "configuration": "./extension/smartBracket/language-configuration-dcl.json"
+                    }
+                ],
+                "adapterExecutableCommand": "extension.lispLaunchAdapterExecutableCommand",
+                "configurationAttributes": {
+                    "launch": {
+                        "required": [
+                            "attributes"
+                        ],
+                        "properties": {
+                            "attributes": {
+                                "type": "object",
+                                "description": "%autolispext.debug.launchconfig.desc%",
+                                "default": ""
+                            }
+                        }
+                    }
+                },
+                "initialConfigurations": [{
+                    "type": "launchlisp",
+                    "request": "launch",
+                    "name": "AutoLISP Debug: Launch",
+                    "attributes": {
+                        "//": "%autolispext.packagejson.changelaunchprog%"
+                    }
+                }],
+                "configurationSnippets": [{
+                    "label": "AutoLISP Debug: Launch",
+                    "description": "%autolispext.debug.config.snippet.desc%",
+                    "body": {
+                        "type": "launchlisp",
+                        "request": "launch",
+                        "name": "AutoLISP Debug: Launch",
+                        "attributes": {
+                            "//": "%autolispext.packagejson.changelaunchprog%"
+                        }
+                    }
+                }]
+            }
+        ],
+        "viewsContainers": {
+            "activitybar": [{
+                "id": "Autolisp-PMSideBar",
+                "title": "%autolispext.project.projectmanager.title%",
+                "icon": "images/Project_Management.svg"
+            }]
+        },
+        "views": {
+            "Autolisp-PMSideBar": [{
+                    "id": "Autolisp-ProjectView",
+                    "name": "%autolispext.project.projectview.name%",
+                    "when": ""
+                },
+                {
+                    "id": "Autolisp-FindReplaceView",
+                    "name": "%autolispext.project.findreplaceview.name%",
+                    "when": ""
+                }
+            ]
+        },
+        "menus": {
+            "view/title": [{
+                    "command": "autolisp.createProject",
+                    "group": "navigation@1",
+                    "when": "view == Autolisp-ProjectView"
+                },
+                {
+                    "command": "autolisp.openProject",
+                    "group": "navigation@2",
+                    "when": "view == Autolisp-ProjectView"
+                },
+                {
+                    "command": "autolisp.addFile2Project",
+                    "group": "navigation@3",
+                    "when": "view == Autolisp-ProjectView"
+                },
+                {
+                    "command": "autolisp.refresh",
+                    "group": "navigation@6",
+                    "when": "view == Autolisp-ProjectView"
+                },
+                {
+                    "command": "autolisp.findInProject",
+                    "group": "navigation@1",
+                    "when": "view == Autolisp-FindReplaceView"
+                },
+                {
+                    "command": "autolisp.replaceInProject",
+                    "group": "navigation@2",
+                    "when": "view == Autolisp-FindReplaceView"
+                },
+                {
+                    "command": "autolisp.stopSearch",
+                    "group": "navigation@3",
+                    "when": "view == Autolisp-FindReplaceView"
+                },
+                {
+                    "command": "autolisp.clearSearchResults",
+                    "group": "navigation@4",
+                    "when": "view == Autolisp-FindReplaceView"
+                }
+            ],
+            "view/item/context": [{
+                    "when": "view == Autolisp-ProjectView && viewItem == project",
+                    "command": "autolisp.addFile2Project",
+                    "group": "navigation@1"
+                },
+                {
+                    "when": "view == Autolisp-ProjectView && viewItem == project",
+                    "command": "autolisp.refresh",
+                    "group": "navigation@2"
+                },
+                {
+                    "when": "view == Autolisp-ProjectView && viewItem == project",
+                    "command": "autolisp.SaveProject",
+                    "group": "navigation@3"
+                },
+                {
+                    "when": "view == Autolisp-ProjectView && viewItem == project",
+                    "command": "autolisp.SaveAll",
+                    "group": "navigation@4"
+                },
+                {
+                    "when": "view == Autolisp-ProjectView && viewItem == lspFile",
+                    "command": "autolisp.removeFileFromProject",
+                    "group": "navigation@1"
+                }
+            ],
+            "editor/context": [{
+                    "when": "resourceLangId == autolisp",
+                    "command": "autolisp.loadActiveFile",
+                    "group": "navigation@1"
+                },
+                {
+                    "when": "resourceLangId == autolisp",
+                    "command": "autolisp.openWebHelp",
+                    "group": "navigation@2"
+                }
+            ]
+        }
+    },
+    "scripts": {
+        "compile": "tsc -p ./",
+        "watch": "tsc -p -watch ./",
+        "test": "npm run compile && node ./out/test/runTest.js"
+    },
+    "devDependencies": {
+        "@types/mocha": "^5.2.7",
+        "@types/node": "8.10.18",
+        "@types/vscode": "^1.44.0",
+        "del": "^4.1.1",
+        "event-stream": "^4.0.1",
+        "gulp": "^4.0.2",
+        "gulp-filter": "^5.1.0",
+        "gulp-sourcemaps": "^2.6.5",
+        "gulp-typescript": "^5.0.1",
+        "run-sequence": "^2.2.1",
+        "tslint": "5.11.0",
+        "typescript": "3.2.4",
+        "vscode-test": "^1.3.0",
+        "mocha": "^6.1.4",
+        "chai": "^4.2.0",
+        "source-map-resolve": "0.6.0",
+        "vscode-nls-dev": "^3.2.6"
+    },
+    "dependencies": {
+        "execa": "0.7.0",
+        "fs-extra": "^8.1.0",
+        "vsce": "1.57.0",
+        "vscode-languageclient": "4.2.0",
+        "vscode-nls": "3.2.5",
+        "vscode-ripgrep": "1.5.8",
+        "os-locale": "5.0.0",
+        "jschardet": "2.1.1"
+    },
+    "resolutions": {
+        "yargs-parser": "^18.1.3"
+    }
 }
