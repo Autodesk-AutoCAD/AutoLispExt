@@ -47,6 +47,11 @@
 				"category": "AutoLISP",
 				"title": "%autolispext.loadcurrentfile.title%"
 			},
+            {
+                "command": "autolisp.openWebHelp",
+                "category": "AutoLISP",
+                "title": "Open Web Help"
+            },
 			{
 				"command": "autolisp.createProject",
 				"category": "AutoLISP",
@@ -550,7 +555,12 @@
 					"when": "resourceLangId == autolisp",
 					"command": "autolisp.loadActiveFile",
 					"group": "navigation@1"
-				}				
+				},
+                {
+                    "when": "resourceLangId == autolisp",
+                    "command": "autolisp.openWebHelp",
+                    "group": "navigation@2"
+                }
 			]
 		}
 	},
