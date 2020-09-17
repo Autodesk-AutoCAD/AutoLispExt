@@ -14,7 +14,6 @@ import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
 import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnIsSearching } from './findReplace/clearResults';
 import { RefreshProject } from './refreshProject';
-import { openWebHelp } from './openWebHelp';
 
 import * as nls from 'vscode-nls';
 import { grantExePermission } from './findReplace/ripGrep';
@@ -206,16 +205,6 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.stopSearch', () => {
             try {
                 stopSearching();
-            }
-            catch (err) {
-                if (err)
-                    console.log(err.toString());
-            }
-        }));
-
-        context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', () => {
-            try {
-                openWebHelp();
             }
             catch (err) {
                 if (err)

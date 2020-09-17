@@ -2,9 +2,7 @@ import * as vscode from 'vscode';
 import * as os from 'os';
 import * as path from 'path';
 import { isCursorInDoubleQuoteExpr } from "../format/autoIndent";
-import { WebHelpLibrary } from '../project/openWebHelp';
 
-export let webHelpContainer: WebHelpLibrary = new WebHelpLibrary();
 let internalLispFuncs: Array<string> = [];
 let internalDclKeys: Array<string> = [];
 let winOnlyListFuncPrefix: Array<string> = [];
@@ -60,19 +58,6 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
         }
     });
 }
-
-// loads resources for the openWebHelp.ts objects. 
-// Note: possibly needs to be refactored somewhere else. It was only filed here because everything else loading from /extensions/data/ was also loaded from here
-function loadWebHelpAbstraction(datafile: string): void {
-    var fs = require("fs");
-    var dataPath = path.resolve(__dirname, datafile);
-    fs.readFile(dataPath, function(err, data) {        
-        if (err === null) {                      
-            webHelpContainer.load(JSON.parse(data));
-        }
-    });    
-}
-
 export function readAllBultinFunctions() {
     readDataFileByLine("../../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items });
 
@@ -86,7 +71,6 @@ export function readAllBultinFunctions() {
             allCmdsAndSysvars.push(item)
     });
 
-    loadWebHelpAbstraction("../../extension/data/webHelpAbstraction.json");
 }
 
 function getCmdAndVarsCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
