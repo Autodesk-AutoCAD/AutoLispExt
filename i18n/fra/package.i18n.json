@@ -1,6 +1,7 @@
 {
   "autolispext.description": "Il s'agit d'une extension vscode pour AutoCAD AutoLISP",
   "autolispext.loadcurrentfile.title": "Charger le fichier dans AutoCAD",
+  "autolispext.openwebhelp.title": "Ouvrir l'aide en ligne",
   "autolispext.configuration.title": "Configuration d'AutoCAD® AutoLISP",
   "autolispext.configuration.maxlinechars.desc": "Nombre maximal de caractères suggéré pour chaque ligne. La valeur doit être supérieure ou égale à 60 caractères.",
   "autolispext.configuration.narrowstyleindent.desc": "Valeur de retrait utilisée dans les arguments de la fonction Style de formatage étroit. La valeur doit être comprise entre 1 et 6.",

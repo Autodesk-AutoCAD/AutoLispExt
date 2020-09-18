@@ -1,6 +1,7 @@
 {
   "autolispext.description": "これは、AutoCAD AutoLISP 用 vscode Extension です。",
   "autolispext.loadcurrentfile.title": "AutoCAD にファイルをロード",
+  "autolispext.openwebhelp.title": "オンラインヘルプを開く",
   "autolispext.configuration.title": "AutoCAD® AutoLISP の環境設定",
   "autolispext.configuration.maxlinechars.desc": "各行に表示する最大文字数の推奨値です。値は 60 以上でなければなりません。",
   "autolispext.configuration.narrowstyleindent.desc": "関数の引数の幅狭整形スタイルで使用されるインデント値。値は 1 ~ 6 の範囲でなければなりません。",

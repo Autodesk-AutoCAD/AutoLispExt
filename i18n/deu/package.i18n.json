@@ -1,6 +1,7 @@
 {
   "autolispext.description": "Dies ist eine VS Code Extension für AutoCAD AutoLISP",
   "autolispext.loadcurrentfile.title": "Datei in AutoCAD laden",
+  "autolispext.openwebhelp.title": "Öffnen Sie Online-Hilfe",
   "autolispext.configuration.title": "AutoCAD® AutoLISP-Konfiguration",
   "autolispext.configuration.maxlinechars.desc": "Empfohlene Höchstzahl an Zeichen für die Anzeige pro Zeile. Wert muss 60 oder höher sein.",
   "autolispext.configuration.narrowstyleindent.desc": "Einrückungswert für den schmalen Formatierungsstil der Funktionsargumente. Wert muss zwischen 1 und 6 liegen.",
