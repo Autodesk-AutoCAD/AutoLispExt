@@ -50,7 +50,7 @@
 			{
 				"command": "autolisp.openWebHelp",
 				"category": "AutoLISP",
-				"title": "Open Web Help"
+				"title": "%autolispext.openwebhelp.title%"
 			},
 			{
 				"command": "autolisp.createProject",
