@@ -59,10 +59,12 @@ export class WebHelpLibrary{
 			case "chs": return "/CHS/";
 			case "cn": return "/CHS/";
 			case "zh-cn": return "/CHS/";
+			case "zh-hans": return "/CHS/";
 			case "cht": return "/CHT/";
 			case "tw": return "/CHT/";
 			case "zh-tw": return "/CHT/";
-			default: return "/CHT/";
+			case "zh-hant": return "/CHT/";
+			default: return "/ENU/";
 		}
 	}
 
