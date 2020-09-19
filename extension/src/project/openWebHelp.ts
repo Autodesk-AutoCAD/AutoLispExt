@@ -41,24 +41,50 @@ export class WebHelpLibrary{
 			this.enumerators[key] = newObj;
 		});
 	}
-	getDefaultHelpLink(): string{
+
+	getLanguageUrlDomain(): string {
+		switch (vscode.env.language.toLowerCase()) {			
+			case "de": return "/DEU/";
+			case "es": return "/ESP/";
+			case "fr": return "/FRA/";
+			case "hu": return "/HUN/";
+			case "ja": return "/JPN/";
+			case "en": return "/ENU/";
+			case "ko": return "/KOR/";
+			case "pt": return "/PTB/";
+			case "br": return "/PTB/";
+			case "pt-br": return "/PTB/";
+			case "ru": return "/RUS/";
+			case "zh": return "/CHS/";
+			case "chs": return "/CHS/";
+			case "cn": return "/CHS/";
+			case "zh-cn": return "/CHS/";
+			case "cht": return "/CHT/";
+			case "tw": return "/CHT/";
+			case "zh-tw": return "/CHT/";
+			default: return "/CHT/";
+		}
+	}
+
+	getDefaultHelpLink(languageDomain: string): string{
 		let year: number = new Date().getFullYear() + 1;
-		return "https://help.autodesk.com/view/OARX/" + year.toString() + "/ENU/";
+		return "https://help.autodesk.com/view/OARX/" + year.toString() + languageDomain;
 	}
 
 	// Searches the library dictionaries for a reference to the provided symbol name. If found, yields help URL relevant to that symbol, but otherwise outputs generalized help URL
 	getWebHelpUrlBySymbolName(item: string): string {
 		let symbolProfile: string = item.toLowerCase();
+		let lang: string = this.getLanguageUrlDomain();
 		if (symbolProfile in this.functions){        
-			return this.functions[symbolProfile].getHelpLink();
+			return this.functions[symbolProfile].getHelpLink(lang);
 		} else if (symbolProfile in this.enumerators){
-			return this.enumerators[symbolProfile].getHelpLink();
+			return this.enumerators[symbolProfile].getHelpLink(lang);
 		} else if (symbolProfile in this.ambiguousFunctions){
-			return this.ambiguousFunctions[symbolProfile][0].getHelpLink();
+			return this.ambiguousFunctions[symbolProfile][0].getHelpLink(lang);
 		} else if (symbolProfile in this.objects){
-			return this.objects[symbolProfile].getHelpLink();
+			return this.objects[symbolProfile].getHelpLink(lang);
 		} else{
-			return this.getDefaultHelpLink();
+			return this.getDefaultHelpLink(lang);
 		}
 	}
 }
@@ -106,9 +132,9 @@ class WebHelpEntity {
 		this.guid = template["guid"];
 		this.id = template["id"];
 	}
-	getHelpLink(): string{
+	getHelpLink(languageDomain: string): string{
 		let year: number = new Date().getFullYear() + 1;
-		return "https://help.autodesk.com/view/OARX/" + year.toString() + "/ENU/?guid=GUID-" + this.guid;
+		return "https://help.autodesk.com/view/OARX/" + year.toString() + languageDomain + "?guid=GUID-" + this.guid;
 	}
 }
 
