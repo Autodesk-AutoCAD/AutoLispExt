@@ -3,10 +3,10 @@
 	"scopeName": "source.autolispdcl",
 	"patterns": [
 		{
-			"include": "#blockcomment"
+			"include": "#comment"
 		},
 		{
-			"include": "#comment"
+			"include": "#commentblock"
 		},
 		{
 			"include": "#keywords"
@@ -18,20 +18,22 @@
 			"include": "#strings"
 		}
 	],
-	"repository": {
-		"blockcomment": 
-		{
-			"name":"comment.block",
-			"begin": "\/\\*",
-			"end": "\\*\/",
-			"patterns": []
-		},
-		"comment": 
-		{
+	"repository": {		
+		"comment": {
 			"patterns": [
 				{
 					"name":"comment.line",
 					"match": "\/\/.*$"
+				}
+			]
+		},
+		"commentblock": {
+			"patterns": [
+				{
+					"name":"comment.block",
+					"begin": "\/\\*",
+					"end": "\\*\/",
+					"patterns": []
 				}
 			]
 		},
