@@ -20,7 +20,7 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 
 // Invoked from extension.ts as a generic early-loader of the webHelpAbstraction; possibly future related files too.
 export function readAllHelpData() {
-	loadWebHelpAbstraction("../../extension/data/webHelpAbstraction.json");
+	loadWebHelpAbstraction("../../extension/src/help/webHelpAbstraction.json");	
 }
 
 function loadWebHelpAbstraction(datafile: string): void {
