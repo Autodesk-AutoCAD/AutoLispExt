@@ -1,12 +1,50 @@
 import * as vscode from 'vscode';
-import { webHelpContainer } from "../completion/autocompletionProvider"; // Currently where all ./data/ files are being loaded & was maintained for symmetry
+import * as path from 'path';
+
+export let webHelpContainer: WebHelpLibrary;
+
+//#region Web Help Initialization
+// Invoked from extension.ts to setup the Right Click 'Open Online Help' command. 
+export function registerHelpCommands(context: vscode.ExtensionContext) {
+	context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', async () => {
+		try {
+			await openWebHelp();
+		}
+		catch (err) {
+			if (err) {
+				console.log(err.toString());
+			}
+		}
+	}));
+}
+
+// Invoked from extension.ts as a generic early-loader of the webHelpAbstraction; possibly future related files too.
+export function readAllHelpData() {
+	loadWebHelpAbstraction("../../extension/data/webHelpAbstraction.json");
+}
+
+function loadWebHelpAbstraction(datafile: string): void {
+	webHelpContainer = new WebHelpLibrary();
+    var fs = require("fs");
+    var dataPath = path.resolve(__dirname, datafile);
+    fs.readFile(dataPath, function(err, data) {        
+        if (err === null) {                      
+            webHelpContainer.load(JSON.parse(data));
+        }
+    });    
+}
+//#endregion
 
 
 // Triggers VSCode to open the official web documentation URL related to the currently selected symbol
 // Note: this function is directly referenced by projectCommands.ts and the the package.json contributes (commands & menus) section.
-export function openWebHelp() {
+export async function openWebHelp() {
 	const editor: vscode.TextEditor = vscode.window.activeTextEditor;
 	let selected: string = editor.document.getText(editor.selection);	
+	if (selected === "") {
+		await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+		selected = editor.document.getText(editor.selection);
+	}
 	let urlPath: string = webHelpContainer.getWebHelpUrlBySymbolName(selected);
 	vscode.env.openExternal(vscode.Uri.parse(urlPath));
 }
