@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
+import * as nls from 'vscode-nls';
+import { showErrorMessage } from "../project/projectCommands";
+import { url } from 'inspector';
 
 export let webHelpContainer: WebHelpLibrary;
-
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 //#region Web Help Initialization
 // Invoked from extension.ts to setup the Right Click 'Open Online Help' command. 
 export function registerHelpCommands(context: vscode.ExtensionContext) {
@@ -11,9 +14,8 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 			await openWebHelp();
 		}
 		catch (err) {
-			if (err) {
-				console.log(err.toString());
-			}
+			let msg = localize("autolispext.project.commands.clearresultfailed", "Failed to clear search results.");
+			showErrorMessage(msg, err);
 		}
 	}));
 }
@@ -44,9 +46,11 @@ export async function openWebHelp() {
 	if (selected === "") {
 		await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
 		selected = editor.document.getText(editor.selection);
-	}
+	}	
 	let urlPath: string = webHelpContainer.getWebHelpUrlBySymbolName(selected);
-	vscode.env.openExternal(vscode.Uri.parse(urlPath));
+	if (urlPath.trim() !== ""){
+		vscode.env.openExternal(vscode.Uri.parse(urlPath));
+	}
 }
 
 
@@ -113,7 +117,7 @@ export class WebHelpLibrary{
 
 	// Searches the library dictionaries for a reference to the provided symbol name. If found, yields help URL relevant to that symbol, but otherwise outputs generalized help URL
 	getWebHelpUrlBySymbolName(item: string): string {
-		let symbolProfile: string = item.toLowerCase();
+		let symbolProfile: string = item.toLowerCase().trim();
 		let lang: string = this.getLanguageUrlDomain();
 		if (symbolProfile in this.functions){        
 			return this.functions[symbolProfile].getHelpLink(lang);

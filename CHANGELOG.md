@@ -1,3 +1,11 @@
+## [1.4.0] - 2020-09-21
+a. Added Right Click -> 'Open Online Help' feature. This makes it possible for users to quickly access official documentation on a selected symbol.
+
+b. Online Help GUID targets were provided by a new data source (webHelpAbstraction.json) that will likely be used to provide future intellisense enhancements
+
+c. Fixed a bug with DCL comments. Both single line and Block comments should now be working.
+
+
 ## [1.3.0] - 2020-06-12
 a.	Support AutoLISP project editing. Support find and replace in the open project.
 
