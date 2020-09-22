@@ -2,7 +2,6 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as nls from 'vscode-nls';
 import { showErrorMessage } from "../project/projectCommands";
-import { url } from 'inspector';
 
 export let webHelpContainer: WebHelpLibrary;
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
@@ -14,8 +13,10 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 			await openWebHelp();
 		}
 		catch (err) {
-			let msg = localize("autolispext.project.commands.clearresultfailed", "Failed to clear search results.");
-			showErrorMessage(msg, err);
+			if (err){
+				let msg = localize("autolispext.project.commands.clearresultfailed", "Failed to clear search results.");
+				showErrorMessage(msg, err);
+			}
 		}
 	}));
 }
@@ -46,7 +47,7 @@ export async function openWebHelp() {
 	if (selected === "") {
 		await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
 		selected = editor.document.getText(editor.selection);
-	}	
+	}
 	let urlPath: string = webHelpContainer.getWebHelpUrlBySymbolName(selected);
 	if (urlPath.trim() !== ""){
 		vscode.env.openExternal(vscode.Uri.parse(urlPath));
