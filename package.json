@@ -557,10 +557,10 @@
 					"group": "navigation@1"
 				},
 				{
-					"when": "resourceLangId == autolisp",
+					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.openWebHelp",
 					"group": "navigation@2"
-				}				
+				}    
 			]
 		}
 	},

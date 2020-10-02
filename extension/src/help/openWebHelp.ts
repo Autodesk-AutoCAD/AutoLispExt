@@ -14,7 +14,7 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 		}
 		catch (err) {
 			if (err){
-				let msg = localize("autolispext.project.commands.clearresultfailed", "Failed to clear search results.");
+				let msg = localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
 				showErrorMessage(msg, err);
 			}
 		}
@@ -23,9 +23,8 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 
 // Invoked from extension.ts as a generic early-loader of the webHelpAbstraction; possibly future related files too.
 export function readAllHelpData() {
-	loadWebHelpAbstraction("../../extension/src/help/webHelpAbstraction.json");	
+	loadWebHelpAbstraction("../../out/help/webHelpAbstraction.json");	
 }
-
 function loadWebHelpAbstraction(datafile: string): void {
 	webHelpContainer = new WebHelpLibrary();
     var fs = require("fs");
@@ -55,15 +54,25 @@ export async function openWebHelp() {
 }
 
 
-// This container object represents all the normalized data extracted from help.autodesk.com/view/OARX/
+// This container object represents all of the normalized data extracted from help.autodesk.com/view/OARX/
 export class WebHelpLibrary{
+	dclAttributes: Dictionary<WebHelpDclAtt> = {};
+	dclTiles: Dictionary<WebHelpDclTile> = {};
 	objects: Dictionary<WebHelpObject> = {};
 	functions: Dictionary<WebHelpFunction> = {};
 	ambiguousFunctions: Dictionary<WebHelpFunction[]> = {};
-	enumerators: Dictionary<WebHelpEntity> = {};	
+	enumerators: Dictionary<string> = {};	
 	
 	// consumes a JSON converted object into the WebHelpLibrary
 	load(obj: object): void{		
+		Object.keys(obj["dclAttributes"]).forEach(key => {
+			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
+			this.dclAttributes[key] = newObj;
+		});
+		Object.keys(obj["dclTiles"]).forEach(key => {
+			let newObj = new WebHelpDclTile(obj["dclTiles"][key]);
+			this.dclTiles[key] = newObj;
+		});
 		Object.keys(obj["objects"]).forEach(key => {
 			let newObj = new WebHelpObject(obj["objects"][key]);
 			this.objects[key] = newObj;
@@ -79,58 +88,39 @@ export class WebHelpLibrary{
 			});
 			this.ambiguousFunctions[key] = newLst;
 		});
-		Object.keys(obj["enumerators"]).forEach(key => {
-			let newObj = new WebHelpEntity(obj["enumerators"][key]);
-			this.enumerators[key] = newObj;
-		});
+		this.enumerators = obj["enumerators"];
+		// The obj["events"] dictionary also exists but wasn't used because we really don't have a purpose for them right now.
 	}
 
-	getLanguageUrlDomain(): string {
-		switch (vscode.env.language.toLowerCase()) {			
-			case "de": return "/DEU/";
-			case "es": return "/ESP/";
-			case "fr": return "/FRA/";
-			case "hu": return "/HUN/";
-			case "ja": return "/JPN/";
-			case "en": return "/ENU/";
-			case "ko": return "/KOR/";
-			case "pt": return "/PTB/";
-			case "br": return "/PTB/";
-			case "pt-br": return "/PTB/";
-			case "ru": return "/RUS/";
-			case "zh": return "/CHS/";
-			case "chs": return "/CHS/";
-			case "cn": return "/CHS/";
-			case "zh-cn": return "/CHS/";
-			case "zh-hans": return "/CHS/";
-			case "cht": return "/CHT/";
-			case "tw": return "/CHT/";
-			case "zh-tw": return "/CHT/";
-			case "zh-hant": return "/CHT/";
-			default: return "/ENU/";
-		}
-	}
 
-	getDefaultHelpLink(languageDomain: string): string{
-		let year: number = new Date().getFullYear() + 1;
-		return "https://help.autodesk.com/view/OARX/" + year.toString() + languageDomain;
-	}
-
-	// Searches the library dictionaries for a reference to the provided symbol name. If found, yields help URL relevant to that symbol, but otherwise outputs generalized help URL
+	// Searches the library dictionaries for a reference to the provided symbol name. If found, yields help URL relevant to that symbol, but otherwise outputs a filetype contextual default help URL
 	getWebHelpUrlBySymbolName(item: string): string {
 		let symbolProfile: string = item.toLowerCase().trim();
-		let lang: string = this.getLanguageUrlDomain();
-		if (symbolProfile in this.functions){        
-			return this.functions[symbolProfile].getHelpLink(lang);
-		} else if (symbolProfile in this.enumerators){
-			return this.enumerators[symbolProfile].getHelpLink(lang);
-		} else if (symbolProfile in this.ambiguousFunctions){
-			return this.ambiguousFunctions[symbolProfile][0].getHelpLink(lang);
-		} else if (symbolProfile in this.objects){
-			return this.objects[symbolProfile].getHelpLink(lang);
-		} else{
-			return this.getDefaultHelpLink(lang);
+		var editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			return; // No Document
+		} else if (editor.document.fileName.slice(-4).toUpperCase() === ".LSP") {
+			if (symbolProfile in this.objects){
+				return this.objects[symbolProfile].getHelpLink();
+			} else if (symbolProfile in this.functions){        
+				return this.functions[symbolProfile].getHelpLink();
+			} else if (symbolProfile in this.ambiguousFunctions){
+				return this.ambiguousFunctions[symbolProfile][0].getHelpLink();
+			} else if (symbolProfile in this.enumerators){
+				return this.getWebHelpUrlBySymbolName(this.enumerators[symbolProfile]);
+			} else {
+				return WebHelpEntity.createHelpLink("4CEE5072-8817-4920-8A2D-7060F5E16547");  // LSP General Landing Page
+			}
+		} else if (editor.document.fileName.slice(-4).toUpperCase() === ".DCL") {
+			if (symbolProfile in this.dclTiles){        
+				return this.dclTiles[symbolProfile].getHelpLink();
+			} else if (symbolProfile in this.dclAttributes){        
+				return this.dclAttributes[symbolProfile].getHelpLink();
+			} else {
+				return WebHelpEntity.createHelpLink("F8F5A79B-9A05-4E25-A6FC-9720216BA3E7"); // DCL General Landing Page
+			}
 		}
+		return WebHelpEntity.getDefaultHelpLink();
 	}
 }
 
@@ -164,7 +154,7 @@ class WebHelpValueType {
 
 
 // Generic base type containing all the underlying data specific to making the "Open Web Help" context menu option functional
-// Note that enum names are directly represented by this generic class and contain a GUID redirect to the help documentation that referenced them.
+// Note that enum names are directly represented by this generic class and contain a named redirect to the help documentation that referenced them.
 class WebHelpEntity {	
 	id: string;
 	category: WebHelpCategory;	
@@ -177,9 +167,46 @@ class WebHelpEntity {
 		this.guid = template["guid"];
 		this.id = template["id"];
 	}
-	getHelpLink(languageDomain: string): string{
+
+
+	getHelpLink(): string {
+		return WebHelpEntity.getDefaultHelpLink() + "?guid=GUID-" + this.guid;
+	}
+
+	static createHelpLink(guid: string): string {
+		return WebHelpEntity.getDefaultHelpLink() + "?guid=GUID-" + guid;
+	}
+
+	static getDefaultHelpLink(): string {
+		let lang: string = WebHelpEntity.getLanguageUrlDomain();
 		let year: number = new Date().getFullYear() + 1;
-		return "https://help.autodesk.com/view/OARX/" + year.toString() + languageDomain + "?guid=GUID-" + this.guid;
+		return "https://help.autodesk.com/view/OARX/" + year.toString() + lang;
+	}
+
+	static getLanguageUrlDomain(): string {
+		switch (vscode.env.language.toLowerCase()) {			
+			case "de": return "/DEU/";
+			case "es": return "/ESP/";
+			case "fr": return "/FRA/";
+			case "hu": return "/HUN/";
+			case "ja": return "/JPN/";
+			case "en": return "/ENU/";
+			case "ko": return "/KOR/";
+			case "pt": return "/PTB/";
+			case "br": return "/PTB/";
+			case "pt-br": return "/PTB/";
+			case "ru": return "/RUS/";
+			case "zh": return "/CHS/";
+			case "chs": return "/CHS/";
+			case "cn": return "/CHS/";
+			case "zh-cn": return "/CHS/";
+			case "zh-hans": return "/CHS/";
+			case "cht": return "/CHT/";
+			case "tw": return "/CHT/";
+			case "zh-tw": return "/CHT/";
+			case "zh-hant": return "/CHT/";
+			default: return "/ENU/";
+		}
 	}
 }
 
@@ -214,4 +241,26 @@ class WebHelpFunction extends WebHelpEntity {
 	}
 }
 
+// The signatures were only very mildly processed to remove irregularities, but mostly represent exactly what the official documentation provided.
+// The attributes field is purely a list of normalized names. Use webHelpContainer<WebHelpLibrary>[dclAttributes][name] to query data about a specific attribute type.
+class WebHelpDclTile extends WebHelpEntity {
+	attributes: string[];	
+	signature: string;	
+	constructor(template: object){
+		super(template);
+		this.attributes = template["attributes"];
+		this.signature = template["signature"];
+	}	
+}
 
+
+// The valueType value is in the same arrangement as the functions, but the signatures were only very mildly processed and generally represent the exact official documentation.
+class WebHelpDclAtt extends WebHelpEntity {	
+	valueType: WebHelpValueType;
+	signature: string;		
+	constructor(template: object){
+		super(template);
+		this.valueType = template["valueType"];
+		this.signature = template["signature"];
+	}	
+}
