@@ -1,6 +1,7 @@
 {
   "autolispext.description": "Это расширение vscode для AutoCAD AutoLISP",
   "autolispext.loadcurrentfile.title": "Загрузить файл в AutoCAD",
+  "autolispext.openwebhelp.title": "Открыть онлайн-справку",
   "autolispext.configuration.title": "Конфигурация AutoCAD® AutoLISP",
   "autolispext.configuration.maxlinechars.desc": "Предлагаемое максимальное количество символов в каждой строке. Значение должно быть не менее 60.",
   "autolispext.configuration.narrowstyleindent.desc": "Значение отступа, используемое в узком стиле форматирования аргументов функции. Значение должно находиться в диапазоне от 1 до 6.",

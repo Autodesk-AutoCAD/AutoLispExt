@@ -33,6 +33,7 @@ def init():
     print("\n\n")
 
     copyAcadProcFinder()
+    copyWebHelpAbstraction()
 
     copyRipGrep()
     return 0
@@ -57,6 +58,10 @@ def copyAcadProcFinder():
 
     copyFile(src, dst, 'copied acadProcessFinder.exe')
 
+def copyWebHelpAbstraction():
+    src = os.path.join(os.path.curdir, 'extension', 'src', 'help', 'webHelpAbstraction.json')
+    dst = os.path.join(os.path.curdir, 'out', 'help', 'webHelpAbstraction.json')
+    copyFile(src, dst, 'copied webHelpAbstraction.json')
 
 def removeFile(dir, filename):
     filepath = os.path.join(dir, filename)

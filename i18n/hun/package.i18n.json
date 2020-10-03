@@ -1,6 +1,7 @@
 {
   "autolispext.description": "Ez egy vscode-bővítmény az AutoCAD AutoLISP-hez",
   "autolispext.loadcurrentfile.title": "Fájl betöltése az AutoCAD-be",
+  "autolispext.openwebhelp.title": "Nyissa Online súgót",
   "autolispext.configuration.title": "AutoCAD® AutoLISP-konfiguráció",
   "autolispext.configuration.maxlinechars.desc": "Az egyes sorokban megjelenítendő karakterek javasolt maximális száma. Az értéknek 60-nak vagy nagyobbnak kell lennie.",
   "autolispext.configuration.narrowstyleindent.desc": "A függvényargumentumok keskeny formázási stílusában használt behúzási érték. Az értéknek 1 és 6 között kell lennie.",

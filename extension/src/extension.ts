@@ -17,7 +17,7 @@ import * as autoIndent from './format/autoIndent'
 
 import * as DebugProviders from "./debug"
 import * as pmCmds from "./project/projectCommands"
-
+import * as helpCmds from './help/openWebHelp';
 import * as nls from 'vscode-nls';
 
 // The example uses the file message format.
@@ -26,6 +26,7 @@ const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 let client: LanguageClient;
 
 autoCompletionProvider.readAllBultinFunctions();
+helpCmds.readAllHelpData();
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -64,6 +65,7 @@ export function activate(context: vscode.ExtensionContext) {
 	//-----------------------------------------------------------
 	//6. register project commands
 	pmCmds.registerProjectCommands(context);
+	helpCmds.registerHelpCommands(context);
 }
 
 export function deactivate(): Thenable<void> | undefined {

@@ -26,6 +26,7 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Smart bracket
     * Document/selection formatting using narrow or wide style
     * Auto indent
+    * Easy access to online documentation through the context menu (selection sensitive)
 
 3. AutoLISP Project
     * Open a project (.prj)

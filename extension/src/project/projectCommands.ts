@@ -225,7 +225,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
 const showErrOpt = { modal: true };
 
-function showErrorMessage(description: string, detail: string) {
+export function showErrorMessage(description: string, detail: string) {
     if (!detail) {
         vscode.window.showErrorMessage(description, showErrOpt);
     } else {

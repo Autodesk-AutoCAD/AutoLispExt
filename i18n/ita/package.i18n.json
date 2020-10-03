@@ -1,6 +1,7 @@
 {
   "autolispext.description": "Questa è un'estensione vscode per AutoLISP di AutoCAD.",
   "autolispext.loadcurrentfile.title": "Carica file in AutoCAD",
+  "autolispext.openwebhelp.title": "Apri Guida in linea",
   "autolispext.configuration.title": "Configurazione di AutoLISP di AutoCAD®",
   "autolispext.configuration.maxlinechars.desc": "Numero massimo di caratteri consigliato da visualizzare su ogni riga. Il valore deve essere maggiore o uguale a 60.",
   "autolispext.configuration.narrowstyleindent.desc": "Valore di rientro utilizzato nello stile di formattazione stretto degli argomenti di funzione. Il valore deve essere compreso nell'intervallo 1-6.",

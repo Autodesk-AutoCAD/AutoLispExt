@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.3.0",
+	"version": "1.4.0",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
@@ -46,6 +46,11 @@
 				"command": "autolisp.loadActiveFile",
 				"category": "AutoLISP",
 				"title": "%autolispext.loadcurrentfile.title%"
+			},
+			{
+				"command": "autolisp.openWebHelp",
+				"category": "AutoLISP",
+				"title": "%autolispext.openwebhelp.title%"
 			},
 			{
 				"command": "autolisp.createProject",
@@ -550,7 +555,12 @@
 					"when": "resourceLangId == autolisp",
 					"command": "autolisp.loadActiveFile",
 					"group": "navigation@1"
-				}				
+				},
+				{
+					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
+					"command": "autolisp.openWebHelp",
+					"group": "navigation@2"
+				}    
 			]
 		}
 	},

@@ -1,6 +1,7 @@
 {
   "autolispext.description": "这是适用于 AutoCAD AutoLISP 的 vscode 扩展",
   "autolispext.loadcurrentfile.title": "加载文件到 AutoCAD",
+  "autolispext.openwebhelp.title": "打开在线帮助",
   "autolispext.configuration.title": "AutoCAD® AutoLISP 配置",
   "autolispext.configuration.maxlinechars.desc": "建议每行显示的最大字符数。值必须为 60 或更大。",
   "autolispext.configuration.narrowstyleindent.desc": "函数参数的窄格式样式中使用的缩进值。值必须在 1 和 6 之间。",
