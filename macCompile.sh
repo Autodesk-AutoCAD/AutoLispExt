@@ -24,6 +24,9 @@ echo ""
 echo "removing out ..."
 rm -rf out
 
+echo "copying webHelpAbstraction.json to target folder ..."
+ditto ./extension/src/help/webHelpAbstraction.json ./out/help/webHelpAbstraction.json
+
 echo ""
 echo "start to compile AutoLispExt ..."
 npm run compile
