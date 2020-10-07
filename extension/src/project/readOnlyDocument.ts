@@ -47,6 +47,12 @@ export class ReadonlyDocument implements vscode.TextDocument {
         this.isClosed = false;
     }
 
+    static openFromContent(fileContent: string, languageId: string): ReadonlyDocument {        
+        let ret = new ReadonlyDocument("tempfile");
+        ret.initialize(fileContent, languageId);
+        return ret;
+    }
+
     static open(filePath: string): ReadonlyDocument {
         if (fs.existsSync(filePath) == false) {
             return null;
