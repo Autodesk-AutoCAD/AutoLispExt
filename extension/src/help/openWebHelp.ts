@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
-import * as path from 'path';
 import * as nls from 'vscode-nls';
 import { showErrorMessage } from "../project/projectCommands";
+import { IJsonLoadable, webHelpContainer } from "../resources";
 
-export let webHelpContainer: WebHelpLibrary;
+
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
-//#region Web Help Initialization
+
 // Invoked from extension.ts to setup the Right Click 'Open Online Help' command. 
 export function registerHelpCommands(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', async () => {
@@ -20,22 +20,6 @@ export function registerHelpCommands(context: vscode.ExtensionContext) {
 		}
 	}));
 }
-
-// Invoked from extension.ts as a generic early-loader of the webHelpAbstraction; possibly future related files too.
-export function readAllHelpData() {
-	loadWebHelpAbstraction("../../out/help/webHelpAbstraction.json");	
-}
-function loadWebHelpAbstraction(datafile: string): void {
-	webHelpContainer = new WebHelpLibrary();
-    var fs = require("fs");
-    var dataPath = path.resolve(__dirname, datafile);
-    fs.readFile(dataPath, function(err, data) {        
-        if (err === null) {                      
-            webHelpContainer.load(JSON.parse(data));
-        }
-    });    
-}
-//#endregion
 
 
 // Triggers VSCode to open the official web documentation URL related to the currently selected symbol
@@ -55,7 +39,7 @@ export async function openWebHelp() {
 
 
 // This container object represents all of the normalized data extracted from help.autodesk.com/view/OARX/
-export class WebHelpLibrary{
+export class WebHelpLibrary implements IJsonLoadable {
 	dclAttributes: Dictionary<WebHelpDclAtt> = {};
 	dclTiles: Dictionary<WebHelpDclTile> = {};
 	objects: Dictionary<WebHelpObject> = {};
@@ -64,7 +48,7 @@ export class WebHelpLibrary{
 	enumerators: Dictionary<string> = {};	
 	
 	// consumes a JSON converted object into the WebHelpLibrary
-	load(obj: object): void{		
+	loadFromJsonObject(obj: object): void{		
 		Object.keys(obj["dclAttributes"]).forEach(key => {
 			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
 			this.dclAttributes[key] = newObj;
@@ -133,7 +117,10 @@ enum WebHelpCategory {
 	PROPGETTER = 2,
 	PROPSETTER = 3,
 	FUNCTION = 4,
-	ENUM = 5
+	ENUM = 5,
+	DCLTILE = 6,
+	DCLATT = 7,
+	EVENT = 8
 }
 
 
@@ -160,12 +147,14 @@ class WebHelpEntity {
 	category: WebHelpCategory;	
 	guid: string;
 	description: string;
+	platforms: string;
 	constructor(template: object)
 	{
 		this.category = template["category"];
 		this.description = template["description"];
 		this.guid = template["guid"];
 		this.id = template["id"];
+		this.platforms = template["platforms"];
 	}
 
 
@@ -254,7 +243,8 @@ class WebHelpDclTile extends WebHelpEntity {
 }
 
 
-// The valueType value is in the same arrangement as the functions, but the signatures were only very mildly processed and generally represent the exact official documentation.
+// The signatures were very mildly processed to remove irregularities, but mostly represent exactly what the official documentation provided.
+// The valueTypes were reigidly handled/specified by the abstraction generator
 class WebHelpDclAtt extends WebHelpEntity {	
 	valueType: WebHelpValueType;
 	signature: string;		
