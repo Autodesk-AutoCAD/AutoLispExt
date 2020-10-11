@@ -5,15 +5,11 @@ import * as format from './listreader';
 import { LispAtom, Sexpression, indentationForNarrowStyle } from './sexpression';
 import { CursorPosition } from './listreader';
 
-export class ElementRange {
+class ElementRange {
     constructor() {
         this.startPos = null;
         this.endPos = null;
         this.quoted = false;
-    }
-
-    getRange(document: vscode.TextDocument): vscode.Range{
-        return new vscode.Range(document.positionAt(this.startPos.offsetInDocument), document.positionAt(this.endPos.offsetInDocument));
     }
 
     startPos: format.CursorPosition;
