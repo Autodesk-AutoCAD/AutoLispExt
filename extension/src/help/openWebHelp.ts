@@ -133,10 +133,7 @@ enum WebHelpCategory {
 	PROPGETTER = 2,
 	PROPSETTER = 3,
 	FUNCTION = 4,
-	ENUM = 5,
-	DCLTILE = 6,
-	DCLATT = 7,
-	EVENT = 8
+	ENUM = 5
 }
 
 
@@ -163,14 +160,12 @@ class WebHelpEntity {
 	category: WebHelpCategory;	
 	guid: string;
 	description: string;
-	platforms: string;
 	constructor(template: object)
 	{
 		this.category = template["category"];
 		this.description = template["description"];
 		this.guid = template["guid"];
 		this.id = template["id"];
-		this.platforms = template["platforms"];
 	}
 
 
@@ -259,8 +254,7 @@ class WebHelpDclTile extends WebHelpEntity {
 }
 
 
-// The signatures were very mildly processed to remove irregularities, but mostly represent exactly what the official documentation provided.
-// The valueTypes were reigidly handled/specified by the abstraction generator
+// The valueType value is in the same arrangement as the functions, but the signatures were only very mildly processed and generally represent the exact official documentation.
 class WebHelpDclAtt extends WebHelpEntity {	
 	valueType: WebHelpValueType;
 	signature: string;		

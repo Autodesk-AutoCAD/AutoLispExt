@@ -5,7 +5,7 @@ import * as format from './listreader';
 import { LispAtom, Sexpression, indentationForNarrowStyle } from './sexpression';
 import { CursorPosition } from './listreader';
 
-export class ElementRange {
+class ElementRange {
     constructor() {
         this.startPos = null;
         this.endPos = null;

@@ -5,11 +5,6 @@ import * as fs from 'fs-extra';
 
 const os = require('os');
 
-// useful when building from new RegExp and incorporating a dynamic keyword as part of the search pattern.
-export function escapeRegExp(string): string {
-	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-
 export function getFullDocRange(editor: vscode.TextEditor): vscode.Range {
     return editor.document.validateRange(
         new vscode.Range(
