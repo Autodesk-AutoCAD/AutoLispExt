@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs'
+import * as fs from 'fs';
 import * as nls from 'vscode-nls';
+import { LispParser } from '../format/parser';
+import { Sexpression } from '../format/sexpression';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
@@ -71,10 +73,18 @@ export class ReadonlyDocument implements vscode.TextDocument {
         return ret;
     }
 
+    //Note to reviewers, this method is used exactly one place. We could update that call to provide 'autolispprj' to the more ambiguous createMemoryDocument()
     static createProject(prjContent: string): ReadonlyDocument {
         let ret = new ReadonlyDocument('');
 
         ret.initialize(prjContent, 'autolispprj');
+        return ret;
+    }
+
+    // used to create micro memory documents from fragments of AutoLisp code. One application for doing this is clearly identifying the scope of variables.
+    static createMemoryDocument(fileContent: string, languageId: string): ReadonlyDocument {        
+        let ret = new ReadonlyDocument('');
+        ret.initialize(fileContent, languageId);
         return ret;
     }
 
@@ -93,11 +103,22 @@ export class ReadonlyDocument implements vscode.TextDocument {
             this.lines = fileContent.split('\r\n');
             this.lineCount = this.lines.length;
         }
+        this.atomsForest = [];
+        if (languageId === 'autolisp'){
+            let parser = new LispParser(this);
+            try {
+                parser.tokenizeString(this.fileContent, 0);        
+                this.atomsForest = [...parser.atomsForest];    
+            } finally {
+                parser = undefined;
+            }
+        }
     }
 
     fileContent: string;
     lines: string[];
     eolLength: number;
+    atomsForest: Array<string|Sexpression>; // Drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
