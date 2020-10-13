@@ -10,14 +10,15 @@ import {
 import * as Diagnostics from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
 
-import * as formatProviders from './format/formatProviders'
-import * as autoCompletionProvider from "./completion/autocompletionProvider"
-import * as statusBar from "./statusbar"
-import * as autoIndent from './format/autoIndent'
+import * as formatProviders from './format/formatProviders';
+import * as autoCompletionProvider from "./completion/autocompletionProvider";
+import * as statusBar from "./statusbar";
+import * as autoIndent from './format/autoIndent';
 
-import * as DebugProviders from "./debug"
-import * as pmCmds from "./project/projectCommands"
+import * as DebugProviders from "./debug";
+import * as pmCmds from "./project/projectCommands";
 import * as helpCmds from './help/openWebHelp';
+import { loadAllResources } from "./resources";
 import * as nls from 'vscode-nls';
 
 // The example uses the file message format.
@@ -25,8 +26,7 @@ const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 let client: LanguageClient;
 
-autoCompletionProvider.readAllBultinFunctions();
-helpCmds.readAllHelpData();
+loadAllResources();
 
 export function activate(context: vscode.ExtensionContext) {
 
