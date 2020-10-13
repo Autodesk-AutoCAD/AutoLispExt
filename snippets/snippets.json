@@ -463,6 +463,13 @@
             "(setq layer (cdr (assoc 8 ${1:entname})))"
         ],
         "description": "get entity layer"
+    },
+    "#region": {
+        "prefix": "#region",
+        "body": [
+            ";#region ${1:description}\n${TM_SELECTED_TEXT}\n;#endregion"
+        ],
+        "description": "Folding Region"
     }
 
 
