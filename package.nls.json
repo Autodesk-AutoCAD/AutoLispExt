@@ -2,6 +2,7 @@
 	"autolispext.description": "This is a vscode extension for AutoCAD AutoLISP",
 	"autolispext.loadcurrentfile.title": "Load File into AutoCAD",
 	"autolispext.openwebhelp.title": "Open Online Help",
+	"autolispext.regionsnippet.title": "Insert Region",
 	"autolispext.configuration.title": "AutoCAD® AutoLISP configuration",
 	"autolispext.configuration.maxlinechars.desc": "Suggested maximum number of characters to display on each line. Value must be 60 or greater.",
 	"autolispext.configuration.narrowstyleindent.desc": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6.",
