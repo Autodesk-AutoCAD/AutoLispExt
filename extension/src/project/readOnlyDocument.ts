@@ -97,12 +97,35 @@ export class ReadonlyDocument implements vscode.TextDocument {
             this.lines = fileContent.split('\r\n');
             this.lineCount = this.lines.length;
         }
-        this.atomsForest = [];
-        if (languageId === 'autolisp'){
+    }
+
+    
+    // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
+    get atomsForest(): Array<string|Sexpression> {
+        if (this.languageId === 'autolisp') {
+            if (this._atomsForest && this._atomsForest.length > 0){
+                return this._atomsForest;
+            } else {
+                this.updateAtomsForest();
+                return this._atomsForest;
+            }
+        } else {
+            return [];
+        }
+    }
+    
+    // This was segregated from the atomsForest getter to support two primary use cases:
+    //      A force update that will be called on the workspace.onDidSaveTextDocument() saved event to keep the memory document in sync with the user input.
+    //      The recycle/update a memory document currently being used with AutoLisp code fragramts for enhanced data type detection.
+    updateAtomsForest(content?: string) {
+        if (this.languageId === 'autolisp'){
+            if (content) {
+                this.initialize(content, this.languageId);
+            }
             let parser = new LispParser(this);
             try {
                 parser.tokenizeString(this.fileContent, 0);        
-                this.atomsForest = [...parser.atomsForest];    
+                this._atomsForest = [...parser.atomsForest];    
             } finally {
                 parser = undefined;
             }
@@ -112,7 +135,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     fileContent: string;
     lines: string[];
     eolLength: number;
-    atomsForest: Array<string|Sexpression>; // Added to drastically reduces complexity in other places.
+    private _atomsForest: Array<string|Sexpression>; // Added to drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
