@@ -1,25 +1,5 @@
 import * as vscode from 'vscode';
-import * as nls from 'vscode-nls';
-import { showErrorMessage } from "../project/projectCommands";
 import { IJsonLoadable, webHelpContainer } from "../resources";
-
-
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
-
-// Invoked from extension.ts to setup the Right Click 'Open Online Help' command. 
-export function registerHelpCommands(context: vscode.ExtensionContext) {
-	context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', async () => {
-		try {
-			await openWebHelp();
-		}
-		catch (err) {
-			if (err){
-				let msg = localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
-				showErrorMessage(msg, err);
-			}
-		}
-	}));
-}
 
 
 // Triggers VSCode to open the official web documentation URL related to the currently selected symbol

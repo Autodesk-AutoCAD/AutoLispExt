@@ -53,6 +53,11 @@
 				"title": "%autolispext.openwebhelp.title%"
 			},
 			{
+				"command": "autolisp.insertFoldingRegion",
+				"category": "AutoLISP",
+				"title": "%autolispext.regionsnippet.title%"
+			},
+			{
 				"command": "autolisp.createProject",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.createproject.title%",
@@ -560,6 +565,11 @@
 					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.openWebHelp",
 					"group": "navigation@2"
+				},
+				{
+					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
+					"command": "autolisp.insertFoldingRegion",
+					"group": "navigation@3"
 				}    
 			]
 		}
