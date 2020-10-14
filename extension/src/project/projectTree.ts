@@ -1,8 +1,8 @@
 import { IconUris } from './icons';
 import { ProjectDefinition } from './projectDefinition';
-
-import * as vscode from 'vscode'
-import * as path from 'path'
+import { ReadonlyDocument } from './readOnlyDocument';
+import * as vscode from 'vscode';
+import * as path from 'path';
 import { pathEqual } from '../utils';
 
 import * as nls from 'vscode-nls';
@@ -64,7 +64,7 @@ export class ProjectNode implements DisplayNode {
 export class LspFileNode implements DisplayNode {
     filePath: string;
     fileExists: boolean;
-
+    document: ReadonlyDocument;
     rawFilePath: string;//the raw path string read from .prj file; for new added file, it should be null
 
     getDisplayText(): string {
@@ -124,16 +124,23 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
 
     public updateData(newRootNode: ProjectNode) {
         this.rootNode = newRootNode;
-
+        vscode.commands.executeCommand("setContext", "autolisp.hasProject", ProjectTreeProvider.hasProjectOpened());
         this.onChanged.fire();
     }
 
     public refreshData(data?: DisplayNode) {
+        vscode.commands.executeCommand("setContext", "autolisp.hasProject", ProjectTreeProvider.hasProjectOpened());
         this.onChanged.fire(data);
     }
 
     public get projectNode(): ProjectNode {
         return this.rootNode;
+    }
+
+    public static closeProject(): void {
+        ProjectTreeProvider.currentInstance.rootNode = null;
+        ProjectTreeProvider.currentInstance.onChanged.fire(null);
+        vscode.commands.executeCommand("setContext", "autolisp.hasProject", false);
     }
 
 
@@ -238,5 +245,6 @@ export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string,
     fileNode.filePath = fileName;
     fileNode.fileExists = fs.existsSync(fileName);
     fileNode.rawFilePath = rawFilePath;
+    fileNode.document = ReadonlyDocument.open(fileName);
     root.sourceFiles.push(fileNode);
 }

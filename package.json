@@ -76,6 +76,15 @@
 				}
 			},
 			{
+				"command": "autolisp.closeProject",
+				"category": "AutoLISP",
+				"title": "%autolispext.project.closeproject.title%",
+				"icon": {
+					"dark": "images/dark/close.svg",
+					"light": "images/light/close.svg"
+				}
+			},
+			{
 				"command": "autolisp.addFile2Project",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.addfile.title%",
@@ -500,12 +509,17 @@
 				{
 					"command": "autolisp.addFile2Project",
 					"group": "navigation@3",
-					"when": "view == Autolisp-ProjectView"
+					"when": "view == Autolisp-ProjectView && autolisp.hasProject"
 				},
 				{
 					"command": "autolisp.refresh",
 					"group": "navigation@6",
-					"when": "view == Autolisp-ProjectView"
+					"when": "view == Autolisp-ProjectView && autolisp.hasProject"
+				},
+				{
+					"command": "autolisp.closeProject",
+					"group": "navigation@7",
+					"when": "view == Autolisp-ProjectView && autolisp.hasProject"
 				},
 				{
 					"command": "autolisp.findInProject",
@@ -548,6 +562,11 @@
 					"when": "view == Autolisp-ProjectView && viewItem == project",	
 					"command": "autolisp.SaveAll",	
 					"group": "navigation@4"	
+				},
+				{	
+					"when": "view == Autolisp-ProjectView && viewItem == project",	
+					"command": "autolisp.closeProject",	
+					"group": "navigation@5"	
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",
