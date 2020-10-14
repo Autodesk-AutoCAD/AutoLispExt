@@ -13,7 +13,7 @@ export class ElementRange {
     }
 
     getRange(document: vscode.TextDocument): vscode.Range{
-        return new vscode.Range(document.positionAt(this.startPos.offsetInDocument), document.positionAt(this.endPos.offsetInDocument));
+        return new vscode.Range(document.positionAt(this.startPos.offsetInDocument), document.positionAt(this.endPos.offsetInDocument + 1));
     }
 
     startPos: format.CursorPosition;

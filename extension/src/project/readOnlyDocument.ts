@@ -73,15 +73,9 @@ export class ReadonlyDocument implements vscode.TextDocument {
         return ret;
     }
 
-    //Note to reviewers, this method is used exactly one place. We could update that call to provide 'autolispprj' to the more ambiguous createMemoryDocument()
-    static createProject(prjContent: string): ReadonlyDocument {
-        let ret = new ReadonlyDocument('');
-
-        ret.initialize(prjContent, 'autolispprj');
-        return ret;
-    }
-
-    // used to create micro memory documents from fragments of AutoLisp code. One application for doing this is clearly identifying the scope of variables.
+    // Example Use Cases
+    //      Identify global variables from fragments of AutoLisp code
+    //      Currently in use to save/create PRJ files
     static createMemoryDocument(fileContent: string, languageId: string): ReadonlyDocument {        
         let ret = new ReadonlyDocument('');
         ret.initialize(fileContent, languageId);
@@ -118,7 +112,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     fileContent: string;
     lines: string[];
     eolLength: number;
-    atomsForest: Array<string|Sexpression>; // Drastically reduces complexity in other places.
+    atomsForest: Array<string|Sexpression>; // Added to drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
