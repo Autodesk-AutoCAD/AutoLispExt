@@ -129,20 +129,12 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     }
 
     public refreshData(data?: DisplayNode) {
-        vscode.commands.executeCommand("setContext", "autolisp.hasProject", ProjectTreeProvider.hasProjectOpened());
         this.onChanged.fire(data);
     }
 
     public get projectNode(): ProjectNode {
         return this.rootNode;
     }
-
-    public static closeProject(): void {
-        ProjectTreeProvider.currentInstance.rootNode = null;
-        ProjectTreeProvider.currentInstance.onChanged.fire(null);
-        vscode.commands.executeCommand("setContext", "autolisp.hasProject", false);
-    }
-
 
     public static hasProjectOpened(): Boolean {
         if (!ProjectTreeProvider.currentInstance)

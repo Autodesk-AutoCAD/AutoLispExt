@@ -65,18 +65,15 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.closeProject', async () => {
-            try {
+            if (ProjectTreeProvider.hasProjectOpened() === true){
                 let promptmsg = localize("autolispext.project.commands.closepromptmsg", "Confirm close request on: ");
                 let responseYes = localize("autolispext.project.commands.closepromptyes", "Yes");
                 let responseNo = localize("autolispext.project.commands.closepromptno", "No");
                 vscode.window.showWarningMessage(promptmsg + ProjectTreeProvider.instance().projectNode.projectName, responseYes, responseNo).then(result => {
                     if (result === responseYes){
-                        ProjectTreeProvider.closeProject();
+                        ProjectTreeProvider.instance().updateData(null);
                     }
                 });
-            } catch (err) {
-                let msg = localize("autolispext.project.commands.closefailed", "Failed to close project.");
-                showErrorMessage(msg, err);
             }
         }));
 
