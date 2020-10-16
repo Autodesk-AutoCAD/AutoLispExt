@@ -103,7 +103,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
     get atomsForest(): Array<string|Sexpression> {
         if (this.languageId === 'autolisp') {
-            if (this._atomsForest && this._atomsForest.length > 0){
+            if (this._atomsForest){
                 return this._atomsForest;
             } else {
                 this.updateAtomsForest();
