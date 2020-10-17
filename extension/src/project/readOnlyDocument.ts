@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as nls from 'vscode-nls';
 import { LispParser } from '../format/parser';
-import { Sexpression } from '../format/sexpression';
+import { LispAtom, Sexpression } from '../format/sexpression';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
@@ -82,6 +82,22 @@ export class ReadonlyDocument implements vscode.TextDocument {
         return ret;
     }
 
+    // Added this to essentially cast standard TextDocument's to a ROD type enabling work to be done with enhanced standardized/functionality
+    // Related to to discussion issue#17
+    static getMemoryDocument(doc: vscode.TextDocument): ReadonlyDocument {        
+        let ret = new ReadonlyDocument('');
+        ret.eol = vscode.EndOfLine.CRLF;
+        ret.eolLength = 2;
+        ret.lineCount = doc.lineCount;
+        ret.languageId = doc.fileName.toUpperCase().slice(-4) === ".LSP" ? "autolisp" : "";
+        ret.lines = [];        
+        for (let i = 0; i < doc.lineCount; i++) {
+            ret.lines.push(doc.lineAt(i).text);
+        }
+        ret.fileContent = ret.lines.join('\r\n');
+        return ret;
+    }
+
     initialize(fileContent: string, languageId: string) {
         this.fileContent = fileContent.split('\r\n').join('\n').split('\n').join('\r\n');//to make sure every line ends with \r\n
         this.eol = vscode.EndOfLine.CRLF;
@@ -116,7 +132,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     
     // This was segregated from the atomsForest getter to support two primary use cases:
     //      A force update that will be called on the workspace.onDidSaveTextDocument() saved event to keep the memory document in sync with the user input.
-    //      The recycle/update a memory document currently being used with AutoLisp code fragramts for enhanced data type detection.
+    //      To recycle/update a memory document object currently being used with AutoLisp code fragments for enhanced data type detection.
     updateAtomsForest(content?: string) {
         if (this.languageId === 'autolisp'){
             if (content) {
@@ -260,6 +276,37 @@ export class ReadonlyDocument implements vscode.TextDocument {
     validatePosition(position: vscode.Position): vscode.Position {
         throw new Error('Method not implemented.'); //not used in AutolispExt
     }
-
     //#endregion
+
+    // This is very similar to a DOM querySelector and is to be used for quickly finding all the Defun's or Setq's to determine available function/variable names.
+    // The 'all' variable determines whether the function will continue digging inside a function it was able to match for nested versions.
+    // Test Case: Temporarily added the following to extension.ts	
+    //              let rod = ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document);
+    //              let forest = rod.atomsForest;
+    //              let expl = rod.findExpressions(/(DEFUN|LAMBDA|FOREACH)/ig, true);
+    findExpressions(regx: RegExp, all: boolean = false): Sexpression[]{
+        let result: Sexpression[] = [];
+        this.atomsForest.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+            result = result.concat(this.exploreAtomForest(regx, atom, all));
+        });
+        return result;
+    }
+    private exploreAtomForest(regx: RegExp, sexp: Sexpression, all: boolean): Sexpression[] {
+        let result: Sexpression[] = [];        
+        if (!sexp.atoms[1]){
+            return result;
+        } else if (sexp.atoms[1] instanceof LispAtom && regx.test(sexp.atoms[1].symbol) === true){
+            result.push(sexp);
+            if (all === true){
+                sexp.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                    result = result.concat(this.exploreAtomForest(regx, atom, all));
+                });
+            }
+        } else {
+            sexp.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                result = result.concat(this.exploreAtomForest(regx, atom, all));
+            });
+        }
+        return result;
+    }
 }
