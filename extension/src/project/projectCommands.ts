@@ -1,4 +1,4 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 import { OpenProject } from './openProject';
 import { ProjectTreeProvider } from './projectTree';
 import { openLspFile } from './openLspFile';
@@ -62,6 +62,19 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                     let msg = localize("autolispext.project.commands.openprojectfailed", "Failed to open the specified project.");
                     showErrorMessage(msg, err);
                 });
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.closeProject', async () => {
+            if (ProjectTreeProvider.hasProjectOpened() === true){
+                let promptmsg = localize("autolispext.project.commands.closepromptmsg", "Confirm close request on: ");
+                let responseYes = localize("autolispext.project.commands.closepromptyes", "Yes");
+                let responseNo = localize("autolispext.project.commands.closepromptno", "No");
+                vscode.window.showWarningMessage(promptmsg + ProjectTreeProvider.instance().projectNode.projectName, responseYes, responseNo).then(result => {
+                    if (result === responseYes){
+                        ProjectTreeProvider.instance().updateData(null);
+                    }
+                });
+            }
         }));
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.addFile2Project', async () => {

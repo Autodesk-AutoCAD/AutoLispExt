@@ -16,6 +16,7 @@
 	"autolispext.debug.launchconfig.desc": "user settings for AutoCAD path and startup parameters.",
 	"autolispext.project.createproject.title": "Create a New Project",
 	"autolispext.project.openproject.title": "Open an Existing Project",
+	"autolispext.project.closeproject.title": "Close Project",
 	"autolispext.project.addfile.title": "Add File to Project",
 	"autolispext.project.removefile.title": "Remove File from Project",
 	"autolispext.project.saveproject.title": "Save Project",
