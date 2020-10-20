@@ -120,7 +120,7 @@ export class LispParser {
                     endPos2d = document.positionAt(endOfString.offsetInDocument);
                 }
                 else {
-                    endPos2d = selectionStartOffset + textString.length;
+                    endPos2d = document.positionAt(selectionStartOffset + textString.length);
                 }
 
                 let stringExpr = document.getText(new vscode.Range(startPos2d, endPos2d));

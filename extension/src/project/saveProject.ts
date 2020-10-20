@@ -30,7 +30,7 @@ export async function SaveProject(refresh: boolean) {
         }
 
         //format the text before writing to file
-        let doc = ReadonlyDocument.createProject(prjFileText);
+        let doc = ReadonlyDocument.createMemoryDocument(prjFileText, 'autolispprj');
         longListFormatAsSingleColum();
         let formatedText = LispFormatter.format(doc, null);
         resetLongListFormatAsSingleColum();

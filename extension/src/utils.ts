@@ -109,3 +109,8 @@ export function getTmpFilePath(): string {
 function tryGetTmpFilePath() {
     return path.join(os.tmpdir(), `unsaved.${crypto.randomBytes(6).readUIntLE(0, 6).toString(36)}.tmp`);
 }
+
+// useful when building from new RegExp and incorporating a dynamic keyword as part of the search pattern.
+export function escapeRegExp(string): string {
+	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
