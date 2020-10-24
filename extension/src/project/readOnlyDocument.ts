@@ -3,12 +3,11 @@ import * as fs from 'fs';
 import * as nls from 'vscode-nls';
 import { LispParser } from '../format/parser';
 import { LispAtom, Sexpression } from '../format/sexpression';
+import { DocumentManager } from '../documents';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
-    private constructor() {
-
-    }
+    private constructor() {}
 
     static Create(txt: string, line: number): ReadonlyLine {
         let ret = new ReadonlyLine();
@@ -23,19 +22,19 @@ export class ReadonlyLine implements vscode.TextLine {
     text: string;
 
     get rangeIncludingLineBreak(): vscode.Range {
-        throw new Error("Method not implemented")//not used in AutolispExt
+        throw new Error("Method not implemented");//not used in AutolispExt
     }
 
     get range(): vscode.Range {
-        throw new Error("Method not implemented")//not used in AutolispExt
+        throw new Error("Method not implemented");//not used in AutolispExt
     }
 
     get firstNonWhitespaceCharacterIndex(): number {
-        throw new Error("Method not implemented")//not used in AutolispExt
+        throw new Error("Method not implemented");//not used in AutolispExt
     }
 
     get isEmptyOrWhitespace(): boolean {
-        throw new Error("Method not implemented")//not used in AutolispExt
+        throw new Error("Method not implemented");//not used in AutolispExt
     }
 }
 
@@ -50,22 +49,11 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     static open(filePath: string): ReadonlyDocument {
-        if (fs.existsSync(filePath) == false) {
+        const langId = DocumentManager.getSelectorType(filePath);
+        if (fs.existsSync(filePath) === false || langId === "") {
             return null;
         }
-
-        let langId = null;
-        let filePathLower = filePath.toLocaleLowerCase();
-        if (filePathLower.endsWith('.prj')) {
-            langId = 'autolispprj';
-        }
-        else if (filePathLower.endsWith('.lsp')) {
-            langId = 'autolisp';
-        }
-        else {
-            return null;
-        }
-
+        
         let ret = new ReadonlyDocument(filePath);
 
         let data = fs.readFileSync(filePath).toString();
@@ -83,13 +71,13 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     // Added this to essentially cast standard TextDocument's to a ROD type enabling work to be done with enhanced standardized/functionality
-    // Related to to discussion issue#17
+    // Related to to discussion issue#30
     static getMemoryDocument(doc: vscode.TextDocument): ReadonlyDocument {        
         let ret = new ReadonlyDocument('');
         ret.eol = vscode.EndOfLine.CRLF;
         ret.eolLength = 2;
         ret.lineCount = doc.lineCount;
-        ret.languageId = doc.fileName.toUpperCase().slice(-4) === ".LSP" ? "autolisp" : "";
+        ret.languageId = DocumentManager.getSelectorType(doc.fileName);
         ret.lines = [];        
         for (let i = 0; i < doc.lineCount; i++) {
             ret.lines.push(doc.lineAt(i).text);
@@ -105,7 +93,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
         this.languageId = languageId;
 
-        if (this.fileContent.length == 0) {
+        if (this.fileContent.length === 0) {
             this.lineCount = 0;
             this.lines = [];
         }
@@ -118,7 +106,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     
     // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
     get atomsForest(): Array<string|Sexpression> {
-        if (this.languageId === 'autolisp') {
+        if (this.languageId === DocumentManager.Selectors.lsp) {
             if (this._atomsForest){
                 return this._atomsForest;
             } else {
@@ -134,7 +122,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     //      A force update that will be called on the workspace.onDidSaveTextDocument() saved event to keep the memory document in sync with the user input.
     //      To recycle/update a memory document object currently being used with AutoLisp code fragments for enhanced data type detection.
     updateAtomsForest(content?: string) {
-        if (this.languageId === 'autolisp'){
+        if (this.languageId === DocumentManager.Selectors.lsp){
             if (content) {
                 this.initialize(content, this.languageId);
             }
@@ -181,16 +169,17 @@ export class ReadonlyDocument implements vscode.TextDocument {
             line = position.line;
         }
 
-        if (line >= this.lineCount) //line number starts by 0
+        if (line >= this.lineCount) { //line number starts by 0
             return null;
+        }
 
         return ReadonlyLine.Create(this.lines[line], line);
     }
 
     offsetAt(position: vscode.Position): number {
-        if (position.line >= this.lineCount)
+        if (position.line >= this.lineCount) {
             return this.fileContent.length; //invalid input; put the "cursor" after the last char
-
+        }
         let offset = 0;
         //count char number before the given line
         for (let line = 0; line < position.line; line++) {
@@ -201,9 +190,9 @@ export class ReadonlyDocument implements vscode.TextDocument {
         //now the last line
         let lastLine = this.lines[position.line];
         let charNum = position.character;
-        if (position.character >= lastLine.length)
+        if (position.character >= lastLine.length) {
             charNum = lastLine.length; //put the "cursor" after the last char
-
+        }
         offset += charNum;
 
         return offset;
@@ -223,9 +212,8 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
             //now, the offset is outside current line
 
-            if (line == (this.lineCount - 1)) {
+            if (line === (this.lineCount - 1)) {
                 //current line is the end of all, so the given position is invalid
-
                 return new vscode.Position(line, lineText.length);//put the "cursor" after the last char
             }
 
@@ -245,17 +233,17 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     getText(range?: vscode.Range): string {
-        if (!range)
+        if (!range) {
             return this.fileContent;
-
+        }
         range = this.validateRange(range);
 
         let start = this.offsetAt(range.start);
         let end = this.offsetAt(range.end);
 
-        if (start >= this.fileContent.length)
+        if (start >= this.fileContent.length) {
             return '';
-
+        }
         return this.fileContent.substring(start, end);
     }
 
