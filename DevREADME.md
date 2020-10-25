@@ -100,3 +100,128 @@ Error installing vscode.d.ts: Error: read ECONNRESET
 If you encounter this problem, maybe your NODE is too old, in version v10.13.0 it 
 can work well.
 or run "npm cache clean -force"
+
+## Style Guide
+Below are some general 
+### Names
+1. ==Use `PascalCase` for type/interface names, enums, setters, getters and global singletons==
+2. Use `camelCase` for function, argument and local variable names.
+3. Use `UPPER_CASE` for global constants.
+4. ==Use `_` as a prefix for private variables==
+5. ==Use `I` as a prefix for interface names that define function declarations.==
+5. Use whole words in names where possible.
+
+#### Types
+1. Do not export types/functions unless you need to share them across multiple components.
+2. Within a file, type definitions should come first.
+
+#### Comments
+1. ==Use JSDoc-style comments for functions, interfaces, enums, and classes.==
+2. ==Limited to using an informal description and @type/@param/@return when applicable==
+
+## Style
+1. Use arrow functions over anonymous function expressions.
+2. Always surround loop and conditional bodies with curly braces.
+3. Open curly braces always go on the same line as whatever necessitates them.
+4. `else` goes on the same line as the closing curly brace.
+5. ==Use two (2) spaces for indentation.==
+6. ==The `export` keyword should be on its own line.==
+7. ==Function should always provide type declarations for its return and argument values==
+8. ==Function bodies (including getters/setters) must appear on seperate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line==
+9. ==Use a maximum of 140 chars per lines; including leading whitespace==
+10. ==Strings should always use single quotes if they do not contain interpolated values:==
+```typescript
+  let foo = 'bar';       // static string
+  let baz = `${5 * 5}`;  // interpolated string
+  let qux = 'These aren\'t the droids you\'re looking for.';  // escaped quotes in string
+```
+
+## Classes
+1. Avoid public properties - use setters/getters.
+2. Do not use the `public` keyword for public members - it is implied by default.
+3. Initialize all private properties to an initial value or `null`, unless they 
+   will be initialized in the constructor. ==If a basic type is used, do not add 
+   a type specifier== (e.g. `private _someValue = 0;`).
+4. ==Ordering of members within a class should be:==
+  - `static`
+  - `public`
+  - `protected`
+  - `private`
+5. Start with getters/setters in each scope, then methods. Protected and private
+   properties go last.
+6. Abstract methods go in the same location as they would in the implemented class.
+
+## Examples
+- Interface declaration:
+
+```typescript
+/**
+ * The base message object which can be sent to a message handler.
+ */
+export
+interface IMessage {
+  /**
+   * The type of the message.
+   * @type {string}
+   */
+  type: string;
+}
+```
+
+- If-Else block:
+
+```typescript
+if (parent) {
+  this._parent = null;
+} else if (this.isAttached) {
+  this.detach(); 
+}
+```
+
+
+- Bit flags:
+
+```typescript
+export
+enum WidgetFlag {
+  /**
+   * The widget is attached to the DOM.
+   */
+  IsAttached = 0x1,
+}
+```
+
+```typescript
+export
+class Widget {
+  /**
+   * Test whether the given widget flag is set.
+   * @param {object} flag WidgetFlag
+   * @return {boolean}
+   */
+  testFlag(flag: WidgetFlag): boolean {
+    return (this._wflags & flag) !== 0;
+  }
+
+  /**
+   * Set the given widget flag.
+   * @param {object} flag WidgetFlag
+   * @returns {void}
+   */
+  setFlag(flag: WidgetFlag): void {
+    this._wflags |= flag;
+  }
+
+  /**
+   * Clear the given widget flag.
+   * @param {object} flag WidgetFlag
+   * @returns {void}
+   */
+  clearFlag(flag: WidgetFlag): void {
+    this._wflags &= ~flag;
+  }
+
+  private _wflags = 0;
+}
+```
+
