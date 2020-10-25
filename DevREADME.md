@@ -101,6 +101,8 @@ If you encounter this problem, maybe your NODE is too old, in version v10.13.0 i
 can work well.
 or run "npm cache clean -force"
 
+---
+
 ## Style Guide
 Below are some general code guidelines that should be followed when adding or updating the code base. It is the expectation that participating members actively apply this style guide to legacy code during maintenance so we can eventually have a noticeably consistent developer experience.
 ### Names
