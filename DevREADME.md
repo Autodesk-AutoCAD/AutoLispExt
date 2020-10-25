@@ -111,15 +111,15 @@ Below are some general
 5. ==Use `I` as a prefix for interface names that define function declarations.==
 5. Use whole words in names where possible.
 
-#### Types
+### Types
 1. Do not export types/functions unless you need to share them across multiple components.
 2. Within a file, type definitions should come first.
 
-#### Comments
+### Comments
 1. ==Use JSDoc-style comments for functions, interfaces, enums, and classes.==
 2. ==Limited to using an informal description and @type/@param/@return when applicable==
 
-## Style
+### General
 1. Use arrow functions over anonymous function expressions.
 2. Always surround loop and conditional bodies with curly braces.
 3. Open curly braces always go on the same line as whatever necessitates them.
@@ -136,7 +136,7 @@ Below are some general
   let qux = 'These aren\'t the droids you\'re looking for.';  // escaped quotes in string
 ```
 
-## Classes
+### Classes
 1. Avoid public properties - use setters/getters.
 2. Do not use the `public` keyword for public members - it is implied by default.
 3. Initialize all private properties to an initial value or `null`, unless they 
@@ -151,7 +151,7 @@ Below are some general
    properties go last.
 6. Abstract methods go in the same location as they would in the implemented class.
 
-## Examples
+### Examples
 - Interface declaration:
 
 ```typescript
