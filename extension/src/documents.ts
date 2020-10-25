@@ -10,25 +10,43 @@ export class DocumentManager{
 	private _workspace: Map<string, ReadonlyDocument> = new Map();
 	private _watchers: vscode.FileSystemWatcher[] = [];
 	
-	get OpenedDocuments(): ReadonlyDocument[] { return this.getOpenedAsReadonlyDocuments(); }
-	get WorkspaceDocuments(): ReadonlyDocument[] { return this.getWorkspaceDocuments(); }
-	get ProjectDocuments(): ReadonlyDocument[] { return this.getProjectDocuments(); }
-	get ActiveDocument(): ReadonlyDocument { return vscode.window.activeTextEditor ? ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document) : undefined; }
+	get OpenedDocuments(): ReadonlyDocument[] { 
+		return this.getOpenedAsReadonlyDocuments(); 
+	}
+	get WorkspaceDocuments(): ReadonlyDocument[] { 
+		return this.getWorkspaceDocuments(); 
+	}
+	get ProjectDocuments(): ReadonlyDocument[] { 
+		return this.getProjectDocuments(); 
+	}
+	get ActiveDocument(): ReadonlyDocument { 
+		return vscode.window.activeTextEditor ? ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document) : undefined; 
+	}
 	
-	get ActiveTextDocument(): vscode.TextDocument { return vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document :  null; }
-	get OpenedTextDocuments(): vscode.TextDocument[] { return [...this._opened.values()]; }
+	get ActiveTextDocument(): vscode.TextDocument { 
+		return vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document :  null; 
+	}
+	get OpenedTextDocuments(): vscode.TextDocument[] { 
+		return [...this._opened.values()]; 
+	}
 	
 
 	// General purpose methods for identifying the scope of work for a given document type
-	getSelectorType(fspath: string): string { return DocumentManager.getSelectorType(fspath); }
+	getSelectorType(fspath: string): string { 
+		return DocumentManager.getSelectorType(fspath); 
+	}
 	public static getSelectorType(fspath: string): string {
-		const ext: string = fspath.toUpperCase().slice(-4);
-		switch (ext) {
-			case ".LSP": return DocumentManager.Selectors.lsp;
-			case ".MNL": return DocumentManager.Selectors.lsp;
-			case ".PRJ": return DocumentManager.Selectors.prj;
-			case ".DCL": return DocumentManager.Selectors.dcl;
-			default: return "";
+		if (fspath) {
+			const ext: string = fspath.toUpperCase().slice(-4);
+			switch (ext) {
+				case ".LSP": return DocumentManager.Selectors.lsp;
+				case ".MNL": return DocumentManager.Selectors.lsp;
+				case ".PRJ": return DocumentManager.Selectors.prj;
+				case ".DCL": return DocumentManager.Selectors.dcl;
+				default: return "";
+			}
+		} else {
+			return "";
 		}
 	}
 
@@ -68,7 +86,8 @@ export class DocumentManager{
 		return result;
 	}
 
-	private initialize(){
+	// Creates the FileSystemWatcher's & builds a workspace blueprint
+	private initialize(): void {
 		this._opened.clear();
 		this._workspace.clear();
 		this._watchers.forEach(w => {
@@ -99,7 +118,8 @@ export class DocumentManager{
 		}
 	}
 
-	private setupFileSystemWatchers(){
+	// integral to the initialize() function but separated for clarity
+	private setupFileSystemWatchers(): void {
 		vscode.workspace.workspaceFolders.forEach(folder => {
 			const pattern = new vscode.RelativePattern(folder, "**");
 			const watcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
@@ -251,7 +271,7 @@ export class DocumentManager{
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async (e: vscode.WorkspaceFoldersChangeEvent) => {			
 			// backup the opened documents so their context can be persisted. These add/remove operations do not have the effect of closing open documents
 			const openedBackup = [...this._opened.values()]; 
-			// WorkspaceFoldersChangeEvent object tells us if it was added or removed, but it better to just reset all the events rather make seemingly futile attempts to pick/choose
+			// WorkspaceFoldersChangeEvent object tells us if it was added or removed, but it better to just reset all the events rather than make seemingly futile attempts to pick/choose
 			this.initialize(); 
 			// restore the _opened documents Map
 			openedBackup.forEach(doc => { 
