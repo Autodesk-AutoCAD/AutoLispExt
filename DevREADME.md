@@ -104,11 +104,11 @@ or run "npm cache clean -force"
 ## Style Guide
 Below are some general code guidelines that should be followed when adding or updating the code base. It is the expectation that participating members actively apply this style guide to legacy code during maintenance so we can eventually have a noticeably consistent developer experience.
 ### Names
-1. ==Use `PascalCase` for type/interface names, enums, setters, getters and global singletons==
+1. Use `PascalCase` for type/interface names, enums, setters, getters and global singletons
 2. Use `camelCase` for function, argument and local variable names.
 3. Use `UPPER_CASE` for global constants.
-4. ==Use `_` as a prefix for private variables==
-5. ==Use `I` as a prefix for interface names that define function declarations.==
+4. Use `_` as a prefix for private variables
+5. Use `I` as a prefix for interface names that define function declarations.
 5. Use whole words in names where possible.
 
 ### Types
@@ -116,20 +116,20 @@ Below are some general code guidelines that should be followed when adding or up
 2. Within a file, type definitions should come first.
 
 ### Comments
-1. ==Use JSDoc-style comments for functions, interfaces, enums, and classes.==
-2. ==Limited to using an informal description and @type/@param/@return when applicable==
+1. Use JSDoc-style comments for functions, interfaces, enums, and classes.
+2. Limited to using an informal description and @type/@param/@return when applicable
 
 ### General
 1. Use arrow functions over anonymous function expressions.
 2. Always surround loop and conditional bodies with curly braces.
 3. Open curly braces always go on the same line as whatever necessitates them.
 4. `else` goes on the same line as the closing curly brace.
-5. ==Use two (2) spaces for indentation.==
-6. ==The `export` keyword should be on its own line.==
-7. ==Function should always provide type declarations for its return and argument values==
-8. ==Function bodies (including getters/setters) must appear on separate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line==
-9. ==Use a maximum of 140 chars per lines; including leading whitespace==
-10. ==Strings should always use single quotes if they do not contain interpolated values:==
+5. Use two (2) spaces for indentation.
+6. The `export` keyword should be on its own line.
+7. Function should always provide type declarations for its return and argument values
+8. Function bodies (including getters/setters) must appear on separate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line
+9. Use a maximum of 140 chars per lines; including leading whitespace
+10. Strings should always use single quotes if they do not contain interpolated values:
 ```typescript
   let foo = 'bar';       // static string
   let baz = `${5 * 5}`;  // interpolated string
@@ -140,9 +140,9 @@ Below are some general code guidelines that should be followed when adding or up
 1. Avoid public properties - use setters/getters.
 2. Do not use the `public` keyword for public members - it is implied by default.
 3. Initialize all private properties to an initial value or `null`, unless they 
-   will be initialized in the constructor. ==If a basic type is used, do not add 
-   a type specifier== (e.g. `private _someValue = 0;`).
-4. ==Ordering of members within a class should be:==
+   will be initialized in the constructor. If a basic type is used, do not add 
+   a type specifier (e.g. `private _someValue = 0;`).
+4. Ordering of members within a class should be:
   - `static`
   - `public`
   - `protected`
