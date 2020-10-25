@@ -102,7 +102,7 @@ can work well.
 or run "npm cache clean -force"
 
 ## Style Guide
-Below are some general 
+Below are some general code guidelines that should be followed when adding or updating the code base. It is the expectation that participating members actively apply this style guide to legacy code during maintenance so we can eventually have a noticeably consistent developer experience.
 ### Names
 1. ==Use `PascalCase` for type/interface names, enums, setters, getters and global singletons==
 2. Use `camelCase` for function, argument and local variable names.
@@ -127,7 +127,7 @@ Below are some general
 5. ==Use two (2) spaces for indentation.==
 6. ==The `export` keyword should be on its own line.==
 7. ==Function should always provide type declarations for its return and argument values==
-8. ==Function bodies (including getters/setters) must appear on seperate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line==
+8. ==Function bodies (including getters/setters) must appear on separate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line==
 9. ==Use a maximum of 140 chars per lines; including leading whitespace==
 10. ==Strings should always use single quotes if they do not contain interpolated values:==
 ```typescript
