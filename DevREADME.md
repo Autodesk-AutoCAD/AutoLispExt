@@ -128,10 +128,11 @@ Below are some general code guidelines that should be followed when adding or up
 4. `else` goes on the same line as the closing curly brace.
 5. Use two (2) spaces for indentation.
 6. The `export` keyword should be on its own line.
-7. Function should always provide type declarations for its return and argument values
-8. Function bodies (including getters/setters) must appear on separate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line
-9. Use a maximum of 140 chars per lines; including leading whitespace
-10. Strings should always use single quotes if they do not contain interpolated values:
+7. TypeScript errors/warnings need to be resolved.
+8. Function should always provide type declarations for its return and argument values
+9. Function bodies (including getters/setters) must appear on separate lines from their signature declarations regardless of their simplicity. Empty constructors that exist for clarity are acceptable on a single line
+10. Use a maximum of 140 chars per lines; including leading whitespace
+11. Strings should always use single quotes if they do not contain interpolated values:
 ```typescript
   let foo = 'bar';       // static string
   let baz = `${5 * 5}`;  // interpolated string
