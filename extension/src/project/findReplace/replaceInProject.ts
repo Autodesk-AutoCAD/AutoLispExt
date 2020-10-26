@@ -2,26 +2,24 @@ import { SearchTreeProvider } from './searchTree';
 import { FindInProject } from './findInProject';
 import { ProjectTreeProvider } from '../projectTree';
 import { getSearchOption, getString } from './options';
-
-import * as vscode from 'vscode'
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import * as vscode from 'vscode';
+import { AutoLispExt } from '../../extension';
 
 export async function replaceInProject() {
     if (ProjectTreeProvider.hasProjectOpened() == false) {
-        let msg = localize("autolispext.project.findreplace.replace.openproject", "A project must be open before you can replace a text string.");
+        let msg = AutoLispExt.localize("autolispext.project.findreplace.replace.openproject", "A project must be open before you can replace a text string.");
         vscode.window.showInformationMessage(msg);
         return;
     }
 
     //get find options: keyword, match case, etc.
-    let title = localize("autolispext.project.findreplace.replace.title", "Replace in Project");
-    let keywordHint = localize("autolispext.project.findreplace.replace.hint.keyword", "Type a text string to find, and press Enter.");
+    let title = AutoLispExt.localize("autolispext.project.findreplace.replace.title", "Replace in Project");
+    let keywordHint = AutoLispExt.localize("autolispext.project.findreplace.replace.hint.keyword", "Type a text string to find, and press Enter.");
     let opt = await getSearchOption(title, keywordHint);
     if (opt.isKeywordProvided() == false)
         return;
 
-    let replacementHint = localize("autolispext.project.findreplace.replace.hint.replacement", "Type a text string to replace with, and press Enter.");
+    let replacementHint = AutoLispExt.localize("autolispext.project.findreplace.replace.hint.replacement", "Type a text string to replace with, and press Enter.");
     //get the replacment of given keyword
     let repl = await getString(title, replacementHint);
     if (repl == undefined)

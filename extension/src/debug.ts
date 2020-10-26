@@ -1,9 +1,7 @@
 import * as vscode from 'vscode';
 import * as Net from 'net';
 import * as os from 'os';
-
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import { AutoLispExt } from './extension';
 
 import { pickProcess } from './process/acadPicker';
 import { calculateABSPathForDAP } from './platform';
@@ -11,8 +9,8 @@ import { existsSync } from 'fs';
 import { ProcessPathCache } from './process/processCache';
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
 
-let strNoADPerr: string = localize("autolispext.debug.nodap", "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.");
-let strNoACADerr: string = localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
+let strNoADPerr: string = AutoLispExt.localize("autolispext.debug.nodap", "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.");
+let strNoACADerr: string = AutoLispExt.localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
 let acadPid2Attach = -1;
 
 let attachCfgName = 'AutoLISP Debug: Attach';
@@ -89,7 +87,7 @@ export function registerLispDebugProviders(context: vscode.ExtensionContext) {
                 setDefaultAcadPid(-1);
             }
             else if (event.event === "acadnosupport") {
-                let msg = localize("autolispext.debug.acad.nosupport",
+                let msg = AutoLispExt.localize("autolispext.debug.acad.nosupport",
                     "This instance of AutoCAD doesn’t support debugging AutoLISP files, use a release later than AutoCAD 2020.");
                 vscode.window.showErrorMessage(msg);
             }
@@ -141,24 +139,24 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
             }
 
             if (!productPath) {
-                let info = localize("autolispext.debug.launchjson.path",
+                let info = AutoLispExt.localize("autolispext.debug.launchjson.path",
                     "Specify the absolute path to the product with the Path attribute of the launch.json file.");
                 vscode.window.showInformationMessage(info);
                 let platform = os.type();
                 if (platform === 'Windows_NT') {
-                    let msg = localize("autolispext.debug.prod.path.win",
+                    let msg = AutoLispExt.localize("autolispext.debug.prod.path.win",
                         "Specify the absolute path for the product. For example, C://Program Files//Autodesk//AutoCAD//acad.exe.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
                     rememberLaunchPath(productPath);
                 }
                 else if (platform === 'Darwin') {
-                    let msg = localize("autolispext.debug.prod.path.osx",
+                    let msg = AutoLispExt.localize("autolispext.debug.prod.path.osx",
                         "Specify the absolute path for the product. For example, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
                     rememberLaunchPath(productPath);
                 }
                 else {
-                    let msg = localize("autolispext.debug.prod.path.other", "Specify the absolute path for the product.");
+                    let msg = AutoLispExt.localize("autolispext.debug.prod.path.other", "Specify the absolute path for the product.");
                     productPath = await vscode.window.showInputBox({ placeHolder: msg });
                     rememberLaunchPath(productPath);
                 }
@@ -234,7 +232,7 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
         ProcessPathCache.clearProductProcessPathArr();
         let processId = await pickProcess(false, acadPid2Attach);
         if (!processId) {
-            let msg = localize("autolispext.debug.noprocess.eror", "No process for which to attach could be found.");
+            let msg = AutoLispExt.localize("autolispext.debug.noprocess.eror", "No process for which to attach could be found.");
             return vscode.window.showInformationMessage(msg).then(_ => {
                 return undefined;	// abort attach
             });

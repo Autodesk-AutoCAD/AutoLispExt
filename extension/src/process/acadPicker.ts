@@ -13,11 +13,8 @@ import { basename } from 'path';
 import { getProcesses } from './processTree';
 import {ProcessPathCache} from "./processCache";
 import { calculateACADProcessName } from '../platform';
-import { acitiveDocHasValidLanguageId } from '../utils';
-
-
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import { activeDocHasValidLanguageId } from '../utils';
+import { AutoLispExt } from '../extension';
 interface ProcessItem extends vscode.QuickPickItem{
     pidOrPort:string;
     sortKey:number;
@@ -26,11 +23,11 @@ interface ProcessItem extends vscode.QuickPickItem{
 function getProcesspickerPlaceHolderStr(){
 	let platform = os.type();
 	if(platform === 'Windows_NT'){
-		return localize('autolispext.pickprocess.acad.win', "Pick the process to attach. Make sure AutoCAD, or one of the specialized toolsets, is running. Type acad and select it from the list.");
+		return AutoLispExt.localize('autolispext.pickprocess.acad.win', "Pick the process to attach. Make sure AutoCAD, or one of the specialized toolsets, is running. Type acad and select it from the list.");
 	}else if(platform === 'Darwin'){
-		return localize('autolispext.pickprocess.acad.osx', "Pick the process to attach. Make sure AutoCAD is running. Type AutoCAD and select it from the list.");
+		return AutoLispExt.localize('autolispext.pickprocess.acad.osx', "Pick the process to attach. Make sure AutoCAD is running. Type AutoCAD and select it from the list.");
 	}else{
-		return localize('autolispext.pickprocess.acad.other', "Pick the process to attach");
+		return AutoLispExt.localize('autolispext.pickprocess.acad.other', "Pick the process to attach");
 	}
 }
 
@@ -56,7 +53,7 @@ export function pickProcess(ports:any, defaultPid: number): Promise<string | nul
 		let choosedItem =  vscode.window.showQuickPick(items, options).then(item => item ? item.pidOrPort : null);
 		return choosedItem;
 	}).catch(err => {
-		let chooseItem = vscode.window.showErrorMessage(localize('autolispext.pickprocess.pickfailed', "Process picker failed ({0})", err.message), { modal: true }).then(_ => null);
+		let chooseItem = vscode.window.showErrorMessage(AutoLispExt.localize('autolispext.pickprocess.pickfailed', "Process picker failed ({0})", err.message), { modal: true }).then(_ => null);
 		return chooseItem;
 	});
 }
@@ -76,7 +73,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 		if(ProcessPathCache.globalAcadNameInUserAttachConfig){
 			processName = ProcessPathCache.globalAcadNameInUserAttachConfig;
 		}
-		else if (vscode.window.activeTextEditor && acitiveDocHasValidLanguageId()) {
+		else if (vscode.window.activeTextEditor && activeDocHasValidLanguageId()) {
 			//read attach configuration from launch.json
 			let configurations:[] = vscode.workspace.getConfiguration("launch", vscode.window.activeTextEditor.document.uri).get("configurations");
 			let attachLispConfig;
@@ -115,14 +112,14 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 
 		if (usePort) {
 			if (protocol === 'inspector') {
-				description = localize('autolispext.pickprocess.process.id.port', "process id: {0}, debug port: {1}", pid, port);
+				description = AutoLispExt.localize('autolispext.pickprocess.process.id.port', "process id: {0}, debug port: {1}", pid, port);
 			} else {
-				description = localize('autolispext.pickprocess.process.id.legacy', "process id: {0}, debug port: {1} (legacy protocol)", pid, port);
+				description = AutoLispExt.localize('autolispext.pickprocess.process.id.legacy', "process id: {0}, debug port: {1} (legacy protocol)", pid, port);
 			}
 			pidOrPort = `${protocol}${port}`;
 		} else {
 			if (protocol && port > 0) {
-				description = localize('autolispext.pickprocess.process.port.singal', "process id: {0}, debug port: {1} ({2})", pid, port, 'SIGUSR1');
+				description = AutoLispExt.localize('autolispext.pickprocess.process.port.singal', "process id: {0}, debug port: {1} ({2})", pid, port, 'SIGUSR1');
 				pidOrPort = `${pid}${protocol}${port}`;
 			} else {
 				// no port given
@@ -138,7 +135,7 @@ function listProcesses(ports: boolean): Promise<ProcessItem[]> {
 
 				if(addintolist){
 					ProcessPathCache.addGlobalProductProcessPathArr(executablePath, pid);
-					description = localize('autolispext.pickprocess.process.id.singal', "process id: {0} ({1})", pid, 'SIGUSR1');
+					description = AutoLispExt.localize('autolispext.pickprocess.process.id.singal', "process id: {0} ({1})", pid, 'SIGUSR1');
 					pidOrPort = pid.toString();
 				}
 			}

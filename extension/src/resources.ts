@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { WebHelpLibrary } from "./help/openWebHelp";
+import * as fs from 'fs';
 
 
 export let internalLispFuncs: Array<string> = [];
@@ -29,7 +30,6 @@ export interface IJsonLoadable {
 
 
 function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
-	var fs = require("fs");
 	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {        
 		if (err === null && intoObject["loadFromJsonObject"]) {
@@ -40,7 +40,6 @@ function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
 
 
 function readDataFileByLine(datafile: string, action: (items: string[]) => void) {
-	var fs = require("fs");
 	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
 		if (err === null) {
@@ -56,7 +55,6 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
 
 
 function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
-	var fs = require("fs");
 	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
 		var lineList = new Array<String>();
