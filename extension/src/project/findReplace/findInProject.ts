@@ -3,31 +3,28 @@ import { ProjectNode, ProjectTreeProvider } from '../projectTree';
 import { findInFile } from './ripGrep';
 import { FileNode, FindingNode, SearchTreeProvider, SummaryNode } from './searchTree';
 import { saveOpenDoc2Tmp } from '../../utils';
-
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 import * as os from 'os';
 import { applyReplacementInFile } from './applyReplacement';
 import { setIsSearching } from './clearResults';
-import * as nls from 'vscode-nls';
+import { AutoLispExt } from '../../extension';
 import { detectEncoding } from './encoding';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import * as fs from 'fs-extra';
+import * as osLocale from 'os-locale';
 
-const fs = require('fs-extra')
-
-const osLocale = require('os-locale');
 const encodings = new Map([["zh-CN", "gb2312"], ["zh-TW", "big5"], ["ja-JP", "shift-jis"], ["ko-KR", "ksc5601"]]);
 
 export async function findInProject() {
     //check if there's a opened project
     if (ProjectTreeProvider.hasProjectOpened() == false) {
-        let msg = localize("autolispext.project.find.openproject", "A project must be open before you can search for a text string.");
+        let msg = AutoLispExt.localize("autolispext.project.find.openproject", "A project must be open before you can search for a text string.");
         vscode.window.showInformationMessage(msg);
         return;
     }
 
     //get search option
-    let title = localize("autolispext.project.find.title", "Find in Project");
-    let hint = localize("autolispext.project.find.hint", "Type a text string to find, and press Enter.");
+    let title = AutoLispExt.localize("autolispext.project.find.title", "Find in Project");
+    let hint = AutoLispExt.localize("autolispext.project.find.hint", "Type a text string to find, and press Enter.");
     let opt = await getSearchOption(title, hint);
     if (opt.isKeywordProvided() == false)
         return;
@@ -55,7 +52,7 @@ export class FindInProject {
     public async execute(searchOption: SearchOption, prjNode: ProjectNode) {
         if (os.platform() == 'win32') {
             if (os.arch() != 'x64') {
-                let msg = localize("autolispext.project.find.supportos", "Find & Replace is supported only on 64-bit systems.");
+                let msg = AutoLispExt.localize("autolispext.project.find.supportos", "Find & Replace is supported only on 64-bit systems.");
                 return Promise.reject(msg);
             }
         }
@@ -74,7 +71,7 @@ export class FindInProject {
             this.summaryNode.makeTooltip(searchOption, prjNode);
 
             //update the search tree with some progress
-            let summary = localize("autolispext.project.find.inprogress", "In progress... ");
+            let summary = AutoLispExt.localize("autolispext.project.find.inprogress", "In progress... ");
             this.summaryNode.summary = summary;
             SearchTreeProvider.instance.reset(this.resultByFile, this.summaryNode, searchOption);
 
@@ -82,9 +79,9 @@ export class FindInProject {
             let totalFiles = 0;
             let totalLines = 0;
 
-            let found = localize("autolispext.project.find.found", "Found ");
-            let lines = localize("autolispext.project.find.results", " result(s) in ");
-            let files = localize("autolispext.project.find.files", " file(s):");
+            let found = AutoLispExt.localize("autolispext.project.find.found", "Found ");
+            let lines = AutoLispExt.localize("autolispext.project.find.results", " result(s) in ");
+            let files = AutoLispExt.localize("autolispext.project.find.files", " file(s):");
             for (let srcFile of prjNode.sourceFiles) {
                 if (SearchOption.activeInstance.stopRequested)
                     break;
@@ -154,18 +151,18 @@ export class FindInProject {
             }
 
             if (SearchOption.activeInstance.stopRequested) {
-                this.summaryNode.summary = localize("autolispext.project.find.stopped", "Find stopped. ");
+                this.summaryNode.summary = AutoLispExt.localize("autolispext.project.find.stopped", "Find stopped. ");
             } else {
                 this.summaryNode.summary = '';
             }
 
             if (exceedMaxResults) {
-                this.summaryNode.summary += localize("autolispext.project.find.exceedmaxresults", "Limit of search results exceeded. Refine your search to narrow down the results. ");
+                this.summaryNode.summary += AutoLispExt.localize("autolispext.project.find.exceedmaxresults", "Limit of search results exceeded. Refine your search to narrow down the results. ");
             }
 
             if (totalLines <= 0) {
                 if (!exceedMaxResults) {
-                    this.summaryNode.summary += localize("autolispext.project.find.noresults", "No results found.");
+                    this.summaryNode.summary += AutoLispExt.localize("autolispext.project.find.noresults", "No results found.");
                 }
             }
             else {

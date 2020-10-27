@@ -1,9 +1,8 @@
 import * as vscode from 'vscode';
 import * as crypto from 'crypto';
-import * as path from 'path'
+import * as path from 'path';
 import * as fs from 'fs-extra';
-
-const os = require('os');
+import * as os from 'os';
 
 export function getFullDocRange(editor: vscode.TextEditor): vscode.Range {
     return editor.document.validateRange(
@@ -25,7 +24,7 @@ export function getSelectedDocRange(editor: vscode.TextEditor): vscode.Range {
     );
 }
 
-export function acitiveDocHasValidLanguageId(): Boolean {
+export function activeDocHasValidLanguageId(): Boolean {
     const editor = vscode.window.activeTextEditor;
 
     return editor.document.languageId === 'autolisp' ||

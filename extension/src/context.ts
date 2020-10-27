@@ -4,13 +4,13 @@ import * as Resources from "./resources";
 import { Disposable } from 'vscode-languageclient';
 import { DocumentManager } from './documents';
 
-
+// This is a singleton class
 export class ContextManager{
 	private _ctx: vscode.ExtensionContext;
 	private _docManager: DocumentManager;
 	
-	localize = nls.config({ messageFormat: nls.MessageFormat.file })();	
-	
+	localize: nls.LocalizeFunc = nls.config({ messageFormat: nls.MessageFormat.file })();
+
 	get Context(): vscode.ExtensionContext { 
 		return this._ctx; 
 	}

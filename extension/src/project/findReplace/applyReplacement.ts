@@ -1,15 +1,13 @@
 import * as fs from 'fs-extra';
-import * as vscode from 'vscode'
-
+import * as vscode from 'vscode';
 import { FileNode } from './searchTree';
-import { getTmpFilePath, getDocument } from '../../utils';
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import { getDocument } from '../../utils';
+import { AutoLispExt } from '../../extension';
 
 export async function applyReplacementInFile(filePlan: FileNode) {
     try {
         if (fs.existsSync(filePlan.filePath) == false) {
-            filePlan.errorInReplace = localize("autolispext.project.findreplace.applyreplacement.filenotexist", "File doesn't exist.");
+            filePlan.errorInReplace = AutoLispExt.localize("autolispext.project.findreplace.applyreplacement.filenotexist", "File doesn't exist.");
             return;
         }
 
@@ -81,7 +79,7 @@ async function applyChangeInEditor(filePath: string, fileContent: string) {
 
         let succ = await vscode.workspace.applyEdit(edit);
         if (!succ) {
-            let msg = localize("autolispext.project.findreplace.applyreplacement.replacetextfailed", "Failed to replace text: ");
+            let msg = AutoLispExt.localize("autolispext.project.findreplace.applyreplacement.replacetextfailed", "Failed to replace text: ");
             throw new Error(msg + filePath);
         }
 

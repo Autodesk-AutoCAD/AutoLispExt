@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import { IconUris } from '../icons';
 import { SearchOption } from './options';
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+import { AutoLispExt } from '../../extension';
 
 export class optionButton implements vscode.QuickInputButton {
     public constructor(iconUriOn: vscode.Uri, iconUriOff: vscode.Uri, isOn: boolean,
@@ -35,25 +34,25 @@ export class optionButton implements vscode.QuickInputButton {
 
     public static getButtons() {
         if (!optionButton.matchCaseBtn) {
-            let matchCase = localize("autolispext.project.findreplace.optionbutton.matchcase", "Match Case");
+            let matchCase = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.matchcase", "Match Case");
             optionButton.matchCaseBtn =
                 new optionButton(IconUris.matchCase(true), IconUris.matchCase(false), SearchOption.activeInstance.matchCase,
                     matchCase,
                     optionButton.name_MatchCase);
 
-            let matchWholeWord = localize("autolispext.project.findreplace.optionbutton.matchwholeword", "Match Whole Word");
+            let matchWholeWord = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.matchwholeword", "Match Whole Word");
             optionButton.matchWordBtn =
                 new optionButton(IconUris.matchWord(true), IconUris.matchWord(false), SearchOption.activeInstance.matchWholeWord,
                     matchWholeWord,
                     optionButton.name_MatchWord);
 
-            let regExp = localize("autolispext.project.findreplace.optionbutton.regexp", "Use Regular Expression");
+            let regExp = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.regexp", "Use Regular Expression");
             optionButton.useRegularExprBtn =
                 new optionButton(IconUris.useRegularExpr(true), IconUris.useRegularExpr(false), SearchOption.activeInstance.useRegularExpr,
                     regExp,
                     optionButton.name_UseRegularExpr);
 
-            let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            let closeTooltip = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.close", "Close");
             optionButton.closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
         }
 
