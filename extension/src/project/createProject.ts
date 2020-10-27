@@ -18,7 +18,7 @@ export async function getNewProjectFilePath() {
 
     let fileUri = await vscode.window.showSaveDialog(options);    
     if (fileUri) {
-        if (path.basename(fileUri.fsPath).split(' ').length === 1){
+        if (path.basename(fileUri.fsPath).indexOf(' ') >= 0) {
             return Promise.resolve(fileUri);
         } else {
             let msg = AutoLispExt.localize("autolispext.project.createproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
