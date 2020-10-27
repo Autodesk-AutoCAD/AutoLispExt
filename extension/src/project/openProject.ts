@@ -61,10 +61,16 @@ async function SelectProjectFile() {
     };
 
     let fileUri = await vscode.window.showOpenDialog(options);
-    if (fileUri && fileUri.length > 0)
-        return Promise.resolve(fileUri[0]);
-
-    //return Promise.resolve(undefined) by default, and it means the operation is cancelled
+    if (fileUri && fileUri.length > 0){
+        if (path.basename(fileUri[0].fsPath).indexOf(' ') === -1){
+            return Promise.resolve(fileUri[0]);
+        } else {
+            let msg = AutoLispExt.localize("autolispext.project.openproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
+            return Promise.reject(msg);
+        }
+    } else {
+        return Promise.resolve(undefined);
+    }
 }
 
 
