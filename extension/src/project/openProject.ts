@@ -1,16 +1,12 @@
-import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree, isFileAlreadyInProject } from './projectTree'
+import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree, isFileAlreadyInProject } from './projectTree';
 import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../format/sexpression';
 import { ProjectDefinition } from './projectDefinition';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
-
-import * as vscode from 'vscode'
-import * as path from 'path'
+import * as vscode from 'vscode';
+import * as path from 'path';
 import { ReadonlyDocument } from './readOnlyDocument';
-
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
-const fs = require('fs');
+import { AutoLispExt } from '../extension';
 import * as os from 'os';
 
 export async function OpenProject() {
@@ -25,7 +21,7 @@ export async function OpenProject() {
 
         let prjPathUpper = prjUri.fsPath.toUpperCase();
         if (prjPathUpper.endsWith(".PRJ") == false) {
-            let msg = localize("autolispext.project.openproject.onlyprjallowed", "Only PRJ files are allowed.");
+            let msg = AutoLispExt.localize("autolispext.project.openproject.onlyprjallowed", "Only PRJ files are allowed.");
             return Promise.reject(msg);
         }
 
@@ -40,13 +36,13 @@ export async function OpenProject() {
 export function OpenProjectFile(prjUri: vscode.Uri): ProjectNode {
     let document = ReadonlyDocument.open(prjUri.fsPath);
     if (!document) {
-        let msg = localize("autolispext.project.openproject.readfailed", "Can't read project file: ");
+        let msg = AutoLispExt.localize("autolispext.project.openproject.readfailed", "Can't read project file: ");
         throw new Error(msg + prjUri.fsPath);
     }
 
     let ret = ParseProjectDocument(prjUri.fsPath, document);
     if (!ret) {
-        let msg = localize("autolispext.project.openproject.malformedfile", "Malformed project file: ");
+        let msg = AutoLispExt.localize("autolispext.project.openproject.malformedfile", "Malformed project file: ");
         throw new Error(msg + prjUri.fsPath);
     }
 
@@ -54,7 +50,7 @@ export function OpenProjectFile(prjUri: vscode.Uri): ProjectNode {
 }
 
 async function SelectProjectFile() {
-    let label = localize("autolispext.project.openproject.label", "Open Project");
+    let label = AutoLispExt.localize("autolispext.project.openproject.label", "Open Project");
     const options: vscode.OpenDialogOptions = {
         //TBD: globalize
         canSelectMany: false,
@@ -65,10 +61,16 @@ async function SelectProjectFile() {
     };
 
     let fileUri = await vscode.window.showOpenDialog(options);
-    if (fileUri && fileUri.length > 0)
-        return Promise.resolve(fileUri[0]);
-
-    //return Promise.resolve(undefined) by default, and it means the operation is cancelled
+    if (fileUri && fileUri.length > 0){
+        if (path.basename(fileUri[0].fsPath).split(' ').length === 1){
+            return Promise.resolve(fileUri[0]);
+        } else {
+            let msg = AutoLispExt.localize("autolispext.project.openproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
+            return Promise.reject(msg);
+        }
+    } else {
+        return Promise.resolve(undefined);
+    }
 }
 
 
