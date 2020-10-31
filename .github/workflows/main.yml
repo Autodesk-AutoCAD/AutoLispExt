@@ -30,8 +30,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install yarn
-          npm install gulp-cli
+          npm install -g yarn
+          npm install -g gulp-cli
           yarn install
 
       - name: Build
