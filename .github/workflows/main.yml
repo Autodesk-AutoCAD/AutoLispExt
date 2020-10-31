@@ -25,14 +25,14 @@ jobs:
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.2
 
+      - name: Update version
+        run: npm version prerelease --preid=${{github.sha}}
+
       - name: Install dependencies
         run: |
           npm install yarn
           npm install gulp-cli
           yarn install
-
-      - name: Update version
-        run: npm version prerelease --preid=${{github.sha}}
 
       - name: Build
         run: |
