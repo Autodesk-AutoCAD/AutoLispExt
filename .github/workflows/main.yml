@@ -28,3 +28,5 @@ jobs:
           npm install yarn
           npm install gulp-cli
           yarn install
+      - name: Build
+          gulp build
