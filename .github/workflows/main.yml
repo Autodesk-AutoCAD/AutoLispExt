@@ -26,7 +26,7 @@ jobs:
         uses: actions/setup-node@v2.1.2
 
       - name: Update version
-        run: npm version prerelease --preid=${{github.sha}}
+        run: npm version prerelease --no-git-tag-version --preid=${{github.sha}}
 
       - name: Install dependencies
         run: |
