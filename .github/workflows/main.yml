@@ -29,10 +29,7 @@ jobs:
         run: npm version prerelease --no-git-tag-version --preid=${{github.sha}}
 
       - name: Install dependencies
-        run: |
-          npm install -g yarn
-          npm install -g gulp-cli
-          yarn install
+        run:  npm install
 
       - name: Build
         run: |

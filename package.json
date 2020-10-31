@@ -382,7 +382,7 @@
 						"type": "attachlisp",
 						"request": "attach",
 						"name": "AutoLISP Debug: Attach",
-						"attributes" : {
+						"attributes": {
 							"//": "%autolispext.packagejson.changeattachproc%"
 						}
 					}
@@ -395,7 +395,7 @@
 							"type": "attachlisp",
 							"request": "attach",
 							"name": "AutoLISP Debug: Attach",
-							"attributes" : {
+							"attributes": {
 								"//": "%autolispext.packagejson.changeattachproc%"
 							}
 						}
@@ -451,7 +451,7 @@
 						"request": "launch",
 						"name": "AutoLISP Debug: Launch",
 						"attributes": {
-							"//" : "%autolispext.packagejson.changelaunchprog%"
+							"//": "%autolispext.packagejson.changelaunchprog%"
 						}
 					}
 				],
@@ -464,7 +464,7 @@
 							"request": "launch",
 							"name": "AutoLISP Debug: Launch",
 							"attributes": {
-								"//" : "%autolispext.packagejson.changelaunchprog%"
+								"//": "%autolispext.packagejson.changelaunchprog%"
 							}
 						}
 					}
@@ -553,20 +553,20 @@
 					"command": "autolisp.refresh",
 					"group": "navigation@2"
 				},
-				{	
-					"when": "view == Autolisp-ProjectView && viewItem == project",	
-					"command": "autolisp.SaveProject",	
-					"group": "navigation@3"	
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.SaveProject",
+					"group": "navigation@3"
 				},
-				{	
-					"when": "view == Autolisp-ProjectView && viewItem == project",	
-					"command": "autolisp.SaveAll",	
-					"group": "navigation@4"	
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.SaveAll",
+					"group": "navigation@4"
 				},
-				{	
-					"when": "view == Autolisp-ProjectView && viewItem == project",	
-					"command": "autolisp.closeProject",	
-					"group": "navigation@5"	
+				{
+					"when": "view == Autolisp-ProjectView && viewItem == project",
+					"command": "autolisp.closeProject",
+					"group": "navigation@5"
 				},
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == lspFile",
@@ -589,7 +589,7 @@
 					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.insertFoldingRegion",
 					"group": "navigation@3"
-				}    
+				}
 			]
 		}
 	},
@@ -605,6 +605,7 @@
 		"@types/fs-extra": "^8.1.0",
 		"del": "^4.1.1",
 		"event-stream": "^4.0.1",
+		"gulp-cli": "^2.3.0",
 		"gulp": "^4.0.2",
 		"gulp-filter": "^5.1.0",
 		"gulp-sourcemaps": "^2.6.5",
@@ -621,12 +622,12 @@
 	"dependencies": {
 		"execa": "0.7.0",
 		"fs-extra": "^8.1.0",
+		"jschardet": "2.1.1",
+		"os-locale": "5.0.0",
 		"vsce": "1.57.0",
 		"vscode-languageclient": "4.2.0",
 		"vscode-nls": "3.2.5",
-		"vscode-ripgrep": "1.5.8",	
-		"os-locale": "5.0.0",
-		"jschardet": "2.1.1"
+		"vscode-ripgrep": "1.5.8"
 	},
 	"resolutions": {
 		"yargs-parser": "^18.1.3"
