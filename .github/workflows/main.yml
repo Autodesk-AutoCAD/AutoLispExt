@@ -29,4 +29,4 @@ jobs:
           npm install gulp-cli
           yarn install
       - name: Build
-          gulp build
+        run: gulp build
