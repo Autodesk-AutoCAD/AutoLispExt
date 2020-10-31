@@ -21,12 +21,23 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.1.2
+
       - name: Install dependencies
         run: |
           npm install yarn
           npm install gulp-cli
           yarn install
+
+      - name: Update version
+        run: npm version prerelease --preid=${{github.sha}}
+
       - name: Build
-        run: gulp build
+        run: |
+          gulp build
+          gulp package
+      - name: Create release
+        run: echo ${{github.event_name}}
+
