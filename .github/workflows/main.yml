@@ -42,6 +42,13 @@ jobs:
           gulp build
           gulp package
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: javascript
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
       - name: Create release
         id: create_release
         if: ${{ github.event_name =='push' && github.ref == 'refs/heads/main'}}
