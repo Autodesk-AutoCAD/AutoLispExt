@@ -26,7 +26,9 @@ jobs:
         uses: actions/setup-node@v2.1.2
 
       - name: Update version
-        run: npm version prerelease --no-git-tag-version --preid=${{github.sha}}
+        id: update-version
+        # See https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions
+        run: echo '::set-output name=VERSION::$(npm version prerelease --no-git-tag-version --preid=${{github.sha}})'
 
       - name: Install dependencies
         run:  npm install
@@ -35,6 +37,20 @@ jobs:
         run: |
           gulp build
           gulp package
+
+      - name: Test
+        run: echo ${{ steps.update-version.outputs.VERSION }}
+
       - name: Create release
-        run: echo ${{github.event_name}}
+        if: ${{ github.event_name}}=='push'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.update-version.outputs.VERSION }}
+          release_name: Release ${{ steps.update-version.outputs.VERSION }}
+          body: |
+            Generated response to push in main branch.
+          draft: false
+          prerelease: true
 
