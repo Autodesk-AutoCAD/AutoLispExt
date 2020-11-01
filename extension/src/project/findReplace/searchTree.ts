@@ -192,13 +192,13 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
 
         this.lastSearchOption = opt;
 
-        this.onChanged.fire();
+        this.onChanged.fire(null);
     }
 
     public clear() {
         this.rootNodes = null;
 
-        this.onChanged.fire();
+        this.onChanged.fire(null);
     }
 
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<vscode.TreeItem> {

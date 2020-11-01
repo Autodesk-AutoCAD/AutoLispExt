@@ -125,7 +125,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     public updateData(newRootNode: ProjectNode) {
         this.rootNode = newRootNode;
 
-        this.onChanged.fire();
+        this.onChanged.fire(this.rootNode);
     }
 
     public refreshData(data?: DisplayNode) {
