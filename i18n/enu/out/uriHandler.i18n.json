@@ -1,6 +1,6 @@
 {
-   "autolispext.urihandler.invaid": "Invalid call to AutoCAD AutoLISP Extension.",
-   "autolispext.urihandler.activeddebugcfg": "Current debug configuration: ",
-   "autolispext.urihandler.debug.start":"From the menu bar, click Run > Start Debugging to debug the current AutoLISP source file.",
-   "autolispext.urihandler.debug.openfile":"Open an AutoLISP source file and click Run > Start Debugging from the menu bar to debug the file."
+  "autolispext.urihandler.invaid": "Invalid call to AutoCAD AutoLISP Extension.",
+  "autolispext.urihandler.activeddebugcfg": "Current debug configuration: ",
+  "autolispext.urihandler.debug.start": "From the menu bar, click Run > Start Debugging to debug the current AutoLISP source file.",
+  "autolispext.urihandler.debug.openfile": "Open an AutoLISP source file and click Run > Start Debugging from the menu bar to debug the file."
 }

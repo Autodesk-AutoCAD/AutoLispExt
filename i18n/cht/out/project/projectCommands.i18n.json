@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "無法取代專案中的文字字串。",
   "autolispext.project.commands.openresultfailed": "無法開啟搜尋結果。",
   "autolispext.project.commands.clearresultfailed": "無法清除搜尋結果。",
-  "autolispext.project.commands.initializefailed": "無法初始化 AutoLISP 專案管理員。"
+  "autolispext.project.commands.initializefailed": "無法初始化 AutoLISP 專案管理員。",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }

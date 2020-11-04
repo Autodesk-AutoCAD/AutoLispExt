@@ -1,4 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "Crear",
-  "autolispext.project.createproject.onlyprjallowed": "Solo se admiten archivos PRJ."
+  "autolispext.project.createproject.onlyprjallowed": "Solo se admiten archivos PRJ.",
+  "autolispext.project.createproject.nospaces": ""
 }

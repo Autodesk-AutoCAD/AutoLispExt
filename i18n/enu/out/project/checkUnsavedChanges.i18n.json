@@ -1,5 +1,5 @@
 {
-	"autolispext.project.checkunsavedchanges.message": "Unsaved changes found with the project or the files in the project.\nDo you want to save the changes?",
-	"autolispext.project.checkunsavedchanges.save": "Save",
-	"autolispext.project.checkunsavedchanges.dontsave": "Don't Save"
+  "autolispext.project.checkunsavedchanges.message": "Unsaved changes found with the project or the files in the project.\nDo you want to save the changes?",
+  "autolispext.project.checkunsavedchanges.save": "Save",
+  "autolispext.project.checkunsavedchanges.dontsave": "Don't Save"
 }

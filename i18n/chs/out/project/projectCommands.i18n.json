@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "无法在项目中替换文字字符串。",
   "autolispext.project.commands.openresultfailed": "无法打开搜索结果。",
   "autolispext.project.commands.clearresultfailed": "无法清除搜索结果。",
-  "autolispext.project.commands.initializefailed": "无法初始化 AutoLISP 项目管理器。"
+  "autolispext.project.commands.initializefailed": "无法初始化 AutoLISP 项目管理器。",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }
