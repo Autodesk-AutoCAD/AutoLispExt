@@ -14,7 +14,7 @@
   "autolispext.project.commands.openresultfailed": "Failed to open search results.",
   "autolispext.project.commands.clearresultfailed": "Failed to clear search results.",
   "autolispext.project.commands.initializefailed": "Failed to initalize the AutoLISP Project Manager.",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": ""
+  "autolispext.project.commands.closepromptmsg": "Confirm close request on: ",
+  "autolispext.project.commands.closepromptyes": "Yes",
+  "autolispext.project.commands.closepromptno": "No"
 }

@@ -22,7 +22,6 @@ namespace autolispext.i18.helper
     public static class Shared
     {
         public static string rootDir = "";
-        public static string rootDir = "";
         public static string srcDir = "";
         public static string i18Dir = "";
         public static List<string> codes = new List<string>();
@@ -195,6 +194,7 @@ namespace autolispext.i18.helper
         {
 
         }
+
     }
 
     public class deleteReference
@@ -271,11 +271,12 @@ namespace autolispext.i18.helper
                         if (References.ContainsKey(localContent) == false)
                             References.Add(localContent, new List<localizeReference>());
 
-
-                        References[localContent].Add(new localizeReference(new WeakReference<tsFileReference>(this), langid, expected, localContent, cv));
+                        if (References[localContent].Count != Shared.codes.Count)
+                            References[localContent].Add(new localizeReference(new WeakReference<tsFileReference>(this), langid, expected, localContent, cv));
                     }
                 }
             }
+
         }
 
         public override string ToString()

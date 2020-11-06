@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:autolispext.i18.helper"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
-        Title="MainWindow" Height="450" Width="800">
+        Title="AutoLispExt Language Helper" Height="450" Width="800">
     <Grid>
-        <Grid x:Name="grdConfig" Tag="Config" Visibility="Collapsed">
+        <Grid x:Name="grdConfig" Tag="Config" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="auto"/>
@@ -127,7 +127,7 @@
                 </Button.ContextMenu>
             </Button>
         </Grid>
-        <Grid x:Name="grdAuditExisting" Visibility="Visible" Margin="5">
+        <Grid x:Name="grdAuditExisting" Visibility="Collapsed" Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
