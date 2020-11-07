@@ -1,10 +1,10 @@
 {
-	"autolispext.project.findreplace.searchtree.in": " in ",
-	"autolispext.project.findreplace.searchtree.prjfile": "\r\nProject file: ",
-	"autolispext.project.findreplace.searchtree.replace": "Replace",
-	"autolispext.project.findreplace.searchtree.with": " with ",
-	"autolispext.project.findreplace.searchtree.find": "Find ",
-	"autolispext.project.findreplace.searchtree.matchcaseon": "\r\nMatch case: ON",
-	"autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nMatch whole word: ON",
-	"autolispext.project.findreplace.searchtree.regexpon": "\r\nUse regular expression: ON"
+  "autolispext.project.findreplace.searchtree.in": " in ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nProject file: ",
+  "autolispext.project.findreplace.searchtree.replace": "Replace",
+  "autolispext.project.findreplace.searchtree.with": " with ",
+  "autolispext.project.findreplace.searchtree.find": "Find ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nMatch case: ON",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nMatch whole word: ON",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nUse regular expression: ON"
 }

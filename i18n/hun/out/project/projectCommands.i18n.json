@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "Nem sikerült lecserélni a szöveges karakterláncot a projektben.",
   "autolispext.project.commands.openresultfailed": "Nem sikerült megnyitni a keresési eredményeket.",
   "autolispext.project.commands.clearresultfailed": "Nem sikerült törölni a keresési eredményeket.",
-  "autolispext.project.commands.initializefailed": "Az AutoLISP-projektkezelő inicializálása nem sikerült."
+  "autolispext.project.commands.initializefailed": "Az AutoLISP-projektkezelő inicializálása nem sikerült.",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }

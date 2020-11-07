@@ -1,0 +1,160 @@
+﻿<Window x:Class="autolispext.i18.helper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:autolispext.i18.helper"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded"
+        Title="AutoLispExt Language Helper" Height="450" Width="800">
+    <Grid>
+        <Grid x:Name="grdConfig" Tag="Config" Visibility="Visible">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="80*"/>
+                <RowDefinition Height="10*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="12*"/>
+                <ColumnDefinition Width="40*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Select Source root folder" Grid.Column="1" Grid.Row="1" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Text="Languages" Grid.Column="2" Grid.Row="1" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TextBlock Text="Select i18 root folder" Grid.Column="3" Grid.Row="1" FontWeight="Bold" HorizontalAlignment="Center"/>
+            <TreeView x:Name="tvSourceRoot" Grid.Column="1" Grid.Row="2"/>            
+            <TreeView x:Name="tvLanguageRoot" Grid.Column="3" Grid.Row="2"/>
+            <Menu x:Name="mnuLangs" Grid.Column="2" Grid.Row="2" Margin="5,0" HorizontalAlignment="Center">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <MenuItem Header="chs" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="cht" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="deu" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="enu" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="esp" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="fra" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="hun" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="ita" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="jpn" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="kor" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="ptb" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+                <MenuItem Header="rus" IsCheckable="True" IsChecked="True" Margin="5,2"/>
+            </Menu>
+            <Button x:Name="btnUseConfig" Grid.Column="0" Grid.ColumnSpan="99" Grid.Row="99" Content="Next" Click="btnUseConfig_Click"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,0" Margin="0,0,12,12">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedItem, ElementName=tvSourceRoot}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding SelectedItem, ElementName=tvLanguageRoot}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </Grid>
+        <Grid x:Name="grdWorkspace" Margin="10,0" Visibility="Collapsed">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="10"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="TypeScript Files" Grid.Column="0" Grid.Row="0" FontWeight="Bold"/>
+            <TextBlock Text="Localized Keys" Grid.Column="2" Grid.Row="0" FontWeight="Bold"/>
+            <TextBlock x:Name="tbxLabel" Text="Current i18 Values" Grid.Column="0" Grid.Row="3" FontWeight="Bold"/>
+            <ListBox x:Name="lbxTsFiles" Grid.Row="1" Grid.Column="0"/>
+            <ListBox x:Name="lbxLocalRefs" Grid.Row="1" Grid.Column="2" ItemsSource="{Binding SelectedItem.References, ElementName=lbxTsFiles}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Key}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"  Grid.Row="4" Grid.ColumnSpan="99">
+                <ItemsControl x:Name="itemEditor" ItemsSource="{Binding SelectedItem.Value, ElementName=lbxLocalRefs}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:localizeReference}">
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding countryCode}" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding cValue}" Grid.Column="1" AcceptsReturn="True" AcceptsTab="True"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <Button x:Name="btnSaveValues" Grid.Column="2" Grid.RowSpan="2" Grid.Row="2" Content="Save" Click="btnSaveValues_Click"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,0" Margin="0,0,12,2"/>
+
+            <Button x:Name="btnTranslate" Grid.Column="0" Grid.RowSpan="2" Grid.Row="2" Content="Open Google Translate" Click="btnTranslate_Click"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,0" Margin="0,0,0,2" ContextMenuService.IsEnabled="false">
+                <Button.ContextMenu>
+                    <ContextMenu Opened="ButtonContextMenu_Opened_DoPlacement">
+                        <MenuItem Header="enu -&gt; chs" Click="cmiTranslateClick_Click" Tag="zh-CN"/>
+                        <MenuItem Header="enu -&gt; cht" Click="cmiTranslateClick_Click" Tag="zh-TW"/>
+                        <MenuItem Header="enu -&gt; deu" Click="cmiTranslateClick_Click" Tag="de"/>
+                        <MenuItem Header="enu -&gt; esp" Click="cmiTranslateClick_Click" Tag="es"/>
+                        <MenuItem Header="enu -&gt; fra" Click="cmiTranslateClick_Click" Tag="fr"/>
+                        <MenuItem Header="enu -&gt; hun" Click="cmiTranslateClick_Click" Tag="hu"/>
+                        <MenuItem Header="enu -&gt; ita" Click="cmiTranslateClick_Click" Tag="it"/>
+                        <MenuItem Header="enu -&gt; jpn" Click="cmiTranslateClick_Click" Tag="ja"/>
+                        <MenuItem Header="enu -&gt; kor" Click="cmiTranslateClick_Click" Tag="ko"/>
+                        <MenuItem Header="enu -&gt; ptb" Click="cmiTranslateClick_Click" Tag="pt"/>
+                        <MenuItem Header="enu -&gt; rus" Click="cmiTranslateClick_Click" Tag="ru"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </Grid>
+        <Grid x:Name="grdAuditExisting" Visibility="Collapsed" Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="JSON entries that didn't have Localize() references" FontWeight="Bold"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
+                <ItemsControl x:Name="itemDeleteEditor">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:deleteReference}">
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40*"/>
+                                    <ColumnDefinition Width="60*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding displayPath}" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding name}" Grid.Column="1" FontWeight="Bold" VerticalAlignment="Center"/>
+                                <CheckBox Content="Remove" Grid.Column="3" IsChecked="{Binding flag}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <Button x:Name="btnDeleteValues" Grid.Row="2" Content="Save Removed Orphans" Click="btnDeleteValues_Click"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Padding="5,0" Margin="0,5,12,7"/>            
+        </Grid>
+    </Grid>
+</Window>

@@ -1,7 +1,7 @@
 {
-	"autolispext.loadlisp.tooltip": "Load the Current File",
-	"autolispext.loadlisp.title": "Load lisp",
-	"autolispext.loadlisp.attach": "First, attach to or launch a host application before loading this file.", 
-	"autolispext.loadlisp.fileformat.win": "This file format isn’t supported. Activate a window containing a DCL, LSP, or MNL file.", 
-	"autolispext.loadlisp.fileformat.mac": "This file format isn’t supported. Activate a window containing a DCL or LSP file."
+  "autolispext.loadlisp.tooltip": "Load the Current File",
+  "autolispext.loadlisp.title": "Load lisp",
+  "autolispext.loadlisp.attach": "First, attach to or launch a host application before loading this file.",
+  "autolispext.loadlisp.fileformat.win": "This file format isn’t supported. Activate a window containing a DCL, LSP, or MNL file.",
+  "autolispext.loadlisp.fileformat.mac": "This file format isn’t supported. Activate a window containing a DCL or LSP file."
 }

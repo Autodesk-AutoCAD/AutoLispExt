@@ -1,10 +1,10 @@
 {
-	"autolispext.pickprocess.acad.win": "Pick the process to attach. Make sure AutoCAD, or one of the specialized toolsets, is running. Type acad and select it from the list.", 
-	"autolispext.pickprocess.acad.osx": "Pick the process to attach. Make sure AutoCAD is running. Type AutoCAD and select it from the list.", 
-	"autolispext.pickprocess.acad.other": "Pick the process to attach",
-	"autolispext.pickprocess.pickfailed": "Process picker failed ({0})",
-	"autolispext.pickprocess.process.id.port": "process id: {0}, debug port: {1}",
-	"autolispext.pickprocess.process.id.legacy": "process id: {0}, debug port: {1} (legacy protocol)",
-	"autolispext.pickprocess.process.port.singal": "process id: {0}, debug port: {1} ({2})",
-	"autolispext.pickprocess.process.id.singal": "process id: {0} ({1})"
+  "autolispext.pickprocess.acad.win": "Pick the process to attach. Make sure AutoCAD, or one of the specialized toolsets, is running. Type acad and select it from the list.",
+  "autolispext.pickprocess.acad.osx": "Pick the process to attach. Make sure AutoCAD is running. Type AutoCAD and select it from the list.",
+  "autolispext.pickprocess.acad.other": "Pick the process to attach",
+  "autolispext.pickprocess.pickfailed": "Process picker failed ({0})",
+  "autolispext.pickprocess.process.id.port": "process id: {0}, debug port: {1}",
+  "autolispext.pickprocess.process.id.legacy": "process id: {0}, debug port: {1} (legacy protocol)",
+  "autolispext.pickprocess.process.port.singal": "process id: {0}, debug port: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "process id: {0} ({1})"
 }

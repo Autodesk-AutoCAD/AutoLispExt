@@ -1,6 +1,7 @@
 {
-	"autolispext.project.openproject.onlyprjallowed": "Only PRJ files are allowed.",
-	"autolispext.project.openproject.readfailed": "Can't read project file: ",
-	"autolispext.project.openproject.malformedfile": "Malformed project file: ",
-	"autolispext.project.openproject.label": "Open Project"
+  "autolispext.project.openproject.onlyprjallowed": "Only PRJ files are allowed.",
+  "autolispext.project.openproject.readfailed": "Can't read project file: ",
+  "autolispext.project.openproject.malformedfile": "Malformed project file: ",
+  "autolispext.project.openproject.label": "Open Project",
+  "autolispext.project.openproject.nospaces": "Legacy PRJ naming rules do not allow spaces"
 }

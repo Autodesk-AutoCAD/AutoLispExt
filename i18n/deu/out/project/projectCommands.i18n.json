@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "Ersetzen der Textzeichenfolge im Projekt fehlgeschlagen.",
   "autolispext.project.commands.openresultfailed": "Suchergebnisse konnten nicht geöffnet werden.",
   "autolispext.project.commands.clearresultfailed": "Suchergebnisse konnten nicht gelöscht werden.",
-  "autolispext.project.commands.initializefailed": "Fehler beim Initialisieren des AutoLISP-Projektmanagers."
+  "autolispext.project.commands.initializefailed": "Fehler beim Initialisieren des AutoLISP-Projektmanagers.",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }

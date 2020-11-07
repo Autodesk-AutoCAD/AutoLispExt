@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "Falha ao substituir a sequência de texto no projeto.",
   "autolispext.project.commands.openresultfailed": "Falha ao abrir os resultados da pesquisa.",
   "autolispext.project.commands.clearresultfailed": "Falha ao limpar os resultados da pesquisa.",
-  "autolispext.project.commands.initializefailed": "Falha ao inicializar o Gerenciador de projetos do AutoLISP."
+  "autolispext.project.commands.initializefailed": "Falha ao inicializar o Gerenciador de projetos do AutoLISP.",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }

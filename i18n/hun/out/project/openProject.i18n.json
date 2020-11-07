@@ -2,5 +2,6 @@
   "autolispext.project.openproject.onlyprjallowed": "Csak PRJ-fájlok engedélyezettek.",
   "autolispext.project.openproject.readfailed": "A projektfájl nem olvasható: ",
   "autolispext.project.openproject.malformedfile": "Hibás formátumú projektfájl: ",
-  "autolispext.project.openproject.label": "Projekt megnyitása"
+  "autolispext.project.openproject.label": "Projekt megnyitása",
+  "autolispext.project.openproject.nospaces": ""
 }

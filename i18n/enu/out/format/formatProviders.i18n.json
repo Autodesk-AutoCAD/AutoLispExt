@@ -1,4 +1,4 @@
 {
-	"autolispext.format.notsupport.dcl": "Command doesn't support DCL files.",
-	"autolispext.format.selectionlines": "First, select the lines of code to format."
+  "autolispext.format.notsupport.dcl": "Command doesn't support DCL files.",
+  "autolispext.format.selectionlines": "First, select the lines of code to format."
 }

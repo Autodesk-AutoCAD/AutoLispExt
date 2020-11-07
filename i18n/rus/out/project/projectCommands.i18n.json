@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "Не удалось заменить текстовую строку в проекте.",
   "autolispext.project.commands.openresultfailed": "Не удалось открыть результаты поиска.",
   "autolispext.project.commands.clearresultfailed": "Не удалось очистить результаты поиска.",
-  "autolispext.project.commands.initializefailed": "Не удалось инициализировать Диспетчер проектов AutoLISP."
+  "autolispext.project.commands.initializefailed": "Не удалось инициализировать Диспетчер проектов AutoLISP.",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }
