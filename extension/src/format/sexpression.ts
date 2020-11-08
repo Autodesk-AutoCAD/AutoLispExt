@@ -1,6 +1,6 @@
-import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
-import { isInternalAutoLispOp } from '../completion/autocompletionProvider'
-import { Position } from 'vscode';
+import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig';
+import { isInternalAutoLispOp } from '../completion/autocompletionProvider';
+import { Position, Range } from 'vscode';
 
 enum  LongListFmts{
   kSingleColumn,
@@ -890,4 +890,65 @@ export class Sexpression extends LispAtom {
 
         return this.format(startColumn);
     }
-} 
+
+
+    getRange(){
+        const begin: LispAtom = this.atoms[0];
+        const close: LispAtom = this.atoms[this.atoms.length -1];
+        return new Range(begin.line, begin.column, close.line, close.column + 1);
+    }
+
+    
+    contains(position: Position): boolean {
+        return this.getRange().contains(position);
+    }
+
+
+    // This version was necessary to properly alternate over SETQ Name vs Value 
+    private isValidForSetq(atom: LispAtom) {
+        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && (atom instanceof Sexpression || atom.symbol.trim().length > 0);
+    }    
+    // This is general purpose utility to make sure primitives such as strings, numbers and decorations are not evaluated
+    private isValidNonPrimitive(atom: LispAtom) {
+        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\-*\d+$/.test(atom.symbol));
+    }
+
+
+    // This is an ittoration helper that makes sure only useful LispAtom/Sexpression's get used for contextual data collection purposes.
+    nextKeyIndex(currentIndex: number, forSetq?: boolean): number {
+        let index = currentIndex + 1;
+        if (index < this.atoms.length) {
+            const atom = this.atoms[index];
+            const flag = forSetq ? this.isValidForSetq(atom) : this.isValidNonPrimitive(atom);
+            if (atom instanceof LispAtom && flag){
+                return index;               
+            } else {
+                return this.nextKeyIndex(index, forSetq);
+            }
+        } else {
+            return -1;
+        }
+    }
+
+
+    // Used a lot like a DOM selector to navigate/extract values from Sexpresions
+    findChildren(regx: RegExp, all: boolean): Sexpression[] {
+        let result: Sexpression[] = [];       
+        let index = this.nextKeyIndex(0);
+        if (!this.atoms[index]){
+            return result;
+        } else if (!(this.atoms[index] instanceof Sexpression) && regx.test(this.atoms[index].symbol) === true){
+            result.push(this);
+            if (all === true){
+                this.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                    result = result.concat(atom.findChildren(regx, all));
+                });
+            }
+        } else {
+            this.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                result = result.concat(atom.findChildren(regx, all));
+            });
+        }
+        return result;
+    }
+}
