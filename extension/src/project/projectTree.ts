@@ -123,7 +123,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     public updateData(newRootNode: ProjectNode) {
         this.rootNode = newRootNode;
         vscode.commands.executeCommand("setContext", "autolisp.hasProject", ProjectTreeProvider.hasProjectOpened());
-        this.onChanged.fire(this.rootNode);
+        this.refreshData(null);
     }
 
     public refreshData(data?: DisplayNode) {
