@@ -892,10 +892,27 @@ export class Sexpression extends LispAtom {
     }
 
 
+    getSexpressionFromPos(loc: Position, parent: boolean = false): Sexpression {
+        let result: Sexpression = null;
+        if (this.contains(loc)) {
+            this.atoms.forEach(sexpr =>{
+                if (sexpr instanceof Sexpression && sexpr.contains(loc)) {
+                    result = sexpr.getSexpressionFromPos(loc, parent) ?? (parent ? this : sexpr);
+                }
+            });
+        }
+        return result;
+    }
+
+    getParentOfSexpression(child: Sexpression): Sexpression {        
+        const pos = new Position(child.line, child.column);
+        return this.getSexpressionFromPos(pos, true);
+    }
+
     getRange(){
         const begin: LispAtom = this.atoms[0];
         const close: LispAtom = this.atoms[this.atoms.length -1];
-        return new Range(begin.line, begin.column, close.line, close.column + 1);
+        return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length) - 1);
     }
 
     
@@ -909,8 +926,8 @@ export class Sexpression extends LispAtom {
         return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && (atom instanceof Sexpression || atom.symbol.trim().length > 0);
     }    
     // This is general purpose utility to make sure primitives such as strings, numbers and decorations are not evaluated
-    private isValidNonPrimitive(atom: LispAtom) {
-        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\-*\d+$/.test(atom.symbol));
+    private isValidNonPrimitive(atom: LispAtom) {        
+        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\'{0,1}\-{0,1}\d+[eE\-]{0,2}\d*$/.test(atom.symbol));
     }
 
 
@@ -939,7 +956,7 @@ export class Sexpression extends LispAtom {
             return result;
         } else if (!(this.atoms[index] instanceof Sexpression) && regx.test(this.atoms[index].symbol) === true){
             result.push(this);
-            if (all === true){
+            if (all === true) {
                 this.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
                     result = result.concat(atom.findChildren(regx, all));
                 });

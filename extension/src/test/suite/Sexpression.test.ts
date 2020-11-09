@@ -4,7 +4,7 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
 let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
-let pos: Position = new Position(100, 100);
+let pos: Position = new Position(100, 100); // based on line: (setq downloadPath (caadr (NS:ACAD:DirPicker "Select Download Path" "Download files" GV:ProjPath)))
 
 suite("ReadonlyDocument.findExpressions() Tests", function () {
 	let found = 0;
@@ -41,6 +41,30 @@ suite("ReadonlyDocument.findExpressions() Tests", function () {
 					}
 					catch (err) {
 						assert.fail("Found Sexpression sub-atom did not match expectation");
+					}
+				});
+				
+				test("Sexpression.getSexpressionFromPos()", function () {
+					try {
+						const sexp = exp.getSexpressionFromPos(pos);
+						const txt = doc.getText(sexp.getRange());
+						assert.equal(txt.length, 71);
+					}
+					catch (err) {
+						assert.fail("Invalid quantity, has the LSP changed?");
+					}
+				});
+
+				test("Sexpression.getParentSexpression()", function () {
+					try {
+						const sexp = exp.getSexpressionFromPos(pos);
+						const par1 = exp.getParentOfSexpression(sexp);
+						const par2 = exp.getParentOfSexpression(par1);
+						const txt = doc.getText(par2.getRange());
+						assert.equal(txt.length, 99);
+					}
+					catch (err) {
+						assert.fail("Invalid quantity, has the LSP changed?");
 					}
 				});
 

@@ -117,12 +117,12 @@ export class DocumentManager{
 				// pre-caching the AtomsForest is a more significant memory jump because of its parent/child structure
 				// However, on 10mb's of LSP's in the workspace, this is only about a 90mb sustained jump and adds a lot of performance
 				// in other areas that makes this worth the cost to passively (non-blocking) pre-load the data.
-				// Also note, generating the pre-atomsForest does cause a massive memory spike (500mb) until the workspace is fully loaded.
+				// Also note, generating the pre-loaded atomsForest does cause a massive memory spike (500mb) until the workspace is fully loaded.
 				d.updateAtomsForest();
 			});
 		}).then(() =>{
 			let msg = AutoLispExt.localize("autolispext.workspace.fullyloaded", "Your workspace documents have fully loaded");
-            vscode.window.showInformationMessage(msg);
+			vscode.window.showInformationMessage(msg);
 		});
 		
 		if (vscode.workspace.workspaceFolders) {
