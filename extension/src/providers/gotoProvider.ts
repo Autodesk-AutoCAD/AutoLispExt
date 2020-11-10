@@ -37,7 +37,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			} else if (altFirstChild && selected === altFirstChild.symbol) { 
 				isFunction = true; // added to capture document root level function calls
 			}
-			if (isFunction && possibleDefun && /^DEFUN$|^DEFUN-Q$/i.test(possibleDefun.getNthKeyAtom(0).symbol)) {
+			if (isFunction && possibleDefun && /^DEFUN$|^DEFUN-Q$|^LAMBDA$/i.test(possibleDefun.getNthKeyAtom(0).symbol)) {
 				const symbolType = possibleDefun.getNthKeyAtom(0).symbol;
 				const varHeader = possibleDefun.getNthKeyAtom(symbolType.toUpperCase() === 'LAMBDA' ? 1 : 2);
 				if (innerContainer.line === varHeader.line && innerContainer.column === varHeader.column){
