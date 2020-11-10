@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { Position } from 'vscode';
+import { Sexpression } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
@@ -74,6 +75,21 @@ suite("ReadonlyDocument.findExpressions() Tests", function () {
 					}
 					catch (err) {
 						assert.fail("Failed to find expected Sexpression child");
+					}
+				});
+
+				test("Sexpression.getNthKeyAtom()", function () {
+					try {
+						const headers = exp.getNthKeyAtom(2);
+						if (headers instanceof Sexpression){
+							const atom = headers.getNthKeyAtom(8);
+							assert.equal(atom.symbol, 'textList');
+						} else {
+							assert.fail("Failed to locate defun variable header");	
+						}						
+					}
+					catch (err) {
+						assert.fail("Failed to locate variable header and/or sub-atom");
 					}
 				});
 			}

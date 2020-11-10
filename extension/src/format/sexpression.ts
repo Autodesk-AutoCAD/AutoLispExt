@@ -947,6 +947,18 @@ export class Sexpression extends LispAtom {
         }
     }
 
+    getNthKeyAtom(count: number){
+        let num = 0;        
+        for (let i = 0; i <= count; i++) {
+            num = this.nextKeyIndex(num);
+        }          
+        if (num < this.atoms.length && num >= 0){
+            return this.atoms[num];
+        } else {
+            return null;
+        }
+    }
+
 
     // Used a lot like a DOM selector to navigate/extract values from Sexpresions
     findChildren(regx: RegExp, all: boolean): Sexpression[] {
