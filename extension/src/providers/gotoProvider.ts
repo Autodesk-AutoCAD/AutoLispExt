@@ -1,23 +1,25 @@
+import { utils } from 'mocha';
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
 import { Sexpression } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
+import { escapeRegExp } from "../utils";
 
 
 export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
-		const editor: vscode.TextEditor = vscode.window.activeTextEditor;		
+		const editor: vscode.TextEditor = vscode.window.activeTextEditor;
 		const rDoc = ReadonlyDocument.getMemoryDocument(document);
 		let selected: string =  editor.document.getText(editor.selection);
-		if (selected === '') {			
+		if (selected === '') {
 			rDoc.atomsForest.forEach(sexp => {
 				if (sexp instanceof Sexpression && sexp.contains(position)){
 					const atom = sexp.getAtomFromPos(position);
 					if (atom) {
 						selected = atom.symbol.replace(/^[']*/, '');
-					}		
+					}
 				}
-			});			
+			});
 		}
 		if (['(', ')', '\'', '.'].includes(selected)){
 			return;
@@ -29,12 +31,12 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			const innerContainer = parentContainer?.getSexpressionFromPos(position);
 			const possibleDefun = innerContainer ? parentContainer.getParentOfSexpression(innerContainer) : null;
 			const firstChild = innerContainer?.getNthKeyAtom(0);
-			const altFirstChild = parentContainer?.atoms[parentContainer.nextKeyIndex(0)];
+			const altFirstChild = parentContainer?.getNthKeyAtom(0);
 
 			let isFunction = false;
 			if (firstChild && !(firstChild instanceof Sexpression) && selected === firstChild.symbol) {
 				isFunction = true; // most likely a function
-			} else if (altFirstChild && selected === altFirstChild.symbol) { 
+			} else if (altFirstChild && selected === altFirstChild.symbol) {
 				isFunction = true; // added to capture document root level function calls
 			}
 			if (isFunction && possibleDefun && /^DEFUN$|^DEFUN-Q$|^LAMBDA$/i.test(possibleDefun.getNthKeyAtom(0).symbol)) {
@@ -54,7 +56,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 				}
 				possible.forEach(item => {
 					locations.push(item);
-				});					
+				});
 			} else if (parentContainer) {
 				this.findFirstVariableMatch(rDoc, position, selected, parentContainer).forEach(item => {
 					locations.push(item);
@@ -64,7 +66,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		} catch (error) {
 			return;	// I don't believe this requires a localized error since VSCode has a default "no definition found" response
 		}
-	} 
+	}
 
 	
 	private findFirstVariableMatch(doc: ReadonlyDocument, start: vscode.Position, searchFor: string, searchIn: Sexpression): vscode.Location[] {
@@ -74,16 +76,15 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		let flag = true;
 		do {
 			const parent = searchIn.getParentOfSexpression(context);
-			const first = parent?.nextKeyIndex(0);
-			const atom = parent?.atoms[first];			
+			const atom = parent?.getNthKeyAtom(0);
 			if (atom && /^DEFUN$|^DEFUN-Q|^LAMBDA$/i.test(atom.symbol)) {
-				let headers = parent.atoms[parent.nextKeyIndex(first)];
+				let headers = parent.getNthKeyAtom(1);
 				if (headers?.symbol.toUpperCase() === ucName){ // adds defun names to possible result. Especially useful for quoted function names.
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(headers.line, headers.column)));
 				}
 				if (!(headers instanceof Sexpression)){
-					headers = parent.atoms[parent.nextKeyIndex(parent.nextKeyIndex(first))];
-				}			
+					headers = parent.getNthKeyAtom(2);
+				}
 				if (headers instanceof Sexpression){
 					const found = headers.atoms.find(p => p.symbol.toUpperCase() === ucName);
 					if (found) {
@@ -91,7 +92,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 					}
 				}
 			} else if (atom && /^FOREACH$|^VLAX-FOR$/i.test(atom.symbol)) {
-				const tmpVar = parent.atoms[parent.nextKeyIndex(first)];
+				const tmpVar = parent.getNthKeyAtom(1);
 				if (!(tmpVar instanceof Sexpression) && tmpVar.symbol.toUpperCase() === ucName){
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(tmpVar.line, tmpVar.column)));
 				}
@@ -101,7 +102,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			} else {
 				context = parent;
 			}
-		} while (flag);		
+		} while (flag);
 		// If we still haven't found anything check the 1st occurrence of setq's. This will find globals setqs and nested ones possibly inside other defuns
 		if (result.length === 0){
 			doc.findExpressions(/^SETQ$/i).forEach(setq => {
@@ -122,22 +123,23 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 
 	private findDefunMatches(searchFor: string, searchIn: ReadonlyDocument[]): vscode.Location[] {
 		const result: vscode.Location[] = [];
+		const regx = new RegExp('\\((DEFUN|DEFUN-Q)' + escapeRegExp(searchFor) + '\\(', 'ig');
 		searchIn.forEach((doc: ReadonlyDocument) => {
-			doc.atomsForest.forEach(atom => {
-				if (atom instanceof Sexpression){
-					const defs = atom.findChildren(/^DEFUN$|^DEFUN-Q$/i, true);
-					defs.forEach(sexp => {
-						const ptr = sexp.atoms[sexp.nextKeyIndex(sexp.nextKeyIndex(0))];
-						if (ptr.symbol.toUpperCase() === searchFor.toUpperCase()){
-							result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(ptr.line, ptr.column)));
-						}
-					});
-				}
-			});
+			if (regx.test(doc.fileContent.replace(/\s/g, ''))){
+				doc.atomsForest.forEach(atom => {
+					if (atom instanceof Sexpression){
+						const defs = atom.findChildren(/^DEFUN$|^DEFUN-Q$/i, true);
+						defs.forEach(sexp => {
+							const ptr = sexp.getNthKeyAtom(2);
+							if (ptr.symbol.toUpperCase() === searchFor.toUpperCase()){
+								result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(ptr.line, ptr.column)));
+							}
+						});
+					}
+				});
+			}
 		});
 		return result;
 	}
 
-
-	
 }

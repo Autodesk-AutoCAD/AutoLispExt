@@ -123,7 +123,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     public updateData(newRootNode: ProjectNode) {
         this.rootNode = newRootNode;
         vscode.commands.executeCommand("setContext", "autolisp.hasProject", ProjectTreeProvider.hasProjectOpened());
-        this.onChanged.fire(this.rootNode);
+        this.refreshData(null);
     }
 
     public refreshData(data?: DisplayNode) {
@@ -236,5 +236,6 @@ export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string,
     fileNode.fileExists = fs.existsSync(fileName);
     fileNode.rawFilePath = rawFilePath;
     fileNode.document = ReadonlyDocument.open(fileName);
-    root.sourceFiles.push(fileNode);
+    fileNode.document.updateAtomsForest();
+    root.sourceFiles.push(fileNode);    
 }

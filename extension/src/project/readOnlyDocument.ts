@@ -121,7 +121,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     // This was segregated from the atomsForest getter to support two primary use cases:
     //      A force update that will be called on the workspace.onDidSaveTextDocument() saved event to keep the memory document in sync with the user input.
     //      To recycle/update a memory document object currently being used with AutoLisp code fragments for enhanced data type detection.
-    async updateAtomsForest(content?: string) {
+    updateAtomsForest(content?: string) {
         if (this.languageId === DocumentManager.Selectors.lsp){
             if (content) {
                 this.initialize(content, this.languageId);
