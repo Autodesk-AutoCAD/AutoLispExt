@@ -130,7 +130,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 					if (atom instanceof Sexpression){
 						const defs = atom.findChildren(/^DEFUN$|^DEFUN-Q$/i, true);
 						defs.forEach(sexp => {
-							const ptr = sexp.getNthKeyAtom(2);
+							const ptr = sexp.getNthKeyAtom(1);
 							if (ptr.symbol.toUpperCase() === searchFor.toUpperCase()){
 								result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(ptr.line, ptr.column)));
 							}
