@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "プロジェクト内の文字列の置換に失敗しました。",
   "autolispext.project.commands.openresultfailed": "検索結果を開けませんでした。",
   "autolispext.project.commands.clearresultfailed": "検索結果のクリアに失敗しました。",
-  "autolispext.project.commands.initializefailed": "AutoLISP プロジェクト マネージャの初期化に失敗しました。"
+  "autolispext.project.commands.initializefailed": "AutoLISP プロジェクト マネージャの初期化に失敗しました。",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }

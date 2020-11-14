@@ -1,10 +1,10 @@
 {
-	"autolispext.debug.nodap": "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.", 
-	"autolispext.debug.noacad": "doesn’t exist. Verify and correct the folder path to the product executable.", 
-	"autolispext.debug.acad.nosupport": "This instance of AutoCAD doesn’t support debugging AutoLISP files, use a release later than AutoCAD 2020.",
-	"autolispext.debug.launchjson.path": "Specify the absolute path to the product with the Path attribute of the launch.json file.",
-	"autolispext.debug.prod.path.win":"Specify the absolute path for the product. For example, C://Program Files//Autodesk//AutoCAD//acad.exe.",
-	"autolispext.debug.prod.path.osx": "Specify the absolute path for the product. For example, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.",
-	"autolispext.debug.prod.path.other":"Specify the absolute path for the product.",
-	"autolispext.debug.noprocess.eror":"No process for which to attach could be found."
+  "autolispext.debug.nodap": "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.",
+  "autolispext.debug.noacad": "doesn’t exist. Verify and correct the folder path to the product executable.",
+  "autolispext.debug.acad.nosupport": "This instance of AutoCAD doesn’t support debugging AutoLISP files, use a release later than AutoCAD 2020.",
+  "autolispext.debug.launchjson.path": "Specify the absolute path to the product with the Path attribute of the launch.json file.",
+  "autolispext.debug.prod.path.win": "Specify the absolute path for the product. For example, C://Program Files//Autodesk//AutoCAD//acad.exe.",
+  "autolispext.debug.prod.path.osx": "Specify the absolute path for the product. For example, /Applications/Autodesk/AutoCAD.app/Contents/MacOS/AutoCAD.",
+  "autolispext.debug.prod.path.other": "Specify the absolute path for the product.",
+  "autolispext.debug.noprocess.eror": "No process for which to attach could be found."
 }

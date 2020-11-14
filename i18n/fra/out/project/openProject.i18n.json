@@ -2,5 +2,6 @@
   "autolispext.project.openproject.onlyprjallowed": "Seuls les fichiers PRJ sont autorisés.",
   "autolispext.project.openproject.readfailed": "Impossible de lire le fichier de projet: ",
   "autolispext.project.openproject.malformedfile": "Fichier de projet incorrect: ",
-  "autolispext.project.openproject.label": "Ouvrir un projet"
+  "autolispext.project.openproject.label": "Ouvrir un projet",
+  "autolispext.project.openproject.nospaces": ""
 }

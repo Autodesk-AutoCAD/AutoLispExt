@@ -1,4 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "建立",
-  "autolispext.project.createproject.onlyprjallowed": "只允許 PRJ 檔。"
+  "autolispext.project.createproject.onlyprjallowed": "只允許 PRJ 檔。",
+  "autolispext.project.createproject.nospaces": ""
 }

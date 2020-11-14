@@ -1,13 +1,13 @@
 {
-	"autolispext.project.find.openproject": "A project must be open before you can search for a text string.",
-	"autolispext.project.find.title": "Find in Project",
-	"autolispext.project.find.hint": "Type a text string to find, and press Enter.",
-	"autolispext.project.find.supportos": "Find & Replace is supported only on 64-bit systems.",
-	"autolispext.project.find.inprogress": "In progress... ",
-	"autolispext.project.find.found": "Found ",
-	"autolispext.project.find.results": " result(s) in ",
-	"autolispext.project.find.files": " file(s):",
-	"autolispext.project.find.stopped": "Find stopped. ",
-	"autolispext.project.find.noresults": "No results found.",
-	"autolispext.project.find.exceedmaxresults": "Limit of search results exceeded. Refine your search to narrow down the results. "
+  "autolispext.project.find.openproject": "A project must be open before you can search for a text string.",
+  "autolispext.project.find.title": "Find in Project",
+  "autolispext.project.find.hint": "Type a text string to find, and press Enter.",
+  "autolispext.project.find.supportos": "Find & Replace is supported only on 64-bit systems.",
+  "autolispext.project.find.inprogress": "In progress... ",
+  "autolispext.project.find.found": "Found ",
+  "autolispext.project.find.results": " result(s) in ",
+  "autolispext.project.find.files": " file(s):",
+  "autolispext.project.find.stopped": "Find stopped. ",
+  "autolispext.project.find.noresults": "No results found.",
+  "autolispext.project.find.exceedmaxresults": "Limit of search results exceeded. Refine your search to narrow down the results. "
 }

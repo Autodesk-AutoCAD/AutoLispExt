@@ -13,5 +13,8 @@
   "autolispext.project.commands.replacefailed": "No se ha podido reemplazar la cadena de texto en el proyecto.",
   "autolispext.project.commands.openresultfailed": "No se han podido abrir los resultados de la búsqueda.",
   "autolispext.project.commands.clearresultfailed": "No se han podido borrar los resultados de la búsqueda.",
-  "autolispext.project.commands.initializefailed": "No se ha podido inicializar el Administrador de proyectos de AutoLISP."
+  "autolispext.project.commands.initializefailed": "No se ha podido inicializar el Administrador de proyectos de AutoLISP.",
+  "autolispext.project.commands.closepromptmsg": "",
+  "autolispext.project.commands.closepromptyes": "",
+  "autolispext.project.commands.closepromptno": ""
 }
