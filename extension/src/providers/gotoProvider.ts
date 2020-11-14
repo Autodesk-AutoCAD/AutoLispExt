@@ -4,52 +4,32 @@ import { AutoLispExt } from '../extension';
 import { Sexpression } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { escapeRegExp } from "../utils";
-
+import { SearchPatterns, SearchHandlers } from './providerShared';
 
 export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
 		const editor: vscode.TextEditor = vscode.window.activeTextEditor;
 		const rDoc = ReadonlyDocument.getMemoryDocument(document);
-		let selected: string =  editor.document.getText(editor.selection);
+		let selected: string = editor.document.getText(editor.selection);
 		if (selected === '') {
 			rDoc.atomsForest.forEach(sexp => {
 				if (sexp instanceof Sexpression && sexp.contains(position)){
 					const atom = sexp.getAtomFromPos(position);
-					if (atom) {
+					if (atom && !atom.isComment()) {
 						selected = atom.symbol.replace(/^[']*/, '');
 					}
 				}
 			});
 		}
-		if (['(', ')', '\'', '.'].includes(selected)){
+		if (['(', ')', '\'', '.', ';'].includes(selected)){
 			return;
 		}
 		try {
-			// This has a "preference" for opened and project documents for actual definitions, but will only handle variables on the opened document.
+			// determine scope
+			const {isFunction, parentContainer} = SearchHandlers.getSelectionScopeOfWork(rDoc, position, selected);
 			const locations: vscode.Location[] = [];
-			const parentContainer = rDoc.atomsForest.find(p => p instanceof Sexpression && p.contains(position)) as Sexpression;
-			const innerContainer = parentContainer?.getSexpressionFromPos(position);
-			const possibleDefun = innerContainer ? parentContainer.getParentOfSexpression(innerContainer) : null;
-			const firstChild = innerContainer?.getNthKeyAtom(0);
-			const altFirstChild = parentContainer?.getNthKeyAtom(0);
-
-			let isFunction = false;
-			if (firstChild && !(firstChild instanceof Sexpression) && selected === firstChild.symbol) {
-				isFunction = true; // most likely a function
-			} else if (altFirstChild && selected === altFirstChild.symbol) {
-				isFunction = true; // added to capture document root level function calls
-			}
-			if (isFunction && possibleDefun && /^DEFUN$|^DEFUN-Q$|^LAMBDA$/i.test(possibleDefun.getNthKeyAtom(0).symbol)) {
-				const symbolType = possibleDefun.getNthKeyAtom(0).symbol;
-				const varHeader = possibleDefun.getNthKeyAtom(symbolType.toUpperCase() === 'LAMBDA' ? 1 : 2);
-				if (innerContainer.line === varHeader.line && innerContainer.column === varHeader.column){
-					isFunction = false; // course correct for the first argument in a variable header being interpreted as a function call
-				}
-			}
-
-
-			// This condition determines the likelyhood of this being a function definition request or (else) a variable definition request
 			if (isFunction) {
+				// This has a "preference" for opened and project documents for actual definitions, but will only handle variables on the opened document.
 				let possible = this.findDefunMatches(selected, AutoLispExt.Documents.OpenedDocuments.concat(AutoLispExt.Documents.ProjectDocuments));
 				if (possible.length === 0) {
 					possible = this.findDefunMatches(selected, AutoLispExt.Documents.WorkspaceDocuments);
@@ -57,7 +37,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 				possible.forEach(item => {
 					locations.push(item);
 				});
-			} else if (parentContainer) {
+			} else if (parentContainer) { // Most likely a variable, but ultimately the scope of work is now only in the active document.
 				this.findFirstVariableMatch(rDoc, position, selected, parentContainer).forEach(item => {
 					locations.push(item);
 				});
@@ -77,7 +57,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		do {
 			const parent = searchIn.getParentOfSexpression(context);
 			const atom = parent?.getNthKeyAtom(0);
-			if (atom && /^DEFUN$|^DEFUN-Q|^LAMBDA$/i.test(atom.symbol)) {
+			if (atom && SearchPatterns.LOCALIZES.test(atom.symbol)) {
 				let headers = parent.getNthKeyAtom(1);
 				if (headers?.symbol.toUpperCase() === ucName){ // adds defun names to possible result. Especially useful for quoted function names.
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(headers.line, headers.column)));
@@ -91,7 +71,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 						result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(found.line, found.column)));
 					}
 				}
-			} else if (atom && /^FOREACH$|^VLAX-FOR$/i.test(atom.symbol)) {
+			} else if (atom && SearchPatterns.ITERATES.test(atom.symbol)) {
 				const tmpVar = parent.getNthKeyAtom(1);
 				if (!(tmpVar instanceof Sexpression) && tmpVar.symbol.toUpperCase() === ucName){
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(tmpVar.line, tmpVar.column)));
@@ -105,19 +85,25 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		} while (flag);
 		// If we still haven't found anything check the 1st occurrence of setq's. This will find globals setqs and nested ones possibly inside other defuns
 		if (result.length === 0){
-			doc.findExpressions(/^SETQ$/i).forEach(setq => {
-				let isVar = false;
-				let cIndex = setq.nextKeyIndex(0);
-				do {
-					const atom = setq.atoms[cIndex];
-					if (isVar && atom?.symbol.toUpperCase() === ucName) {
-						result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(atom.line, atom.column)));
-					}
-					cIndex = setq.nextKeyIndex(cIndex);
-					isVar = !isVar;
-				} while (cIndex && cIndex > -1);
-			});
+			this.findInSetqs(doc, ucName).forEach(x => { result.push(x); });
 		}
+		return result;
+	}
+
+	private findInSetqs(doc: ReadonlyDocument, ucName: string): vscode.Location[] {
+		const result: vscode.Location[] = [];
+		doc.findExpressions(SearchPatterns.ASSIGNS).forEach(setq => {
+			let isVar = false;
+			let cIndex = setq.nextKeyIndex(0);
+			do {
+				const atom = setq.atoms[cIndex];
+				if (isVar && atom?.symbol.toUpperCase() === ucName) {
+					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(atom.line, atom.column)));
+				}
+				cIndex = setq.nextKeyIndex(cIndex);
+				isVar = !isVar;
+			} while (cIndex && cIndex > -1);
+		});
 		return result;
 	}
 
@@ -128,7 +114,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			if (regx.test(doc.fileContent.replace(/\s/g, ''))){
 				doc.atomsForest.forEach(atom => {
 					if (atom instanceof Sexpression){
-						const defs = atom.findChildren(/^DEFUN$|^DEFUN-Q$/i, true);
+						const defs = atom.findChildren(SearchPatterns.DEFINES, true);
 						defs.forEach(sexp => {
 							const ptr = sexp.getNthKeyAtom(1);
 							if (ptr.symbol.toUpperCase() === searchFor.toUpperCase()){

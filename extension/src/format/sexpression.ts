@@ -37,6 +37,10 @@ export class LispAtom {
         this.symbol = sym;
     }
 
+    equal(atom: LispAtom): boolean {
+        return JSON.stringify(this) === JSON.stringify(atom);
+    }
+
     symbLine(last: boolean = true): number {
         if (last) {
             let internalLines = 0;
@@ -926,7 +930,7 @@ export class Sexpression extends LispAtom {
         return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && (atom instanceof Sexpression || atom.symbol.trim().length > 0);
     }    
     // This is general purpose utility to make sure primitives such as strings, numbers and decorations are not evaluated
-    private isValidNonPrimitive(atom: LispAtom) {        
+    private notNumberStringOrProtected(atom: LispAtom) {        
         return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\'{0,1}\-{0,1}\d+[eE\-]{0,2}\d*$/.test(atom.symbol));
     }
 
@@ -936,7 +940,7 @@ export class Sexpression extends LispAtom {
         let index = currentIndex + 1;
         if (index < this.atoms.length) {
             const atom = this.atoms[index];
-            const flag = forSetq ? this.isValidForSetq(atom) : this.isValidNonPrimitive(atom);
+            const flag = forSetq ? this.isValidForSetq(atom) : this.notNumberStringOrProtected(atom);
             if (atom instanceof LispAtom && flag){
                 return index;               
             } else {
@@ -947,10 +951,10 @@ export class Sexpression extends LispAtom {
         }
     }
 
-    getNthKeyAtom(count: number){
+    getNthKeyAtom(significantNth: number){
         let num = 0;        
-        for (let i = 0; i <= count; i++) {
-            num = this.nextKeyIndex(num);
+        for (let i = 0; i <= significantNth; i++) {
+            num = this.nextKeyIndex(num, true);
         }          
         if (num < this.atoms.length && num >= 0){
             return this.atoms[num];
