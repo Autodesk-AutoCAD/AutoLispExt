@@ -1,6 +1,6 @@
-import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig'
-import { isInternalAutoLispOp } from '../completion/autocompletionProvider'
-import { Position } from 'vscode';
+import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } from './fmtconfig';
+import { isInternalAutoLispOp } from '../completion/autocompletionProvider';
+import { Position, Range } from 'vscode';
 
 enum  LongListFmts{
   kSingleColumn,
@@ -35,6 +35,10 @@ export class LispAtom {
         this.line = line;
         this.column = column;
         this.symbol = sym;
+    }
+
+    equal(atom: LispAtom): boolean {
+        return JSON.stringify(this) === JSON.stringify(atom);
     }
 
     symbLine(last: boolean = true): number {
@@ -890,4 +894,94 @@ export class Sexpression extends LispAtom {
 
         return this.format(startColumn);
     }
-} 
+
+
+    getSexpressionFromPos(loc: Position, parent: boolean = false): Sexpression {
+        let result: Sexpression = null;
+        if (this.contains(loc)) {
+            this.atoms.forEach(sexpr =>{
+                if (sexpr instanceof Sexpression && sexpr.contains(loc)) {
+                    result = sexpr.getSexpressionFromPos(loc, parent) ?? (parent ? this : sexpr);
+                }
+            });
+        }
+        return result;
+    }
+
+    getParentOfSexpression(child: Sexpression): Sexpression {        
+        const pos = new Position(child.line, child.column);
+        return this.getSexpressionFromPos(pos, true);
+    }
+
+    getRange(){
+        const begin: LispAtom = this.atoms[0];
+        const close: LispAtom = this.atoms[this.atoms.length -1];
+        return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length) - 1);
+    }
+
+    
+    contains(position: Position): boolean {
+        return this.getRange().contains(position);
+    }
+
+
+    // This version was necessary to properly alternate over SETQ Name vs Value 
+    private isValidForSetq(atom: LispAtom) {
+        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && (atom instanceof Sexpression || atom.symbol.trim().length > 0);
+    }    
+    // This is general purpose utility to make sure primitives such as strings, numbers and decorations are not evaluated
+    private notNumberStringOrProtected(atom: LispAtom) {        
+        return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\'{0,1}\-{0,1}\d+[eE\-]{0,2}\d*$/.test(atom.symbol));
+    }
+
+
+    // This is an ittoration helper that makes sure only useful LispAtom/Sexpression's get used for contextual data collection purposes.
+    nextKeyIndex(currentIndex: number, forSetq?: boolean): number {
+        let index = currentIndex + 1;
+        if (index < this.atoms.length) {
+            const atom = this.atoms[index];
+            const flag = forSetq ? this.isValidForSetq(atom) : this.notNumberStringOrProtected(atom);
+            if (atom instanceof LispAtom && flag){
+                return index;               
+            } else {
+                return this.nextKeyIndex(index, forSetq);
+            }
+        } else {
+            return -1;
+        }
+    }
+
+    getNthKeyAtom(significantNth: number){
+        let num = 0;        
+        for (let i = 0; i <= significantNth; i++) {
+            num = this.nextKeyIndex(num, true);
+        }          
+        if (num < this.atoms.length && num >= 0){
+            return this.atoms[num];
+        } else {
+            return null;
+        }
+    }
+
+
+    // Used a lot like a DOM selector to navigate/extract values from Sexpresions
+    findChildren(regx: RegExp, all: boolean): Sexpression[] {
+        let result: Sexpression[] = [];       
+        let index = this.nextKeyIndex(0);
+        if (!this.atoms[index]){
+            return result;
+        } else if (!(this.atoms[index] instanceof Sexpression) && regx.test(this.atoms[index].symbol) === true){
+            result.push(this);
+            if (all === true) {
+                this.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                    result = result.concat(atom.findChildren(regx, all));
+                });
+            }
+        } else {
+            this.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
+                result = result.concat(atom.findChildren(regx, all));
+            });
+        }
+        return result;
+    }
+}

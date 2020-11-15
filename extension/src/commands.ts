@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import { AutoLispExt } from './extension';
 import { openWebHelp } from './help/openWebHelp';
 import { showErrorMessage } from './project/projectCommands';
+import { AutolispDefinitionProvider } from './providers/gotoProvider';
 
 
 export function registerCommands(context: vscode.ExtensionContext){
@@ -36,4 +37,5 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 
+	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], new AutolispDefinitionProvider()));
 }

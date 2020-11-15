@@ -78,6 +78,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
         ret.lineCount = doc.lineCount;
         ret.languageId = DocumentManager.getSelectorType(doc.fileName);
         ret.lines = [];        
+        ret.fileName = doc.fileName;
         for (let i = 0; i < doc.lineCount; i++) {
             ret.lines.push(doc.lineAt(i).text);
         }
@@ -273,27 +274,10 @@ export class ReadonlyDocument implements vscode.TextDocument {
     //              let expl = rod.findExpressions(/(DEFUN|LAMBDA|FOREACH)/ig, true);
     findExpressions(regx: RegExp, all: boolean = false): Sexpression[]{
         let result: Sexpression[] = [];
-        this.atomsForest.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
-            result = result.concat(this.exploreAtomForest(regx, atom, all));
+        this.atomsForest.filter(f => f instanceof Sexpression).forEach((sexp: Sexpression) => {
+            result = result.concat(sexp.findChildren(regx, all));
         });
         return result;
     }
-    private exploreAtomForest(regx: RegExp, sexp: Sexpression, all: boolean): Sexpression[] {
-        let result: Sexpression[] = [];        
-        if (!sexp.atoms[1]){
-            return result;
-        } else if (sexp.atoms[1] instanceof LispAtom && regx.test(sexp.atoms[1].symbol) === true){
-            result.push(sexp);
-            if (all === true){
-                sexp.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
-                    result = result.concat(this.exploreAtomForest(regx, atom, all));
-                });
-            }
-        } else {
-            sexp.atoms.filter(f => f instanceof Sexpression).forEach((atom: Sexpression) => {
-                result = result.concat(this.exploreAtomForest(regx, atom, all));
-            });
-        }
-        return result;
-    }
+    // Relocated the atomsForestExplorer() to be an Sexpression utility function so more things had a logical path to using it.
 }

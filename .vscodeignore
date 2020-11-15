@@ -8,6 +8,7 @@ extension/package-lock.json
 extension/tsconfig.json
 extension/vsc-extension-quickstart.md
 extension/node_modules/**
+test_case/**
 vendor/**
 out/test/**
 out/**/*.map

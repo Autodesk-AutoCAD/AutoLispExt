@@ -103,15 +103,29 @@ export class DocumentManager{
 		}
 
 		// This builds the '_workspace' *.LSP Memory Document placeholder set
-		// 		This feature does make the "fair assumption" that AutoCAD machines has plenty of memory to be holding all this information
-		// 		This was stress tested with a root workspace folder containing 10mb of *.LSP files and the memory footprint increased less than 50mb
+		// 		This feature does make the "fair assumption" that AutoCAD machines have plenty of memory to be holding all this information
+		// 		The impact of creating read-only documents was stress tested with a root workspace folder containing 10mb of *.LSP files
+		//		and the memory footprint from the readonlyDocument's increased the memory (sustained) by less than 50mb		
 		vscode.workspace.findFiles("**").then((items: vscode.Uri[]) => {
 			items.forEach((fileUri: vscode.Uri) => {			
 				if (this.getSelectorType(fileUri.fsPath) === DocumentManager.Selectors.lsp) {
-					this._workspace.set(fileUri.fsPath, null); // initialized as null to blueprint the workspace files without the overhead of reading their contents
+					this._workspace.set(fileUri.fsPath, ReadonlyDocument.open(fileUri.fsPath));
 				}
 			});
 		});
+		/////////////////////// To be deleted if the pre-check method passes review ///////////////////////
+		// .then(() => {
+		// 	AutoLispExt.Documents.WorkspaceDocuments.forEach(d => {
+		// 		// pre-caching the AtomsForest is a more significant memory jump because of its parent/child structure
+		// 		// However, on 10mb's of LSP's in the workspace, this is only about a 90mb sustained jump and adds a lot of performance
+		// 		// in other areas that makes this worth the cost to passively (non-blocking) pre-load the data.
+		// 		// Also note, generating the pre-loaded atomsForest does cause a massive memory spike (500mb) until the workspace is fully loaded.
+		// 		d.updateAtomsForest();
+		// 	});
+		// }).then(() =>{
+		// 	let msg = AutoLispExt.localize("autolispext.workspace.fullyloaded", "Your workspace documents have fully loaded");
+		// 	vscode.window.showInformationMessage(msg);
+		// });
 		
 		if (vscode.workspace.workspaceFolders) {
 			this.setupFileSystemWatchers();
