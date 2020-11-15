@@ -8,20 +8,17 @@ import { SearchPatterns, SearchHandlers } from './providerShared';
 
 export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
-		const editor: vscode.TextEditor = vscode.window.activeTextEditor;
 		const rDoc = ReadonlyDocument.getMemoryDocument(document);
-		let selected: string = editor.document.getText(editor.selection);
-		if (selected === '') {
-			rDoc.atomsForest.forEach(sexp => {
-				if (sexp instanceof Sexpression && sexp.contains(position)){
-					const atom = sexp.getAtomFromPos(position);
-					if (atom && !atom.isComment()) {
-						selected = atom.symbol.replace(/^[']*/, '');
-					}
+		let selected = '';
+		rDoc.atomsForest.forEach(sexp => {
+			if (sexp instanceof Sexpression && sexp.contains(position)){
+				const atom = sexp.getAtomFromPos(position);
+				if (atom && !atom.isComment()) {
+					selected = atom.symbol.replace(/^[']*/, '');
 				}
-			});
-		}
-		if (['(', ')', '\'', '.', ';'].includes(selected)){
+			}
+		});
+		if (selected === '' || ['(', ')', '\'', '.', ';'].includes(selected)){
 			return;
 		}
 		try {
@@ -30,7 +27,10 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			const locations: vscode.Location[] = [];
 			if (isFunction) {
 				// This has a "preference" for opened and project documents for actual definitions, but will only handle variables on the opened document.
-				let possible = this.findDefunMatches(selected, AutoLispExt.Documents.OpenedDocuments.concat(AutoLispExt.Documents.ProjectDocuments));
+				let possible = this.findDefunMatches(selected, [AutoLispExt.Documents.ActiveDocument]);
+				if (possible.length === 0) {
+					possible = this.findDefunMatches(selected, AutoLispExt.Documents.OpenedDocuments.concat(AutoLispExt.Documents.ProjectDocuments));
+				}
 				if (possible.length === 0) {
 					possible = this.findDefunMatches(selected, AutoLispExt.Documents.WorkspaceDocuments);
 				}
