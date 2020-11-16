@@ -8,7 +8,7 @@ import { SearchPatterns, SearchHandlers } from './providerShared';
 
 export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
-		const rDoc = ReadonlyDocument.getMemoryDocument(document);
+		const rDoc = AutoLispExt.Documents.getDocument(document);
 		let selected = '';
 		rDoc.atomsForest.forEach(sexp => {
 			if (sexp instanceof Sexpression && sexp.contains(position)){
