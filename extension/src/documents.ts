@@ -153,7 +153,7 @@ export class DocumentManager{
 	// When the internal & native documents match in content the existing version is returned, but will be regenerated if they are not
 	private getOpenedAsReadonlyDocuments(): ReadonlyDocument[] {
 		const result: ReadonlyDocument[] = [];
-		[...this._cached.keys()].forEach(key => {
+		this.cacheKeys.forEach(key => {
 			const sources = this._cached.get(key);
 			if (sources.native && sources.flags.has(Origins.OPENED)){
 				if (!sources.internal || !sources.internal.equal(sources.native)){
