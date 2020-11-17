@@ -3,12 +3,13 @@ import * as vscode from 'vscode';
 import { ReadonlyDocument } from "./project/readOnlyDocument";
 import { AutoLispExt } from './extension';
 import { ProjectTreeProvider  } from "./project/projectTree";
+import * as fs from	'fs-extra';
 
 
 enum Origins {
-	OPENED = 'O',
-	WSPACE = 'W',
-	PROJECT = 'P'
+	OPENED,
+	WSPACE,
+	PROJECT
 }
 
 
@@ -49,29 +50,15 @@ export class DocumentManager{
 	}
 	get ActiveDocument(): ReadonlyDocument { 
 		if (vscode.window.activeTextEditor) {
-			const key = vscode.window.activeTextEditor.document.fileName.replace(/\//g, '\\');
-			if (this._cached.has(key)){
-				const sources = this._cached.get(key);
-				if (!sources.native) {
-					sources.native = vscode.window.activeTextEditor.document;
-					sources.flags.add(Origins.OPENED);
-				}
-				if (!sources.internal || !sources.internal.equal(sources.native)){
-					sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-				}
-				return sources.internal;
-			} else {
-				const sources = DocumentSources.create(Origins.OPENED, vscode.window.activeTextEditor.document);
-				this._cached.set(key, sources);
-				return sources.internal;
-			}
+			const key = this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);			
+			return this._cached.get(key)?.internal;
 		} else {
 			return null;
 		}		
 	}
 	
 	get ActiveTextDocument(): vscode.TextDocument { 
-		return vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document :  null; 
+		return vscode.window.activeTextEditor?.document;
 	}
 	get OpenedTextDocuments(): vscode.TextDocument[] { 
 		return [...this._cached.values()]
@@ -86,24 +73,10 @@ export class DocumentManager{
 		const result: string[] = [];
 		if (ProjectTreeProvider.hasProjectOpened()){
 			ProjectTreeProvider.instance().projectNode.sourceFiles.forEach(x => {
-				result.push(x.filePath.replace(/\//g, '\\'));
+				result.push(this.normalizePath(x.filePath));
 			});
 		}
 		return result;
-	}
-
-	getDocument(nDoc: vscode.TextDocument) {
-		const key = nDoc.fileName.replace(/\//g, '\\');
-		if (this._cached.has(key)) {
-			const sources = this._cached.get(key);
-			sources.native = nDoc;
-			if (!sources.internal || !sources.internal.equal(sources.native)){
-				sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-			}
-			return sources.internal;
-		} else {
-			this._cached.set(key, DocumentSources.create(Origins.OPENED, nDoc));
-		}
 	}
 
 	// General purpose methods for identifying the scope of work for a given document type
@@ -125,30 +98,72 @@ export class DocumentManager{
 		}
 	}
 
+	private normalizePath(path: string): string {
+		return path.replace(/\//g, '\\');
+	}
+
+	private tryUpdateInternal(sources: DocumentSources){
+		if (sources.native && (!sources.internal || !sources.internal.equal(sources.native))) {
+			sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
+		}
+	}
+
+	private pathConsumeOrValidate(path: string, flag: Origins): string {
+		const key = this.normalizePath(path);		
+		if (fs.existsSync(key) && this.getSelectorType(key) === DocumentManager.Selectors.lsp) {
+			if (this._cached.has(key) === false) {
+				const sources = DocumentSources.create(flag, ReadonlyDocument.open(key));
+				this._cached.set(key, sources);
+			} else {
+				const sources = this._cached.get(key);				
+				this.tryUpdateInternal(sources);
+				sources.flags.add(flag);
+			}
+			return key;
+		} else {
+			return '';
+		}
+	}
+
+	private documentConsumeOrValidate(doc: vscode.TextDocument, flag: Origins, key?: string): string {
+		if (!key){
+			key = this.normalizePath(doc.fileName);
+		}
+		if (this.getSelectorType(key) === DocumentManager.Selectors.lsp){
+			if (this._cached.has(key) === false) {
+				const sources = DocumentSources.create(flag, doc);
+				this._cached.set(key, sources);
+			} else {
+				const sources = this._cached.get(key);
+				sources.native = doc;
+				this.tryUpdateInternal(sources);
+				sources.flags.add(flag);
+			}
+			return key;
+		} else {
+			return '';
+		}
+	}
+
+	getDocument(nDoc: vscode.TextDocument): ReadonlyDocument {
+		const key = this.documentConsumeOrValidate(nDoc, Origins.OPENED);			
+		return this._cached.get(key)?.internal;
+	}	
+
 	// Gets an array of PRJ ReadonlyDocument references, but verifies the content is based on a vscode.TextDocument's when available
 	private getProjectDocuments(): ReadonlyDocument[] {
 		const result: ReadonlyDocument[] = [];
 		if (ProjectTreeProvider.hasProjectOpened()) {
 			this.projectKeys.forEach(key => {
+				this.pathConsumeOrValidate(key, Origins.PROJECT);
 				if (this._cached.has(key)){
-					const sources = this._cached.get(key);
-					sources.flags.add(Origins.PROJECT);
-					if (sources.native && !sources.internal.equal(sources.native)){
-						sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-					}
-					result.push(sources.internal);
-				} else {
-					const sources = DocumentSources.create(Origins.PROJECT, key);
-					this._cached.set(key, sources);
-					result.push(sources.internal);
+					result.push(this._cached.get(key).internal);
 				}
 			});
 		}
 		return result;
 	}
 
-
-	
 	// Gets an array of ReadonlyDocument references representing Origins.OPENED, but verifies the content is based on the native vscode.TextDocument
 	// When the internal & native documents match in content the existing version is returned, but will be regenerated if they are not
 	private getOpenedAsReadonlyDocuments(): ReadonlyDocument[] {
@@ -156,9 +171,7 @@ export class DocumentManager{
 		this.cacheKeys.forEach(key => {
 			const sources = this._cached.get(key);
 			if (sources.native && sources.flags.has(Origins.OPENED)){
-				if (!sources.internal || !sources.internal.equal(sources.native)){
-					sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-				}
+				this.tryUpdateInternal(sources);
 				result.push(sources.internal);
 			}
 		});
@@ -171,9 +184,8 @@ export class DocumentManager{
 		this.cacheKeys.forEach(key => {
 			const sources = this._cached.get(key);
 			if (sources.flags.has(Origins.WSPACE)) {
-				if (sources.native && (!sources.internal || !sources.internal.equal(sources.native))){
-					sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-				} else if (!sources.internal) {
+				this.tryUpdateInternal(sources);
+				if (!sources.internal) {
 					sources.internal = ReadonlyDocument.open(key);
 				}
 				result.push(sources.internal);
@@ -194,19 +206,8 @@ export class DocumentManager{
 		//		It is important to start tracking this early because we can't actually see what is opened by VSCode during its internal workspace reload.
 		//		Our first opportunity to capture these previously opened documents is when they are activated. **Unavoidable Technical Debt that needs future resolution**
 		if (vscode.window.activeTextEditor && this.getSelectorType(vscode.window.activeTextEditor.document.fileName) === DocumentManager.Selectors.lsp) {
-			const key = vscode.window.activeTextEditor.document.uri.fsPath.replace(/\//g, '\\');
-			const nDoc = vscode.window.activeTextEditor.document;	
-			shouldExist.push(key);		
-			if (this._cached.has(key)){
-				const sources = this._cached.get(key);
-				sources.native = nDoc;
-				sources.flags.add(Origins.OPENED);
-				if (!sources.internal || !sources.internal.equal(nDoc)) {
-					sources.internal = ReadonlyDocument.getMemoryDocument(nDoc);
-				}
-			} else {
-				this._cached.set(key, DocumentSources.create(Origins.OPENED, nDoc));
-			}
+			const key = this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
+			shouldExist.push(key);
 		}
 
 		// This builds the '_workspace' *.LSP Memory Document placeholder set
@@ -215,15 +216,9 @@ export class DocumentManager{
 		//		and the memory footprint from just the ReadonlyDocument's increased the memory (sustained) by less than 50mb		
 		vscode.workspace.findFiles("**").then((items: vscode.Uri[]) => {
 			items.forEach((fileUri: vscode.Uri) => {	
-				const key = fileUri.fsPath.replace(/\//g, '\\');		
-				if (this.getSelectorType(key) === DocumentManager.Selectors.lsp) {
+				const key = this.pathConsumeOrValidate(fileUri.fsPath, Origins.WSPACE);
+				if (key !== '') {
 					shouldExist.push(key);
-					if (this._cached.has(key)){
-						const source = this._cached.get(key);
-						source.flags.add(Origins.WSPACE);
-					} else {
-						this._cached.set(key, DocumentSources.create(Origins.WSPACE, key));
-					}
 				}
 			});
 		});
@@ -231,16 +226,9 @@ export class DocumentManager{
 
 		if (ProjectTreeProvider.hasProjectOpened()) {
 			this.projectKeys.forEach(key => {
-				shouldExist.push(key);
-				if (this._cached.has(key)){
-					const sources = this._cached.get(key);
-					sources.flags.add(Origins.PROJECT);
-					if (sources.native && !sources.internal.equal(sources.native)){
-						sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
-					}
-				} else {
-					const sources = DocumentSources.create(Origins.PROJECT, key);
-					this._cached.set(key, sources);
+				key = this.pathConsumeOrValidate(key, Origins.PROJECT);
+				if (key !== '') {
+					shouldExist.push(key);
 				}
 			});
 		}
@@ -269,51 +257,27 @@ export class DocumentManager{
 			const watcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
 
 			AutoLispExt.Subscriptions.push(watcher.onDidDelete((e: vscode.Uri) => {
-				const key = e.fsPath.replace(/\//g, '\\');
+				const key = this.normalizePath(e.fsPath);
+				const prjs = this.projectKeys;
 				if (this._cached.has(key)){
-					if (this._cached.get(key).flags.has(Origins.OPENED) === false){
+					const sources = this._cached.get(key);
+					if (prjs.includes(key) || sources.flags.has(Origins.OPENED)){
 						this._cached.delete(key);
 					} else {
-						this._cached.get(key).flags.delete(Origins.WSPACE);
+						sources.flags.delete(Origins.WSPACE);
 					}	
 				}
 			}));
 		
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidCreate((e: vscode.Uri) => {
-				const key = e.fsPath.replace(/\//g, '\\');
-				if (this.getSelectorType(key) === DocumentManager.Selectors.lsp) { 
-					if (this._cached.has(key)) {
-						const source = this._cached.get(key);
-						source.flags.add(Origins.WSPACE);
-						if (source.native && source.native.fileName.replace(/\//g, '\\') === key
-						   && (!source.internal || !source.internal.equal(source.native))) {
-							source.internal = ReadonlyDocument.getMemoryDocument(source.native);
-						} else {
-							source.internal = ReadonlyDocument.open(key);
-						}
-					} else {
-						this._cached.set(key, DocumentSources.create(Origins.WSPACE, key));
-					}
-				}
+				const key = this.normalizePath(e.fsPath);
+				this.pathConsumeOrValidate(key, Origins.WSPACE);
 			}));
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidChange((e: vscode.Uri) => {
-				const key = e.fsPath.replace(/\//g, '\\');
-				if (this.getSelectorType(key) === DocumentManager.Selectors.lsp) { 
-					if (this._cached.has(key) === false) {
-						const source = this._cached.get(key);
-						source.flags.add(Origins.WSPACE);
-						if (source.native && source.native.fileName.replace(/\//g, '\\') === key
-						   && (!source.internal || !source.internal.equal(source.native))) {
-							source.internal = ReadonlyDocument.getMemoryDocument(source.native);
-						} else {
-							source.internal = ReadonlyDocument.open(key);
-						}
-					} else {
-						this._cached.set(key, DocumentSources.create(Origins.WSPACE, key));
-					}
-				}
+				const key = this.normalizePath(e.fsPath);
+				this.pathConsumeOrValidate(key, Origins.WSPACE);				
 			}));
 
 			this._watchers.push(watcher);
@@ -413,27 +377,18 @@ export class DocumentManager{
 		this.initialize();
 
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => {
-			const source = this._cached.get(e.fileName.replace(/\//g, '\\'));
+			const source = this._cached.get(this.normalizePath(e.fileName));
 			source?.flags.delete(Origins.OPENED);
 		}));
 	
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidOpenTextDocument((e: vscode.TextDocument) => {
-			if (this.getSelectorType(e.fileName) === DocumentManager.Selectors.lsp) {
-				const key = e.fileName.replace(/\//g, '\\');
-				if (this._cached.has(key)) {
-					const source = this._cached.get(key);
-					source.native = e;
-					source.flags.add(Origins.OPENED);
-				} else {
-					this._cached.set(key, DocumentSources.create(Origins.OPENED, e));
-				}
-			}
+			this.documentConsumeOrValidate(e, Origins.OPENED);
 		}));
 
 		// Note: if the file is already opened and deleted through the workspace, it is deleted AND closed.
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidDeleteFiles((e: vscode.FileDeleteEvent) => {
 			e.files.forEach(file => {
-				const key = file.fsPath.replace(/\//g, '\\');
+				const key = this.normalizePath(file.fsPath);
 				if (this._cached.has(key)) {
 					this._cached.delete(key);
 				}
