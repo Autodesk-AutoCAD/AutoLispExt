@@ -269,7 +269,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
     equal(doc: vscode.TextDocument): boolean {
         return this.fileName.toUpperCase().replace(/\//g, '\\') === doc.fileName.toUpperCase().replace(/\//g, '\\')
-               && this.fileContent === doc.getText();
+               && this.fileContent === doc.getText().replace(/\r\n|\r|\n/g, '\r\n'); //.split('\r\n').join('\n').split('\n').join('\r\n');
     }
 
     
