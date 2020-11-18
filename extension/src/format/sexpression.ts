@@ -905,9 +905,6 @@ export class Sexpression extends LispAtom {
                 }
             });
         }
-        if (!result && this.contains(loc)){
-            result = this;
-        }
         return result;
     }
 
