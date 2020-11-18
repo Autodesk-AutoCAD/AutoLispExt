@@ -196,7 +196,6 @@ export class DocumentManager{
 
 	// Creates the FileSystemWatcher's & builds a workspace blueprint
 	private initialize(): void {
-		const shouldExist: string[] = [];
 		this._watchers.forEach(w => {
 			w.dispose();
 		});
@@ -206,8 +205,7 @@ export class DocumentManager{
 		//		It is important to start tracking this early because we can't actually see what is opened by VSCode during its internal workspace reload.
 		//		Our first opportunity to capture these previously opened documents is when they are activated. **Unavoidable Technical Debt that needs future resolution**
 		if (vscode.window.activeTextEditor && this.getSelectorType(vscode.window.activeTextEditor.document.fileName) === DocumentManager.Selectors.lsp) {
-			const key = this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
-			shouldExist.push(key);
+			this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
 		}
 
 		// This builds the '_workspace' *.LSP Memory Document placeholder set
@@ -216,34 +214,16 @@ export class DocumentManager{
 		//		and the memory footprint from just the ReadonlyDocument's increased the memory (sustained) by less than 50mb		
 		vscode.workspace.findFiles("**").then((items: vscode.Uri[]) => {
 			items.forEach((fileUri: vscode.Uri) => {	
-				const key = this.pathConsumeOrValidate(fileUri.fsPath, Origins.WSPACE);
-				if (key !== '') {
-					shouldExist.push(key);
-				}
+				this.pathConsumeOrValidate(fileUri.fsPath, Origins.WSPACE);
 			});
 		});
 
 
 		if (ProjectTreeProvider.hasProjectOpened()) {
 			this.projectKeys.forEach(key => {
-				key = this.pathConsumeOrValidate(key, Origins.PROJECT);
-				if (key !== '') {
-					shouldExist.push(key);
-				}
+				this.pathConsumeOrValidate(key, Origins.PROJECT);
 			});
 		}
-
-
-		/////////////////////// The extension appears to reset after every workspace change and this probably isn't really doing anything ///////////////////////
-		this.cacheKeys.filter(k => !shouldExist.includes(k)).forEach(obsolete => {
-			if (this._cached.has(obsolete)) {
-				const context = this._cached.get(obsolete);
-				if (!(context.native && context.flags.has(Origins.OPENED))) {
-					this._cached.delete(obsolete);	
-				}
-			}
-		});
-		
 		
 		if (vscode.workspace.workspaceFolders) {
 			this.setupFileSystemWatchers();
@@ -372,6 +352,11 @@ export class DocumentManager{
 		// workspace.onDidOpenTextDocument -> workspace.onDidCloseTextDocument 
 		//		The onDidOpenTextDocument event will add the NEW TextDocument object to the _opened Map
 		//		The onDidCloseTextDocument event will delete the OLD TextDocument object from the _opened Map
+
+		/////////////////////// The extension appears to reset after every workspace change and this wasn't doing anything ///////////////////////
+		// AutoLispExt.Subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async (e: vscode.WorkspaceFoldersChangeEvent) => {
+		// 	this.initialize();
+		// }));
 		
 		// Create FileSystemWatcher's & build the workspace blueprint
 		this.initialize();
@@ -394,11 +379,6 @@ export class DocumentManager{
 				}
 			});
 		}));
-
-		/////////////////////// The extension appears to reset after every workspace change and this probably didn't do anything ///////////////////////
-		// AutoLispExt.Subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async (e: vscode.WorkspaceFoldersChangeEvent) => {
-		// 	this.initialize();
-		// }));
 	} // End of DocumentManger Constructor
 }
 

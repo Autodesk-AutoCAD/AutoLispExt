@@ -84,9 +84,9 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 			}
 		} while (flag);
 		// If we still haven't found anything check the 1st occurrence of setq's. This will find globals setqs and nested ones possibly inside other defuns
-		if (result.length === 0){
-			this.findInSetqs(doc, ucName).forEach(x => { result.push(x); });
-		}
+		// if (result.length === 0){
+		// 	this.findInSetqs(doc, ucName).forEach(x => { result.push(x); });
+		// }
 		return result;
 	}
 
