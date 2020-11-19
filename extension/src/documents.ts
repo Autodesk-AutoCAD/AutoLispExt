@@ -3,11 +3,40 @@ import * as vscode from 'vscode';
 import { ReadonlyDocument } from "./project/readOnlyDocument";
 import { AutoLispExt } from './extension';
 import { ProjectTreeProvider  } from "./project/projectTree";
+import * as fs from	'fs-extra';
 
+
+enum Origins {
+	OPENED,
+	WSPACE,
+	PROJECT
+}
+
+
+interface DocumentSources {
+	native: vscode.TextDocument;
+	internal: ReadonlyDocument;
+	flags: Set<Origins>;
+}
+
+
+namespace DocumentSources{
+	export function create(source: Origins, path: string): DocumentSources;
+	export function create(source: Origins, nDoc: vscode.TextDocument): DocumentSources;
+	export function create(source: Origins, iDoc: ReadonlyDocument): DocumentSources;
+	export function create(source: Origins, context: vscode.TextDocument|ReadonlyDocument|string): DocumentSources {
+		if (context instanceof ReadonlyDocument) {
+			return { native: null, internal: context, flags: new Set([source]) };
+		} else if (typeof(context) === 'string') {
+			return { native: null, internal: ReadonlyDocument.open(context), flags: new Set([source]) };
+		} else {
+			return { native: context, internal: ReadonlyDocument.getMemoryDocument(context), flags: new Set([source]) };
+		}
+	}
+}
 
 export class DocumentManager{	
-	private _opened: Map<string, vscode.TextDocument> = new Map();
-	private _workspace: Map<string, ReadonlyDocument> = new Map();
+	private _cached: Map<string, DocumentSources> = new Map();
 	private _watchers: vscode.FileSystemWatcher[] = [];
 	
 	get OpenedDocuments(): ReadonlyDocument[] { 
@@ -20,16 +49,35 @@ export class DocumentManager{
 		return this.getProjectDocuments(); 
 	}
 	get ActiveDocument(): ReadonlyDocument { 
-		return vscode.window.activeTextEditor ? ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document) : undefined; 
+		if (vscode.window.activeTextEditor) {
+			const key = this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);			
+			return this._cached.get(key)?.internal;
+		} else {
+			return null;
+		}		
 	}
 	
 	get ActiveTextDocument(): vscode.TextDocument { 
-		return vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document :  null; 
+		return vscode.window.activeTextEditor?.document;
 	}
 	get OpenedTextDocuments(): vscode.TextDocument[] { 
-		return [...this._opened.values()]; 
+		return [...this._cached.values()]
+			   .filter(p => p.native && p.flags.has(Origins.OPENED))
+			   .map(p => p.native); 
 	}
-	
+
+	private get cacheKeys(): string [] {
+		return [...this._cached.keys()];
+	}
+	private get projectKeys(): string[] {
+		const result: string[] = [];
+		if (ProjectTreeProvider.hasProjectOpened()){
+			ProjectTreeProvider.instance().projectNode.sourceFiles.forEach(x => {
+				result.push(this.normalizePath(x.filePath));
+			});
+		}
+		return result;
+	}
 
 	// General purpose methods for identifying the scope of work for a given document type
 	getSelectorType(fspath: string): string { 
@@ -50,37 +98,97 @@ export class DocumentManager{
 		}
 	}
 
-	// Gets an array of PRJ ReadonlyDocument references, but prefers vscode.TextDocument's as their source when available
-	private getProjectDocuments(): ReadonlyDocument[] {
-		if (ProjectTreeProvider.hasProjectOpened()) {
-			return ProjectTreeProvider.instance().projectNode.sourceFiles.map(x => 
-				this._opened.has(x.document.fileName) ? ReadonlyDocument.getMemoryDocument(this._opened.get(x.document.fileName)) : x.document
-				);
-		} else {
-			return [];
+	private normalizePath(path: string): string {
+		return path.replace(/\//g, '\\');
+	}
+
+	private tryUpdateInternal(sources: DocumentSources){
+		if (sources.native && (!sources.internal || !sources.internal.equal(sources.native))) {
+			sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
 		}
 	}
 
-	// Gets an array of ReadonlyDocument references representing the _opened Map, but uses the native vscode.TextDocument's as their data source to provide more accurate information
+	private pathConsumeOrValidate(path: string, flag: Origins): string {
+		const key = this.normalizePath(path);		
+		if (fs.existsSync(key) && this.getSelectorType(key) === DocumentManager.Selectors.lsp) {
+			if (this._cached.has(key) === false) {
+				const sources = DocumentSources.create(flag, ReadonlyDocument.open(key));
+				this._cached.set(key, sources);
+			} else {
+				const sources = this._cached.get(key);				
+				this.tryUpdateInternal(sources);
+				sources.flags.add(flag);
+			}
+			return key;
+		} else {
+			return '';
+		}
+	}
+
+	private documentConsumeOrValidate(doc: vscode.TextDocument, flag: Origins, key?: string): string {
+		if (!key){
+			key = this.normalizePath(doc.fileName);
+		}
+		if (this.getSelectorType(key) === DocumentManager.Selectors.lsp){
+			if (this._cached.has(key) === false) {
+				const sources = DocumentSources.create(flag, doc);
+				this._cached.set(key, sources);
+			} else {
+				const sources = this._cached.get(key);
+				sources.native = doc;
+				this.tryUpdateInternal(sources);
+				sources.flags.add(flag);
+			}
+			return key;
+		} else {
+			return '';
+		}
+	}
+
+	getDocument(nDoc: vscode.TextDocument): ReadonlyDocument {
+		const key = this.documentConsumeOrValidate(nDoc, Origins.OPENED);			
+		return this._cached.get(key)?.internal;
+	}	
+
+	// Gets an array of PRJ ReadonlyDocument references, but verifies the content is based on a vscode.TextDocument's when available
+	private getProjectDocuments(): ReadonlyDocument[] {
+		const result: ReadonlyDocument[] = [];
+		if (ProjectTreeProvider.hasProjectOpened()) {
+			this.projectKeys.forEach(key => {
+				this.pathConsumeOrValidate(key, Origins.PROJECT);
+				if (this._cached.has(key)){
+					result.push(this._cached.get(key).internal);
+				}
+			});
+		}
+		return result;
+	}
+
+	// Gets an array of ReadonlyDocument references representing Origins.OPENED, but verifies the content is based on the native vscode.TextDocument
+	// When the internal & native documents match in content the existing version is returned, but will be regenerated if they are not
 	private getOpenedAsReadonlyDocuments(): ReadonlyDocument[] {
 		const result: ReadonlyDocument[] = [];
-		this._opened.forEach(doc => {
-			result.push(ReadonlyDocument.getMemoryDocument(doc));
+		this.cacheKeys.forEach(key => {
+			const sources = this._cached.get(key);
+			if (sources.native && sources.flags.has(Origins.OPENED)){
+				this.tryUpdateInternal(sources);
+				result.push(sources.internal);
+			}
 		});
 		return result;
 	}
 
-	// Gets a complete (data populated) set of ReadonlyDocuments representing the workspace, but it will prefer vscode.TextDocument data sources from the _opened Map when available
+	// Gets a complete ReadonlyDocuments representing the workspace, but will update cached internal versions if it is out of sync with an available vscode.TextDocument
 	private getWorkspaceDocuments(): ReadonlyDocument[] {
 		const result: ReadonlyDocument[] = [];
-		[...this._workspace.keys()].forEach(key => {
-			if (this._opened.has(key)){
-				result.push(ReadonlyDocument.getMemoryDocument(this._opened.get(key)));
-			} else if (this._workspace.get(key) === null) {
-				this._workspace.set(key, ReadonlyDocument.open(key));
-				result.push(this._workspace.get(key) as ReadonlyDocument);
-			} else {
-				result.push(this._workspace.get(key));
+		this.cacheKeys.forEach(key => {
+			const sources = this._cached.get(key);
+			if (sources.flags.has(Origins.WSPACE)) {
+				this.tryUpdateInternal(sources);
+				if (!sources.internal) {
+					sources.internal = ReadonlyDocument.open(key);
+				}
+				result.push(sources.internal);
 			}
 		});
 		return result;
@@ -88,8 +196,6 @@ export class DocumentManager{
 
 	// Creates the FileSystemWatcher's & builds a workspace blueprint
 	private initialize(): void {
-		this._opened.clear();
-		this._workspace.clear();
 		this._watchers.forEach(w => {
 			w.dispose();
 		});
@@ -99,33 +205,25 @@ export class DocumentManager{
 		//		It is important to start tracking this early because we can't actually see what is opened by VSCode during its internal workspace reload.
 		//		Our first opportunity to capture these previously opened documents is when they are activated. **Unavoidable Technical Debt that needs future resolution**
 		if (vscode.window.activeTextEditor && this.getSelectorType(vscode.window.activeTextEditor.document.fileName) === DocumentManager.Selectors.lsp) {
-			this._opened.set(vscode.window.activeTextEditor.document.uri.fsPath, vscode.window.activeTextEditor.document);
+			this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
 		}
 
 		// This builds the '_workspace' *.LSP Memory Document placeholder set
 		// 		This feature does make the "fair assumption" that AutoCAD machines have plenty of memory to be holding all this information
 		// 		The impact of creating read-only documents was stress tested with a root workspace folder containing 10mb of *.LSP files
-		//		and the memory footprint from the readonlyDocument's increased the memory (sustained) by less than 50mb		
+		//		and the memory footprint from just the ReadonlyDocument's increased the memory (sustained) by less than 50mb		
 		vscode.workspace.findFiles("**").then((items: vscode.Uri[]) => {
-			items.forEach((fileUri: vscode.Uri) => {			
-				if (this.getSelectorType(fileUri.fsPath) === DocumentManager.Selectors.lsp) {
-					this._workspace.set(fileUri.fsPath, ReadonlyDocument.open(fileUri.fsPath));
-				}
+			items.forEach((fileUri: vscode.Uri) => {	
+				this.pathConsumeOrValidate(fileUri.fsPath, Origins.WSPACE);
 			});
 		});
-		/////////////////////// To be deleted if the pre-check method passes review ///////////////////////
-		// .then(() => {
-		// 	AutoLispExt.Documents.WorkspaceDocuments.forEach(d => {
-		// 		// pre-caching the AtomsForest is a more significant memory jump because of its parent/child structure
-		// 		// However, on 10mb's of LSP's in the workspace, this is only about a 90mb sustained jump and adds a lot of performance
-		// 		// in other areas that makes this worth the cost to passively (non-blocking) pre-load the data.
-		// 		// Also note, generating the pre-loaded atomsForest does cause a massive memory spike (500mb) until the workspace is fully loaded.
-		// 		d.updateAtomsForest();
-		// 	});
-		// }).then(() =>{
-		// 	let msg = AutoLispExt.localize("autolispext.workspace.fullyloaded", "Your workspace documents have fully loaded");
-		// 	vscode.window.showInformationMessage(msg);
-		// });
+
+
+		if (ProjectTreeProvider.hasProjectOpened()) {
+			this.projectKeys.forEach(key => {
+				this.pathConsumeOrValidate(key, Origins.PROJECT);
+			});
+		}
 		
 		if (vscode.workspace.workspaceFolders) {
 			this.setupFileSystemWatchers();
@@ -138,25 +236,28 @@ export class DocumentManager{
 			const pattern = new vscode.RelativePattern(folder, "**");
 			const watcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
 
-			AutoLispExt.Subscriptions.push(watcher.onDidDelete((e: vscode.Uri) => {		
-				if (this._workspace.has(e.fsPath) === true) {
-					this._workspace.delete(e.fsPath);
-				}		
+			AutoLispExt.Subscriptions.push(watcher.onDidDelete((e: vscode.Uri) => {
+				const key = this.normalizePath(e.fsPath);
+				const prjs = this.projectKeys;
+				if (this._cached.has(key)){
+					const sources = this._cached.get(key);
+					if (prjs.includes(key) || sources.flags.has(Origins.OPENED)){
+						this._cached.delete(key);
+					} else {
+						sources.flags.delete(Origins.WSPACE);
+					}	
+				}
 			}));
 		
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidCreate((e: vscode.Uri) => {
-				if (this.getSelectorType(e.fsPath) === DocumentManager.Selectors.lsp) {
-					if (this._workspace.has(e.fsPath) === false) {
-						this._workspace.set(e.fsPath, null);
-					}
-				}
+				const key = this.normalizePath(e.fsPath);
+				this.pathConsumeOrValidate(key, Origins.WSPACE);
 			}));
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidChange((e: vscode.Uri) => {
-				if (this._workspace.has(e.fsPath) === false) {
-					this._workspace.set(e.fsPath, null);
-				}
+				const key = this.normalizePath(e.fsPath);
+				this.pathConsumeOrValidate(key, Origins.WSPACE);				
 			}));
 
 			this._watchers.push(watcher);
@@ -164,15 +265,10 @@ export class DocumentManager{
 	}
 
 	constructor() {
-		// **Event General Concepts**
-		//		vscode.workspace.onDid() events are only concerned with maintaining the _opened Map
-		//		FileSystemWatcher.onDid() events are only concerned with maintaining the _workspace Map
-		//		The FSW Create/Change events arbitrarily add the fspath to the _workspace Map set to null. The insures that any underlying data changes will get reloaded at the next get() query.
-		//		The ultimate goal of the _workspace Map is only to keep a complete set of fspath pointers to LSP files within the workspace.
-		//			These pointers may not actually contain document content. If they've been queried since the last time they initialized or changed, then they have data, else they are null
-		//			If they are null, then requesting the data will synchronously load/serve the contents as if it were there to begin with; this is expected to cause a single lag at the first occurrence
-		//			As long as the FileSystemWatcher.OnDidChange doesn't fire on that fspath again, then they will persist data to be used for making GoTo & AutoCompletion extremely responsive
-		
+		// The following test analysis is out of date, but still excellent documentation for what/why/when something is firing. 
+		// For context, the original configuration used separate _opened and _workspace Map()'s to track documents and now we are using
+		// a single _cached Map() with a more complex object to track pairs of ReadonlyDocument's & vscode.TextDocument's with a set of contextual flags.
+
 		// **Unused vscode.workspace.onDid() Event Documentation**
 		// 		onDidChangeConfiguration		Not Used and not tested
 		// 		onDidChangeTextDocument			Unnecessary because this can only relate to opened documents and we already cached the vscode.TextDocument reference during onDidOpenTextDocument
@@ -256,41 +352,30 @@ export class DocumentManager{
 		// workspace.onDidOpenTextDocument -> workspace.onDidCloseTextDocument 
 		//		The onDidOpenTextDocument event will add the NEW TextDocument object to the _opened Map
 		//		The onDidCloseTextDocument event will delete the OLD TextDocument object from the _opened Map
+
+		/////////////////////// The extension appears to reset after every workspace change and this wasn't doing anything ///////////////////////
+		// AutoLispExt.Subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async (e: vscode.WorkspaceFoldersChangeEvent) => {
+		// 	this.initialize();
+		// }));
 		
 		// Create FileSystemWatcher's & build the workspace blueprint
 		this.initialize();
 
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => {
-			if (this._opened.has(e.uri.fsPath) === true) {
-				this._opened.delete(e.uri.fsPath);
-			}
+			const source = this._cached.get(this.normalizePath(e.fileName));
+			source?.flags.delete(Origins.OPENED);
 		}));
 	
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidOpenTextDocument((e: vscode.TextDocument) => {
-			if (this.getSelectorType(e.fileName) === DocumentManager.Selectors.lsp) {
-				this._opened.set(e.uri.fsPath, e);		
-			}
+			this.documentConsumeOrValidate(e, Origins.OPENED);
 		}));
 
+		// Note: if the file is already opened and deleted through the workspace, it is deleted AND closed.
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidDeleteFiles((e: vscode.FileDeleteEvent) => {
 			e.files.forEach(file => {
-				if (this._opened.has(file.fsPath)) {
-					this._opened.delete(file.fsPath);
-				}
-			});
-		}));
-
-		// This allows the system to hook back up in the desired way should the user add or remove a folder to the their workspace
-		// If a user entirely closes and/or directly opens a different folder as their workspace, then our extensions essentially starts a new as if never activated
-		AutoLispExt.Subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(async (e: vscode.WorkspaceFoldersChangeEvent) => {			
-			// backup the opened documents so their context can be persisted. These add/remove operations do not have the effect of closing open documents
-			const openedBackup = [...this._opened.values()]; 
-			// WorkspaceFoldersChangeEvent object tells us if it was added or removed, but it better to just reset all the events rather than make seemingly futile attempts to pick/choose
-			this.initialize(); 
-			// restore the _opened documents Map
-			openedBackup.forEach(doc => { 
-				if (!this._opened.has(doc.fileName)) {
-					this._opened.set(doc.fileName, doc);
+				const key = this.normalizePath(file.fsPath);
+				if (this._cached.has(key)) {
+					this._cached.delete(key);
 				}
 			});
 		}));

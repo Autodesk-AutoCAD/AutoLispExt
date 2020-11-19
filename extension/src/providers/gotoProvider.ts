@@ -8,7 +8,7 @@ import { SearchPatterns, SearchHandlers } from './providerShared';
 
 export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
-		const rDoc = ReadonlyDocument.getMemoryDocument(document);
+		const rDoc = AutoLispExt.Documents.getDocument(document);
 		let selected = '';
 		rDoc.atomsForest.forEach(sexp => {
 			if (sexp instanceof Sexpression && sexp.contains(position)){
@@ -55,7 +55,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		let context = searchIn.getSexpressionFromPos(start);
 		let flag = true;
 		do {
-			const parent = searchIn.getParentOfSexpression(context);
+			const parent = !context ? searchIn : searchIn.getParentOfSexpression(context);			
 			const atom = parent?.getNthKeyAtom(0);
 			if (atom && SearchPatterns.LOCALIZES.test(atom.symbol)) {
 				let headers = parent.getNthKeyAtom(1);
@@ -77,7 +77,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(tmpVar.line, tmpVar.column)));
 				}
 			}
-			if (!parent || result.length > 0){
+			if (!parent || !context || result.length > 0 || parent.equal(context)) {
 				flag = false;
 			} else {
 				context = parent;
@@ -85,24 +85,28 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		} while (flag);
 		// If we still haven't found anything check the 1st occurrence of setq's. This will find globals setqs and nested ones possibly inside other defuns
 		if (result.length === 0){
-			this.findInSetqs(doc, ucName).forEach(x => { result.push(x); });
+			const possible = searchIn.findChildren(SearchPatterns.DEFINES, true).filter(p => p.contains(start));			
+			if (possible.length >= 0) {
+				this.findInSetqs(possible.pop(), ucName, doc.fileName).forEach(x => { result.push(x); });
+			}
 		}
 		return result;
 	}
 
-	private findInSetqs(doc: ReadonlyDocument, ucName: string): vscode.Location[] {
+	private findInSetqs(sexp: Sexpression, ucName: string, fileName: string): vscode.Location[] {
 		const result: vscode.Location[] = [];
-		doc.findExpressions(SearchPatterns.ASSIGNS).forEach(setq => {
+		const found = sexp.findChildren(SearchPatterns.ASSIGNS, false);
+		found.forEach(setq => {
 			let isVar = false;
-			let cIndex = setq.nextKeyIndex(0);
+			let cIndex = setq.nextKeyIndex(0, true);
 			do {
 				const atom = setq.atoms[cIndex];
 				if (isVar && atom?.symbol.toUpperCase() === ucName) {
-					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(atom.line, atom.column)));
+					result.push(new vscode.Location(vscode.Uri.file(fileName), new vscode.Position(atom.line, atom.column)));
 				}
-				cIndex = setq.nextKeyIndex(cIndex);
+				cIndex = setq.nextKeyIndex(cIndex, true);
 				isVar = !isVar;
-			} while (cIndex && cIndex > -1);
+			} while (cIndex && cIndex > -1 && result.length === 0);
 		});
 		return result;
 	}

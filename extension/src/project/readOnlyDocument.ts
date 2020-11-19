@@ -266,6 +266,13 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
     //#endregion
 
+
+    equal(doc: vscode.TextDocument): boolean {
+        return this.fileName.toUpperCase().replace(/\//g, '\\') === doc.fileName.toUpperCase().replace(/\//g, '\\')
+               && this.fileContent === doc.getText().replace(/\r\n|\r|\n/g, '\r\n'); //.split('\r\n').join('\n').split('\n').join('\r\n');
+    }
+
+    
     // This is very similar to a DOM querySelector and is to be used for quickly finding all the Defun's or Setq's to determine available function/variable names.
     // The 'all' variable determines whether the function will continue digging inside a function it was able to match for nested versions.
     // Test Case: Temporarily added the following to extension.ts	

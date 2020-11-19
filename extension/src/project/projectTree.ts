@@ -1,6 +1,5 @@
 import { IconUris } from './icons';
 import { ProjectDefinition } from './projectDefinition';
-import { ReadonlyDocument } from './readOnlyDocument';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { pathEqual } from '../utils';
@@ -62,7 +61,6 @@ export class ProjectNode implements DisplayNode {
 export class LspFileNode implements DisplayNode {
     filePath: string;
     fileExists: boolean;
-    document: ReadonlyDocument;
     rawFilePath: string;//the raw path string read from .prj file; for new added file, it should be null
 
     getDisplayText(): string {
@@ -235,7 +233,5 @@ export function addLispFileNode2ProjectTree(root: ProjectNode, fileName: string,
     fileNode.filePath = fileName;
     fileNode.fileExists = fs.existsSync(fileName);
     fileNode.rawFilePath = rawFilePath;
-    fileNode.document = ReadonlyDocument.open(fileName);
-    fileNode.document.updateAtomsForest();
     root.sourceFiles.push(fileNode);    
 }
