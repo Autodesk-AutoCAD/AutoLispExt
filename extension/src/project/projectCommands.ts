@@ -16,6 +16,7 @@ import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnI
 import { RefreshProject } from './refreshProject';
 import { AutoLispExt } from '../extension';
 import { grantExePermission } from './findReplace/ripGrep';
+import * as fs from 'fs-extra';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -101,7 +102,21 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
 
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.addWorkspaceFile2Project', async (clickedFile: vscode.Uri, selectedFiles: vscode.Uri[]) => {
             if (!selectedFiles || selectedFiles.length === 0 || getWarnIsSearching()){
-                return;}
+                return;
+            }
+            let selectedDirs = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isDirectory());
+            selectedFiles = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isFile());
+            
+            selectedDirs.forEach(dir => {
+                fs.readdirSync(dir.fsPath).forEach(name => {
+                    const fspath = dir.fsPath.replace(/[\/\\]$/, '') + '\\' + name;
+                    if (fs.existsSync(fspath) && fs.statSync(fspath, { bigint: false}).isFile()) {
+                        if (AutoLispExt.Documents.getSelectorType(fspath) === AutoLispExt.Selectors.lsp){
+                            selectedFiles.push(vscode.Uri.file(fspath));
+                        }
+                    }
+                });
+            });
 
             try {
                 let addedFiles = await AddFile2Project(selectedFiles);
