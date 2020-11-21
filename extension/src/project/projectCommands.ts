@@ -99,6 +99,31 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             }
         }));
 
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.addWorkspaceFile2Project', async (clickedFile: vscode.Uri, selectedFiles: vscode.Uri[]) => {
+            if (!selectedFiles || selectedFiles.length === 0 || getWarnIsSearching()){
+                return;}
+
+            try {
+                let addedFiles = await AddFile2Project(selectedFiles);
+                if (!addedFiles){
+                    return; //it's possible that the user cancelled the operation
+                }
+            }
+            catch (err) {
+                let msg = AutoLispExt.localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
+                showErrorMessage(msg, err);
+                return;
+            }
+
+            try {
+                await SaveProject(true);
+            }
+            catch (err) {
+                let msg = AutoLispExt.localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                showErrorMessage(msg, err);
+            }
+        }));
+
         context.subscriptions.push(vscode.commands.registerCommand('autolisp.removeFileFromProject', async (selected) => {
             if (getWarnIsSearching())
                 return;
