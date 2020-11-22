@@ -3,5 +3,6 @@
   "autolispext.project.addfile.onlylspallowed": "Nur LSP-Dateien sind zulässig.",
   "autolispext.project.addfile.filealreadyexist": "Datei ist in diesem Projekt bereits vorhanden: ",
   "autolispext.project.addfile.samenameexist": "Datei mit demselben Namen ist in diesem Projekt bereits vorhanden: ",
-  "autolispext.project.addfile.openlabel": "Zu Projekt hinzufügen"
+  "autolispext.project.addfile.openlabel": "Zu Projekt hinzufügen",
+  "autolispext.project.addfolder.openlabel": ""
 }

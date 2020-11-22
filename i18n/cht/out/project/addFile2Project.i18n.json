@@ -3,5 +3,6 @@
   "autolispext.project.addfile.onlylspallowed": "只允許 LSP 檔。",
   "autolispext.project.addfile.filealreadyexist": "此專案中已經有檔案: ",
   "autolispext.project.addfile.samenameexist": "此專案中已經有名稱相同的檔案: ",
-  "autolispext.project.addfile.openlabel": "加入至專案"
+  "autolispext.project.addfile.openlabel": "加入至專案",
+  "autolispext.project.addfolder.openlabel": ""
 }
