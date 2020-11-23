@@ -10,16 +10,16 @@ let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.ls
 suite("LispParser.DocumentExpression Tests", function () {	
 	test("Original atomsForest vs new version", function () {		
 		try {
-			const doc = ReadonlyDocument.open(project_path); 			
-			const dex = LispParser.getDocumentSexpression(doc);
+			const doc = ReadonlyDocument.open(project_path); 						
 			const v1Start = Date.now();
 			const v1items = doc.atomsForest.filter(x => x instanceof Sexpression);
 			const v1Stop = Date.now();
+			const dex = LispParser.getDocumentSexpression(doc);
 			const v2items = dex.atoms.filter(x => x instanceof Sexpression);
 			const v2Stop = Date.now();
 			const v1Diff = v1Stop - v1Start;
 			const v2Diff = v2Stop - v1Stop;
-			assert.isBelow(v2Diff, v1Diff);
+			assert.isTrue(v2Diff <= v1Diff);
 			assert.equal(v2items.length, v1items.length);
 			
 		}
