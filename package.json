@@ -94,11 +94,6 @@
 				}
 			},
 			{
-				"command": "autolisp.addFolder2Project",
-				"category": "AutoLISP",
-				"title": "%autolispext.project.addfolder.title%"
-			},
-			{
 				"command": "autolisp.addWorkspaceFile2Project",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.addfile.title%",
@@ -560,11 +555,6 @@
 				{
 					"when": "view == Autolisp-ProjectView && viewItem == project",
 					"command": "autolisp.addFile2Project",
-					"group": "navigation@1"
-				},
-				{
-					"when": "view == Autolisp-ProjectView && viewItem == project",
-					"command": "autolisp.addFolder2Project",
 					"group": "navigation@1"
 				},
 				{

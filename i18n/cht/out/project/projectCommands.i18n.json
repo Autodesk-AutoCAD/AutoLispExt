@@ -16,6 +16,5 @@
   "autolispext.project.commands.initializefailed": "無法初始化 AutoLISP 專案管理員。",
   "autolispext.project.commands.closepromptmsg": "",
   "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptno": ""
 }

@@ -90,17 +90,3 @@ async function SelectLspFiles() {
     if (fileUris && fileUris.length > 0)
         return Promise.resolve(fileUris);
 }
-
-
-export async function SelectFolder(): Promise<vscode.Uri[]> {
-    let label = AutoLispExt.localize("autolispext.project.addfolder.openlabel", "Add Folder");
-    const options: vscode.OpenDialogOptions = {
-        canSelectFolders: true,
-        openLabel: label
-    };
-
-    let fileUris = await vscode.window.showOpenDialog(options);
-    if (fileUris && fileUris.length > 0){
-        return Promise.resolve(fileUris);
-    }
-}

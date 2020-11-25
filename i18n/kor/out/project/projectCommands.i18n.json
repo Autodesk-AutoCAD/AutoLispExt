@@ -16,6 +16,5 @@
   "autolispext.project.commands.initializefailed": "AutoLISP 프로젝트 관리자를 초기화하지 못했습니다.",
   "autolispext.project.commands.closepromptmsg": "",
   "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptno": ""
 }
