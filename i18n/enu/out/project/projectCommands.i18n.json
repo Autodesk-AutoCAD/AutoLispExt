@@ -16,5 +16,6 @@
   "autolispext.project.commands.initializefailed": "Failed to initalize the AutoLISP Project Manager.",
   "autolispext.project.commands.closepromptmsg": "Confirm close request on: ",
   "autolispext.project.commands.closepromptyes": "Yes",
-  "autolispext.project.commands.closepromptno": "No"
+  "autolispext.project.commands.closepromptno": "No",
+  "autolispext.project.commands.addedworkspacefiles": "lisp files have been added to"
 }

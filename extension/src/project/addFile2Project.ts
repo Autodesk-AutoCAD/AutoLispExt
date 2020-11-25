@@ -3,14 +3,14 @@ import { ProjectTreeProvider, isFileAlreadyInProject, hasFileWithSameName } from
 import { AutoLispExt } from '../extension';
 import * as path from 'path';
 
-export async function AddFile2Project() {
+export async function AddFile2Project(fileList?: vscode.Uri[]) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
             let msg = AutoLispExt.localize("autolispext.project.addfile.openproject", "A project must be open before you can add a file.");
             return Promise.reject(msg);
         }
 
-        let selectedFiles = await SelectLspFiles();
+        let selectedFiles = fileList ?? await SelectLspFiles();
         if (!selectedFiles)
             return; //user has cancelled the open file dialog
 
