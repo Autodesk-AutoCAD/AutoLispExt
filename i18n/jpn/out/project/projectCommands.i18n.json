@@ -16,5 +16,6 @@
   "autolispext.project.commands.initializefailed": "AutoLISP プロジェクト マネージャの初期化に失敗しました。",
   "autolispext.project.commands.closepromptmsg": "",
   "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": ""
+  "autolispext.project.commands.closepromptno": "",
+  "autolispext.project.commands.addedworkspacefiles": ""
 }

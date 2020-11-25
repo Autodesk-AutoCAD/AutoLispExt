@@ -94,6 +94,15 @@
 				}
 			},
 			{
+				"command": "autolisp.addWorkspaceFile2Project",
+				"category": "AutoLISP",
+				"title": "%autolispext.project.addfile.title%",
+				"icon": {
+					"dark": "images/dark/Add_LISP_File.svg",
+					"light": "images/light/Add_LISP_File.svg"
+				}
+			},
+			{
 				"command": "autolisp.removeFileFromProject",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.removefile.title%",
@@ -589,6 +598,18 @@
 					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.insertFoldingRegion",
 					"group": "navigation@3"
+				}
+			],
+			"explorer/context": [
+				{
+					"when": "resourceLangId == autolisp && autolisp.hasProject",					
+					"command": "autolisp.addWorkspaceFile2Project",
+					"group": "navigation@1"
+				},
+				{
+					"when": "explorerResourceIsFolder && autolisp.hasProject",					
+					"command": "autolisp.addWorkspaceFile2Project",
+					"group": "navigation@1"
 				}
 			]
 		}

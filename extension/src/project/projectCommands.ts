@@ -16,6 +16,7 @@ import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnI
 import { RefreshProject } from './refreshProject';
 import { AutoLispExt } from '../extension';
 import { grantExePermission } from './findReplace/ripGrep';
+import * as fs from 'fs-extra';
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -83,6 +84,51 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 let addedFiles = await AddFile2Project();
                 if (!addedFiles)
                     return;//it's possible that the user cancelled the operation
+            }
+            catch (err) {
+                let msg = AutoLispExt.localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
+                showErrorMessage(msg, err);
+                return;
+            }
+
+            try {
+                await SaveProject(true);
+            }
+            catch (err) {
+                let msg = AutoLispExt.localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                showErrorMessage(msg, err);
+            }
+        }));
+
+        context.subscriptions.push(vscode.commands.registerCommand('autolisp.addWorkspaceFile2Project', async (clickedFile: vscode.Uri, selectedFiles: vscode.Uri[]) => {
+            if (!selectedFiles || selectedFiles.length === 0 || getWarnIsSearching()){
+                return;
+            }
+            let selectedDirs = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isDirectory());
+            selectedFiles = selectedFiles.filter(f => 
+                fs.statSync(f.fsPath, { bigint: false}).isFile() &&
+                AutoLispExt.Documents.getSelectorType(f.fsPath) === AutoLispExt.Selectors.lsp
+            );
+            
+            selectedDirs.forEach(dir => {
+                fs.readdirSync(dir.fsPath).forEach(name => {
+                    const fspath = dir.fsPath.replace(/[\/\\]$/, '') + '\\' + name;
+                    if (fs.existsSync(fspath) && fs.statSync(fspath, { bigint: false}).isFile()) {
+                        if (AutoLispExt.Documents.getSelectorType(fspath) === AutoLispExt.Selectors.lsp){
+                            selectedFiles.push(vscode.Uri.file(fspath));
+                        }
+                    }
+                });
+            });
+
+            try {
+                let addedFiles = await AddFile2Project(selectedFiles);
+                if (!addedFiles){
+                    return; //it's possible that the user cancelled the operation
+                } else {                    
+                    const msg = AutoLispExt.localize("autolispext.project.commands.addedworkspacefiles", 'lisp files have been added to');
+                    vscode.window.showInformationMessage(addedFiles.length + ' ' + msg + ' ' + ProjectTreeProvider.instance().projectNode.projectName + '.prj');
+                }
             }
             catch (err) {
                 let msg = AutoLispExt.localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
