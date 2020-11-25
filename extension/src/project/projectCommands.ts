@@ -105,7 +105,10 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 return;
             }
             let selectedDirs = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isDirectory());
-            selectedFiles = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isFile());
+            selectedFiles = selectedFiles.filter(f => 
+                fs.statSync(f.fsPath, { bigint: false}).isFile() &&
+                AutoLispExt.Documents.getSelectorType(f.fsPath) === AutoLispExt.Selectors.lsp
+            );
             
             selectedDirs.forEach(dir => {
                 fs.readdirSync(dir.fsPath).forEach(name => {
@@ -122,6 +125,9 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 let addedFiles = await AddFile2Project(selectedFiles);
                 if (!addedFiles){
                     return; //it's possible that the user cancelled the operation
+                } else {                    
+                    const msg = AutoLispExt.localize("autolispext.project.commands.addedworkspacefiles", 'lisp files have been added to');
+                    vscode.window.showInformationMessage(addedFiles.length + ' ' + msg + ' ' + ProjectTreeProvider.instance().projectNode.projectName + '.prj');
                 }
             }
             catch (err) {

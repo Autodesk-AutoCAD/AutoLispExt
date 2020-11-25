@@ -16,5 +16,6 @@
   "autolispext.project.commands.initializefailed": "Impossibile inizializzare Gestione progetti di AutoLISP.",
   "autolispext.project.commands.closepromptmsg": "",
   "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": ""
+  "autolispext.project.commands.closepromptno": "",
+  "autolispext.project.commands.addedworkspacefiles": ""
 }
