@@ -15,7 +15,7 @@ let acadPid2Attach = -1;
 
 const attachCfgName = 'AutoLISP Debug: Attach';
 const attachCfgType = 'attachlisp';
-const launchCfgName = 'AutoLISP Debug: Attach';
+const launchCfgName = 'AutoLISP Debug: Launch';
 const launchCfgType = 'launchlisp';
 const attachCfgRequest = 'attach';
 
@@ -125,8 +125,6 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
     private _server?: Net.Server;
 
     async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
-        console.log(config);
-
         // if launch.json is missing or empty
         if (need2AddDefaultConfig(config)) {
             config.type = launchCfgType;
