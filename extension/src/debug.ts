@@ -13,51 +13,58 @@ let strNoADPerr: string = AutoLispExt.localize("autolispext.debug.nodap", "doesn
 let strNoACADerr: string = AutoLispExt.localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
 let acadPid2Attach = -1;
 
-let attachCfgName = 'AutoLISP Debug: Attach';
-let attachCfgType = 'attachlisp';
-let attachCfgRequest = 'attach';
+const attachCfgName = 'AutoLISP Debug: Attach';
+const attachCfgType = 'attachlisp';
+const launchCfgName = 'AutoLISP Debug: Launch';
+const launchCfgType = 'launchlisp';
+const attachCfgRequest = 'attach';
 
 export function setDefaultAcadPid(pid: number) {
     acadPid2Attach = pid;
 }
 function need2AddDefaultConfig(config: vscode.DebugConfiguration): Boolean {
-    if (config.type) return false;
-    if (config.request) return false;
-    if (config.name) return false;
+  if (config.type) return false;
+  if (config.request) return false;
+  if (config.name) return false;
 
-    return true;
+  return true;
 }
 
 const LAUNCH_PROC:string = 'debug.LaunchProgram';
 const LAUNCH_PARM:string = 'debug.LaunchParameters';
 const ATTACH_PROC:string = 'debug.AttachProcess';
 
+class LaunchDebugAdapterExecutableFactory
+  implements vscode.DebugAdapterDescriptorFactory {
+  createDebugAdapterDescriptor(
+    _session: vscode.DebugSession,
+    executable: vscode.DebugAdapterExecutable | undefined
+  ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
+    let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
+    let productStartCommand = ProcessPathCache.globalProductPath;
+    let productStartParameter = ProcessPathCache.globalParameter;
+
+    const args = ["--", productStartCommand, productStartParameter];
+    return new vscode.DebugAdapterExecutable(lispadapterpath, args);
+  }
+}
+
+class AttachDebugAdapterExecutableFactory
+  implements vscode.DebugAdapterDescriptorFactory {
+  createDebugAdapterDescriptor(
+    _session: vscode.DebugSession,
+    executable: vscode.DebugAdapterExecutable | undefined
+  ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
+    let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
+
+    return new vscode.DebugAdapterExecutable(lispadapterpath);
+  }
+}
+
 export function registerLispDebugProviders(context: vscode.ExtensionContext) {
-    //-----------------------------------------------------------
-    //4. debug adapter
-    //-----------------------------------------------------------
-    //this command is used for launch debug calculating DebugAdapter path and arguments
-    context.subscriptions.push(vscode.commands.registerCommand("extension.lispLaunchAdapterExecutableCommand", async () => {
-
-        let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
-        let productStartCommand = ProcessPathCache.globalProductPath;
-        let productStartParameter = ProcessPathCache.globalParameter;
-        return {
-            command: lispadapterpath,
-            args: ["--", productStartCommand, productStartParameter]
-        };
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand("extension.lispAttachAdapterExecutableCommand", async () => {
-        let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
-        return {
-            command: lispadapterpath,
-            args: []
-        };
-    }));
-
     // register a configuration provider for 'lisp' launch debug type
     const launchProvider = new LispLaunchConfigurationProvider();
-    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('launchlisp', launchProvider));
+    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider(launchCfgType, launchProvider));
     context.subscriptions.push(launchProvider);
 
     //register a configuration provider for 'lisp' attach debug type
@@ -65,10 +72,18 @@ export function registerLispDebugProviders(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider(attachCfgType, attachProvider));
     context.subscriptions.push(attachProvider);
 
-    //register attach failed message
+    //-----------------------------------------------------------
+    //4. debug adapter
+    //-----------------------------------------------------------
+    const attachDapFactory = new AttachDebugAdapterExecutableFactory();
+    const lauchDapFactory = new LaunchDebugAdapterExecutableFactory();
+    context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory(attachCfgType, attachDapFactory));
+    context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory(launchCfgType, lauchDapFactory));
+
+    //register attach failed custom message
     context.subscriptions.push(vscode.debug.onDidReceiveDebugSessionCustomEvent((event) => {
         console.log(event);
-        if (event.session && (event.session.type === "launchlisp" || event.session.type === attachCfgType)) {
+        if (event.session && (event.session.type === launchCfgType || event.session.type === attachCfgType)) {
             if (event.event === "runtimeerror") {
                 /*
                     struct runtimeerror
@@ -110,19 +125,17 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
     private _server?: Net.Server;
 
     async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
-        console.log(config);
-
         // if launch.json is missing or empty
         if (need2AddDefaultConfig(config)) {
-            config.type = 'launchlisp';
-            config.name = 'AutoLISP Debug: Launch';
+            config.type = launchCfgType;
+            config.name = launchCfgName;
             config.request = 'launch';
         }
 
         if (vscode.window.activeTextEditor)
             config.program = vscode.window.activeTextEditor.document.fileName;
 
-        if (config["type"] === "launchlisp") {
+        if (config["type"] === launchCfgType) {
             // 1. get acad and adapter path
             //2. get acadRoot path
             //2.1 get acadRoot path from launch.json
