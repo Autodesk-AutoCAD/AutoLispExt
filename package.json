@@ -314,7 +314,6 @@
 				"windows": {
 					"program": "${lispadapterpath}"
 				},
-				"adapterExecutableCommand": "extension.lispAttachAdapterExecutableCommand",
 				"languages": [
 					{
 						"id": "autolisp",
@@ -407,7 +406,6 @@
 						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
 					}
 				],
-				"adapterExecutableCommand": "extension.lispLaunchAdapterExecutableCommand",
 				"configurationAttributes": {
 					"launch": {
 						"required": [
