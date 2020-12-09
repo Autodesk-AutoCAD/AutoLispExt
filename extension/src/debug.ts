@@ -129,10 +129,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
         if (newConfig["type"] === launchCfgType) {
             // 1. get acad and adapter path
             // 2. get acadRoot path
-            let productPath = "";
-            let path = getExtensionSettingString(LAUNCH_PROC);
-            if (path)
-                productPath = path;
+            let productPath = getExtensionSettingString(LAUNCH_PROC);
 
             if (!productPath) {
                 let info = AutoLispExt.localize("autolispext.debug.launchjson.path",
@@ -167,10 +164,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                 ProcessPathCache.globalProductPath = "";
                 return undefined;
             } else {
-                let params = "";
-                let text = getExtensionSettingString(LAUNCH_PARM);
-                if (text)
-                    params = text;
+                let params = getExtensionSettingString(LAUNCH_PARM);
                 ProcessPathCache.globalParameter = params;
             }
 
