@@ -579,10 +579,13 @@
 		"fs-extra": "^8.1.0",
 		"jschardet": "2.1.1",
 		"os-locale": "5.0.0",
-		"vsce": "1.57.0",
-		"vscode-languageclient": "4.2.0",
-		"vscode-nls": "3.2.5",
-		"vscode-ripgrep": "1.5.8"
+		"vsce": "^1.81.1",
+		"vscode-languageclient": "^4.4.2",
+		"vscode-nls": "^3.2.5",
+		"vscode-ripgrep": "^1.11.1",
+		"vscode-languageserver-protocol": "3.10.3",
+		"vscode-jsonrpc": "3.6.2",
+		"vscode-languageserver-types": "3.10.1"
 	},
 	"resolutions": {
 		"yargs-parser": "18.1.3"

@@ -161,14 +161,15 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
     public static TreeItemClicked = 'LispProjectNodeClicked';
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<import("vscode").TreeItem> {
         try {
-            let treeNode = new vscode.TreeItem(element.getDisplayText());
+            const label = element.getDisplayText();
+            let treeNode = new vscode.TreeItem(label);
             treeNode.collapsibleState = element.getCollapsibleState();
             treeNode.tooltip = element.getTooltip();
             treeNode.iconPath = element.getIconUri();
             treeNode.contextValue = element.getNodeType();
 
             treeNode.command = {
-                title: treeNode.label,
+                title: label,
                 command: ProjectTreeProvider.TreeItemClicked,
                 tooltip: treeNode.tooltip,
                 arguments: [
