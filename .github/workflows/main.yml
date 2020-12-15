@@ -39,6 +39,7 @@ jobs:
 
       - name: Build
         run: |
+          python --version
           gulp build
           gulp package
 
