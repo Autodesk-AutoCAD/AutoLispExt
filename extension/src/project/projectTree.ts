@@ -175,7 +175,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
                 arguments: [
                     element
                 ]
-            }
+            };
             return treeNode;
         }
         catch (err) {
