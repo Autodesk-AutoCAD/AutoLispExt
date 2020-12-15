@@ -51,7 +51,7 @@ jobs:
 
       - name: Create release
         id: create_release
-        if: ${{ github.event_name =='push' && github.ref == 'refs/heads/main'}}
+        if: ${{ github.event_name =='push' && startsWith(github.ref,'refs/heads/release')}}
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -64,7 +64,7 @@ jobs:
           prerelease: true
 
       - name: Upload vsix as release asset
-        if: ${{ github.event_name =='push' && github.ref == 'refs/heads/main'}}
+        if: ${{ github.event_name =='push' && startsWith(github.ref,'refs/heads/release')}}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
