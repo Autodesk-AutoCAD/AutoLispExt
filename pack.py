@@ -12,7 +12,7 @@ import sys
 def init():
     print("===============================================")
     print("             try to install gulp-cli globally")
-    os.system("npm install --global gulp-cli") # nosec
+    os.system("yarn install --global gulp-cli") # nosec
 
     os.system("yarn install --unsafe-perm") # nosec
 
