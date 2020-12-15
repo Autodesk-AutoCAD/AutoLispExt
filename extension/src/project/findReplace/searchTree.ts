@@ -217,7 +217,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
                 arguments: [
                     element
                 ]
-            }
+            };
 
             return treeNode;
         }
