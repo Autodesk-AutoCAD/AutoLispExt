@@ -200,17 +200,20 @@ export namespace LispParser {
         linefeed: string;
     }
 
-    export function getDocumentSexpression(data: string|vscode.TextDocument, tracker?: CountTracker): Sexpression {
+    export function getDocumentSexpression(data: string|vscode.TextDocument, offset?: number|vscode.Position, tracker?: CountTracker): Sexpression {
         let documentText = '';
-        if (typeof(data) === 'string') {
-            documentText = data;
-        } else {
+        if (data instanceof Object) {
             documentText = data.getText();
+        } else {
+            documentText = data;
+        }
+        if (!offset) {
+            offset = 0;
         }
         if (!tracker){
             tracker = {
                 idx: 0, line: 0, column: 0, 
-                linefeed: typeof(data) === 'string' ? (data.indexOf('\r\n') >= 0 ? '\r\n' : '\n') : LispParser.getEOL(data)
+                linefeed: data instanceof Object ? LispParser.getEOL(data) : (data.indexOf('\r\n') >= 0 ? '\r\n' : '\n')
             };
         }
         
@@ -225,105 +228,125 @@ export namespace LispParser {
         let temp = '';
         
         while (tracker.idx < documentText.length && isAuthorized) {
-            //const prev = documentText[tracker.idx - 1];
             const curr = documentText[tracker.idx];
             const next = documentText[tracker.idx + 1];
-            let handled = false;
-            switch (state) {
-                case ParseState.UNKNOWN:
-                    if (grpStart === null && curr === '\'' && next === '(') {
-                        result.atoms.push(new LispAtom(tracker.line, tracker.column, curr));
-                    } else if (grpStart === null && curr === '(') {
-                        grpStart = new vscode.Position(tracker.line, tracker.column);
-                        result.atoms.push(new LispAtom(grpStart.line, grpStart.character, curr));
-                    } else if (curr === ')') {
-                        if (temp.length > 0) {                            
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                        }
-                        temp = '';
-                        result.atoms.push(new LispAtom(tracker.line, tracker.column, curr));
-                        grpStart = null;
-                        isAuthorized = false;
-                    } else if (curr === '(' || curr === '\'' && next === '(') {
-                        if (temp.length > 0) {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));                            
-                        }
-                        temp = '';
-                        result.atoms.push(getDocumentSexpression(documentText, tracker));
-                        handled = true;
-                    } else if (curr === ';') {
-                        if (temp.length > 0) {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                        }
-                        temp = ';';
-                        grpStart = new vscode.Position(tracker.line, tracker.column);
-                        state = ParseState.COMMENT;
-                    } else if (curr === '"') {
-                        if (temp.length > 0) {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                        }
-                        temp = '"';
-                        grpStart = new vscode.Position(tracker.line, tracker.column);
-                        state = ParseState.STRING;
-                    } else if (/\s/.test(curr)) {
-                        if (temp.length > 0) {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                        }
-                        if (curr === '\n'){
-                            tracker.line++;
-                            tracker.column = -1;
-                        }
-                        temp = '';
-                    } else { // This is some other kind of readable character, so it can start a group pointer
-                        if (temp === '') { 
+            
+            let doWork = false;
+            if (offset instanceof vscode.Position) {
+                doWork = tracker.line >= offset.line && tracker.column >= offset.character;
+            } else {
+                doWork = tracker.idx >= offset;
+            }
+
+            if (doWork === false) {
+                if (curr === '\n'){
+                    tracker.line++;
+                    tracker.column = -1;
+                }
+                tracker.idx++;
+                tracker.column++;
+            } else {
+                let handled = false; // Only true when this function gets recursively called because of a new open parenthesis (Sexpression) scope
+                switch (state) {
+                    case ParseState.UNKNOWN:                    
+                        if (grpStart === null && curr === '\'' && next === '(') {
+                            result.atoms.push(new LispAtom(tracker.line, tracker.column, curr));
+                        } else if (grpStart === null && curr === '(') {
                             grpStart = new vscode.Position(tracker.line, tracker.column);
-                        }
-                        temp += curr;
-                    }
-                    break;
-                case ParseState.STRING:
-                    temp += curr;
-                    // these 2 endswith tests are hard to understand, but they were vetted on a previous C# lisp parser to detect escaped double quotes
-                    if (curr === '"' && (temp.endsWith("\\\\\"") || !temp.endsWith("\\\""))) {    
-                        result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                        state = ParseState.UNKNOWN;
-                        temp = '';
-                    } 
-                    if (curr === '\n'){
-                        tracker.line++;
-                        tracker.column = -1;
-                    }
-                    break;
-                case ParseState.COMMENT:                    
-                    if (temp[1] === '|') {
-                        temp += curr;
-                        if (temp.endsWith('|;')) {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                            state = ParseState.UNKNOWN;
+                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, curr));
+                        } else if (curr === ')') {
+                            if (temp.length > 0) {                            
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                            }
                             temp = '';
-                        }
-                        if (curr === '\n'){
-                            tracker.line++;
-                            tracker.column = -1;
-                        }
-                    } else {
-                        if (curr === '\r' || curr === '\n') {
-                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
-                            state = ParseState.UNKNOWN;
+                            result.atoms.push(new LispAtom(tracker.line, tracker.column, curr));
+                            grpStart = null;
+                            isAuthorized = false;
+                        } else if (curr === '(' || curr === '\'' && next === '(') {
+                            if (temp.length > 0) {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));                            
+                            }
                             temp = '';
-                        } else {
+                            result.atoms.push(getDocumentSexpression(documentText, offset, tracker));
+                            handled = true;
+                        } else if (curr === ';') {
+                            if (temp.length > 0) {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                            }
+                            temp = ';';
+                            grpStart = new vscode.Position(tracker.line, tracker.column);
+                            state = ParseState.COMMENT;
+                        } else if (curr === '"') {
+                            if (temp.length > 0) {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                            }
+                            temp = '"';
+                            grpStart = new vscode.Position(tracker.line, tracker.column);
+                            state = ParseState.STRING;
+                        } else if (/\s/.test(curr)) {
+                            if (temp.length > 0) {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                            }
+                            if (curr === '\n'){
+                                tracker.line++;
+                                tracker.column = -1;
+                            }
+                            temp = '';
+                        } else { // This is some other kind of readable character, so it can start a group pointer
+                            if (temp === '') { 
+                                grpStart = new vscode.Position(tracker.line, tracker.column);
+                            }
                             temp += curr;
                         }
-                    }
-                    break;
-            }
-            if (handled === false) {
-                tracker.idx++;                
-                tracker.column++;
+                        break;
+                    case ParseState.STRING:
+                        temp += curr;
+                        // these 2 endswith tests are hard to understand, but they were vetted on a previous C# lisp parser to detect escaped double quotes
+                        if (curr === '"' && (temp.endsWith("\\\\\"") || !temp.endsWith("\\\""))) {    
+                            result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                            state = ParseState.UNKNOWN;
+                            temp = '';
+                        } 
+                        if (curr === '\n'){
+                            tracker.line++;
+                            tracker.column = -1;
+                        }
+                        break;
+                    case ParseState.COMMENT:                    
+                        if (temp[1] === '|') {
+                            temp += curr;
+                            if (temp.endsWith('|;')) {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                                state = ParseState.UNKNOWN;
+                                temp = '';
+                            }
+                            if (curr === '\n'){
+                                tracker.line++;
+                                tracker.column = -1;
+                            }
+                        } else {
+                            if (curr === '\r' || curr === '\n') {
+                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                                state = ParseState.UNKNOWN;
+                                temp = '';
+                            } else {
+                                temp += curr;
+                            }
+                        }
+                        break;
+                }
+                if (handled === false) {
+                    tracker.idx++;                
+                    tracker.column++;
+                }
             }
         }
         if (temp.length > 0) {
             result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+        }
+        if (result.atoms.length > 0) {
+            result.line = result.atoms[0].line;
+            result.column = result.atoms[0].column;
         }
         return result;
     }
