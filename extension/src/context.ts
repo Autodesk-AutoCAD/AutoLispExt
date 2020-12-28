@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import * as nls from "vscode-nls";
 import * as Resources from "./resources";
-import { Disposable } from 'vscode-languageclient';
 import { DocumentManager } from './documents';
 
 // This is a singleton class
@@ -23,7 +22,7 @@ export class ContextManager{
 	get AllSelectors(): string[] { 
 		return [DocumentManager.Selectors.lsp, DocumentManager.Selectors.dcl, DocumentManager.Selectors.prj]; 
 	}
-	get Subscriptions(): Disposable[] { 
+	get Subscriptions(): vscode.Disposable[] { 
 		return this._ctx ? this._ctx.subscriptions : null; 
 	}
 	get ExtPath(): string { 
