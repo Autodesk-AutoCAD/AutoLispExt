@@ -1,7 +1,7 @@
 
 'use strict';
 import * as vscode from 'vscode';
-import { LanguageClient } from 'vscode-languageclient';
+//import { LanguageClient } from 'vscode-languageclient';
 import { ContextManager } from "./context";
 // moved singleton AutoLispExt constructor ahead of 'our' other imports to create nls.localize() before they cause a null reference error
 export const AutoLispExt: ContextManager = new ContextManager();
@@ -17,7 +17,7 @@ import { registerProjectCommands } from "./project/projectCommands";
 import { registerCommands } from "./commands";
 import { loadAllResources } from "./resources";
 
-let client: LanguageClient;
+//let client: LanguageClient;
 
 loadAllResources();
 
@@ -62,9 +62,11 @@ export function activate(context: vscode.ExtensionContext) {
 	registerCommands(context);
 }
 
-export function deactivate(): Thenable<void> | undefined {
-	if (!client) {
-		return undefined;
-	}
-	return client.stop();
-}
+export function deactivate() {}
+
+// export function deactivate(): Thenable<void> | undefined {
+// 	if (!client) {
+// 		return undefined;
+// 	}
+// 	return client.stop();
+// }
