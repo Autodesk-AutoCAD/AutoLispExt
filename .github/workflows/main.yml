@@ -39,8 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          gulp build
-          gulp package
+          python pack.py
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
