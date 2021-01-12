@@ -14,10 +14,10 @@ def init():
     print("             try to install gulp-cli globally")
     os.system("npm install --global gulp-cli") # nosec
 
-    os.system("yarn install --unsafe-perm") # nosec
+    os.system("npm install --unsafe-perm") # nosec
 
     print("===============================================")
-    print("             complete yarn install")
+    print("             complete npm install")
     print("===============================================")
     print("\n\n")
 
