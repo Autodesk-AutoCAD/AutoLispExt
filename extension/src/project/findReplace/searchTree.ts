@@ -3,6 +3,7 @@ import { IconUris } from '../icons';
 import { SearchOption } from './options';
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../../extension';
+import {getTreeItemTitle } from '../projectutil'
 
 export class FileNode implements DisplayNode {
     filePath: string = '';
@@ -199,6 +200,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
         this.onChanged.fire(null);
     }
 
+
     public getTreeItem(element: DisplayNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
         try {
             let treeNode = new vscode.TreeItem(element.getDisplayText());
@@ -208,7 +210,7 @@ export class SearchTreeProvider implements vscode.TreeDataProvider<DisplayNode> 
             treeNode.contextValue = element.getNodeType();
 
             treeNode.command = {
-                title: treeNode.label,
+                title: getTreeItemTitle(treeNode),
                 command: SearchTreeProvider.showResult,
                 tooltip: treeNode.tooltip,
                 arguments: [

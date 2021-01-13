@@ -9,7 +9,7 @@ Then you could setup the develop environment by:
 ```
 cd AutoLispExt
 npm install --global gulp-cli
-yarn install 
+npm install 
 ```
 __NOTE:__ You may see a warning `"The engine "vscode" appears to be invalid"` while running `yarn install`. This is a known problem. Please refer to the [VSCode issue](https://github.com/microsoft/vscode/issues/91009).
 ## How to compile the code

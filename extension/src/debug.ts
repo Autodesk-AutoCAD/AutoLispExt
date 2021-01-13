@@ -13,51 +13,50 @@ let strNoADPerr: string = AutoLispExt.localize("autolispext.debug.nodap", "doesn
 let strNoACADerr: string = AutoLispExt.localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
 let acadPid2Attach = -1;
 
-let attachCfgName = 'AutoLISP Debug: Attach';
-let attachCfgType = 'attachlisp';
-let attachCfgRequest = 'attach';
+const attachCfgName = 'AutoLISP Debug: Attach';
+const attachCfgType = 'attachlisp';
+const launchCfgName = 'AutoLISP Debug: Launch';
+const launchCfgType = 'launchlisp';
+const attachCfgRequest = 'attach';
 
 export function setDefaultAcadPid(pid: number) {
     acadPid2Attach = pid;
 }
-function need2AddDefaultConfig(config: vscode.DebugConfiguration): Boolean {
-    if (config.type) return false;
-    if (config.request) return false;
-    if (config.name) return false;
-
-    return true;
-}
-
 const LAUNCH_PROC:string = 'debug.LaunchProgram';
 const LAUNCH_PARM:string = 'debug.LaunchParameters';
 const ATTACH_PROC:string = 'debug.AttachProcess';
 
+class LaunchDebugAdapterExecutableFactory
+  implements vscode.DebugAdapterDescriptorFactory {
+  createDebugAdapterDescriptor(
+    _session: vscode.DebugSession,
+    executable: vscode.DebugAdapterExecutable | undefined
+  ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
+    let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
+    let productStartCommand = ProcessPathCache.globalProductPath;
+    let productStartParameter = ProcessPathCache.globalParameter;
+
+    const args = ["--", productStartCommand, productStartParameter];
+    return new vscode.DebugAdapterExecutable(lispadapterpath, args);
+  }
+}
+
+class AttachDebugAdapterExecutableFactory
+  implements vscode.DebugAdapterDescriptorFactory {
+  createDebugAdapterDescriptor(
+    _session: vscode.DebugSession,
+    executable: vscode.DebugAdapterExecutable | undefined
+  ): vscode.ProviderResult<vscode.DebugAdapterDescriptor> {
+    let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
+
+    return new vscode.DebugAdapterExecutable(lispadapterpath);
+  }
+}
+
 export function registerLispDebugProviders(context: vscode.ExtensionContext) {
-    //-----------------------------------------------------------
-    //4. debug adapter
-    //-----------------------------------------------------------
-    //this command is used for launch debug calculating DebugAdapter path and arguments
-    context.subscriptions.push(vscode.commands.registerCommand("extension.lispLaunchAdapterExecutableCommand", async () => {
-
-        let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
-        let productStartCommand = ProcessPathCache.globalProductPath;
-        let productStartParameter = ProcessPathCache.globalParameter;
-        return {
-            command: lispadapterpath,
-            args: ["--", productStartCommand, productStartParameter]
-        };
-    }));
-    context.subscriptions.push(vscode.commands.registerCommand("extension.lispAttachAdapterExecutableCommand", async () => {
-        let lispadapterpath = ProcessPathCache.globalLispAdapterPath;
-        return {
-            command: lispadapterpath,
-            args: []
-        };
-    }));
-
     // register a configuration provider for 'lisp' launch debug type
     const launchProvider = new LispLaunchConfigurationProvider();
-    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('launchlisp', launchProvider));
+    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider(launchCfgType, launchProvider));
     context.subscriptions.push(launchProvider);
 
     //register a configuration provider for 'lisp' attach debug type
@@ -65,10 +64,18 @@ export function registerLispDebugProviders(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider(attachCfgType, attachProvider));
     context.subscriptions.push(attachProvider);
 
-    //register attach failed message
+    //-----------------------------------------------------------
+    //4. debug adapter
+    //-----------------------------------------------------------
+    const attachDapFactory = new AttachDebugAdapterExecutableFactory();
+    const lauchDapFactory = new LaunchDebugAdapterExecutableFactory();
+    context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory(attachCfgType, attachDapFactory));
+    context.subscriptions.push(vscode.debug.registerDebugAdapterDescriptorFactory(launchCfgType, lauchDapFactory));
+
+    //register attach failed custom message
     context.subscriptions.push(vscode.debug.onDidReceiveDebugSessionCustomEvent((event) => {
         console.log(event);
-        if (event.session && (event.session.type === "launchlisp" || event.session.type === attachCfgType)) {
+        if (event.session && (event.session.type === launchCfgType || event.session.type === attachCfgType)) {
             if (event.event === "runtimeerror") {
                 /*
                     struct runtimeerror
@@ -110,33 +117,19 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
     private _server?: Net.Server;
 
     async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
-        console.log(config);
 
-        // if launch.json is missing or empty
-        if (need2AddDefaultConfig(config)) {
-            config.type = 'launchlisp';
-            config.name = 'AutoLISP Debug: Launch';
-            config.request = 'launch';
-        }
+        var newConfig = {} as vscode.DebugConfiguration;
+        newConfig.type = launchCfgType;
+        newConfig.name = launchCfgName;
+        newConfig.request = 'launch';
 
         if (vscode.window.activeTextEditor)
-            config.program = vscode.window.activeTextEditor.document.fileName;
+             newConfig.program = vscode.window.activeTextEditor.document.fileName;
 
-        if (config["type"] === "launchlisp") {
+        if (newConfig["type"] === launchCfgType) {
             // 1. get acad and adapter path
-            //2. get acadRoot path
-            //2.1 get acadRoot path from launch.json
-
-            let productPath = "";
-            if (config["attributes"]) {
-                productPath = config["attributes"]["path"] ? config["attributes"]["path"] : "";
-            }
-
-            if (!productPath) {
-                let path = getExtensionSettingString(LAUNCH_PROC);
-                if (path)
-                    productPath = path;
-            }
+            // 2. get acadRoot path
+            let productPath = getExtensionSettingString(LAUNCH_PROC);
 
             if (!productPath) {
                 let info = AutoLispExt.localize("autolispext.debug.launchjson.path",
@@ -161,6 +154,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                     rememberLaunchPath(productPath);
                 }
             }
+
             //3. get acad startup params
             if (!existsSync(productPath)) {
                 if (!productPath || productPath.length == 0)
@@ -170,17 +164,10 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                 ProcessPathCache.globalProductPath = "";
                 return undefined;
             } else {
-                let params = "";
-                if (config["attributes"]) {
-                    params = config["attributes"]["params"] ? config["attributes"]["params"] : "";
-                }
-                else {
-                    let text = getExtensionSettingString(LAUNCH_PARM);
-                    if (text)
-                        params = text;
-                }
+                let params = getExtensionSettingString(LAUNCH_PARM);
                 ProcessPathCache.globalParameter = params;
             }
+
             //4. get debug adapter path
             let lispadapterpath = calculateABSPathForDAP(productPath);
             if (!existsSync(lispadapterpath)) {
@@ -193,7 +180,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
             ProcessPathCache.globalLispAdapterPath = lispadapterpath;
             ProcessPathCache.globalProductPath = productPath;
         }
-        return config;
+        return newConfig;
     }
 
     dispose() {
@@ -208,26 +195,18 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
     private _server?: Net.Server;
 
     async resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): Promise<vscode.DebugConfiguration> {
-
-        // if launch.json is missing or empty
-        if (need2AddDefaultConfig(config)) {
-            config.type = attachCfgType;
-            config.name = attachCfgName;
-            config.request = attachCfgRequest;
-        }
+        var newConfig = {} as vscode.DebugConfiguration;
+        newConfig.type = attachCfgType;
+        newConfig.name = attachCfgName;
+        newConfig.request = attachCfgRequest;
 
         if (vscode.window.activeTextEditor)
-            config.program = vscode.window.activeTextEditor.document.fileName;
+            newConfig.program = vscode.window.activeTextEditor.document.fileName;
 
         ProcessPathCache.globalAcadNameInUserAttachConfig = '';
-        if (config && config.attributes && config.attributes.process) {
-            ProcessPathCache.globalAcadNameInUserAttachConfig = config.attributes.process;
-        }
-        else {
-            let name = getExtensionSettingString(ATTACH_PROC);
-            if (name)
-                ProcessPathCache.globalAcadNameInUserAttachConfig = name;
-        }
+        let name = getExtensionSettingString(ATTACH_PROC);
+        if (name)
+            ProcessPathCache.globalAcadNameInUserAttachConfig = name;
 
         ProcessPathCache.clearProductProcessPathArr();
         let processId = await pickProcess(false, acadPid2Attach);
@@ -245,9 +224,9 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
             return undefined;
         }
         ProcessPathCache.globalLispAdapterPath = lispadapterpath;
-        config.processId = processId;
+        newConfig.processId = processId;
 
-        return config;
+        return newConfig;
     }
 
     dispose() {
