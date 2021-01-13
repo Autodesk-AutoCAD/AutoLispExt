@@ -8,4 +8,4 @@
 
 
 ##### Screen shot
-<!-- GIF screen shot is prefered, this helps reviewers and testers understand what's the behavior changed -->
+<!-- GIF screen shot is preferred, this helps reviewers and testers understand what's the behavior changed -->
