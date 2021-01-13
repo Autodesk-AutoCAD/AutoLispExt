@@ -4,13 +4,13 @@ AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Ext
 
 ## How to setup the Dev env and compile the code
 
-You could do all above steps  by the script pack.py, it is python2
+You could do all the steps in the script pack.py, it is python2; or run it directly:
 ```
 cd AutoLispExt
 python pack.py
 ```
 ### How to compile the codes
-The script pack.py will copy some utility files to correct location for making package. After run this script and then change some ts codes, you can also use the follow command to compile it:
+The script pack.py will copy some utility files to correct location for making package. After run that script and then change some TS codes, you can also use the follow command to compile codes simply:
 ```
 npm run compile
 ```
@@ -36,10 +36,14 @@ You have two ways to run the tests:
   - Run inside the VS Code and begin debugging by choosing "Extension Tests"
   - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation) 
 ```
-yarn test
+npm run test
 ```
 
 ### The following steps require access to Autodesk network resources and therefore can only be done by Autodesk employees
+
+## NPM settings
+Because the mandatory local NPM setting in Autodesk, for Autodesk developer you can simply replace all the ocurrences in pacake-lock.json like:
+replace https://registry.npmjs.org/ with https://art-bobcat.autodesk.com:443/artifactory/api/npm/autodesk-npm-virtual/
 
 ## Build status
 
