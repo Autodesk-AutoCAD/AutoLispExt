@@ -2,27 +2,17 @@
 
 AutoCAD Lisp Extension is a vscode extension for debug AutoCAD AutoLISP. The Extension plays the roles of both debug adapter and language server which could enable you debug lisp with AutoCAD. The following description is for developers.
 
-## How to setup the Dev Env
-npm install -g yarn (if it's not installed yet)
+## How to setup the Dev env and compile the code
 
-Then you could setup the develop environment by:
+You could do all above steps  by the script pack.py, it is python2
 ```
 cd AutoLispExt
-npm install --global gulp-cli
-npm install 
+python pack.py
 ```
-__NOTE:__ You may see a warning `"The engine "vscode" appears to be invalid"` while running `yarn install`. This is a known problem. Please refer to the [VSCode issue](https://github.com/microsoft/vscode/issues/91009).
-## How to compile the code
-You could compile the code by:
+### How to compile the codes
+The script pack.py will copy some utility files to correct location for making package. After run this script and then change some ts codes, you can also use the follow command to compile it:
 ```
-cd AutoLispExt
-gulp build
-copy utils\acadProcessFinder\bin\acadProcessFinder.exe extension\out\process
-```
-If you only want to build the ts file and debug it via F5, you can run:
-```
-=> Windows:   winCompile.bat
-=> Otherwise: ./macCompile.sh
+npm run compile
 ```
 
 ## How to debug the extension
@@ -32,24 +22,13 @@ If you only want to build the ts file and debug it via F5, you can run:
 3. hit F5 and select "Extension Client", then it will start another vscode instance with running the extension. 
 4. Do some operations to invoke the codes which are added breakpoints, vscode will stop in the first instance.
 
-
 ## How to package the extension
 
 You could package the extension by:
 ```
-cd AutoLispExt
-gulp package
-```
-Note that don't run "publish" command otherwise you make sure you want to do.
-For the publish command it will release current version extension to vscode market. 
-
-## The Script pack.py
-
-You could do all above steps  by the script pack.py, it is python2
-```
-cd AutoLispExt
 python pack.py
 ```
+It will create the package in the current folder.
 
 ## Run tests
 
