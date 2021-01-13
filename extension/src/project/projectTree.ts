@@ -5,6 +5,7 @@ import * as path from 'path';
 import { pathEqual } from '../utils';
 import { AutoLispExt } from '../extension';
 import * as fs from 'fs';
+import {getTreeItemTitle } from './projectutil'
 
 export interface DisplayNode {
     getDisplayText: () => string;
@@ -163,7 +164,7 @@ export class ProjectTreeProvider implements vscode.TreeDataProvider<DisplayNode>
             treeNode.contextValue = element.getNodeType();
 
             treeNode.command = {
-                title: treeNode.label,
+                title: getTreeItemTitle(treeNode),
                 command: ProjectTreeProvider.TreeItemClicked,
                 tooltip: treeNode.tooltip,
                 arguments: [
