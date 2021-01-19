@@ -38,13 +38,18 @@ namespace HelpAbstractionGenerator
 
     public static class urlHelpers
     {
+        public static string year = "";
         public static string getHelpURL(string guid)
         {
             return getDefaultHelpURL() + "?guid=GUID-" + guid;
         }
         public static string getDefaultHelpURL()
         {
-            return "https://help.autodesk.com/view/OARX/2021/" + System.Globalization.CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName + "/";
+            if (year == "")
+                year = Microsoft.VisualBasic.Interaction.InputBox("This should be the most current version of the Autodesk documentation and may not be the current year shown", "Enter 4 digit year", DateTime.Now.Year.ToString()).Trim();
+            if (year == "")
+                year = "2021";
+            return "https://help.autodesk.com/view/OARX/" + year + "/" + System.Globalization.CultureInfo.CurrentCulture.ThreeLetterWindowsLanguageName + "/";
         }
     }
     

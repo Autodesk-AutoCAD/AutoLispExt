@@ -13,6 +13,7 @@ namespace HelpAbstractionGenerator
     #region Exported Json Objects
     public class WebObjectLibrary
     {
+        public string year { get; set; }
         public Dictionary<string, ejoObject> objects { get; set; } = new Dictionary<string, ejoObject>();
         public Dictionary<string, ejoFunction> functions { get; set; } = new Dictionary<string, ejoFunction>();
         public Dictionary<string, List<ejoFunction>> ambiguousFunctions { get; set; } = new Dictionary<string, List<ejoFunction>>();
@@ -22,6 +23,7 @@ namespace HelpAbstractionGenerator
         public Dictionary<string, ejoEvent> events { get; set; } = new Dictionary<string, ejoEvent>();
 
         public WebObjectLibrary() { }
+        public WebObjectLibrary(string year) { this.year = year; }
     }
 
 

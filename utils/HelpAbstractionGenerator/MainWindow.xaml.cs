@@ -141,6 +141,8 @@ namespace HelpAbstractionGenerator
                             break;
                         case 5: // possibly some kind of rule system
                             CurrentLib = ioPathHelpAbstraction.UnPack<WebObjectLibrary>();
+                            if (CurrentLib.year == null)
+                                CurrentLib.year = urlHelpers.year;
                             AllOverrides.Clear();
                             Filter = "";
                             if (System.IO.File.Exists(ioPathRuleOverrides) == true)
@@ -250,7 +252,7 @@ namespace HelpAbstractionGenerator
         }
         private void btnScrapeAllContent_Click(object sender, RoutedEventArgs e)
         {
-            WebObjectLibrary ejoLib = new WebObjectLibrary();
+            WebObjectLibrary ejoLib = new WebObjectLibrary(urlHelpers.year);
             foreach (var key in CatagorizedLinks.Keys)
             {
                 foreach (var link in CatagorizedLinks[key])
@@ -348,7 +350,7 @@ namespace HelpAbstractionGenerator
                 StringBuilder sb = new StringBuilder();
                 sb.AppendLine("Extraction Completed: " + (Errors.Count == 0 ? "without errors" : "with override json errors!"));
                 sb.AppendLine("");
-                sb.AppendLine("Note that unless you've specifically overwritten the internal (pre-override) version, then this dialog will not show show the exported version");
+                sb.AppendLine("Note that unless you've specifically overwritten the internal (pre-override) version, then this dialog will not show the exported version");
                 sb.AppendLine("");
                 sb.AppendLine("");
                 foreach (string err in Errors)
