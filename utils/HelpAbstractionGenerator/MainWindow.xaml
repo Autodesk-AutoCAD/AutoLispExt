@@ -37,7 +37,8 @@
                         <TextBlock TextWrapping="Wrap" Margin="5">
                                    Once the page has loaded, expand all the left-side navigation elements you want to include in the data collection,
                                    this is required because the actual links don't exist until they've been expanded through a click event. Finally,
-                                   click the 'Collect Links and Continue' button before moving onto step 2.
+                                   click the 'Collect Links and Continue' button before moving onto step 2. If this page doesn't load then there is a
+                                   good change the year you provided doesn't have documentation available at this time.
                         </TextBlock>
                         <Separator Margin="0" Padding="0"/>
                     </StackPanel>                    
