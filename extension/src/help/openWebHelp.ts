@@ -148,7 +148,7 @@ class WebHelpEntity {
 
 	static getDefaultHelpLink(): string {
 		let lang: string = WebHelpEntity.getLanguageUrlDomain();
-		let year: number = new Date().getFullYear() + 1;
+		let year: number = new Date().getFullYear();
 		return "https://help.autodesk.com/view/OARX/" + year.toString() + lang;
 	}
 
