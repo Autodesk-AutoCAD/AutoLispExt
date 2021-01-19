@@ -26,9 +26,11 @@ export class WebHelpLibrary implements IJsonLoadable {
 	functions: Dictionary<WebHelpFunction> = {};
 	ambiguousFunctions: Dictionary<WebHelpFunction[]> = {};
 	enumerators: Dictionary<string> = {};	
+	year: string;
 	
 	// consumes a JSON converted object into the WebHelpLibrary
 	loadFromJsonObject(obj: object): void{		
+		this.year = obj['year'] ?? '2021';
 		Object.keys(obj["dclAttributes"]).forEach(key => {
 			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
 			this.dclAttributes[key] = newObj;
@@ -65,26 +67,26 @@ export class WebHelpLibrary implements IJsonLoadable {
 			return; // No Document
 		} else if (editor.document.fileName.slice(-4).toUpperCase() === ".LSP") {
 			if (symbolProfile in this.objects){
-				return this.objects[symbolProfile].getHelpLink();
+				return this.objects[symbolProfile].getHelpLink(this.year);
 			} else if (symbolProfile in this.functions){        
-				return this.functions[symbolProfile].getHelpLink();
+				return this.functions[symbolProfile].getHelpLink(this.year);
 			} else if (symbolProfile in this.ambiguousFunctions){
-				return this.ambiguousFunctions[symbolProfile][0].getHelpLink();
+				return this.ambiguousFunctions[symbolProfile][0].getHelpLink(this.year);
 			} else if (symbolProfile in this.enumerators){
 				return this.getWebHelpUrlBySymbolName(this.enumerators[symbolProfile]);
 			} else {
-				return WebHelpEntity.createHelpLink("4CEE5072-8817-4920-8A2D-7060F5E16547");  // LSP General Landing Page
+				return WebHelpEntity.createHelpLink("4CEE5072-8817-4920-8A2D-7060F5E16547", this.year);  // LSP General Landing Page
 			}
 		} else if (editor.document.fileName.slice(-4).toUpperCase() === ".DCL") {
 			if (symbolProfile in this.dclTiles){        
-				return this.dclTiles[symbolProfile].getHelpLink();
+				return this.dclTiles[symbolProfile].getHelpLink(this.year);
 			} else if (symbolProfile in this.dclAttributes){        
-				return this.dclAttributes[symbolProfile].getHelpLink();
+				return this.dclAttributes[symbolProfile].getHelpLink(this.year);
 			} else {
-				return WebHelpEntity.createHelpLink("F8F5A79B-9A05-4E25-A6FC-9720216BA3E7"); // DCL General Landing Page
+				return WebHelpEntity.createHelpLink("F8F5A79B-9A05-4E25-A6FC-9720216BA3E7", this.year); // DCL General Landing Page
 			}
 		}
-		return WebHelpEntity.getDefaultHelpLink();
+		return WebHelpEntity.getDefaultHelpLink(this.year);
 	}
 }
 
@@ -138,18 +140,17 @@ class WebHelpEntity {
 	}
 
 
-	getHelpLink(): string {
-		return WebHelpEntity.getDefaultHelpLink() + "?guid=GUID-" + this.guid;
+	getHelpLink(year): string {
+		return WebHelpEntity.getDefaultHelpLink(year) + "?guid=GUID-" + this.guid;
 	}
 
-	static createHelpLink(guid: string): string {
-		return WebHelpEntity.getDefaultHelpLink() + "?guid=GUID-" + guid;
+	static createHelpLink(guid: string, year: string): string {
+		return WebHelpEntity.getDefaultHelpLink(year) + "?guid=GUID-" + guid;
 	}
 
-	static getDefaultHelpLink(): string {
+	static getDefaultHelpLink(year: string): string {
 		let lang: string = WebHelpEntity.getLanguageUrlDomain();
-		let year: number = new Date().getFullYear() + 1;
-		return "https://help.autodesk.com/view/OARX/" + year.toString() + lang;
+		return "https://help.autodesk.com/view/OARX/" + year + lang;
 	}
 
 	static getLanguageUrlDomain(): string {
