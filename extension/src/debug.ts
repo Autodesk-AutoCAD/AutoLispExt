@@ -36,7 +36,8 @@ class LaunchDebugAdapterExecutableFactory
     let productStartCommand = ProcessPathCache.globalProductPath;
     let productStartParameter = ProcessPathCache.globalParameter;
 
-    const args = ["--", productStartCommand, productStartParameter];
+    let args = ["--", productStartCommand, productStartParameter];
+    if (productStartParameter == null) args = ["--", productStartCommand];
     return new vscode.DebugAdapterExecutable(lispadapterpath, args);
   }
 }
