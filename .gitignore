@@ -4,3 +4,9 @@ vendor
 tmp
 autolispext*.zip
 package.nls.*.json
+
+utils/HelpAbstractionGenerator/**/*.pdb
+utils/HelpAbstractionGenerator/**/*.xml
+utils/HelpAbstractionGenerator/.vs
+utils/HelpAbstractionGenerator/obj
+utils/HelpAbstractionGenerator/packages
