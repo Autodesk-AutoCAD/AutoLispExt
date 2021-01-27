@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { optionButton } from './optionButton';
 import { IconUris } from '../icons';
+import { AutoLispExt } from '../../extension';
 
 export class SearchOption {
     static activeInstance: SearchOption = new SearchOption;//the one bound to search UI
@@ -107,9 +108,7 @@ export async function getString(title: string, hint: string) {
             quickpick.value = '';
             quickpick.ignoreFocusOut = true;
 
-            // TODO: do localization latter, now it has no enu\out\project\findReplace\options.i18n.json
-            //let closeTooltip = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.close", "Close");
-            let closeTooltip = "Close";
+            let closeTooltip = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.close", "Close");
             let closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
             quickpick.buttons = [closeBtn];
 

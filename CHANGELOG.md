@@ -1,8 +1,11 @@
 ## [1.4.0] - 2021-01-20
-a. Added Right Click -> 'Open Online Help' feature. This makes it possible for users to quickly access official documentation on a selected symbol.
-b. Support to insert custom regions.
-c. F12 "Go to definition" support.
-d. Fix DCL comments issue and other minor bugs.
+a.	Added the ability to open the reference documentation of a built-in function or DCL tile/attribute when a LSP or DCL file is open. Select a function or DCL tile/attribute, and then right-click and choose "Open Online Help" to open the associated reference documentation.
+
+b.	Added support to insert user-defined regions. A region is defined using the ;#region and ;#endregion comments.
+
+c.	Added support to go to the definition of a user-defined function or variable. Select a user-defined function or variable, and then press F12 to use the "Go to Definition" feature.
+
+d.	Fixed an issue with DCL comments and some other minor issues.
 
 ## [1.3.2] - 2020-12-17
 Remove the call to the deprecated vscode APIs
