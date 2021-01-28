@@ -38,7 +38,7 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Find & Search in a project
 
 ## Getting started
-- Step 1. Install a supported AutoCAD release on your system.
+- Step 1. Install a supported AutoCAD release on your system. 
 - Step 2. Install this extension.
 - Step 3. Open a folder that contains the AutoLISP source (LSP) files you want to work on. Or open an Autolisp project file via VSCODE side bar.
 - Step 4. Open a LSP file to modify or debug.
