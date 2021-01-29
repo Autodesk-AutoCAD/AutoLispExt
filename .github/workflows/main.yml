@@ -30,7 +30,7 @@ jobs:
         # See https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions
         run: |
           $version=node -p "require('./package.json').version"
-          $version=$version.substring(1)+"-${{github.sha}}"
+          $version=$version+"-${{github.sha}}"
           echo "::set-output name=VERSION::$version"
         shell: pwsh
 
