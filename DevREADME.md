@@ -41,6 +41,10 @@ You have two ways to run the tests:
 npm run test
 ```
 
+### Profile the performence issue
+For the performence issue of vscode extension, see wiki page https://github.com/microsoft/vscode-wiki/blob/master/Performance-Issues.md
+
+
 ### The following steps require access to Autodesk network resources and therefore can only be done by Autodesk employees
 
 ## NPM settings
