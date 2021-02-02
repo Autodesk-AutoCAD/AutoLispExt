@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "검색 결과를 열지 못했습니다.",
   "autolispext.project.commands.clearresultfailed": "검색 결과를 지우지 못했습니다.",
   "autolispext.project.commands.initializefailed": "AutoLISP 프로젝트 관리자를 초기화하지 못했습니다.",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "닫기 요청 확인: ",
+  "autolispext.project.commands.closepromptyes": "예",
+  "autolispext.project.commands.closepromptno": "아니요",
+  "autolispext.project.commands.addedworkspacefiles": "lisp 파일이 다음에 추가됨"
 }

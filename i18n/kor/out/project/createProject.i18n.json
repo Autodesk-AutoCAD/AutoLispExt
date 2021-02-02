@@ -1,5 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "작성",
   "autolispext.project.createproject.onlyprjallowed": "PRJ 파일만 허용됩니다.",
-  "autolispext.project.createproject.nospaces": ""
+  "autolispext.project.createproject.nospaces": "기존 PRJ 명명 규칙에서는 공백이 허용되지 않습니다."
 }

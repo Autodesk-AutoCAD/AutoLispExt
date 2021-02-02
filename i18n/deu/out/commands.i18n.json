@@ -1,4 +1,4 @@
 {
-  "autolispext.help.commands.openWebHelp": "",
-  "autolispext.commands.addFoldingRegion": ""
+  "autolispext.help.commands.openWebHelp": "Fehler beim Laden der Datei webHelpAbstraction.json",
+  "autolispext.commands.addFoldingRegion": "Fehler beim Einfügen von Snippet"
 }

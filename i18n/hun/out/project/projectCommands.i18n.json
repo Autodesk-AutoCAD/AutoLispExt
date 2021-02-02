@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "Nem sikerült megnyitni a keresési eredményeket.",
   "autolispext.project.commands.clearresultfailed": "Nem sikerült törölni a keresési eredményeket.",
   "autolispext.project.commands.initializefailed": "Az AutoLISP-projektkezelő inicializálása nem sikerült.",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "Bezárási kérés megerősítése a következőn: ",
+  "autolispext.project.commands.closepromptyes": "Igen",
+  "autolispext.project.commands.closepromptno": "Nem",
+  "autolispext.project.commands.addedworkspacefiles": "LISP-fájlok lettek hozzáadva a következőhöz:"
 }

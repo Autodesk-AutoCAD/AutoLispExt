@@ -1,7 +1,7 @@
 {
   "autolispext.description": "這是適用於 AutoCAD AutoLISP 的 vscode 延伸",
   "autolispext.loadcurrentfile.title": "將檔案載入到 AutoCAD",
-  "autolispext.openwebhelp.title": "打開在線幫助",
+  "autolispext.openwebhelp.title": "開啟線上說明",
   "autolispext.configuration.title": "AutoCAD® AutoLISP 規劃",
   "autolispext.configuration.maxlinechars.desc": "每行建議顯示的字元數上限。值必須為 60 或更高。",
   "autolispext.configuration.narrowstyleindent.desc": "函數引數的窄格式型式使用的縮排值。值必須在 1 到 6 的範圍內。",

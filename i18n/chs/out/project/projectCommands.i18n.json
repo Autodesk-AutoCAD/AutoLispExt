@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "无法打开搜索结果。",
   "autolispext.project.commands.clearresultfailed": "无法清除搜索结果。",
   "autolispext.project.commands.initializefailed": "无法初始化 AutoLISP 项目管理器。",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "确认关闭对以下各项的请求: ",
+  "autolispext.project.commands.closepromptyes": "是",
+  "autolispext.project.commands.closepromptno": "否",
+  "autolispext.project.commands.addedworkspacefiles": "已将 lisp 文件添加到"
 }

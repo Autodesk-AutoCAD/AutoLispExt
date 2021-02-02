@@ -1,7 +1,7 @@
 {
   "autolispext.description": "Es una extensión de VS Code para AutoCAD AutoLISP.",
   "autolispext.loadcurrentfile.title": "Cargar archivo en AutoCAD",
-  "autolispext.openwebhelp.title": "Abrir ayuda en línea",
+  "autolispext.openwebhelp.title": "Abrir Ayuda en línea",
   "autolispext.configuration.title": "Configuración de AutoCAD® AutoLISP",
   "autolispext.configuration.maxlinechars.desc": "Número máximo de caracteres sugeridos que se mostrarán en cada línea. El valor debe ser 60 o superior.",
   "autolispext.configuration.narrowstyleindent.desc": "Valor de sangría utilizado en el estilo de formato estrecho de los argumentos de función. El valor debe encontrarse en el intervalo entre 1 y 6.",

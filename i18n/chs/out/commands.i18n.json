@@ -1,4 +1,4 @@
 {
-  "autolispext.help.commands.openWebHelp": "",
-  "autolispext.commands.addFoldingRegion": ""
+  "autolispext.help.commands.openWebHelp": "无法加载 webHelpAbstraction.json 文件",
+  "autolispext.commands.addFoldingRegion": "无法插入代码段"
 }

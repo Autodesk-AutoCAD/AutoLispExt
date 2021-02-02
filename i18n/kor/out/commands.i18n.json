@@ -1,4 +1,4 @@
 {
-  "autolispext.help.commands.openWebHelp": "",
-  "autolispext.commands.addFoldingRegion": ""
+  "autolispext.help.commands.openWebHelp": "webHelpAbstraction.json 파일을 로드하지 못했습니다.",
+  "autolispext.commands.addFoldingRegion": "조각을 삽입하지 못했습니다."
 }

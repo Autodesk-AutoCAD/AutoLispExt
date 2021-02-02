@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "無法開啟搜尋結果。",
   "autolispext.project.commands.clearresultfailed": "無法清除搜尋結果。",
   "autolispext.project.commands.initializefailed": "無法初始化 AutoLISP 專案管理員。",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "確認關閉請求，於: ",
+  "autolispext.project.commands.closepromptyes": "是",
+  "autolispext.project.commands.closepromptno": "否",
+  "autolispext.project.commands.addedworkspacefiles": "lisp 檔已加入"
 }

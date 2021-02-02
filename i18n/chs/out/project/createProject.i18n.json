@@ -1,5 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "创建",
   "autolispext.project.createproject.onlyprjallowed": "仅允许 PRJ 文件。",
-  "autolispext.project.createproject.nospaces": ""
+  "autolispext.project.createproject.nospaces": "旧版 PRJ 命名规则不允许使用空格"
 }

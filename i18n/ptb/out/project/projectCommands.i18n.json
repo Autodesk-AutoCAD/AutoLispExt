@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "Falha ao abrir os resultados da pesquisa.",
   "autolispext.project.commands.clearresultfailed": "Falha ao limpar os resultados da pesquisa.",
   "autolispext.project.commands.initializefailed": "Falha ao inicializar o Gerenciador de projetos do AutoLISP.",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "Confirmar solicitação de fechamento em: ",
+  "autolispext.project.commands.closepromptyes": "Sim",
+  "autolispext.project.commands.closepromptno": "Não",
+  "autolispext.project.commands.addedworkspacefiles": "arquivos lisp foram adicionados a"
 }
