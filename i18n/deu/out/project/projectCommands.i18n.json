@@ -14,8 +14,8 @@
   "autolispext.project.commands.openresultfailed": "Suchergebnisse konnten nicht geöffnet werden.",
   "autolispext.project.commands.clearresultfailed": "Suchergebnisse konnten nicht gelöscht werden.",
   "autolispext.project.commands.initializefailed": "Fehler beim Initialisieren des AutoLISP-Projektmanagers.",
-  "autolispext.project.commands.closepromptmsg": "",
-  "autolispext.project.commands.closepromptyes": "",
-  "autolispext.project.commands.closepromptno": "",
-  "autolispext.project.commands.addedworkspacefiles": ""
+  "autolispext.project.commands.closepromptmsg": "Bestätigung für Schließen der Anfrage am: ",
+  "autolispext.project.commands.closepromptyes": "Ja",
+  "autolispext.project.commands.closepromptno": "Nein",
+  "autolispext.project.commands.addedworkspacefiles": "LISP-Dateien wurden hinzugefügt zu"
 }

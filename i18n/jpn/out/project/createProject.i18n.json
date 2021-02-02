@@ -1,5 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "作成",
   "autolispext.project.createproject.onlyprjallowed": "PRJ ファイルのみが許可されます。",
-  "autolispext.project.createproject.nospaces": ""
+  "autolispext.project.createproject.nospaces": "旧形式の PRJ 命名規則ではスペースを使用できません"
 }

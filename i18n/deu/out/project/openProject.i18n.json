@@ -3,5 +3,5 @@
   "autolispext.project.openproject.readfailed": "Projektdatei kann nicht gelesen werden: ",
   "autolispext.project.openproject.malformedfile": "Fehlerhafte Projektdatei: ",
   "autolispext.project.openproject.label": "Projekt öffnen",
-  "autolispext.project.openproject.nospaces": ""
+  "autolispext.project.openproject.nospaces": "Ältere PRJ-Benennungsregeln erlauben keine Leerzeichen"
 }

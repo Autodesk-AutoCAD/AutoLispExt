@@ -3,5 +3,5 @@
   "autolispext.project.openproject.readfailed": "Impossible de lire le fichier de projet: ",
   "autolispext.project.openproject.malformedfile": "Fichier de projet incorrect: ",
   "autolispext.project.openproject.label": "Ouvrir un projet",
-  "autolispext.project.openproject.nospaces": ""
+  "autolispext.project.openproject.nospaces": "Utilisation d'espaces interdite par les règles de dénomination PRJ héritées"
 }

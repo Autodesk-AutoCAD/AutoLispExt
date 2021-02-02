@@ -1,5 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "Criar",
   "autolispext.project.createproject.onlyprjallowed": "Somente arquivos PRJ são permitidos.",
-  "autolispext.project.createproject.nospaces": ""
+  "autolispext.project.createproject.nospaces": "As regras de nomenclatura PRJ herdadas não permitem espaços"
 }

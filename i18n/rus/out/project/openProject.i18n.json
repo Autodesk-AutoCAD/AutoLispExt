@@ -3,5 +3,5 @@
   "autolispext.project.openproject.readfailed": "Не удалось прочитать файл проекта: ",
   "autolispext.project.openproject.malformedfile": "Неверно сформированный файл проекта: ",
   "autolispext.project.openproject.label": "Открыть проект",
-  "autolispext.project.openproject.nospaces": ""
+  "autolispext.project.openproject.nospaces": "В прошлых версиях правилами именования файлов PRJ не допускалось использование пробелов"
 }

@@ -3,5 +3,5 @@
   "autolispext.project.openproject.readfailed": "无法读取项目文件: ",
   "autolispext.project.openproject.malformedfile": "项目文件不正确: ",
   "autolispext.project.openproject.label": "打开项目",
-  "autolispext.project.openproject.nospaces": ""
+  "autolispext.project.openproject.nospaces": "旧版 PRJ 命名规则不允许使用空格"
 }

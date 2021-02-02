@@ -1,5 +1,5 @@
 {
   "autolispext.project.createproject.createlabel": "Erstellen",
   "autolispext.project.createproject.onlyprjallowed": "Nur PRJ-Dateien sind zulässig.",
-  "autolispext.project.createproject.nospaces": ""
+  "autolispext.project.createproject.nospaces": "Ältere PRJ-Benennungsregeln erlauben keine Leerzeichen"
 }
