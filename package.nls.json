@@ -18,6 +18,7 @@
 	"autolispext.project.openproject.title": "Open an Existing Project",
 	"autolispext.project.closeproject.title": "Close Project",
 	"autolispext.project.addfile.title": "Add File to Project",
+	"autolispext.project.addworkspacefile.title": "Add File to AutoLISP Project",
 	"autolispext.project.removefile.title": "Remove File from Project",
 	"autolispext.project.saveproject.title": "Save Project",
 	"autolispext.project.saveall.title": "Save All",
