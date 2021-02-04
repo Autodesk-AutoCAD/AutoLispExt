@@ -77,14 +77,13 @@ function hasMultipleExtensions(filePath:string):boolean {
 
 async function SelectLspFiles() {
     let label = AutoLispExt.localize("autolispext.project.addfile.openlabel", "Add to Project");
+    const filterDesc = AutoLispExt.localize("autolispext.project.addfile.sourcefilefilter", "AutoLISP Source Files");
     const options: vscode.OpenDialogOptions = {
-        //TBD: globalize
         canSelectMany: true,
         openLabel: label,
-        filters: {
-            'Autolisp source files': ['lsp']
-        }
+        filters: {}
     };
+    options.filters[filterDesc] = ['lsp'];
 
     let fileUris = await vscode.window.showOpenDialog(options);
     if (fileUris && fileUris.length > 0)

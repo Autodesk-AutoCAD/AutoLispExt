@@ -8,13 +8,12 @@ import { AutoLispExt } from '../extension';
 
 export async function getNewProjectFilePath() {
     let label = AutoLispExt.localize("autolispext.project.createproject.createlabel", "Create");
+    const filterDesc = AutoLispExt.localize("autolispext.project.createproject.projectfilter", "AutoLISP Project Files");
     const options: vscode.SaveDialogOptions = {
-        //TBD: globalize
         saveLabel: label,
-        filters: {
-            'Autolisp project files': ['prj']
-        }
+        filters: {}
     };
+    options.filters[filterDesc] = ['prj'];
 
     let fileUri = await vscode.window.showSaveDialog(options);    
     if (fileUri) {
