@@ -1,9 +1,11 @@
 import * as vscode from "vscode";
+import * as nls from 'vscode-nls';
 import { AutoLispExt } from './extension';
 import { openWebHelp } from './help/openWebHelp';
 import { showErrorMessage } from './project/projectCommands';
 import { AutolispDefinitionProvider } from './providers/gotoProvider';
 
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export function registerCommands(context: vscode.ExtensionContext){
 
@@ -14,7 +16,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 		catch (err) {
 			if (err){
-				let msg = AutoLispExt.localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
+				let msg = localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
 				showErrorMessage(msg, err);
 			}
 		}
@@ -30,7 +32,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 		catch (err) {
 			if (err){
-				let msg = AutoLispExt.localize("autolispext.commands.addFoldingRegion", "Failed to insert snippet");
+				let msg = localize("autolispext.commands.addFoldingRegion", "Failed to insert snippet");
 				showErrorMessage(msg, err);
 			}
 		}

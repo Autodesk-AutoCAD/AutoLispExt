@@ -2,7 +2,9 @@ import { SaveProject } from './saveProject';
 import { ProjectTreeProvider } from './projectTree';
 import * as vscode from 'vscode';
 import { pathEqual } from '../utils';
-import { AutoLispExt } from '../extension';
+
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 //return false if no project is opened or there are no unsaved changes or user select "Save" or "Don't Save" the changes
 //return true if there are unsaved changes and user select "Cancel" or just close the dialog
@@ -26,9 +28,9 @@ export async function CheckUnsavedChanges(): Promise<boolean> {
     
     // prompt user if there are unsaved changes
     if (root.projectModified || unsavedFiles.length > 0) {
-        let msg = AutoLispExt.localize("autolispext.project.checkunsavedchanges.message", "Unsaved changes found with the project or the files in the project.\nDo you want to save the changes?");
-        let save = AutoLispExt.localize("autolispext.project.checkunsavedchanges.save", "Save");
-        let dontSave = AutoLispExt.localize("autolispext.project.checkunsavedchanges.dontsave", "Don't Save");
+        let msg = localize("autolispext.project.checkunsavedchanges.message", "Unsaved changes found with the project or the files in the project.\nDo you want to save the changes?");
+        let save = localize("autolispext.project.checkunsavedchanges.save", "Save");
+        let dontSave = localize("autolispext.project.checkunsavedchanges.dontsave", "Don't Save");
         const selection = await vscode.window.showWarningMessage(msg, {modal: true}, save, dontSave);
         if (!selection) {
             return true;

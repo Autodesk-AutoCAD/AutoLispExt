@@ -1,13 +1,16 @@
 
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
 import * as fs from 'fs-extra';
-import * as path from 'path';
+import * as path from 'path'
+import { AutoLispExt } from '../extension';
 import { ProjectNode, LspFileNode } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
-import { AutoLispExt } from '../extension';
+
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function getNewProjectFilePath() {
-    let label = AutoLispExt.localize("autolispext.project.createproject.createlabel", "Create");
+    let label = localize("autolispext.project.createproject.createlabel", "Create");
     const options: vscode.SaveDialogOptions = {
         //TBD: globalize
         saveLabel: label,
@@ -32,7 +35,7 @@ export async function getNewProjectFilePath() {
 export async function createProject(prjFilePath: string) {
     let prjPathUpper = prjFilePath.toUpperCase();
     if (prjPathUpper.endsWith(".PRJ") == false) {
-        let msg = AutoLispExt.localize("autolispext.project.createproject.onlyprjallowed", "Only PRJ files are allowed.");
+        let msg = localize("autolispext.project.createproject.onlyprjallowed", "Only PRJ files are allowed.");
         return Promise.reject(msg)
     }
 

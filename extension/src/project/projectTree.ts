@@ -3,9 +3,11 @@ import { ProjectDefinition } from './projectDefinition';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { pathEqual } from '../utils';
-import { AutoLispExt } from '../extension';
-import * as fs from 'fs';
 import {getTreeItemTitle } from './projectutil'
+
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+const fs = require('fs');
 
 export interface DisplayNode {
     getDisplayText: () => string;
@@ -31,7 +33,7 @@ export class ProjectNode implements DisplayNode {
 
     getDisplayText(): string {
         if (this.projectModified) {
-            let unsaved = AutoLispExt.localize("autolispext.project.tree.unsaved", " (UNSAVED)");
+            let unsaved = localize("autolispext.project.tree.unsaved", " (UNSAVED)");
             return this.projectName + unsaved;
         } else {
             return this.projectName;
@@ -73,7 +75,7 @@ export class LspFileNode implements DisplayNode {
         if (this.fileExists) {
             return this.filePath;
         } else {
-            let msg = AutoLispExt.localize("autolispext.project.tree.filenotexist", "File doesn't exist: ");
+            let msg = localize("autolispext.project.tree.filenotexist", "File doesn't exist: ");
             return msg + this.filePath;
         }
     }

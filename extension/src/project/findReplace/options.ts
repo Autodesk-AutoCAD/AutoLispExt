@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
 import { optionButton } from './optionButton';
 import { IconUris } from '../icons';
-import { AutoLispExt } from '../../extension';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class SearchOption {
     static activeInstance: SearchOption = new SearchOption;//the one bound to search UI
@@ -108,7 +109,7 @@ export async function getString(title: string, hint: string) {
             quickpick.value = '';
             quickpick.ignoreFocusOut = true;
 
-            let closeTooltip = AutoLispExt.localize("autolispext.project.findreplace.optionbutton.close", "Close");
+            let closeTooltip = localize("autolispext.project.findreplace.optionbutton.close", "Close");
             let closeBtn = new optionButton(IconUris.closeUri(), null, true, closeTooltip, optionButton.name_Close);
             quickpick.buttons = [closeBtn];
 
