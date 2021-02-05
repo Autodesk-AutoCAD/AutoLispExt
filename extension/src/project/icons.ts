@@ -28,7 +28,6 @@ export class IconUris {
     public static lspFile(): { light: string | vscode.Uri; dark: string | vscode.Uri } {
         if(IconUris.lspFileUri == undefined) {
             IconUris.lspFileUri = {
-                //TBD: update with real icons from PD
                 "light" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'light', 'LISP_file.svg')),
                 "dark" : vscode.Uri.file(path.join(IconUris.extRootDir, 'images', 'dark', 'LISP_file.svg'))
             };

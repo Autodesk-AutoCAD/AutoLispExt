@@ -96,7 +96,7 @@
 			{
 				"command": "autolisp.addWorkspaceFile2Project",
 				"category": "AutoLISP",
-				"title": "%autolispext.project.addfile.title%",
+				"title": "%autolispext.project.addworkspacefile.title%",
 				"icon": {
 					"dark": "images/dark/Add_LISP_File.svg",
 					"light": "images/light/Add_LISP_File.svg"

@@ -55,14 +55,13 @@ export function OpenProjectFile(prjUri: vscode.Uri): ProjectNode {
 
 async function SelectProjectFile() {
     let label = localize("autolispext.project.openproject.label", "Open Project");
+    const filterDesc = localize("autolispext.project.openproject.projectfilter", "AutoLISP Project Files");
     const options: vscode.OpenDialogOptions = {
-        //TBD: globalize
         canSelectMany: false,
         openLabel: label,
-        filters: {
-            'Autolisp project files': ['prj']
-        }
+        filters: {}
     };
+    options.filters[filterDesc] = ['prj'];
 
     let fileUri = await vscode.window.showOpenDialog(options);
     if (fileUri && fileUri.length > 0){

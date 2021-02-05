@@ -11,13 +11,12 @@ const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function getNewProjectFilePath() {
     let label = localize("autolispext.project.createproject.createlabel", "Create");
+    const filterDesc = localize("autolispext.project.createproject.projectfilter", "AutoLISP Project Files");
     const options: vscode.SaveDialogOptions = {
-        //TBD: globalize
         saveLabel: label,
-        filters: {
-            'Autolisp project files': ['prj']
-        }
+        filters: {}
     };
+    options.filters[filterDesc] = ['prj'];
 
     let fileUri = await vscode.window.showSaveDialog(options);    
     if (fileUri) {
