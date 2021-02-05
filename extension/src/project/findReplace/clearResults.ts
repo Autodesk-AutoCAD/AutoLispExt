@@ -1,7 +1,9 @@
 import { SearchTreeProvider, SummaryNode } from './searchTree';
 import { SearchOption } from './options';
-import * as vscode from 'vscode';
-import { AutoLispExt } from '../../extension';
+
+import * as vscode from 'vscode'
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export function clearSearchResults() {
     SearchTreeProvider.instance.clear();
@@ -29,7 +31,7 @@ let isSearching: boolean = false;
 //this method is expected to never throw error, as it will be the first method to call in many use cases
 export function getWarnIsSearching(): boolean {
     if (isSearching) {
-        let msg = AutoLispExt.localize("autolispext.project.findReplace.clearresults.issearching", "A search is in progress, wait until the current search has completed and try again.");
+        let msg = localize("autolispext.project.findReplace.clearresults.issearching", "A search is in progress, wait until the current search has completed and try again.");
         vscode.window.showInformationMessage(msg);
         return true;
     }

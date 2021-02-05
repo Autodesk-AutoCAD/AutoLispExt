@@ -1,28 +1,35 @@
 
 'use strict';
 import * as vscode from 'vscode';
-import { LanguageClient } from 'vscode-languageclient';
-import { ContextManager } from "./context";
-// moved singleton AutoLispExt constructor ahead of 'our' other imports to create nls.localize() before they cause a null reference error
-export const AutoLispExt: ContextManager = new ContextManager();
+
+import {
+	LanguageClient
+} from 'vscode-languageclient';
+
 
 import * as Diagnostics from './diagnosticsCtrl';
 import { onUriRequested } from './uriHandler';
+
 import * as formatProviders from './format/formatProviders';
 import * as autoCompletionProvider from "./completion/autocompletionProvider";
 import * as statusBar from "./statusbar";
 import * as autoIndent from './format/autoIndent';
+import { ContextManager } from "./context";
 import * as DebugProviders from "./debug";
 import { registerProjectCommands } from "./project/projectCommands";
 import { registerCommands } from "./commands";
 import { loadAllResources } from "./resources";
+import * as nls from 'vscode-nls';
 
+// The example uses the file message format.
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+export const AutoLispExt: ContextManager = new ContextManager();
 let client: LanguageClient;
 
 loadAllResources();
 
 export function activate(context: vscode.ExtensionContext) {
-	AutoLispExt.initialize(context); 
+	AutoLispExt.initialize(context);	
 
 	//-----------------------------------------------------------
 	//1. lisp autoformat

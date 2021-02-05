@@ -1,4 +1,6 @@
 import { Sexpression } from '../format/sexpression';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ProjectDefinition {
     static key_name: string = ":NAME";

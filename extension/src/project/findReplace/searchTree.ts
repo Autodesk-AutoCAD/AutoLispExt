@@ -1,9 +1,11 @@
 import { DisplayNode, ProjectNode } from '../projectTree';
 import { IconUris } from '../icons';
 import { SearchOption } from './options';
-import * as vscode from 'vscode';
-import { AutoLispExt } from '../../extension';
 import {getTreeItemTitle } from '../projectutil'
+
+import * as vscode from 'vscode';
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class FileNode implements DisplayNode {
     filePath: string = '';
@@ -102,31 +104,31 @@ export class SummaryNode implements DisplayNode {
         let prjNameClause = '';
         let prjPathStatement = '';
         if (prjNode) {
-            let inStr = AutoLispExt.localize("autolispext.project.findreplace.searchtree.in", " in ");
-            let prjFileStr = AutoLispExt.localize("autolispext.project.findreplace.searchtree.prjfile", "\r\nProject file: ");
+            let inStr = localize("autolispext.project.findreplace.searchtree.in", " in ");
+            let prjFileStr = localize("autolispext.project.findreplace.searchtree.prjfile", "\r\nProject file: ");
             prjNameClause = inStr + `${prjNode.projectName}`;
             prjPathStatement = prjFileStr + `${prjNode.projectFilePath}`;
         }
 
         if (opt.isReplace) {
-            let replace = AutoLispExt.localize("autolispext.project.findreplace.searchtree.replace", "Replace ");
-            let withStr = AutoLispExt.localize("autolispext.project.findreplace.searchtree.with", " with ");
+            let replace = localize("autolispext.project.findreplace.searchtree.replace", "Replace ");
+            let withStr = localize("autolispext.project.findreplace.searchtree.with", " with ");
             this.tooltip = replace + `\"${opt.keyword}\"` + withStr + `\"${opt.replacement}\"${prjNameClause};`;
         }
         else {
-            let findStr = AutoLispExt.localize("autolispext.project.findreplace.searchtree.find", "Find ");
+            let findStr = localize("autolispext.project.findreplace.searchtree.find", "Find ");
             this.tooltip = findStr + `\"${opt.keyword}\"${prjNameClause};`;
         }
         this.tooltip += prjPathStatement;
 
         if (opt.matchCase) {
-            this.tooltip += AutoLispExt.localize("autolispext.project.findreplace.searchtree.matchcaseon", "\r\nMatch case: ON");
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.matchcaseon", "\r\nMatch case: ON");
         }
         if (opt.matchWholeWord) {
-            this.tooltip += AutoLispExt.localize("autolispext.project.findreplace.searchtree.matchwholewordon", "\r\nMatch whole word: ON");
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.matchwholewordon", "\r\nMatch whole word: ON");
         }
         if (opt.useRegularExpr) {
-            this.tooltip += AutoLispExt.localize("autolispext.project.findreplace.searchtree.regexpon", "\r\nUse regular expression: ON");
+            this.tooltip += localize("autolispext.project.findreplace.searchtree.regexpon", "\r\nUse regular expression: ON");
         }
 
         this.tooltip += "\r\n" + this.summary;
