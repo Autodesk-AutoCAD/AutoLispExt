@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import { AutoLispExt } from '../extension';
+import * as nls from 'vscode-nls';
 import { LispParser } from '../format/parser';
 import { LispAtom, Sexpression } from '../format/sexpression';
 import { DocumentManager } from '../documents';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
     private constructor() {}
@@ -228,7 +229,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
         }
 
         //the code shouldn't get here because it should have returned in the for loop when line == this.lineCount - 1
-        let msg = AutoLispExt.localize("autolispext.project.readonlydocument.convertoffsettopositionfailed", "Failed to convert offset to position.");
+        let msg = localize("autolispext.project.readonlydocument.convertoffsettopositionfailed", "Failed to convert offset to position.");
         throw new Error(msg);
     }
 

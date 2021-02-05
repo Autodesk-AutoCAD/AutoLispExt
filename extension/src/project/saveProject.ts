@@ -1,18 +1,22 @@
 import { ProjectNode, ProjectTreeProvider } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
 import { LispFormatter } from '../format/formatter';
-import * as path from 'path';
+
+import * as path from 'path'
 import * as fs from 'fs-extra';
 import { pathEqual } from '../utils';
 import { ReadonlyDocument } from './readOnlyDocument';
-import { AutoLispExt } from '../extension';
-import {longListFormatAsSingleColum, resetLongListFormatAsSingleColum} from '../format/sexpression';
+import * as nls from 'vscode-nls';
+
+import {longListFormatAsSingleColum, resetLongListFormatAsSingleColum} from '../format/sexpression'
+
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 import * as vscode from 'vscode';
 
 export async function SaveProject(refresh: boolean) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
-            let msg = AutoLispExt.localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
+            let msg = localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
             return Promise.reject(msg);
         }
 
@@ -21,7 +25,7 @@ export async function SaveProject(refresh: boolean) {
         //work out the correct project file text
         let prjFileText = generateProjectText(root);
         if (!prjFileText) {
-            let msg = AutoLispExt.localize("autolispext.project.saveproject.generateprjcontentfailed", "Failed to generate project content.");
+            let msg = localize("autolispext.project.saveproject.generateprjcontentfailed", "Failed to generate project content.");
             return Promise.reject(msg);
         }
 
@@ -55,7 +59,7 @@ export async function SaveProject(refresh: boolean) {
 export async function SaveAll() {
     const root = ProjectTreeProvider.instance().projectNode;
     if (!root) {
-        let msg = AutoLispExt.localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
+        let msg = localize("autolispext.project.saveproject.noprojecttosave", "No project to save.");
         return Promise.reject(msg);
     }
 

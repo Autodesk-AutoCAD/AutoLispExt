@@ -1,12 +1,15 @@
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
 import { ProjectTreeProvider, isFileAlreadyInProject, hasFileWithSameName } from './projectTree';
-import { AutoLispExt } from '../extension';
-import * as path from 'path';
+
+import * as nls from 'vscode-nls';
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+
+import * as path from 'path'
 
 export async function AddFile2Project(fileList?: vscode.Uri[]) {
     try {
         if (ProjectTreeProvider.hasProjectOpened() == false) {
-            let msg = AutoLispExt.localize("autolispext.project.addfile.openproject", "A project must be open before you can add a file.");
+            let msg = localize("autolispext.project.addfile.openproject", "A project must be open before you can add a file.");
             return Promise.reject(msg);
         }
 
@@ -18,7 +21,7 @@ export async function AddFile2Project(fileList?: vscode.Uri[]) {
         for (let file of selectedFiles) {
             let fileUpper = file.fsPath.toUpperCase();
             if (fileUpper.endsWith(".LSP") == false) {
-                let msg = AutoLispExt.localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
+                let msg = localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
                 return Promise.reject(msg);
             }
 
@@ -27,19 +30,19 @@ export async function AddFile2Project(fileList?: vscode.Uri[]) {
                 //Legacy IDE doesn't allow user to add hello.lsp.lsp into a project, but if there happen to be a file
                 //  named hello.lsp, it will add hello.lsp into project, and this is wrong.
                 //To keep consistency with legacy IDE, we have to reject files of this kind.
-                let msg = AutoLispExt.localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
+                let msg = localize("autolispext.project.addfile.onlylspallowed", "Only LSP files are allowed.");
                 return Promise.reject(msg);
             }
 
             if (isFileAlreadyInProject(file.fsPath, ProjectTreeProvider.instance().projectNode)) {
-                let msg = AutoLispExt.localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project: ");
+                let msg = localize("autolispext.project.addfile.filealreadyexist", "File already exists in this project: ");
                 vscode.window.showInformationMessage(msg + file.fsPath);
 
                 continue;
             }
 
             if(hasFileWithSameName(file.fsPath, ProjectTreeProvider.instance().projectNode)) {
-                let msg = AutoLispExt.localize("autolispext.project.addfile.samenameexist", "File with the same name already exists in this project: ");
+                let msg = localize("autolispext.project.addfile.samenameexist", "File with the same name already exists in this project: ");
                 vscode.window.showInformationMessage(msg + path.basename(file.fsPath));
 
                 continue;
@@ -76,8 +79,8 @@ function hasMultipleExtensions(filePath:string):boolean {
 }
 
 async function SelectLspFiles() {
-    let label = AutoLispExt.localize("autolispext.project.addfile.openlabel", "Add to Project");
-    const filterDesc = AutoLispExt.localize("autolispext.project.addfile.sourcefilefilter", "AutoLISP Source Files");
+    let label = localize("autolispext.project.addfile.openlabel", "Add to Project");
+    const filterDesc = localize("autolispext.project.addfile.sourcefilefilter", "AutoLISP Source Files");
     const options: vscode.OpenDialogOptions = {
         canSelectMany: true,
         openLabel: label,
