@@ -1,5 +1,6 @@
 {
   "autolispext.project.createproject.createlabel": "Crea",
   "autolispext.project.createproject.onlyprjallowed": "Sono consentiti solo i file PRJ.",
-  "autolispext.project.createproject.nospaces": "Le regole di denominazione PRJ precedenti non consentono spazi"
+  "autolispext.project.createproject.nospaces": "Le regole di denominazione PRJ precedenti non consentono spazi",
+  "autolispext.project.createproject.projectfilter": "File di progetto AutoLISP"
 }

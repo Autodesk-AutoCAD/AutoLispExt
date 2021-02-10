@@ -3,5 +3,6 @@
   "autolispext.project.addfile.onlylspallowed": "LSP ファイルのみが許可されます。",
   "autolispext.project.addfile.filealreadyexist": "ファイルは既に次のプロジェクトに存在します: ",
   "autolispext.project.addfile.samenameexist": "同じ名前のファイルが既に次のプロジェクトに存在します: ",
-  "autolispext.project.addfile.openlabel": "プロジェクトに追加"
+  "autolispext.project.addfile.openlabel": "プロジェクトに追加",
+  "autolispext.project.addfile.sourcefilefilter": "AutoLISP ソース ファイル"
 }
