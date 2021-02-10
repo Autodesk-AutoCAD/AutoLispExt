@@ -3,5 +3,6 @@
   "autolispext.project.openproject.readfailed": "No se puede leer el archivo de proyecto: ",
   "autolispext.project.openproject.malformedfile": "Archivo de proyecto con formato incorrecto: ",
   "autolispext.project.openproject.label": "Abrir proyecto",
-  "autolispext.project.openproject.nospaces": "Las reglas de asignación de nombres de PRJ existentes no admiten espacios."
+  "autolispext.project.openproject.nospaces": "Las reglas de asignación de nombres de PRJ existentes no admiten espacios.",
+  "autolispext.project.openproject.projectfilter": "Archivos de proyecto de AutoLISP"
 }

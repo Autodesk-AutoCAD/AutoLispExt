@@ -3,5 +3,6 @@
   "autolispext.project.openproject.readfailed": "無法讀取專案檔: ",
   "autolispext.project.openproject.malformedfile": "異常的專案檔: ",
   "autolispext.project.openproject.label": "開啟專案",
-  "autolispext.project.openproject.nospaces": "舊式 PRJ 命名規則不允許空格"
+  "autolispext.project.openproject.nospaces": "舊式 PRJ 命名規則不允許空格",
+  "autolispext.project.openproject.projectfilter": "AutoLISP 專案檔"
 }

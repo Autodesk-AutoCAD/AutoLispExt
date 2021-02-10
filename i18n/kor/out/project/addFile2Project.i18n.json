@@ -3,5 +3,6 @@
   "autolispext.project.addfile.onlylspallowed": "LSP 파일만 허용됩니다.",
   "autolispext.project.addfile.filealreadyexist": "파일이 이 프로젝트에 이미 있습니다. ",
   "autolispext.project.addfile.samenameexist": "같은 이름의 파일이 이 프로젝트에 이미 있습니다. ",
-  "autolispext.project.addfile.openlabel": "프로젝트에 추가"
+  "autolispext.project.addfile.openlabel": "프로젝트에 추가",
+  "autolispext.project.addfile.sourcefilefilter": "AutoLISP 원본 파일"
 }

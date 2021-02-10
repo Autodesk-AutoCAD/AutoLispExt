@@ -3,5 +3,6 @@
   "autolispext.project.openproject.readfailed": "プロジェクト ファイルを読み込めません: ",
   "autolispext.project.openproject.malformedfile": "不正なプロジェクト ファイル: ",
   "autolispext.project.openproject.label": "プロジェクトを開く",
-  "autolispext.project.openproject.nospaces": "旧形式の PRJ 命名規則ではスペースを使用できません"
+  "autolispext.project.openproject.nospaces": "旧形式の PRJ 命名規則ではスペースを使用できません",
+  "autolispext.project.openproject.projectfilter": "AutoLISP プロジェクト ファイル"
 }

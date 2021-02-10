@@ -3,5 +3,6 @@
   "autolispext.project.openproject.readfailed": "A projektfájl nem olvasható: ",
   "autolispext.project.openproject.malformedfile": "Hibás formátumú projektfájl: ",
   "autolispext.project.openproject.label": "Projekt megnyitása",
-  "autolispext.project.openproject.nospaces": "A korábbi PRJ-elnevezési szabályok nem engedélyezték a szóközök használatát"
+  "autolispext.project.openproject.nospaces": "A korábbi PRJ-elnevezési szabályok nem engedélyezték a szóközök használatát",
+  "autolispext.project.openproject.projectfilter": "AutoLISP-projektfájlok"
 }
