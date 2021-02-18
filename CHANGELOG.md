@@ -1,4 +1,4 @@
-## [1.4.0] - 2021-01-20
+## [1.4.0] - 2021-02-19
 a.	Added the ability to open the reference documentation of a built-in function or DCL tile/attribute when a LSP or DCL file is open. Select a function or DCL tile/attribute, and then right-click and choose "Open Online Help" to open the associated reference documentation.
 
 b.	Added support to insert user-defined regions. A region is defined using the ;#region and ;#endregion comments.

@@ -41,6 +41,14 @@ You have two ways to run the tests:
 npm run test
 ```
 
+### localization
+It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
+And the codes in each ts file:
+```
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+```
+does good stuffs for localization.
+
 ### Profile the performence issue
 For the performence issue of vscode extension, see wiki page https://github.com/microsoft/vscode-wiki/blob/master/Performance-Issues.md
 
