@@ -41,7 +41,7 @@ You have two ways to run the tests:
 npm run test
 ```
 
-### localization
+### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
 ```
@@ -59,36 +59,15 @@ For the performence issue of vscode extension, see wiki page https://github.com/
 Because the mandatory local NPM setting in Autodesk, for Autodesk developer you can simply replace all the ocurrences in pacake-lock.json like:
 replace https://registry.npmjs.org/ with https://art-bobcat.autodesk.com:443/artifactory/api/npm/autodesk-npm-virtual/
 
-## Build status
-
-[![Build Status](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master)](https://master-2.jenkins.autodesk.com/buildStatus/icon?=job/AutoCAD/job/AutoLispExt/master/)
-
 ## package location
 
-[extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
+[BRE signed extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
 
 ## How to publish the extension to vscode market
 
-You need to see the details to the page <https://code.visualstudio.com/api/working-with-extensions/publishing-extension>
-
-1. Create a tag on GIT, with the correct commit ID selected
-2. Open https://master-2.jenkins.autodesk.com/job/AutoCAD/job/AutoLispExt/job/master/, and do the following:
-2.1 Click on the "Build with Parameters" on the left side; if you can't find it, please ask Jenkins Admin for permission;
-2.2 Fill in the "vsixUri" field with the Uri of the signed and tested VSIX. It shall be a link on Artifactory, e.g.:
-    https://art-bobcat.autodesk.com/artifactory/team-autocad-npm/autolispext/-/autolispext-1.0.10-40.tgz!/package/autolispext.vsix
-    NOTE: don't copy the Url from your web browser. Copy the address of the "Download" link of the correct VSIX file.
-2.3 Check the "publish2VsCodeMarket" box;
-2.4 Click on the "Build" button;
-2.5 After a few minutes, visit https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext to make sure it's done.
-
-You can also do it by hand:
-1. Download the signed version package from Artifactory to local machine and unzip it
-2. Change path to the path in step 3, and run command "vsce login Autodesk"; it will prompt you input the PAT.
-3. Run command "vsce publish --packagePath autolispextxxx.vsix"
-4. Check the [extension web page](https://marketplace.visualstudio.com/items?itemName=Autodesk.autolispext) to see if it is updated.
-5. run command "vsce logout Autodesk"
-
-Note that when you input the PAT by hand in the machine. The VSCE tool will save the PAT, and next time to run "vsce publish" it will not prompt you to input the PAT and publish it to market directly. So this is risk.
+It needs the BRE team help to do following things by hand:
+ 1. Sign the packages
+ 2. Publish the package to vscode market
 
 ## Notice
 
