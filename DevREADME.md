@@ -59,10 +59,6 @@ For the performence issue of vscode extension, see wiki page https://github.com/
 Because the mandatory local NPM setting in Autodesk, for Autodesk developer you can simply replace all the ocurrences in pacake-lock.json like:
 replace https://registry.npmjs.org/ with https://art-bobcat.autodesk.com:443/artifactory/api/npm/autodesk-npm-virtual/
 
-## package location
-
-[BRE signed extension package posted location](https://art-bobcat.autodesk.com/artifactory/webapp/#/artifacts/browse/tree/General/team-autocad-npm/autolispext/-)
-
 ## How to publish the extension to vscode market
 
 It needs the BRE team help to do following things by hand:
