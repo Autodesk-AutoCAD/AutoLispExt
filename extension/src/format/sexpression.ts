@@ -916,7 +916,7 @@ export class Sexpression extends LispAtom {
     getRange(){
         const begin: LispAtom = this.atoms[0];
         const close: LispAtom = this.atoms[this.atoms.length -1];
-        return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length) - 1);
+        return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length));
     }
 
     

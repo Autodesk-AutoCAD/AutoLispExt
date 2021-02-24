@@ -27,7 +27,7 @@ suite("ReadonlyDocument.findExpressions() Tests", function () {
 				test("Sexpression.getRange()", function () {
 					try {
 						const txt = doc.getText(exp.getRange());									
-						assert.closeTo(txt.length, 6033, 1);
+						assert.equal(txt.length, 6033);
 					}
 					catch (err) {
 						assert.fail("Invalid range from Sexpression");
@@ -49,7 +49,7 @@ suite("ReadonlyDocument.findExpressions() Tests", function () {
 					try {
 						const sexp = exp.getSexpressionFromPos(pos);
 						const txt = doc.getText(sexp.getRange());
-						assert.closeTo(txt.length, 71, 1);
+						assert.equal(txt.length, 71);
 					}
 					catch (err) {
 						assert.fail("Invalid quantity, has the LSP changed?");
@@ -62,7 +62,7 @@ suite("ReadonlyDocument.findExpressions() Tests", function () {
 						const par1 = exp.getParentOfSexpression(sexp);
 						const par2 = exp.getParentOfSexpression(par1);
 						const txt = doc.getText(par2.getRange());
-						assert.closeTo(txt.length, 99, 1);
+						assert.equal(txt.length, 99);
 					}
 					catch (err) {
 						assert.fail("Invalid quantity, has the LSP changed?");
