@@ -106,13 +106,13 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
     
     // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
-    get atomsForest(): Array<string|Sexpression> {
+    get atomsForest(): Array<LispAtom|Sexpression> {
         if (this.languageId === DocumentManager.Selectors.lsp) {
-            if (this._atomsForest){
-                return this._atomsForest;
+            if (this._docExpression){
+                return this._docExpression.atoms;
             } else {
                 this.updateAtomsForest();
-                return this._atomsForest;
+                return this._docExpression.atoms;
             }
         } else {
             return [];
@@ -127,20 +127,14 @@ export class ReadonlyDocument implements vscode.TextDocument {
             if (content) {
                 this.initialize(content, this.languageId);
             }
-            let parser = new LispParser(this);
-            try {
-                parser.tokenizeString(this.fileContent, 0);        
-                this._atomsForest = [...parser.atomsForest];    
-            } finally {
-                parser = undefined;
-            }
+            this._docExpression = LispParser.getDocumentSexpression(this.fileContent);  
         }
     }
 
     fileContent: string;
     lines: string[];
     eolLength: number;
-    private _atomsForest: Array<string|Sexpression>; // Added to drastically reduces complexity in other places.
+    private _docExpression: Sexpression; // Added to drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
