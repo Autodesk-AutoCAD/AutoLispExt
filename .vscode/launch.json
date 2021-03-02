@@ -9,6 +9,7 @@
             "name": "Extension Client",
             "type": "extensionHost",
             "request": "launch",
+            "preLaunchTask": "buildproject",
             "runtimeExecutable": "${execPath}",
 			"args": ["--extensionDevelopmentPath=${workspaceRoot}"],
 			"outFiles": ["${workspaceRoot}/extension/out/**/*.js"],
@@ -18,6 +19,7 @@
             "name": "Extension Tests",
             "type": "extensionHost",
             "request": "launch",
+            "preLaunchTask": "buildproject",
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",

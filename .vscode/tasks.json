@@ -4,6 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
+			"label": "buildproject",
 			"type": "npm",
 			"script": "compile",
 			"group": "build",
