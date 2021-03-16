@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ListReader, CursorPosition } from "./listreader";
-import { LispAtom, Sexpression } from "./sexpression";
+import { LispAtom, Sexpression, LispContainer } from "./sexpression";
 
 class LeftParentItem {
     public location: Number;
@@ -202,15 +202,17 @@ export namespace LispParser {
         linefeed: string;
     }
 
-    export function getDocumentSexpression(data: string|vscode.TextDocument, offset?: number|vscode.Position, tracker?: CountTracker): Sexpression {
+    export function getDocumentContainer(data: string|vscode.TextDocument, offset?: number|vscode.Position, tracker?: CountTracker): LispContainer {
         let documentText = '';
+        let isTopLevel = false;
         if (data instanceof Object) {
             documentText = data.getText();
         } else {
             documentText = data;
         }
-        if (!offset) {
+        if (offset === undefined) {
             offset = 0;
+            isTopLevel = true;
         }
         if (!tracker){
             tracker = {
@@ -219,7 +221,7 @@ export namespace LispParser {
             };
         }
         
-        const result = new Sexpression();
+        const result = new LispContainer();
         result.line = tracker.line;
         result.column = tracker.column;
         result.linefeed = tracker.linefeed;
@@ -247,8 +249,15 @@ export namespace LispParser {
                 }
                 tracker.idx++;
                 tracker.column++;
+            } else if (isTopLevel && curr === '(' && state === ParseState.UNKNOWN) {
+                if (temp.length > 0) {
+                    result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));                            
+                }
+                temp = '';
+                grpStart = null;
+                result.atoms.push(getDocumentContainer(documentText, offset, tracker));
             } else {
-                let handled = false; // Only true when this function gets recursively called because of a new open parenthesis (Sexpression) scope
+                let handled = false; // Only true when this function gets recursively called because of a new open parenthesis (LispContainer) scope
                 switch (state) {
                     case ParseState.UNKNOWN:                    
                         if (grpStart === null && curr === '\'' && next === '(') {
@@ -269,7 +278,7 @@ export namespace LispParser {
                                 result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));                            
                             }
                             temp = '';
-                            result.atoms.push(getDocumentSexpression(documentText, offset, tracker));
+                            result.atoms.push(getDocumentContainer(documentText, offset, tracker));
                             handled = true;
                         } else if (curr === ';') {
                             if (temp.length > 0) {
@@ -328,7 +337,9 @@ export namespace LispParser {
                             }
                         } else {
                             if (curr === '\r' || curr === '\n') {
-                                result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                                if (temp !== '') {
+                                    result.atoms.push(new LispAtom(grpStart.line, grpStart.character, temp));
+                                }
                                 state = ParseState.UNKNOWN;
                                 temp = '';
                             } else {

@@ -618,6 +618,7 @@
 		"test": "npm run compile && node ./out/test/runTest.js"
 	},
 	"devDependencies": {
+		"@types/chai": "^4.2.15",
 		"@types/fs-extra": "^8.1.0",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^14.14.6",

@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as nls from 'vscode-nls';
 import { LispParser } from '../format/parser';
-import { LispAtom, Sexpression } from '../format/sexpression';
+import { ILispFragment, LispContainer } from '../format/sexpression';
 import { DocumentManager } from '../documents';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
@@ -106,13 +106,13 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
     
     // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
-    get atomsForest(): Array<LispAtom|Sexpression> {
+    get atomsForest(): Array<ILispFragment> {
         if (this.languageId === DocumentManager.Selectors.lsp) {
-            if (this._docExpression){
-                return this._docExpression.atoms;
+            if (this._documentContainer){
+                return this._documentContainer.atoms;
             } else {
                 this.updateAtomsForest();
-                return this._docExpression.atoms;
+                return this._documentContainer.atoms;
             }
         } else {
             return [];
@@ -127,14 +127,14 @@ export class ReadonlyDocument implements vscode.TextDocument {
             if (content) {
                 this.initialize(content, this.languageId);
             }
-            this._docExpression = LispParser.getDocumentSexpression(this.fileContent);  
+            this._documentContainer = LispParser.getDocumentContainer(this.fileContent);  
         }
     }
 
     fileContent: string;
     lines: string[];
     eolLength: number;
-    private _docExpression: Sexpression; // Added to drastically reduces complexity in other places.
+    private _documentContainer: LispContainer; // Added to drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
@@ -274,12 +274,12 @@ export class ReadonlyDocument implements vscode.TextDocument {
     //              let rod = ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document);
     //              let forest = rod.atomsForest;
     //              let expl = rod.findExpressions(/(DEFUN|LAMBDA|FOREACH)/ig, true);
-    findExpressions(regx: RegExp, all: boolean = false): Sexpression[]{
-        let result: Sexpression[] = [];
-        this.atomsForest.filter(f => f instanceof Sexpression).forEach((sexp: Sexpression) => {
+    findExpressions(regx: RegExp, all: boolean = false): LispContainer[]{
+        let result: LispContainer[] = [];
+        this.atomsForest.filter(f => f instanceof LispContainer).forEach((sexp: LispContainer) => {
             result = result.concat(sexp.findChildren(regx, all));
         });
         return result;
     }
-    // Relocated the atomsForestExplorer() to be an Sexpression utility function so more things had a logical path to using it.
+    // Relocated the atomsForestExplorer() to be an LispContainer utility function so more things had a logical path to using it.
 }

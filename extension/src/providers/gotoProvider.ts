@@ -1,7 +1,6 @@
-import { utils } from 'mocha';
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { Sexpression } from '../format/sexpression';
+import { LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { escapeRegExp } from "../utils";
 import { SearchPatterns, SearchHandlers } from './providerShared';
@@ -11,7 +10,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		const rDoc = AutoLispExt.Documents.getDocument(document);
 		let selected = '';
 		rDoc.atomsForest.forEach(sexp => {
-			if (sexp instanceof Sexpression && sexp.contains(position)){
+			if (sexp instanceof LispContainer && sexp.contains(position)){
 				const atom = sexp.getAtomFromPos(position);
 				if (atom && !atom.isComment()) {
 					selected = atom.symbol.replace(/^[']*/, '');
@@ -49,23 +48,23 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 	}
 
 	
-	private findFirstVariableMatch(doc: ReadonlyDocument, start: vscode.Position, searchFor: string, searchIn: Sexpression): vscode.Location[] {
+	private findFirstVariableMatch(doc: ReadonlyDocument, start: vscode.Position, searchFor: string, searchIn: LispContainer): vscode.Location[] {
 		const result: vscode.Location[] = [];
 		const ucName = searchFor.toUpperCase();
-		let context = searchIn.getSexpressionFromPos(start);
+		let context = searchIn.getExpressionFromPos(start);
 		let flag = true;
 		do {
-			const parent = !context ? searchIn : searchIn.getParentOfSexpression(context);			
+			const parent = !context ? searchIn : searchIn.getParentOfExpression(context);			
 			const atom = parent?.getNthKeyAtom(0);
 			if (atom && SearchPatterns.LOCALIZES.test(atom.symbol)) {
 				let headers = parent.getNthKeyAtom(1);
 				if (headers?.symbol.toUpperCase() === ucName){ // adds defun names to possible result. Especially useful for quoted function names.
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(headers.line, headers.column)));
 				}
-				if (!(headers instanceof Sexpression)){
+				if (!(headers instanceof LispContainer)){
 					headers = parent.getNthKeyAtom(2);
 				}
-				if (headers instanceof Sexpression){
+				if (headers instanceof LispContainer){
 					const found = headers.atoms.find(p => p.symbol.toUpperCase() === ucName);
 					if (found) {
 						result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(found.line, found.column)));
@@ -73,7 +72,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 				}
 			} else if (atom && SearchPatterns.ITERATES.test(atom.symbol)) {
 				const tmpVar = parent.getNthKeyAtom(1);
-				if (!(tmpVar instanceof Sexpression) && tmpVar.symbol.toUpperCase() === ucName){
+				if (!(tmpVar instanceof LispContainer) && tmpVar.symbol.toUpperCase() === ucName){
 					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(tmpVar.line, tmpVar.column)));
 				}
 			}
@@ -93,7 +92,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		return result;
 	}
 
-	private findInSetqs(sexp: Sexpression, ucName: string, fileName: string): vscode.Location[] {
+	private findInSetqs(sexp: LispContainer, ucName: string, fileName: string): vscode.Location[] {
 		const result: vscode.Location[] = [];
 		const found = sexp.findChildren(SearchPatterns.ASSIGNS, false);
 		found.forEach(setq => {
@@ -117,7 +116,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		searchIn.forEach((doc: ReadonlyDocument) => {
 			if (regx.test(doc.fileContent.replace(/\s/g, ''))){
 				doc.atomsForest.forEach(atom => {
-					if (atom instanceof Sexpression){
+					if (atom instanceof LispContainer){
 						const defs = atom.findChildren(SearchPatterns.DEFINES, true);
 						defs.forEach(sexp => {
 							const ptr = sexp.getNthKeyAtom(1);

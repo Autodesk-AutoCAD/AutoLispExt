@@ -1,4 +1,4 @@
-import { Sexpression } from '../format/sexpression';
+import { LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import * as vscode from	'vscode';
 
@@ -14,15 +14,15 @@ export namespace SearchPatterns {
 export namespace SearchHandlers {
 
 
-	export function getSelectionScopeOfWork(doc: ReadonlyDocument, position: vscode.Position, selected: string): {isFunction: boolean, parentContainer: Sexpression} {
-		const parentContainer = doc.atomsForest.find(p => p instanceof Sexpression && p.contains(position)) as Sexpression;
-		const innerContainer = parentContainer?.getSexpressionFromPos(position);
-		const possibleDefun = innerContainer ? parentContainer.getParentOfSexpression(innerContainer) : null;
+	export function getSelectionScopeOfWork(doc: ReadonlyDocument, position: vscode.Position, selected: string): {isFunction: boolean, parentContainer: LispContainer} {
+		const parentContainer = doc.atomsForest.find(p => p instanceof LispContainer && p.contains(position)) as LispContainer;
+		const innerContainer = parentContainer?.getExpressionFromPos(position);
+		const possibleDefun = innerContainer ? parentContainer.getParentOfExpression(innerContainer) : null;
 		const firstChild = innerContainer?.getNthKeyAtom(0);
 		const altFirstChild = parentContainer?.getNthKeyAtom(0);
 
 		let isFunction = false;
-		if (firstChild && !(firstChild instanceof Sexpression) && selected === firstChild.symbol) {
+		if (firstChild && !(firstChild instanceof LispContainer) && selected === firstChild.symbol) {
 			isFunction = true; // most likely a function
 		} else if (altFirstChild && selected === altFirstChild.symbol) {
 			isFunction = true; // added to capture document root level function calls
