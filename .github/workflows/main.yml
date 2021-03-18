@@ -37,9 +37,17 @@ jobs:
       - name: Install dependencies
         run:  npm install
 
-      - name: Build1
+      - name: Build
         run: |
           python pack.py
+
+      - name: compile the codes
+        run: |
+          npm run compile
+
+      - name: run test 
+        run: |
+          npm run test
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
