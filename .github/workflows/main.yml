@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run:  npm install
 
-      - name: Build
+      - name: Build1
         run: |
           python pack.py
 
