@@ -19,6 +19,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Start xvfb
+          if: startsWith(matrix.os, 'ubuntu')
+          run: /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -40,10 +44,6 @@ jobs:
       - name: Build
         run: |
           python pack.py
-
-      - name: Start xvfb
-          if: startsWith(matrix.os, 'ubuntu')
-          run: /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
          
       - name: Run tests
           env:
