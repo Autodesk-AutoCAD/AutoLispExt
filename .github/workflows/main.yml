@@ -40,11 +40,12 @@ jobs:
       - name: Build
         run: |
           python pack.py
-          
+
       - name: Run the test
         run: xvfb-run -a npm test
         if: runner.os == 'Linux'
 
+        
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
         with:
