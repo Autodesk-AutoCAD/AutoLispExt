@@ -1,5 +1,5 @@
 import * as chai from 'chai';
-import * as chaiFiles from 'chai-files';
+// import * as chaiFiles from 'chai-files';
 import { Position } from 'vscode';
 import { LispAtom } from '../../format/sexpression';
 import { LispFormatter } from '../../format/formatter';
@@ -9,13 +9,13 @@ import * as fs from 'fs'
 import * as path from 'path';
 
 let unformat_file = path.join(__dirname + "\\..\\..\\..\\test_case\\unFormatted.lsp");
-let formatedfile = path.join(__dirname + "\\formatedfile.lsp");
-let formatedBasefile = path.join(__dirname + "\\..\\..\\..\\test_case\\formatedBasefile.lsp");
-chai.use(chaiFiles);
+// let formatedfile = path.join(__dirname + "\\formatedfile.lsp");
+// let formatedBasefile = path.join(__dirname + "\\..\\..\\..\\test_case\\formatedBasefile.lsp");
+// chai.use(chaiFiles);
 
-let expect = chai.expect;
-let file = chaiFiles.file;
-let dir = chaiFiles.dir;
+// let expect = chai.expect;
+// let file = chaiFiles.file;
+// let dir = chaiFiles.dir;
 
 
 
