@@ -40,6 +40,11 @@ jobs:
       - name: Build
         run: |
           python pack.py
+          
+      - name: Run tests
+        uses: GabrielBB/xvfb-action@v1.0
+        with:
+          run: npm test
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
