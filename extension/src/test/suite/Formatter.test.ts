@@ -47,18 +47,6 @@ suite("LispFormatter Tests", function () {
 				chai.assert.fail("The formatted string is different");
 			}
 		});
-		test("LispFormatter.format() whole file compare Test", function () {
-			try {
-				// chai.assert.equal(formatedstring.length,fmt.length);
-			
-				// chai.assert.equal(fmt,expectedFormatString);
-				expect(file(formatedBasefile)).to.equal(file(formatedfile));
-
-			}
-			catch (err) {
-				chai.assert.fail("The formatted string is different");
-			}
-		});
 	} catch (error) {
 		chai.assert.fail("Failed to setup LispContainer Resources for testing");
 		
