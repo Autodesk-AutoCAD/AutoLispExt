@@ -624,6 +624,7 @@
 		"@types/node": "^14.14.6",
 		"@types/vscode": "^1.50.0",
 		"chai": "^4.2.0",
+		"chai-files": "^1.4.0",
 		"del": "^4.1.1",
 		"event-stream": "^4.0.1",
 		"gulp": "^4.0.2",
