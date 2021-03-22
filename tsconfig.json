@@ -6,7 +6,8 @@
 		"rootDir": "extension/src",
 		"lib": [ "es6" ],
 		"sourceMap": true,
-		"alwaysStrict": true
+		"alwaysStrict": true,
+		"noImplicitAny": false
 	},
 	"include": [
 		"extension/src"
