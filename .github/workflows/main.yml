@@ -43,10 +43,14 @@ jobs:
           python pack.py
           
       - name: Run tests
-        uses: GabrielBB/xvfb-action@v1.0
-        with:
-          run: npm test
-
+        # uses: GabrielBB/xvfb-action@v1.0
+        # with:
+        #   run: npm test
+        - run: xvfb-run -a npm test
+          if: runner.os == 'Linux'
+        - run: npm test
+          if: runner.os != 'Linux'
+          
       # - name: Initialize CodeQL
       #   uses: github/codeql-action/init@v1
       #   with:
