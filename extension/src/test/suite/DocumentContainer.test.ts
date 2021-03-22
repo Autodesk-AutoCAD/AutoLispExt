@@ -6,6 +6,7 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
 let project_path = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
+console.log("project path is " + project_path);
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
