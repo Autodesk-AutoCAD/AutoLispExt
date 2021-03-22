@@ -25,34 +25,7 @@ export async function run(): Promise<void> {
 
 	const testsRoot = path.resolve(__dirname, '..');
 
-	// Setup coverage pre-test, including post-test hook to report
-	const nyc = new NYC({
-		...baseConfig,
-		cwd: path.join(__dirname, '..', '..', '..'),
-		reporter: ['text-summary', 'html'],
-		all: true,
-		silent: false,
-		instrument: true,
-		hookRequire: true,
-		hookRunInContext: true,
-		hookRunInThisContext: true,
-		include: ["out/**/*.js"],
-		exclude: ["out/test/**"],
-	});
-	await nyc.wrap();
-
-	// Debug which files will be included/excluded
-	console.log('Glob verification', await nyc.exclude.glob(nyc.cwd));
-
-	// Check the modules already loaded and warn in case of race condition
-	// (ideally, at this point the require cache should only contain one file - this module)
-	const myFilesRegex = /AutoLispExt\/out/;
-	const filterFn = myFilesRegex.test.bind(myFilesRegex);
-	if (Object.keys(require.cache).filter(filterFn).length > 1) {
-		console.warn('NYC initialized after modules were loaded', Object.keys(require.cache).filter(filterFn));
-	}
-
-	await nyc.createTempDirectory();
+	const nyc = await setupNYC();
 
 	// Add all files to the test suite
 	const files = glob.sync('**/*.test.js', { cwd: testsRoot });
@@ -67,12 +40,46 @@ export async function run(): Promise<void> {
 	if (failures > 0) {
 		throw new Error(`${failures} tests failed.`);
 	}
+}
 
-	async function captureStdout(fn) {
-		let w = process.stdout.write, buffer = '';
-		process.stdout.write = (s) => { buffer = buffer + s; return true; };
-		await fn();
-		process.stdout.write = w;
-		return buffer;
+async function setupNYC() {
+	// Setup coverage pre-test, including post-test hook to report
+
+	let nyc = new NYC({
+		...baseConfig,
+		cwd: path.join(__dirname, '..', '..', '..'),
+		reporter: ['text-summary', 'html'],
+		all: true,
+		silent: false,
+		instrument: true,
+		hookRequire: true,
+		hookRunInContext: true,
+		hookRunInThisContext: true,
+		include: ["out/**/*.js"],
+		exclude: ["out/test/**"],
+	});
+	await nyc.wrap();
+
+	// // Debug which files will be included/excluded
+	// console.log('Glob verification', await nyc.exclude.glob(nyc.cwd));
+
+	// Check the modules already loaded and warn in case of race condition
+	// (ideally, at this point the require cache should only contain one file - this module)
+	const myFilesRegex = /AutoLispExt\/out/;
+	const filterFn = myFilesRegex.test.bind(myFilesRegex);
+	if (Object.keys(require.cache).filter(filterFn).length > 1) {
+		console.warn('NYC initialized after modules were loaded', Object.keys(require.cache).filter(filterFn));
 	}
+
+	await nyc.createTempDirectory();
+
+	return nyc;
+}
+
+async function captureStdout(fn) {
+	let w = process.stdout.write, buffer = '';
+	process.stdout.write = (s) => { buffer = buffer + s; return true; };
+	await fn();
+	process.stdout.write = w;
+	return buffer;
 }
