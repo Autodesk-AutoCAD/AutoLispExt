@@ -10,9 +10,9 @@ export function run(): Promise<void> {
 	mocha.useColors(true);
 
 	const testsRoot = path.resolve(__dirname, '..');
-
+	console.log('testRoot path is ' + testsRoot);
 	return new Promise((c, e) => {
-		glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
+		glob('**LispAtom**.test.js', { cwd: testsRoot }, (err, files) => {
 			if (err) {
 				return e(err);
 			}
