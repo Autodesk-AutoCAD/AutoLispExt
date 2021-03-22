@@ -6,6 +6,7 @@ const NYC = require('nyc');
 import * as baseConfig from "@istanbuljs/nyc-config-typescript";
 import 'ts-node/register';
 import 'source-map-support/register';
+import * as fs from 'fs-extra';
 
 // Linux: prevent a weird NPE when mocha on Linux requires the window size from the TTY
 // Since we are not running in a tty environment, we just implementt the method statically
@@ -69,6 +70,11 @@ async function setupNYC() {
 	const filterFn = myFilesRegex.test.bind(myFilesRegex);
 	if (Object.keys(require.cache).filter(filterFn).length > 1) {
 		console.warn('NYC initialized after modules were loaded', Object.keys(require.cache).filter(filterFn));
+	}
+
+	const tempDirectory = nyc.tempDirectory();
+	if(fs.existsSync(tempDirectory)) {
+		fs.removeSync(tempDirectory);
 	}
 
 	await nyc.createTempDirectory();
