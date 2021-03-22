@@ -5,13 +5,13 @@ import { ILispFragment, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { LispParser } from '../../format/parser';
 
-let project_path = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
+let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
 let pos1: Position = new Position(98,  100); // based on line: "           downloadPdfs (cadr (NS:ACAD:ListBox "Select PDFs to Download" "Download Drawings" (acad_strlsort (mapcar 'car contractDrawings)) t)))"
 let pos2: Position = new Position(100, 100); // based on line: "     (setq downloadPath (caadr (NS:ACAD:DirPicker "Select Download Path" "Download files" GV:ProjPath)))"
 
 suite("LispContainer Tests", function () {
 	try {
-		const doc = ReadonlyDocument.open(project_path);
+		const doc = ReadonlyDocument.open(lispFileTest);
 		const container = LispParser.getDocumentContainer(doc.getText());
 		let defunRef: LispContainer = container.atoms[4] as LispContainer;
 		let defunAlt: LispContainer;
