@@ -2,7 +2,8 @@ import * as chai from 'chai';
 import { Position } from 'vscode';
 import { LispAtom, LispContainer } from '../../format/sexpression';
 
-const catom = new LispAtom(0, 0, '; I am a line comment');
+// const catom = new LispAtom(0, 0, '; I am a line comment');
+const catom = new LispAtom(0, 0, 'I am a line comment');
 const satom = new LispAtom(32, 5, 'vl-princ-to-string');
 const matom = new LispAtom(83, 8, ';|this is a\r\n          |multiline test\r\n         |;');
 const lparen = new LispAtom(4, 6, '(');
