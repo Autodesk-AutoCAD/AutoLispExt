@@ -20,7 +20,9 @@ suite("Project related Tests", function () {
 
 		// Defines a Mocha unit test, test case: open an existing project file
 		test("open an existing project file", function () {
-			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
+			let project_path = path.join(__dirname + "/../../../test_case/project_test_file.prj");
+			// let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
+			// let project_path = path.join(__dirname + "\\lisp files\\project_test_file.prj");
 			let ret = Uri.file(project_path);
 			try {
 				//OpenProjectFile() is different with OpenProject()
