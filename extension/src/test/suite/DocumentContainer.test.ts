@@ -5,13 +5,13 @@ import { Sexpression, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
-let project_path = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
-console.log("project path is " + project_path);
+let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
+console.log("lispFileTest path is " + lispFileTest);
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
 		try {
-			const doc = ReadonlyDocument.open(project_path); 						
+			const doc = ReadonlyDocument.open(lispFileTest); 						
 			const v1Start = Date.now();
 			const parser = new LispParser(doc);
 			parser.tokenizeString(doc.getText(), 0);
@@ -36,7 +36,7 @@ suite("LispParser.DocumentContainer Tests", function () {
 	test("DocumentExpression using index", function () {		
 		try {
 			const expectation = '(= (length retList) 1)';
-			const doc = ReadonlyDocument.open(project_path); 						
+			const doc = ReadonlyDocument.open(lispFileTest); 						
 			const start = Date.now();
 			const iex = LispParser.getDocumentContainer(doc.getText(), 6847);
 			const stop = Date.now();
@@ -52,7 +52,7 @@ suite("LispParser.DocumentContainer Tests", function () {
 	test("DocumentExpression using vscode.Position", function () {		
 		try {
 			const expectation = '(= (length retList) 1)';
-			const doc = ReadonlyDocument.open(project_path);
+			const doc = ReadonlyDocument.open(lispFileTest);
 			const start = Date.now();
 			const pex = LispParser.getDocumentContainer(doc, new Position(151,29));
 			const stop = Date.now();
