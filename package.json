@@ -618,6 +618,7 @@
 		"test": "npm run compile && node ./out/test/runTest.js"
 	},
 	"devDependencies": {
+		"@istanbuljs/nyc-config-typescript": "^1.0.1",
 		"@types/chai": "^4.2.15",
 		"@types/fs-extra": "^8.1.0",
 		"@types/mocha": "^5.2.7",
@@ -632,9 +633,11 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"mocha": "^6.1.4",
+		"nyc": "^15.1.0",
 		"run-sequence": "^2.2.1",
 		"source-map-resolve": "0.6.0",
 		"tslint": "5.11.0",
+		"ts-node": "^9.1.1",
 		"typescript": "^3.9.7",
 		"vscode-nls-dev": "^3.2.6",
 		"vscode-test": "^1.4.1"
