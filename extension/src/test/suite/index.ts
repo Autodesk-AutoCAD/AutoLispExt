@@ -8,15 +8,6 @@ import 'ts-node/register';
 import 'source-map-support/register';
 import * as fs from 'fs-extra';
 
-// Linux: prevent a weird NPE when mocha on Linux requires the window size from the TTY
-// Since we are not running in a tty environment, we just implementt the method statically
-const tty = require('tty');
-if (!tty.getWindowSize) {
-    tty.getWindowSize = (): number[] => {
-        return [80, 75];
-    };
-}
-
 export async function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
