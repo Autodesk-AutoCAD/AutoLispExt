@@ -33,20 +33,18 @@ export async function run(): Promise<void> {
 }
 
 async function setupNYC() {
-	// Setup coverage pre-test, including post-test hook to report
-
 	let nyc = new NYC({
 		...baseConfig,
-		cwd: path.join(__dirname, '..', '..', '..'),
-		reporter: ['text', 'html'],
 		all: true,
-		silent: false,
+		cwd: path.join(__dirname, '..', '..', '..'),
+		exclude: ["out/test/**"],
+		include: ["out/**/*.js"],
 		instrument: true,
+		reporter: ['text', 'html'],
 		hookRequire: true,
 		hookRunInContext: true,
 		hookRunInThisContext: true,
-		include: ["out/**/*.js"],
-		exclude: ["out/test/**"],
+		silent: false
 	});
 	await nyc.wrap();
 
@@ -55,7 +53,6 @@ async function setupNYC() {
 	if(fs.existsSync(tempDirectory)) {
 		fs.removeSync(tempDirectory);
 	}
-
 	await nyc.createTempDirectory();
 
 	return nyc;
