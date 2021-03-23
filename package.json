@@ -626,6 +626,7 @@
 		"chai": "^4.2.0",
 		"del": "^4.1.1",
 		"event-stream": "^4.0.1",
+		"fs": "0.0.1-security",
 		"gulp": "^4.0.2",
 		"gulp-cli": "^2.3.0",
 		"gulp-filter": "^5.1.0",
@@ -641,7 +642,6 @@
 	},
 	"dependencies": {
 		"execa": "0.7.0",
-		"fs": "0.0.1-security",
 		"fs-extra": "^8.1.0",
 		"jschardet": "2.1.1",
 		"os-locale": "5.0.0",
