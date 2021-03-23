@@ -15,15 +15,15 @@ console.log('lispFileTest is ' + lispFileTest);
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("empty test to run", function () {	
 		try {
-			let doc = readFileSync(lispFileTest,'utf8')
-			console.log("Asynchronous read: " + doc.toString());
+			// let doc = readFileSync(lispFileTest,'utf8')
+			// console.log("Asynchronous read: " + doc.toString());
 
-			// readFile(lispFileTest, function (err, data) {
-			// 	if (err) {
-			// 		return console.error(err);
-			// 	}
-			// 	console.log("Asynchronous read: " + data.toString());
-			// });
+			readFile(lispFileTest, function (err, data) {
+				if (err) {
+					return console.error(err);
+				}
+				console.log("Asynchronous read: " + data.toString());
+			});
 		}
 		catch (err) {
 			assert.fail("Test Failed!");
