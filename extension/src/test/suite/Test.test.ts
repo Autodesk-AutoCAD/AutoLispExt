@@ -5,6 +5,7 @@ import { Position, Range } from 'vscode';
 import { LispParser } from '../../format/parser';
 import { Sexpression, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
+import fs from 'fs';
 
 // var assert = require('chai').assert;
 let assert = chai.assert;
@@ -14,7 +15,14 @@ console.log('lispFileTest is ' + lispFileTest);
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("empty test to run", function () {	
 		try {
-			console.log('Test!');
+			// const doc = fs.readFileSync(lispFileTest,'utf8')
+
+			fs.readFile(lispFileTest, function (err, data) {
+				if (err) {
+					return console.error(err);
+				}
+				console.log("Asynchronous read: " + data.toString());
+			});
 		}
 		catch (err) {
 			assert.fail("Test Failed!");
