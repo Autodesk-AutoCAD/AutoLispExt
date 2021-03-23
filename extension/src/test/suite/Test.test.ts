@@ -17,7 +17,8 @@ suite("LispParser.DocumentContainer Tests", function () {
 		try {
 			// let doc = readFileSync(lispFileTest,'utf8')
 			// console.log("Asynchronous read: " + doc.toString());
-
+			const v1Start = Date.now();
+			console.log('Date.now start is ' + v1Start);
 			readFile(lispFileTest, function (err, data) {
 				if (err) {
 					return console.error(err);
