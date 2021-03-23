@@ -23,7 +23,7 @@ suite("LispParser.DocumentContainer Tests", function () {
 				if (err) {
 					return console.error(err);
 				}
-				console.log("Asynchronous read: " + data.toString());
+				console.log("Asynchronous read sucess: ");
 			});
 		}
 		catch (err) {
