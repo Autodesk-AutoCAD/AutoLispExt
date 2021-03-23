@@ -42,7 +42,7 @@ async function setupNYC() {
 		exclude: ["out/test/**"],
 		include: ["out/**/*.js"],
 		instrument: true,
-		reporter: ['text', 'html'],
+		reporter: ['text-summary', 'html'],
 		hookRequire: true,
 		hookRunInContext: true,
 		hookRunInThisContext: true,
