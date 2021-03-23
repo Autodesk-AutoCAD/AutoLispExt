@@ -6,16 +6,23 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
 let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
+console.log('lispFileTest is ' + lispFileTest);
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
 		try {
-			const doc = ReadonlyDocument.open(lispFileTest); 						
+			console.log('begin to run DocumentContainer test');
+			const doc = ReadonlyDocument.open(lispFileTest); 
+
 			const v1Start = Date.now();
+			console.log('Date.now start is ' + v1Start);
+
 			const parser = new LispParser(doc);
 			parser.tokenizeString(doc.getText(), 0);
 			const v1items = parser.atomsForest.filter(x => x instanceof Sexpression);
 			const v1Stop = Date.now();
+			console.log('Date.now stop is ' + v1Stop);
+
 			const dex = LispParser.getDocumentContainer(doc.fileContent);			
 			const v2items = dex.atoms.filter(x => x instanceof LispContainer);
 			const v2Stop = Date.now();			
