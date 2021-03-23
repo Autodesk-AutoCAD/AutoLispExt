@@ -19,10 +19,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Start xvfb
-          if: startsWith(matrix.os, 'ubuntu')
-          run: /usr/bin/Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -46,10 +42,8 @@ jobs:
           python pack.py
          
       - name: Run tests
-          env:
-            CODE_VERSION: ''
-            DISPLAY: ':99.0'
-          run: npm run test
+        run: |
+          npm run test
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
