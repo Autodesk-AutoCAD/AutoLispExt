@@ -2,11 +2,13 @@ import * as path from 'path';
 import * as Mocha from 'mocha';
 import * as glob from 'glob';
 
-const NYC = require('nyc');
+import * as fs from 'fs-extra';
 import * as baseConfig from "@istanbuljs/nyc-config-typescript";
+
 import 'ts-node/register';
 import 'source-map-support/register';
-import * as fs from 'fs-extra';
+
+const NYC = require('nyc');
 
 export async function run(): Promise<void> {
 	// Create the mocha test
