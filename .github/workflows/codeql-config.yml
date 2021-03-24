@@ -4,9 +4,8 @@ queries:
 - uses: security-and-quality
 
 paths:
-- src
+- extension/src
 
 paths-ignore:
-- src/node_modules
-- .vscode
+- .vscode-test
 - '**/*.test.js'
