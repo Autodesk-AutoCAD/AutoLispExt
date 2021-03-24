@@ -44,9 +44,9 @@ jobs:
           python pack.py
         
       # Keep this if we switch to Linux OS someday
-      - name: Run tests on Linux OS
-        run: xvfb-run -a npm test
-        if: runner.os == 'Linux'
+      # - name: Run tests on Linux OS
+      #   run: xvfb-run -a npm test
+      #   if: runner.os == 'Linux'
 
       - name: Run tests on Windows OS
         run: npm test
