@@ -8,7 +8,7 @@ import * as baseConfig from "@istanbuljs/nyc-config-typescript";
 import 'ts-node/register';
 import 'source-map-support/register';
 
-const NYC = require('nyc');
+// const NYC = require('nyc');
 
 export async function run(): Promise<void> {
 	// Create the mocha test
@@ -19,7 +19,7 @@ export async function run(): Promise<void> {
 
 	const testsRoot = path.resolve(__dirname, '..');
 
-	const nyc = await setupNYC();
+	// const nyc = await setupNYC();
 
 	// Add all test files to mocha
 	const testFiles = glob.sync('**/*.test.js', { cwd: testsRoot });
@@ -27,53 +27,53 @@ export async function run(): Promise<void> {
 
 	const failures: number = await new Promise(resolve => mocha.run(resolve));
 
-	await reportCodeCoverage(nyc);
+	// await reportCodeCoverage(nyc);
 
 	if (failures > 0) {
 		throw new Error(`${failures} tests failed.`);
 	}
 }
 
-async function setupNYC() {
-	let nyc = new NYC({
-		...baseConfig,
-		all: true,
-		cwd: path.join(__dirname, '..', '..', '..'),
-		exclude: ["out/test/**"],
-		include: ["out/**/*.js"],
-		instrument: true,
-		reporter: ['text-summary', 'html'],
-		hookRequire: true,
-		hookRunInContext: true,
-		hookRunInThisContext: true,
-		silent: false
-	});
-	await nyc.wrap();
+// async function setupNYC() {
+// 	let nyc = new NYC({
+// 		...baseConfig,
+// 		all: true,
+// 		cwd: path.join(__dirname, '..', '..', '..'),
+// 		exclude: ["out/test/**"],
+// 		include: ["out/**/*.js"],
+// 		instrument: true,
+// 		reporter: ['text-summary', 'html'],
+// 		hookRequire: true,
+// 		hookRunInContext: true,
+// 		hookRunInThisContext: true,
+// 		silent: false
+// 	});
+// 	await nyc.wrap();
 
-	// Delete the 'coverage' folder first to make sure the HTML report is only for current run of npm test
-	const tempDirectory = nyc.tempDirectory();
-	if(fs.existsSync(tempDirectory)) {
-		fs.removeSync(tempDirectory);
-	}
-	await nyc.createTempDirectory();
+// 	// Delete the 'coverage' folder first to make sure the HTML report is only for current run of npm test
+// 	const tempDirectory = nyc.tempDirectory();
+// 	if(fs.existsSync(tempDirectory)) {
+// 		fs.removeSync(tempDirectory);
+// 	}
+// 	await nyc.createTempDirectory();
 
-	return nyc;
-}
+// 	return nyc;
+// }
 
-async function reportCodeCoverage(nyc) {
-	await nyc.writeCoverageFile();
+// async function reportCodeCoverage(nyc) {
+// 	await nyc.writeCoverageFile();
 
-	let textReport = '';
+// 	let textReport = '';
 
-	let currentWrite = process.stdout.write;
-	process.stdout.write = (s) => { textReport = textReport + s; return true; };
+// 	let currentWrite = process.stdout.write;
+// 	process.stdout.write = (s) => { textReport = textReport + s; return true; };
 
-	await nyc.report.bind(nyc)();
+// 	await nyc.report.bind(nyc)();
 
-	process.stdout.write = currentWrite;
+// 	process.stdout.write = currentWrite;
 	
-	console.log(textReport);
-	console.log("--------------------------------------------------------");
-	console.log("Open coverage folder to check detailed report in HTML.");
-	console.log("--------------------------------------------------------");
-}
+// 	console.log(textReport);
+// 	console.log("--------------------------------------------------------");
+// 	console.log("Open coverage folder to check detailed report in HTML.");
+// 	console.log("--------------------------------------------------------");
+// }
