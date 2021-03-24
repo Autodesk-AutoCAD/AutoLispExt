@@ -41,7 +41,7 @@ jobs:
         run: |
           python pack.py
 
-       - name: run tests
+      - name: run tests
         run: |
           npm run test
 
