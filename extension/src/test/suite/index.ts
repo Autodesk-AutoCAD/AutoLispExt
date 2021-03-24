@@ -19,7 +19,7 @@ export async function run(): Promise<void> {
 
 	const testsRoot = path.resolve(__dirname, '..');
 
-	const nyc = await setupNYC();
+	// const nyc = await setupNYC();
 
 	// Add all test files to mocha
 	const testFiles = glob.sync('**/*.test.js', { cwd: testsRoot });
@@ -27,7 +27,7 @@ export async function run(): Promise<void> {
 
 	const failures: number = await new Promise(resolve => mocha.run(resolve));
 
-	await reportCodeCoverage(nyc);
+	// await reportCodeCoverage(nyc);
 
 	if (failures > 0) {
 		throw new Error(`${failures} tests failed.`);
