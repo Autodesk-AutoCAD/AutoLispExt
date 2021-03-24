@@ -5,6 +5,10 @@ tmp
 autolispext*.zip
 package.nls.*.json
 
+.nyc_output
+.vscode-test
+coverage
+
 utils/HelpAbstractionGenerator/**/*.pdb
 utils/HelpAbstractionGenerator/**/*.xml
 utils/HelpAbstractionGenerator/.vs

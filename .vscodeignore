@@ -1,6 +1,8 @@
 .git/**
+.nyc_output/**
 .vscode/**
 .vscode-test/**
+coverage/**
 extension/out/test/**
 extension/out/**/*.map
 extension/src/**
