@@ -10,15 +10,6 @@ let assert = chai.assert;
 let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
 
 suite("LispParser.DocumentContainer Tests", function () {	
-	test("empty test to run", function () {	
-		try {
-			console.log('Test!');
-		}
-		catch (err) {
-			assert.fail("Test Failed!");
-		}
-	});
-
 	test("Original atomsForest vs DocumentContainer", function () {	
 		try {
 			const doc = ReadonlyDocument.open(lispFileTest); 
