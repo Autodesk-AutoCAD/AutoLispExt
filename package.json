@@ -615,8 +615,7 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"watch": "tsc -p -watch ./",
-		"test": "npm run compile && node ./out/test/runTest.js",
-		"codecoverage": "npm run compile && node ./out/test/runCodeCoverage.js"
+		"test": "npm run compile && node ./out/test/runTest.js"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.1",
