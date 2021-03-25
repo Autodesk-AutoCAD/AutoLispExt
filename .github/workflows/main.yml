@@ -48,9 +48,9 @@ jobs:
       #   run: xvfb-run -a npm test
       #   if: runner.os == 'Linux'
 
-      # - name: Run tests on Windows OS
-      #   run: npm test
-      #   if: runner.os != 'Linux'
+      - name: Run tests on Windows OS
+        run: npm test
+        if: runner.os != 'Linux'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
