@@ -3,14 +3,14 @@ import { TextDocument } from 'vscode';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
-let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
+let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
 
 
 suite("ReadonlyDocument Tests", function () {
 	let doc: ReadonlyDocument;
 	test("Creating with: open()", function () {		
 		try {
-			doc = ReadonlyDocument.open(project_path); 			
+			doc = ReadonlyDocument.open(lispFileTest); 			
 			assert.equal(doc.languageId, 'autolisp');
 		}
 		catch (err) {
@@ -34,7 +34,7 @@ suite("ReadonlyDocument Tests", function () {
 		try { 
 			doc = ReadonlyDocument.createMemoryDocument(doc.getText(), 'autolisp'); 
 			assert.notEqual(doc.lines, 0);
-			doc.fileName = project_path;
+			doc.fileName = lispFileTest;
 		}
 		catch (err) {
 			assert.fail("Could not create document");

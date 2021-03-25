@@ -1,0 +1,10 @@
+name: "Custom CodeQL Config"
+
+queries:
+- uses: security-and-quality
+
+paths:
+- '**/extension/src/**'
+
+paths-ignore:
+- '**/.vscode-test/**'

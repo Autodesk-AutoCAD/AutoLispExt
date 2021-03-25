@@ -1,16 +1,18 @@
 import * as path from 'path';
+import * as chai from 'chai';
+
 import { Position, Range } from 'vscode';
 import { LispParser } from '../../format/parser';
 import { Sexpression, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
-var assert = require('chai').assert;
-let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
+let assert = chai.assert;
+let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
 		try {
-			const doc = ReadonlyDocument.open(project_path); 						
+			const doc = ReadonlyDocument.open(lispFileTest); 
 			const v1Start = Date.now();
 			const parser = new LispParser(doc);
 			parser.tokenizeString(doc.getText(), 0);
@@ -35,11 +37,12 @@ suite("LispParser.DocumentContainer Tests", function () {
 	test("DocumentExpression using index", function () {		
 		try {
 			const expectation = '(= (length retList) 1)';
-			const doc = ReadonlyDocument.open(project_path); 						
+			const doc = ReadonlyDocument.open(lispFileTest); 						
 			const start = Date.now();
 			const iex = LispParser.getDocumentContainer(doc.getText(), 6847);
 			const stop = Date.now();
 			const diff = stop - start;
+			console.log(`\t\tNewParser Processing Time: ${diff}ms`);
 			const r = new Range(iex.line, iex.column, iex.atoms.slice(-1)[0].line, iex.atoms.slice(-1)[0].column + 1);
 			assert.equal(doc.getText(r), expectation);
 		}
@@ -51,11 +54,12 @@ suite("LispParser.DocumentContainer Tests", function () {
 	test("DocumentExpression using vscode.Position", function () {		
 		try {
 			const expectation = '(= (length retList) 1)';
-			const doc = ReadonlyDocument.open(project_path);
+			const doc = ReadonlyDocument.open(lispFileTest);
 			const start = Date.now();
 			const pex = LispParser.getDocumentContainer(doc, new Position(151,29));
 			const stop = Date.now();
 			const diff = stop - start;
+			console.log(`\t\tNewParser Processing Time: ${diff}ms`);
 			const r = new Range(pex.line, pex.column, pex.atoms.slice(-1)[0].line, pex.atoms.slice(-1)[0].column + 1);
 			assert.equal(doc.getText(r), expectation);
 		}

@@ -20,7 +20,7 @@ suite("Project related Tests", function () {
 
 		// Defines a Mocha unit test, test case: open an existing project file
 		test("open an existing project file", function () {
-			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
+			let project_path = path.join(__dirname + "/../../../test_case/project_test_file.prj");
 			let ret = Uri.file(project_path);
 			try {
 				//OpenProjectFile() is different with OpenProject()
@@ -37,7 +37,7 @@ suite("Project related Tests", function () {
 	suite("Project create Tests", function () {
 		// Defines a Mocha unit test, test case: Successed to create a new project
 		test("create a new project", async function () {
-			let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\createPrj.prj");
+			let project_path = path.join(__dirname + "/../../../test_case/createPrj.prj");
 			try {
 				let returnValue = await createProject(project_path);
 				//after createproject(), need to click "create" button. So under the "__dirname" folder, which don't contains createPrj.prj
@@ -51,7 +51,7 @@ suite("Project related Tests", function () {
 
 		// Defines a Mocha unit test, test case: Failed to create a new project, only PRJ files are allowed.
 		test("failed to create a new project", function () {
-			let project_path_err = path.join(__dirname + "\\..\\..\\..\\test_case\\createPr.pr");
+			let project_path_err = path.join(__dirname + "/../../../test_case/createPr.pr");
 			try {
 				createProject(project_path_err);
 			}

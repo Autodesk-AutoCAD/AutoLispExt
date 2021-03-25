@@ -15,7 +15,9 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    # We will use windows since there are some limitation for Ubuntu to run our test
+    # runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -40,11 +42,22 @@ jobs:
       - name: Build
         run: |
           python pack.py
+        
+      # Keep this in case we switch to Linux OS someday
+      # - name: Run tests on Linux OS
+      #   run: xvfb-run -a npm test
+      #   if: runner.os == 'Linux'
+
+      - name: Run tests on Windows OS
+        run: npm test
+        if: runner.os != 'Linux'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
         with:
           languages: javascript
+          config-file: ./.github/codeql/codeql-config.yml
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
 
