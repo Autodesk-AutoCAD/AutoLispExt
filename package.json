@@ -615,7 +615,8 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"watch": "tsc -p -watch ./",
-		"test": "npm run compile && node ./out/test/runTest.js"
+		"test": "npm run compile && node ./out/test/runTest.js",
+		"codecoverage": "npm run compile && node ./out/test/runCodeCoverage.js"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.1",
@@ -627,7 +628,6 @@
 		"chai": "^4.2.0",
 		"del": "^4.1.1",
 		"event-stream": "^4.0.1",
-		"fs": "0.0.1-security",
 		"gulp": "^4.0.2",
 		"gulp-cli": "^2.3.0",
 		"gulp-filter": "^5.1.0",

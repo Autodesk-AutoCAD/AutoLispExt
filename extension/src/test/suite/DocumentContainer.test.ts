@@ -41,6 +41,8 @@ suite("LispParser.DocumentContainer Tests", function () {
 			const start = Date.now();
 			const iex = LispParser.getDocumentContainer(doc.getText(), 6847);
 			const stop = Date.now();
+			const diff = stop - start;
+			console.log(`\t\tNewParser Processing Time: ${diff}ms`);
 			const r = new Range(iex.line, iex.column, iex.atoms.slice(-1)[0].line, iex.atoms.slice(-1)[0].column + 1);
 			assert.equal(doc.getText(r), expectation);
 		}
@@ -56,6 +58,8 @@ suite("LispParser.DocumentContainer Tests", function () {
 			const start = Date.now();
 			const pex = LispParser.getDocumentContainer(doc, new Position(151,29));
 			const stop = Date.now();
+			const diff = stop - start;
+			console.log(`\t\tNewParser Processing Time: ${diff}ms`);
 			const r = new Range(pex.line, pex.column, pex.atoms.slice(-1)[0].line, pex.atoms.slice(-1)[0].column + 1);
 			assert.equal(doc.getText(r), expectation);
 		}
