@@ -6,7 +6,7 @@ autolispext*.zip
 package.nls.*.json
 
 .nyc_output
-.vscode-test/**
+.vscode-test
 coverage
 
 utils/HelpAbstractionGenerator/**/*.pdb
