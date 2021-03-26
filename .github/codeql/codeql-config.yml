@@ -4,7 +4,7 @@ queries:
 - uses: security-and-quality
 
 paths:
-- '**/extension/src/**'
+- '**/out/**'
 
 paths-ignore:
 - '**/.vscode-test/**'
