@@ -2,6 +2,8 @@ import * as path from 'path';
 import { OpenProjectFile } from '../../project/openProject';
 import { createProject } from '../../project/createProject';
 import { Uri } from 'vscode';
+import { ProjectTreeProvider, addLispFileNode2ProjectTree } from '../../project/projectTree';
+import { AddFile2Project } from '../../project/addFile2Project';
 
 var expect = require('chai').expect;
 
@@ -57,6 +59,66 @@ suite("Project related Tests", function () {
 			}
 			catch (err) {
 				expect(err.message.startsWith("Only PRJ files are allowed.")).to.be.true;
+			}
+		});
+	});
+
+	suite("Project add '.lsp' file Tests",function(){
+		//Defines a Mocha unit test, test case: Add ".lsp" file to project. 
+		//Due to we don't push lispfilenode to projectnode, so we don't need to delete 
+		//Test function: addLispFileNode2ProjectTree(), invoke AddFile2Project(), invoke addFileNode()
+		
+		//The length of LspFileNode is "1" to "2"
+		//value from "test_remove"，to "'test_remove'，'pdfMarkups'"
+		//Check the original value of LspFile is "test_remove"
+		let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\project_test_file.prj");
+		let ret = Uri.file(project_path);
+		let rootNode= OpenProjectFile(ret); 
+		let fileNode = rootNode.sourceFiles[0];
+		let rawFilePath_add = fileNode.rawFilePath;
+		expect(rootNode.sourceFiles.length).to.be.equals(1);
+		
+		test("add '.lsp' file to project",function(){
+			//add "pdfMarkups.lsp"
+			let fileName= path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
+			try{
+				addLispFileNode2ProjectTree(rootNode, fileName, rawFilePath_add);
+				expect(rootNode.sourceFiles.length).to.be.equals(2);
+			}
+			catch (err) {
+				expect(err).to.be.equals("");
+			}
+		});
+		//Defines a Mocha unit test, test case: Failed to add "'.txt'/'.lsp.lsp'" file to project", 
+		//Failed to add a file, which is aAlready in the project, Only LSP files are allowed.
+		//Test function: AddFile2Project()
+		test("failed to add wrong extension file to project",async function(){
+			//add "add_fail_case.txt", which is non .lsp file.
+			ProjectTreeProvider.instance().updateData(rootNode);
+			if (ProjectTreeProvider.hasProjectOpened() == true) {
+				let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\add_fail_case.txt");
+				let project_path_1 = path.join(__dirname + "\\..\\..\\..\\test_case\\add_fail_case.lsp.lsp");
+				let project_path_2 = path.join(__dirname + "\\..\\..\\..\\test_case\\test_remove.lsp");
+				let array = [project_path,  project_path_1,  project_path_2 ];
+				for (let i=0;i<3;i++) {
+					let ret = Uri.file(array[i]);
+					let arr = new Array<Uri>();
+					arr.push(ret);
+					let prom = AddFile2Project(arr);
+					try{
+						prom
+						.then(response => { 
+							return;
+						})
+						.catch(error => {
+							expect(error).to.be.equals("Only LSP files are allowed.");
+						})
+					}
+					catch(err){
+						expect(err).to.be.equals("");
+
+					}
+				}
 			}
 		});
 	});
