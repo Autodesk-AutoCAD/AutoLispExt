@@ -8,4 +8,4 @@ paths:
 
 paths-ignore:
   - '**/.vscode-test/**'
-  - 'AutoLispExt/**/out/**/*.js'
+  - '**/AutoLispExt/out/**/*.js'
