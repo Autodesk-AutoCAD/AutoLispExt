@@ -1,10 +1,11 @@
 name: "Custom CodeQL Config"
 
 queries:
-- uses: security-and-quality
+  - uses: security-and-quality
 
 paths:
-- '**/extension/src/**'
+  - '**/extension/src/**'
 
 paths-ignore:
-- '**/.vscode-test/**'
+  - '**/.vscode-test/**'
+  - 'AutoLispExt/**/out/**/*.js'
