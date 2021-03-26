@@ -30,6 +30,17 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			]
-        }
+        },
+		{
+			"label": "OpenCoverageTestReport",
+			"type": "shell",
+			"command": "./coverage/index.html",
+			"dependsOn": "OpenMochawesomeTestReport"
+		},
+		{
+			"label": "OpenMochawesomeTestReport",
+			"type": "shell",
+			"command": "./coverage/mochawesome/mochawesome.html"
+		}
     ]
 }

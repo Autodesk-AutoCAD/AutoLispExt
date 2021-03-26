@@ -28,7 +28,22 @@
             "outFiles": [
                 "${workspaceFolder}/out/test/**/*.js"
             ]
-        }
+        },
+        {
+            "name": "Extension Tests + Reporting",
+            "type": "extensionHost",
+            "request": "launch",
+            "preLaunchTask": "buildproject",
+            "runtimeExecutable": "${execPath}",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--extensionTestsPath=${workspaceFolder}/out/test/suite/codeCoverage"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/out/test/**/*.js"
+            ],
+            "postDebugTask": "OpenCoverageTestReport"
+        },
     ],
     "compounds": [
 		{
