@@ -4,7 +4,7 @@ queries:
 - uses: security-and-quality
 
 paths:
-- '**/AutoLispExt/**/out/**/*.js'
+- 'AutoLispExt/**/out/**/*.js'
 
 paths-ignore:
 - '**/.vscode-test/**'
