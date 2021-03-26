@@ -41,6 +41,16 @@ You have two ways to run the tests:
 npm run test
 ```
 
+## Run test code coverage
+
+You have two ways to run the tests:
+
+  - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation) 
+  - Run within vscode insider version
+```
+npm run cc
+```
+
 ### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
