@@ -33,14 +33,16 @@
         },
 		{
 			"label": "OpenCoverageTestReport",
-			"type": "shell",
-			"command": "./coverage/index.html",
+			"type": "shell",			
+			"windows": {"command": "./coverage/index.html"},
+			"osx": {"command": "open ./coverage/index.html"},
 			"dependsOn": "OpenMochawesomeTestReport"
 		},
 		{
 			"label": "OpenMochawesomeTestReport",
 			"type": "shell",
-			"command": "./coverage/mochawesome/mochawesome.html"
+			"windows": {"command": "./coverage/mochawesome/mochawesome.html"},
+			"osx": {"command": "open ./coverage/mochawesome/mochawesome.html"}
 		}
     ]
 }
