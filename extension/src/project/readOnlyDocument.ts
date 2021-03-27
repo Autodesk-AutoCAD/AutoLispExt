@@ -87,19 +87,19 @@ export class ReadonlyDocument implements vscode.TextDocument {
         return ret;
     }
 
-    initialize(fileContent: string, languageId: string) {
-        this.fileContent = fileContent.split('\r\n').join('\n').split('\n').join('\r\n');//to make sure every line ends with \r\n
+    initialize(contentOfFile: string, langId: string) {
+        this.fileContent = contentOfFile.split('\r\n').join('\n').split('\n').join('\r\n');//to make sure every line ends with \r\n
         this.eol = vscode.EndOfLine.CRLF;
         this.eolLength = 2;
 
-        this.languageId = languageId;
+        this.languageId = langId;
 
         if (this.fileContent.length === 0) {
             this.lineCount = 0;
             this.lines = [];
         }
         else {
-            this.lines = fileContent.split('\r\n');
+            this.lines = this.fileContent.split('\r\n');
             this.lineCount = this.lines.length;
         }
     }

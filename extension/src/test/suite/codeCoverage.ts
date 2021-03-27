@@ -50,7 +50,7 @@ async function setupNYC() {
 	});
 	await nyc.wrap();
 
-	// Delete the 'coverage' folder first to make sure the HTML report is only for current run of npm test
+	// To make sure the report is only for current run
 	const tempDirectory = nyc.tempDirectory();
 	if(fs.existsSync(tempDirectory)) {
 		fs.removeSync(tempDirectory);
