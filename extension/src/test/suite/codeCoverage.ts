@@ -13,7 +13,11 @@ const NYC = require('nyc');
 export async function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
-		ui: 'tdd'
+		ui: 'tdd',
+		reporter: 'mochawesome',
+		reporterOptions: {
+			'reportDir': path.resolve(__dirname, '../../../coverage/mochawesome')
+		}
 	});
 	mocha.useColors(true);
 
