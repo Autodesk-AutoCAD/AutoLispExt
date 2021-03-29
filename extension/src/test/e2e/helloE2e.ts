@@ -3,7 +3,7 @@ import { assert, expect } from 'chai';
 import { QuickOpenBox, VSBrowser, WebDriver, Workbench } from 'vscode-extension-tester';
 
 // Create a Mocha suite
-describe('My Test Suite', () => {
+describe('DebugAdapterTest', () => {
   let browser: VSBrowser;
   let driver: WebDriver;
   let input: QuickOpenBox;
@@ -24,10 +24,13 @@ describe('My Test Suite', () => {
 //     assert.equal(title, 'whatever');
 //   });
 
-  it('should show debugger selector', async () => {
+  it('should show debugger selector', async  function() {
+    this.timeout(15000);
+
     const workbench = new Workbench();
     await workbench.executeCommand('workbench.action.debug.start');
-    expect(await input.isDisplayed()).true;
+    await new Promise(res => setTimeout(res, 500));
+    expect(await input.isDisplayed()).is.true;
     const picks = await input.getQuickPicks();
     expect(picks.length).equals(1);
 
