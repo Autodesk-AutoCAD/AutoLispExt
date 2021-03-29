@@ -636,6 +636,7 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"mocha": "^6.1.4",
+		"mochawesome": "^6.2.2",
 		"nyc": "^15.1.0",
 		"run-sequence": "^2.2.1",
 		"source-map-resolve": "0.6.0",

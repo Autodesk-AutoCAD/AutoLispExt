@@ -30,6 +30,19 @@
 			"problemMatcher": [
 				"$tsc-watch"
 			]
-        }
+        },
+		{
+			"label": "OpenCoverageTestReport",
+			"type": "shell",			
+			"windows": {"command": "./coverage/index.html"},
+			"osx": {"command": "open ./coverage/index.html"},
+			"dependsOn": "OpenMochawesomeTestReport"
+		},
+		{
+			"label": "OpenMochawesomeTestReport",
+			"type": "shell",
+			"windows": {"command": "./coverage/mochawesome/mochawesome.html"},
+			"osx": {"command": "open ./coverage/mochawesome/mochawesome.html"}
+		}
     ]
 }
