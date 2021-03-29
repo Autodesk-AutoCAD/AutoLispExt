@@ -4,8 +4,8 @@ import { InputBox, Workbench } from 'vscode-extension-tester';
 describe('Debug Configuration Test', () => {
   let input: InputBox;
 
-  const attachCfgName:string = 'AutoLISP Debug: Attach';
-  const launchCfgName:string = 'AutoLISP Debug: Attach';
+  const attachConfigText:string = 'AutoLISP Debug: Attach';
+  const launchConfigText:string = 'AutoLISP Debug: Launch';
   const startDebugCmd:string = 'workbench.action.debug.start';
   
   before(async () => {
@@ -15,7 +15,7 @@ describe('Debug Configuration Test', () => {
       await input.cancel();
   });  
 
-  // to verify that the Attach and Launch config items show up when user starts to debug via. VS Code
+  // to verify that the Attach and Launch config items show up when starting to debug via. VS Code
   it('should show debug config items on F5', async  function() {
     this.timeout(15000);
 
@@ -26,8 +26,26 @@ describe('Debug Configuration Test', () => {
     expect(await input.isDisplayed()).is.true;
 
     const picks = await input.getQuickPicks();
-    expect(picks.find( async x=> await x.getText() === attachCfgName)).not.undefined;
-    expect(picks.find( async x=> await x.getText() === launchCfgName)).not.undefined;
+
+    const attachCfg:InputBox[] = await findAll(picks, async (x:InputBox) => { return attachConfigText === await x.getText();});
+    expect(attachCfg.length).equals(1);
+
+    const launchCfg:InputBox[] = await findAll(picks, async (x:InputBox) => { return launchConfigText === await x.getText();});
+    expect(launchCfg.length).equals(1);
   });
+
+  async function findAll(array, callbackFind) : Promise<Array<InputBox>>{
+    let ret:Array<InputBox> = [];
+
+    for(const item of array) {
+      const matched: boolean = await callbackFind(item);
+      if(!matched)
+        continue;
+      
+      ret.push(item);
+    }
+
+    return ret;
+  }
 
 });

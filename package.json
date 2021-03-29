@@ -617,8 +617,7 @@
 		"watch": "tsc -p -watch ./",
 		"test": "npm run compile && node ./out/test/runTest.js",
 		"cc": "npm run compile && node ./out/test/runTest.js --codecoverage",
-		"e2esetup": "extest get-vscode -c 1.50.0 && extest get-chromedriver -c 1.50.0",
-		"e2etest": "extest setup-and-run -c 1.50.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js"
+		"e2etest": "npm run compile && extest setup-and-run -c 1.50.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.1",
