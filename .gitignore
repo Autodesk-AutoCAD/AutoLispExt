@@ -14,3 +14,6 @@ utils/HelpAbstractionGenerator/**/*.xml
 utils/HelpAbstractionGenerator/.vs
 utils/HelpAbstractionGenerator/obj
 utils/HelpAbstractionGenerator/packages
+
+extension/src/test/OutputFile
+

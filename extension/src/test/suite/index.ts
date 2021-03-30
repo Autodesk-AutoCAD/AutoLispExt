@@ -5,14 +5,15 @@ import * as glob from 'glob';
 export function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
-		ui: 'tdd'
+		ui: 'bdd'
+		// ui: 'tdd'
 	});
 	mocha.useColors(true);
 
 	const testsRoot = path.resolve(__dirname, '..');
 
 	return new Promise((c, e) => {
-		glob('**/*.test.js', { cwd: testsRoot }, (err, files) => {
+		glob('**/*Formatter*.test.js', { cwd: testsRoot }, (err, files) => {
 			if (err) {
 				return e(err);
 			}
