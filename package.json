@@ -13,7 +13,7 @@
 	},
 	"homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
 	"engines": {
-		"vscode": "^1.31.1"
+		"vscode": "^1.50.0"
 	},
 	"publisher": "Autodesk",
 	"keywords": [
@@ -616,7 +616,8 @@
 		"compile": "tsc -p ./",
 		"watch": "tsc -p -watch ./",
 		"test": "npm run compile && node ./out/test/runTest.js",
-		"cc": "npm run compile && node ./out/test/runTest.js --codecoverage"
+		"cc": "npm run compile && node ./out/test/runTest.js --codecoverage",
+		"e2etest": "npm run compile && extest setup-and-run -c 1.50.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.1",
@@ -641,6 +642,7 @@
 		"ts-node": "^9.1.1",
 		"tslint": "5.11.0",
 		"typescript": "^3.9.7",
+		"vscode-extension-tester": "^4.0.2",
 		"vscode-nls-dev": "^3.2.6",
 		"vscode-test": "^1.4.1"
 	},

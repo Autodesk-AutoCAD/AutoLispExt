@@ -8,6 +8,7 @@ package.nls.*.json
 .nyc_output
 .vscode-test
 coverage
+test-resources
 
 utils/HelpAbstractionGenerator/**/*.pdb
 utils/HelpAbstractionGenerator/**/*.xml
