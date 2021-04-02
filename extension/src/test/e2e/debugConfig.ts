@@ -72,8 +72,8 @@ describe('Debug Configuration Test', () => {
 
     debugStarted = true;
 
-    const procInput = await getActiveInputBox();
-    expect((await procInput.getPlaceHolder()).startsWith(expectedLaunchHint)).true;
+    const pathInput = await getActiveInputBox();
+    expect((await pathInput.getPlaceHolder()).startsWith(expectedLaunchHint)).true;
   });
 
   async function findAll(array, callbackFind): Promise<Array<InputBox>> {
