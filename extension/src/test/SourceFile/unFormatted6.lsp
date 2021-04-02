@@ -1,0 +1,8 @@
+(while (<= test 100)
+       (write-char test f)
+       (setq test (1+ test))
+)
+(if (= a b)
+  (write-char test f)
+  (princ "\nA = B ")
+)

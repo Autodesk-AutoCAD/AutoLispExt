@@ -7,9 +7,9 @@ export interface ILispFragment {
     symbol: string;
     line: number;
     column: number;
-    
-    readonly body?: LispContainer|undefined;
-    
+
+    readonly body?: LispContainer | undefined;
+
     isLispFragment(): boolean;
     equal(atom: ILispFragment): boolean;
     symbLine(last?: boolean): number;
@@ -65,7 +65,7 @@ export class LispAtom implements ILispFragment {
             return this.line + internalLines;
         }
         else {
-            return this.line; 
+            return this.line;
         }
     }
 
@@ -78,25 +78,25 @@ export class LispAtom implements ILispFragment {
 
     // Tests if the LispAtom is representing a single-line comment
     isLineComment(): boolean {
-		return this.symbol.startsWith(';') && !this.symbol.startsWith(';|');
+        return this.symbol.startsWith(';') && !this.symbol.startsWith(';|');
     }
-	
+
 
     // Tests if the LispAtom is representing any type of comment
     isComment(): boolean {
-		return this.symbol.startsWith(';');
+        return this.symbol.startsWith(';');
     }
-	
+
 
     // Tests if the LispAtom is representing a structural closing parenthesis
     isRightParen(): boolean {
-		return this.symbol === ')';
+        return this.symbol === ')';
     }
-	
+
 
     // Tests if the LispAtom is representing a structural opening parenthesis
     isLeftParen(): boolean {
-		return this.symbol === '(';
+        return this.symbol === '(';
     }
 
 
@@ -120,7 +120,7 @@ export class LispAtom implements ILispFragment {
                 cColm += 1;
             }
         }
-        const close: Position = new Position(cLine, cColm);        
+        const close: Position = new Position(cLine, cColm);
         return new Range(begin.line, begin.character, close.line, close.character);
     }
 
@@ -137,7 +137,7 @@ export class LispContainer extends LispAtom {
 
     // LispContainer constructor defaults to a clearly uninitialized state
     constructor(startIndex: number = -1) {
-        super(startIndex,startIndex,'');
+        super(startIndex, startIndex, '');
         this.atoms = [];
         this.linefeed = '\n';
     }
@@ -145,7 +145,7 @@ export class LispContainer extends LispAtom {
 
     // Returns a crude version of the text a LispAtom|LispContainer represents
     static getRawText(lispObj: ILispFragment): string {
-        if (lispObj instanceof LispContainer) {            
+        if (lispObj instanceof LispContainer) {
             let ret = '';
             for (let atom of lispObj.atoms) {
                 ret += LispContainer.getRawText(atom) + ' ';
@@ -176,7 +176,7 @@ export class LispContainer extends LispAtom {
                 const lispObj = this.atoms[i];
                 if (lispObj.contains(loc)) {
                     if (lispObj instanceof LispContainer) {
-                        return lispObj.getAtomFromPos(loc);                        
+                        return lispObj.getAtomFromPos(loc);
                     } else if (lispObj instanceof LispAtom) {
                         return lispObj;
                     }
@@ -233,7 +233,7 @@ export class LispContainer extends LispAtom {
 
 
     // Finds the parent LispContainer of any existing ILispFragment, typically used with a primary Container like Defun
-    getParentOfExpression(child: ILispFragment): LispContainer {        
+    getParentOfExpression(child: ILispFragment): LispContainer {
         const pos = new Position(child.line, child.column);
         return this.getExpressionFromPos(pos, true);
     }
@@ -242,7 +242,7 @@ export class LispContainer extends LispAtom {
     // Gets a range representing the full LispContainer, especially useful for TextDocument.getText()
     getRange(): Range {
         const begin: ILispFragment = this.atoms[0];
-        const close: ILispFragment = this.atoms[this.atoms.length -1];
+        const close: ILispFragment = this.atoms[this.atoms.length - 1];
         return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length));
     }
 
@@ -256,9 +256,9 @@ export class LispContainer extends LispAtom {
     // This version was necessary to properly alternate over SETQ Name vs Value 
     private isValidForSetq(atom: ILispFragment): boolean {
         return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && (atom instanceof LispContainer || atom.symbol.trim().length > 0);
-    }    
+    }
     // This is general purpose utility to make sure primitives such as strings, numbers and decorations are not evaluated
-    private notNumberStringOrProtected(atom: ILispFragment): boolean {        
+    private notNumberStringOrProtected(atom: ILispFragment): boolean {
         return !atom.isComment() && !['\'', '(', ')', '.'].includes(atom.symbol) && !(/^".*"$/.test(atom.symbol)) && !(/^\'{0,1}\-{0,1}\d+[eE\-]{0,2}\d*$/.test(atom.symbol));
     }
 
@@ -270,7 +270,7 @@ export class LispContainer extends LispAtom {
             const atom = this.atoms[index];
             const flag = forSetq ? this.isValidForSetq(atom) : this.notNumberStringOrProtected(atom);
             if (atom instanceof LispAtom && flag) {
-                return index;               
+                return index;
             } else {
                 return this.nextKeyIndex(index, forSetq);
             }
@@ -282,10 +282,10 @@ export class LispContainer extends LispAtom {
 
     // Returns a meaningful value from the LispContainer, this is useful for avoiding comments an structural symbols
     getNthKeyAtom(significantNth: number): ILispFragment {
-        let num = 0;        
+        let num = 0;
         for (let i = 0; i <= significantNth; i++) {
             num = this.nextKeyIndex(num, true);
-        }          
+        }
         if (num < this.atoms.length && num >= 0) {
             return this.atoms[num];
         } else {
@@ -296,7 +296,7 @@ export class LispContainer extends LispAtom {
 
     // Used a lot like a DOM selector to navigate/extract values from LispContainer
     findChildren(regx: RegExp, all: boolean): LispContainer[] {
-        let result: Array<LispContainer> = [];       
+        let result: Array<LispContainer> = [];
         let index = this.nextKeyIndex(0);
         const lispObj = this.atoms[index];
         if (!lispObj) {
@@ -325,29 +325,75 @@ export class LispContainer extends LispAtom {
 
 
 
-enum  LongListFmts{
+enum LongListFmts {
     kSingleColumn,
     kWideStyleSingleCol,
     kFitToMargin
-  }
-  
-  let gMaxLineChars = 80;
-  let gIndentSpaces = 2;
-  let gClosedParenInSameLine = true;
-  let gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
-  let gHasSetLongListFormat = false;
-  export function longListFormatAsSingleColum() {
-      gLongListFormatAsSingleColumn = LongListFmts.kSingleColumn;
-      gHasSetLongListFormat = true;
-  }
-  export function resetLongListFormatAsSingleColum() {
-      gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
-      gHasSetLongListFormat = false;
-  }
-  
-  export function indentationForNarrowStyle(): number {
-      return gIndentSpaces;
-  }
+}
+
+let gMaxLineChars = 80;
+let gHasMaxLineChars = false;
+
+let gIndentSpaces = 2;
+let gClosedParenInSameLine = true;
+let gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+let gHasSetLongListFormat = false;
+let gHasIndentSpaces = false;
+let gHasClosedParenInSameLine = false;
+
+export function setMaxLineChars(maxlinechars) {
+    gMaxLineChars = maxlinechars;
+    if (gMaxLineChars < 60)
+        gMaxLineChars = 60;
+    gHasMaxLineChars = true;
+}
+export function resetMaxLineChars() {
+    gMaxLineChars = 80;
+    gHasMaxLineChars = false;
+}
+
+export function setIndentSpaces(n: number) {
+    gIndentSpaces = n;
+    if (gIndentSpaces < 1)
+        gIndentSpaces = 1;
+    else if (gIndentSpaces > 6)
+        gIndentSpaces = 6;
+    gHasIndentSpaces = true;
+}
+export function resetIndentSpaces() {
+    gIndentSpaces = 2;
+    gHasIndentSpaces = false;
+}
+
+export function setClosedParenInSameLine(yes: boolean) {
+    gClosedParenInSameLine = yes;
+    gHasClosedParenInSameLine = true;
+}
+export function resetClosedParenInSameLine() {
+    gClosedParenInSameLine = true;
+    gHasClosedParenInSameLine = false;
+}
+
+export function longListFormatAsSingleColum() {
+    gLongListFormatAsSingleColumn = LongListFmts.kSingleColumn;
+    gHasSetLongListFormat = true;
+}
+export function longListFormatAsWideStyleSingleCol() {
+    gLongListFormatAsSingleColumn = LongListFmts.kWideStyleSingleCol;
+    gHasSetLongListFormat = true;
+}
+export function longListFormatAsFitMargin() {
+    gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+    gHasSetLongListFormat = true;
+}
+export function resetLongListFormatAsSingleColum() {
+    gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
+    gHasSetLongListFormat = false;
+}
+
+export function indentationForNarrowStyle(): number {
+    return gIndentSpaces;
+}
 
 class CustomRes {
     succ: boolean = false;
@@ -1080,7 +1126,7 @@ export class Sexpression extends LispAtom {
     //    And we treat the block comments as a common atom
     //
     // All the atom index start from 0, and include the left parenthes
-    static format(exp: LispAtom|Sexpression, startColumn: number, asCond?: boolean): string {
+    static format(exp: LispAtom | Sexpression, startColumn: number, asCond?: boolean): string {
         if (exp instanceof Sexpression) {
             let length = exp.length();
             if (exp.isDotPairs()) {
@@ -1093,9 +1139,9 @@ export class Sexpression extends LispAtom {
                 let lispOperator = exp.getLispOperator();
                 if (exp.atoms[0].isLeftParen() &&
                     !exp.canBeFormatAsPlain(startColumn)) {
-    
+
                     let opName = lispOperator.symbol.toLowerCase();
-    
+
                     if (opName == "if" || opName == "repeat" || opName == "while")
                         return exp.formatList(startColumn, 3);
                     if (opName == "lambda")
@@ -1112,12 +1158,12 @@ export class Sexpression extends LispAtom {
                         return exp.formatDefun(startColumn);
                     } else if (exp.isPureLongList() && gLongListFormatAsSingleColumn == LongListFmts.kFitToMargin)
                         return exp.formatListAsColumn(startColumn, 3);
-    
+
                     if (asCond) {
                         // cond branch internal expression align with the outer left parenthes
                         return exp.formatList(startColumn, 1);
                     }
-    
+
                     if (exp.shouldFormatWideStyle(startColumn))
                         return exp.formatListAsWideStyle(startColumn);
                     else {
@@ -1125,7 +1171,7 @@ export class Sexpression extends LispAtom {
                     }
                 }
             }
-    
+
             return exp.formatAsPlainStyle(startColumn);
         } else { // was LispAtom
             return exp.symbol;
@@ -1134,31 +1180,36 @@ export class Sexpression extends LispAtom {
 
     formatting(startColumn: number, linefeed?: string): string {
 
-        gMaxLineChars = maximumLineChars();
-        if (gMaxLineChars < 60)
-            gMaxLineChars = 60;
+        if (!gHasMaxLineChars) {
+            gMaxLineChars = maximumLineChars();
+            if (gMaxLineChars < 60)
+                gMaxLineChars = 60;
+        }
 
-        gIndentSpaces = indentSpaces();
-        if (gIndentSpaces < 1)
-            gIndentSpaces = 1;
-        else if (gIndentSpaces > 6)
-            gIndentSpaces = 6;
+        if (!gHasIndentSpaces) {
+            gIndentSpaces = indentSpaces();
+            if (gIndentSpaces < 1)
+                gIndentSpaces = 1;
+            else if (gIndentSpaces > 6)
+                gIndentSpaces = 6;
+        }
 
-        let parenStyle = closeParenStyle();
-        if (parenStyle.toString() == "Same line")
-            gClosedParenInSameLine = true;
-        else gClosedParenInSameLine = false;
+        if (!gHasClosedParenInSameLine) {
+            let parenStyle = closeParenStyle();
+            if (parenStyle.toString().toLowerCase() == "same line")
+                gClosedParenInSameLine = true;
+            else gClosedParenInSameLine = false;
+        }
 
         if (!gHasSetLongListFormat) {
             let listFmtStyle = longListFormatStyle();
-            if (listFmtStyle.toString() == "Single column")
+            if (listFmtStyle.toString().toLowerCase() == "single column")
                 gLongListFormatAsSingleColumn = LongListFmts.kWideStyleSingleCol;
             else gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
         }
 
         if (linefeed)
             this.linefeed = linefeed;
-
         return Sexpression.format(this, startColumn);
     }
 
