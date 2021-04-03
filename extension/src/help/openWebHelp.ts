@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AutoLispExt } from '../extension';
+import { getExtensionSettingString } from '../resources';
 import { IJsonLoadable, webHelpContainer } from "../resources";
 
 
@@ -37,7 +37,7 @@ export class WebHelpLibrary implements IJsonLoadable {
 	// Issue #70 requested user configuration of the help year
 	// 			 this implements the proposed solution of extracting it from the launch configuration
 	private getYearFromSettings(): string|null {
-		let acad = AutoLispExt.Resources.getExtensionSettingString('debug.LaunchProgram');
+		let acad = getExtensionSettingString('debug.LaunchProgram');
 		let qualifier = /(?<=AUTOCAD\s*)20\d{2}(?!ACAD.EXE)/i;
 		if (qualifier.test(acad)) {
 			return qualifier.exec(acad)[0];

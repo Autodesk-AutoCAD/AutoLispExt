@@ -10,7 +10,7 @@ import { calculateABSPathForDAP } from './platform';
 import { existsSync } from 'fs';
 import { ProcessPathCache } from './process/processCache';
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
-import { AutoLispExt } from './extension';
+import { getExtensionSettingString } from './resources';
 
 let strNoADPerr: string = localize("autolispext.debug.nodap", "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.");
 let strNoACADerr: string = localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
@@ -133,7 +133,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
         if (newConfig["type"] === launchCfgType) {
             // 1. get acad and adapter path
             // 2. get acadRoot path
-            let productPath = AutoLispExt.Resources.getExtensionSettingString(LAUNCH_PROC);
+            let productPath = getExtensionSettingString(LAUNCH_PROC);
 
             if (!productPath) {
                 let info = localize("autolispext.debug.launchjson.path",
@@ -168,7 +168,7 @@ class LispLaunchConfigurationProvider implements vscode.DebugConfigurationProvid
                 ProcessPathCache.globalProductPath = "";
                 return undefined;
             } else {
-                let params = AutoLispExt.Resources.getExtensionSettingString(LAUNCH_PARM);
+                let params = getExtensionSettingString(LAUNCH_PARM);
                 ProcessPathCache.globalParameter = params;
             }
 
@@ -208,7 +208,7 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
             newConfig.program = vscode.window.activeTextEditor.document.fileName;
 
         ProcessPathCache.globalAcadNameInUserAttachConfig = '';
-        let name = AutoLispExt.Resources.getExtensionSettingString(ATTACH_PROC);
+        let name = getExtensionSettingString(ATTACH_PROC);
         if (name)
             ProcessPathCache.globalAcadNameInUserAttachConfig = name;
 
