@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { AutoLispExt } from '../extension';
 import { IJsonLoadable, webHelpContainer } from "../resources";
 
 
@@ -26,11 +27,28 @@ export class WebHelpLibrary implements IJsonLoadable {
 	functions: Dictionary<WebHelpFunction> = {};
 	ambiguousFunctions: Dictionary<WebHelpFunction[]> = {};
 	enumerators: Dictionary<string> = {};	
-	year: string;
-	
+	_fallbackYear: string;
+	get year(): string {
+		// This was converted to a getter because WebHelpLibrary only loads once on start
+		// It would of required restart after changing the launch configuration to update the year
+		return this.getYearFromSettings() ?? this._fallbackYear;
+	}
+
+	// Issue #70 requested user configuration of the help year
+	// 			 this implements the proposed solution of extracting it from the launch configuration
+	private getYearFromSettings(): string|null {
+		let acad = AutoLispExt.Resources.getExtensionSettingString('debug.LaunchProgram');
+		let qualifier = /(?<=AUTOCAD\s*)20\d{2}(?!ACAD.EXE)/i;
+		if (qualifier.test(acad)) {
+			return qualifier.exec(acad)[0];
+		} else {
+			return null;
+		}
+	}
+
 	// consumes a JSON converted object into the WebHelpLibrary
 	loadFromJsonObject(obj: object): void{		
-		this.year = obj['year'] ?? '2021';
+		this._fallbackYear = obj['year'] ?? '2021';
 		Object.keys(obj["dclAttributes"]).forEach(key => {
 			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
 			this.dclAttributes[key] = newObj;

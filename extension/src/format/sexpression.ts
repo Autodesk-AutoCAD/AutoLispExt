@@ -247,11 +247,6 @@ export class LispContainer extends LispAtom {
     }
 
 
-    // Returns true if this LispContainer encapsulates the provided Position
-    contains(position: Position): boolean {
-        return this.getRange().contains(position);
-    }
-
 
     // This version was necessary to properly alternate over SETQ Name vs Value 
     private isValidForSetq(atom: ILispFragment): boolean {
