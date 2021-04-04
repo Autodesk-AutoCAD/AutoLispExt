@@ -35,7 +35,7 @@ export class WebHelpLibrary implements IJsonLoadable {
 	}
 
 	// Issue #70 requested user configuration of the help year
-	// 			 this implements the proposed solution of extracting it from the launch configuration
+	//           this implements the proposed solution of extracting it from the launch configuration
 	private getYearFromSettings(): string|null {
 		let acad = getExtensionSettingString('debug.LaunchProgram');
 		let qualifier = /(?<=AUTOCAD\s*)20\d{2}(?!ACAD.EXE)/i;
