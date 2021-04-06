@@ -11,6 +11,7 @@ extension/tsconfig.json
 extension/vsc-extension-quickstart.md
 extension/node_modules/**
 test_case/**
+test-resources/**
 vendor/**
 out/test/**
 out/**/*.map
