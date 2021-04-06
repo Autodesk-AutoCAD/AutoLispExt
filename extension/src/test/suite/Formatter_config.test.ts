@@ -5,18 +5,10 @@ import * as vscode from 'vscode';
 import { before, beforeEach, afterEach } from 'mocha';
 import { LispFormatter } from '../../format/formatter';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-// import { longListFormatAsWideStyleSingleCol, resetLongListFormatAsSingleColum } from '../../format/sexpression';
-// import { setMaxLineChars, resetMaxLineChars } from '../../format/sexpression';
-// import { setIndentSpaces, resetIndentSpaces } from '../../format/sexpression';
-// import { setClosedParenInSameLine, resetClosedParenInSameLine } from '../../format/sexpression';
-// import { longListFormatAsFitMargin } from '../../format/sexpression';
-// import * as sinon from 'sinon';
 
 let assert = chai.assert;
-
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-
 let config = vscode.workspace.getConfiguration();
 
 async function  restoreConfig() {
@@ -27,29 +19,16 @@ async function  restoreConfig() {
 }
 
 async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,vscode.ConfigurationTarget.Global)
-	.then(() =>{
-		console.log(`config is updated ${config.get('format.CloseParenthesisStyle')}`);
-
-	});
+	await config.update('format.CloseParenthesisStyle',sameline,vscode.ConfigurationTarget.Global);
 }
 async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,vscode.ConfigurationTarget.Global)
-	.then(() =>{
-		console.log(`config is updated ${config.get('format.MaxLineChars')}`);
-	});
+	await config.update('format.MaxLineChars',maxchar,vscode.ConfigurationTarget.Global);
 }
 async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,vscode.ConfigurationTarget.Global)
-	.then(() =>{
-		console.log(`config is updated ${config.get('format.LongListFormatStyle')}`);
-	});
+	await config.update('format.LongListFormatStyle',singleCol,vscode.ConfigurationTarget.Global);
 }
 async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,vscode.ConfigurationTarget.Global)
-	.then(() =>{
-		console.log(`config is updated ${config.get('format.NarrowStyleIndent')}`);
-	});
+	await config.update('format.NarrowStyleIndent',indent,vscode.ConfigurationTarget.Global);
 }
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
@@ -77,7 +56,7 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 	}
 }
 
-suite.only("Lisp Formatter Sinon Tests", function () {
+suite.only("Lisp Formatter Tests", function () {
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
 	// in the fmtconfig.ts
@@ -88,31 +67,16 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
 	before(()=>{
-		config = vscode.workspace.getConfiguration('autolispext');
+		try {
+			config = vscode.workspace.getConfiguration('autolispext');
+		} catch (error) {
+			console.log(error);
+		}
 	})
 
 	beforeEach(async () => {
 		//Set the default value to run the test
-		//After call these setXXX() formatting will not 
-		//Get setting value from vscode, instead it will receive
-		//value from the test cases
-
-		// setClosedParenInSameLine(false);
-		// setIndentSpaces(2);
-		// setMaxLineChars(85);
-		// longListFormatAsFitMargin();
-		// config = vscode.workspace.getConfiguration('autolispext');
 		await restoreConfig();
-	});
-
-	afterEach(async () => {
-		// await restoreConfig();
-
-		//Restore the default states
-		// resetClosedParenInSameLine();
-		// resetIndentSpaces();
-		// resetMaxLineChars();
-		// resetLongListFormatAsSingleColum();
 	});
 
 	test("Lisp Formatter Test case 1", function () {
@@ -144,7 +108,7 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 	});
 
 	test("Lisp Formatter Test case 3", function () {
-		// Test multiple function format
+		// Test multiple functions format
 		let i = 3;
 		try {
 			const [source, output, baseline] = getFileName(i);
@@ -174,14 +138,13 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 	test("Lisp Formatter Test case 5", async function () {
 		// Test the Max line chars setting
 		// Test the bug that it will be a space between the last two brackets ) )
+		// MaxLineChars: 65
 		let i = 5;
-		// console.log(`config is ${config.get('format.CloseParenthesisStyle').toString()} in ${i}`);
 		try {
 			const [source, output, baseline] = getFileName(i);
 			const doc = ReadonlyDocument.open(source);
 			await setMaxLineChars(65);
 			let fmt = LispFormatter.format(doc, null);
-			// resetMaxLineChars();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -206,17 +169,12 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 	test("Lisp Formatter Test case 7", async function () {
 		// Test the single column setting
 		let i = 7;
-		// console.log(`config is ${config.get('format.LongListFormatStyle').toString()} in ${i}`);
-
 		try {
 			const [source, output, baseline] = getFileName(i);
 			const doc = ReadonlyDocument.open(source);
 			// set as wide single column format
-			// longListFormatAsWideStyleSingleCol();
 			await setLongListFormat('Single Column');
 			let fmt = LispFormatter.format(doc, null);
-			// set back as kFitToMargin format
-			// resetLongListFormatAsSingleColum();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -231,11 +189,8 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			const [source, output, baseline] = getFileName(i);
 			let doc = ReadonlyDocument.open(source);
 			// set as wide single column format
-			// longListFormatAsWideStyleSingleCol();
 			await setLongListFormat('Single Column');
-
 			let fmt = LispFormatter.format(doc, null);
-			// resetLongListFormatAsSingleColum();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -281,7 +236,6 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			let doc = ReadonlyDocument.open(source);
 			await setIndentSpaces(4);
 			let fmt = LispFormatter.format(doc, null);
-			// resetIndentSpaces();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -295,10 +249,8 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 		try {
 			const [source, output, baseline] = getFileName(i);
 			let doc = ReadonlyDocument.open(source);
-			// setClosedParenInSameLine(true);
 			await setClosedParenInSameLine('same line');
 			let fmt = LispFormatter.format(doc, null);
-			// resetClosedParenInSameLine();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -308,10 +260,10 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 
 	test("Lisp Formatter Test case 13",async function () {
 		// Test Mixed settings
-		// setClosedParenInSameLine(true);
-		// setIndentSpaces(4);
-		// setMaxLineChars(65);
-		// longListFormatAsWideStyleSingleCol();
+		// MaxLineChars: 65
+		// NarrowStyleIndent: 4
+		// CloseParenthesisStyle: 'Same line'
+		// LongListFormatStyle: 'Single line'
 		let i = 13;
 		try {
 			const [source, output, baseline] = getFileName(i);
@@ -320,12 +272,7 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			await setIndentSpaces(4);
 			await setMaxLineChars(65);
 			await setLongListFormat('single column');
-			// longListFormatAsWideStyleSingleCol();
 			let fmt = LispFormatter.format(doc, null);
-			// resetClosedParenInSameLine();
-			// resetIndentSpaces();
-			// resetLongListFormatAsSingleColum();
-			// resetMaxLineChars();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -335,8 +282,8 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 
 	test("Lisp Formatter Test case 14",async function () {
 		// Test the comments after the brackets ") ;progn"
-		// setIndentSpaces(4);
-		// setMaxLineChars(80);
+		// MaxLineChars: 80
+		// NarrowStyleIndent: 4
 		let i = 14;
 		try {
 			const [source, output, baseline] = getFileName(i);
@@ -344,8 +291,6 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			await setIndentSpaces(4);
 			await setMaxLineChars(80);
 			let fmt = LispFormatter.format(doc, null);
-			// resetIndentSpaces();
-			// resetMaxLineChars();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -355,8 +300,8 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 
 	test("Lisp Formatter Test case 15",async function () {
 		// Test unicode
-		// setIndentSpaces(2);
-		// setMaxLineChars(60);
+		// MaxLineChars: 60
+		// NarrowStyleIndent: 2
 		let i = 15;
 		try {
 			const [source, output, baseline] = getFileName(i);
@@ -364,8 +309,6 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			await setIndentSpaces(2);
 			await setMaxLineChars(60);
 			let fmt = LispFormatter.format(doc, null);
-			// resetIndentSpaces();
-			// resetMaxLineChars();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
@@ -375,8 +318,8 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 
 	test("Lisp Formatter Test case 16",async function () {
 		// Test invalid setting
-		// setIndentSpaces(8);
-		// setMaxLineChars(30);
+		// MaxLineChars: 30
+		// NarrowStyleIndent: 8
 		let i = 16;
 		try {
 			const [source, output, baseline] = getFileName(i);
@@ -384,8 +327,6 @@ suite.only("Lisp Formatter Sinon Tests", function () {
 			await setIndentSpaces(8);
 			await setMaxLineChars(30);
 			let fmt = LispFormatter.format(doc, null);
-			// resetIndentSpaces();
-			// resetMaxLineChars();
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
