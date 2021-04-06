@@ -1145,13 +1145,13 @@ export class Sexpression extends LispAtom {
             gIndentSpaces = 6;
 
         let parenStyle = closeParenStyle();
-        if (parenStyle.toString().toLocaleLowerCase() == "same line")
+        if (parenStyle.toString().toLowerCase() == "same line")
             gClosedParenInSameLine = true;
         else gClosedParenInSameLine = false;
 
         if (!gHasSetLongListFormat) {
             let listFmtStyle = longListFormatStyle();
-            if (listFmtStyle.toString().toLocaleLowerCase() == "single column")
+            if (listFmtStyle.toString().toLowerCase() == "single column")
                 gLongListFormatAsSingleColumn = LongListFmts.kWideStyleSingleCol;
             else gLongListFormatAsSingleColumn = LongListFmts.kFitToMargin;
         }
