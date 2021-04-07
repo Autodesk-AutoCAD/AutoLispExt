@@ -61,7 +61,7 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 	}
 }
 
-suite.only("Lisp Formatter Tests", function () {
+suite("Lisp Formatter Tests", function () {
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
 	// in the fmtconfig.ts
@@ -75,11 +75,27 @@ suite.only("Lisp Formatter Tests", function () {
 	before( ()=>{
 		try {
 			let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
+			// fs.existsSync( path.join(process.env.APPDATA,'/code/user') )
+
+			if(fs.existsSync(path.join(process.env.APPDATA,'/code/user'))){
+				console.log('code/user exist');
+			}else{
+				console.log('code/user NOT exist');
+			}
+
+			if(fs.existsSync(path.join(process.env.APPDATA,'/code'))){
+				console.log('code exist');
+			}else{
+				console.log('code NOT exist');
+			}
+
 			if(fs.existsSync(configPath)){
 				console.log('code/user/settings.json exist');
 			}else{
 				console.log('code/user/settings.json NOT exist');
 			}
+
+
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
@@ -149,7 +165,7 @@ suite.only("Lisp Formatter Tests", function () {
 		}
 	});
 
-	test("Lisp Formatter Test case 5", async function () {
+	test.only("Lisp Formatter Test case 5", async function () {
 		// Test the Max line chars setting
 		// Test the bug that it will be a space between the last two brackets ) )
 		// MaxLineChars: 65
