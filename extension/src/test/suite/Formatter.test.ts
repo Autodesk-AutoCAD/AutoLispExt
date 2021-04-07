@@ -34,10 +34,10 @@ let config = vscode.workspace.getConfiguration('');
 
 async function  restoreConfig() {
 	try {
-		await config.update('format.CloseParenthesisStyle','New line with outer identation',true);
-		await config.update('format.MaxLineChars',85,true);
-		await config.update('format.LongListFormatStyle','Fill to Margin',true);
-		await config.update('format.NarrowStyleIndent',2,true);
+		await vscode.workspace.getConfiguration('autolispext').update('format.CloseParenthesisStyle','New line with outer identation',true);
+		await vscode.workspace.getConfiguration('autolispext').update('format.MaxLineChars',85,true);
+		await vscode.workspace.getConfiguration('autolispext').update('format.LongListFormatStyle','Fill to Margin',true);
+		await vscode.workspace.getConfiguration('autolispext').update('format.NarrowStyleIndent',2,true);
 	} catch (error) {
 		console.log(error);
 	}
@@ -45,16 +45,16 @@ async function  restoreConfig() {
 }
 
 async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,true);
+	await vscode.workspace.getConfiguration('autolispext').update('format.CloseParenthesisStyle',sameline,true);
 }
 async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,true);
+	await vscode.workspace.getConfiguration('autolispext').update('format.MaxLineChars',maxchar,true);
 }
 async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,true);
+	await vscode.workspace.getConfiguration('autolispext').update('format.LongListFormatStyle',singleCol,true);
 }
 async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,true);
+	await vscode.workspace.getConfiguration('autolispext').update('format.NarrowStyleIndent',indent,true);
 }
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
@@ -95,8 +95,6 @@ suite("Lisp Formatter Tests", function () {
 
 	before( ()=>{
 		try {
-			
-
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
