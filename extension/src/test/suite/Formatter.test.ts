@@ -12,10 +12,15 @@ const outputDir = path.join(testDir + "/OutputFile");
 let config = vscode.workspace.getConfiguration();
 
 async function  restoreConfig() {
- 	await config.update('format.CloseParenthesisStyle','New line with outer identation',vscode.ConfigurationTarget.Global);
- 	await config.update('format.MaxLineChars',85,vscode.ConfigurationTarget.Global);
- 	await config.update('format.LongListFormatStyle','Fill to Margin',vscode.ConfigurationTarget.Global);
- 	await config.update('format.NarrowStyleIndent',2,vscode.ConfigurationTarget.Global);
+	try {
+		await config.update('format.CloseParenthesisStyle','New line with outer identation',vscode.ConfigurationTarget.Global);
+		await config.update('format.MaxLineChars',85,vscode.ConfigurationTarget.Global);
+		await config.update('format.LongListFormatStyle','Fill to Margin',vscode.ConfigurationTarget.Global);
+		await config.update('format.NarrowStyleIndent',2,vscode.ConfigurationTarget.Global);
+	} catch (error) {
+		console.log(error);
+	}
+
 }
 
 async function setClosedParenInSameLine(sameline : string){
@@ -66,9 +71,11 @@ suite("Lisp Formatter Tests", function () {
 	// CloseParenthesisStyle: 'New line with outer indentation'
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
-	before(()=>{
+	before( ()=>{
 		try {
+			console.log('*** top-level before()***');
 			config = vscode.workspace.getConfiguration('autolispext');
+			console.log(`config is ${config.get('format.CloseParenthesisStyle')} in before()`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -76,6 +83,7 @@ suite("Lisp Formatter Tests", function () {
 
 	beforeEach(async () => {
 		//Set the default value to run the test
+		console.log('*** top-level beforeEach()***');
 		await restoreConfig();
 	});
 
