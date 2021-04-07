@@ -9,25 +9,41 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
-let setting = `
-{
-  "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
-  "autolispext.format.LongListFormatStyle": "Fill to Margin",
-  "autolispext.format.NarrowStyleIndent": 2,
-  "autolispext.format.MaxLineChars": 85
-}`
-if(!fs.existsSync(configPath)){
-	fs.writeFileSync(configPath,setting);
-}
 
+let Code =path.join(process.env.APPDATA,'/Code');
+let User =path.join(process.env.APPDATA,'/Code/User');
+let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
+
+// let setting = `
+// {
+//   "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
+//   "autolispext.format.LongListFormatStyle": "Fill to Margin",
+//   "autolispext.format.NarrowStyleIndent": 2,
+//   "autolispext.format.MaxLineChars": 85
+// }`
+// if(!fs.existsSync(configPath)){
+// 	fs.writeFileSync(configPath,setting);
+// }
+
+if(fs.existsSync(Code)){
+	console.log(`${Code} exist`);
+
+}else{
+	console.log(`${Code} NOT exist`);
+}
+if(fs.existsSync(User)){
+	console.log(`${User} exist`);
+
+}else{
+	console.log(`${User} NOT exist`);
+}
 if(fs.existsSync(configPath)){
-	console.log('code/user/settings.json exist');
+	console.log(`${configPath} exist`);
 	let content = fs.readFileSync(configPath);
 	console.log(`content is ${content.toString()}`);
 
 }else{
-	console.log('code/user/settings.json NOT exist');
+	console.log(`${configPath} NOT exist`);
 }
 
 let config = vscode.workspace.getConfiguration();
