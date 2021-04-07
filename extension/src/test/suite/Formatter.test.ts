@@ -74,6 +74,12 @@ suite.only("Lisp Formatter Tests", function () {
 
 	before( ()=>{
 		try {
+			let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
+			if(fs.existsSync(configPath)){
+				console.log('code/user/settings.json exist');
+			}else{
+				console.log('code/user/settings.json NOT exist');
+			}
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
