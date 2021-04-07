@@ -60,7 +60,15 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		assert.fail(`Format Test Case ${i} failed!`);
 	}
 }
-
+before( ()=>{
+	try {
+		console.log('*** top-level before()***');
+		config = vscode.workspace.getConfiguration('autolispext');
+		console.log(`config is ${config.get('format.CloseParenthesisStyle')} in before()`);
+	} catch (error) {
+		console.log(error);
+	}
+})
 suite("Lisp Formatter Tests", function () {
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
@@ -71,15 +79,7 @@ suite("Lisp Formatter Tests", function () {
 	// CloseParenthesisStyle: 'New line with outer indentation'
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
-	before( ()=>{
-		try {
-			console.log('*** top-level before()***');
-			config = vscode.workspace.getConfiguration('autolispext');
-			console.log(`config is ${config.get('format.CloseParenthesisStyle')} in before()`);
-		} catch (error) {
-			console.log(error);
-		}
-	})
+
 
 	beforeEach(async () => {
 		//Set the default value to run the test
