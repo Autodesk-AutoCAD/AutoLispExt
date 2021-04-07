@@ -12,23 +12,23 @@ const outputDir = path.join(testDir + "/OutputFile");
 let config = vscode.workspace.getConfiguration();
 
 async function  restoreConfig() {
- 	await config.update('format.CloseParenthesisStyle','New line with outer identation',vscode.ConfigurationTarget.Global);
- 	await config.update('format.MaxLineChars',85,vscode.ConfigurationTarget.Global);
- 	await config.update('format.LongListFormatStyle','Fill to Margin',vscode.ConfigurationTarget.Global);
- 	await config.update('format.NarrowStyleIndent',2,vscode.ConfigurationTarget.Global);
+ 	await config.update('format.CloseParenthesisStyle','New line with outer identation');
+ 	await config.update('format.MaxLineChars',85);
+ 	await config.update('format.LongListFormatStyle','Fill to Margin');
+ 	await config.update('format.NarrowStyleIndent',2);
 }
 
 async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,vscode.ConfigurationTarget.Global);
+	await config.update('format.CloseParenthesisStyle',sameline);
 }
 async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,vscode.ConfigurationTarget.Global);
+	await config.update('format.MaxLineChars',maxchar);
 }
 async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,vscode.ConfigurationTarget.Global);
+	await config.update('format.LongListFormatStyle',singleCol);
 }
 async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,vscode.ConfigurationTarget.Global);
+	await config.update('format.NarrowStyleIndent',indent);
 }
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
