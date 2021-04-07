@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "Einrückungswert für den schmalen Formatierungsstil der Funktionsargumente. Wert muss zwischen 1 und 6 liegen.",
   "autolispext.configuration.closeparenstyle.desc": "Steuert den Stil schließender Klammern. Die schließende Klammer wird auf derselben Zeile platziert wie die Funktion oder an der öffnenden Klammer der Funktion ausgerichtet.",
   "autolispext.configuration.longlistformatstyle": "Steuert den Formatstil von langen Listen. Jeder oder mehrere Parameter einer Funktion werden in separaten Zeilen platziert.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Prozessname, nach dem für Debug Attach gefiltert werden soll.",
   "autolispext.configuration.launchprogram.desc": "Absoluter Pfad zur ausführbaren AutoCAD-Datei.",
   "autolispext.configuration.launchparameters.desc": "AutoCAD-Befehlszeilenstartoptionen.",

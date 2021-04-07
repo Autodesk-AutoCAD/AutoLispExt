@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "Valore di rientro utilizzato nello stile di formattazione stretto degli argomenti di funzione. Il valore deve essere compreso nell'intervallo 1-6.",
   "autolispext.configuration.closeparenstyle.desc": "Controlla lo stile della parentesi di chiusura. La parentesi di chiusura viene inserita sulla stessa riga della funzione o allineata con la parentesi di apertura della funzione.",
   "autolispext.configuration.longlistformatstyle": "Controlla lo stile del formato degli elenchi lunghi. Ogni parametro o più parametri di una funzione vengono posizionati su righe separate.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Nome del processo in base al quale filtrare per Debug Attach.",
   "autolispext.configuration.launchprogram.desc": "Percorso assoluto del file eseguibile di AutoCAD.",
   "autolispext.configuration.launchparameters.desc": "Opzioni di avvio dalla riga di comando di AutoCAD.",

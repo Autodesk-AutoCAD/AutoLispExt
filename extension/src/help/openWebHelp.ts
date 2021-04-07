@@ -27,28 +27,23 @@ export class WebHelpLibrary implements IJsonLoadable {
 	functions: Dictionary<WebHelpFunction> = {};
 	ambiguousFunctions: Dictionary<WebHelpFunction[]> = {};
 	enumerators: Dictionary<string> = {};	
-	_fallbackYear: string;
+	_jsonYear: string = '';
+	
 	get year(): string {
-		// This was converted to a getter because WebHelpLibrary only loads once on start
-		// It would of required restart after changing the launch configuration to update the year
-		return this.getYearFromSettings() ?? this._fallbackYear;
+		return getExtensionSettingString('help.TargetYear');
 	}
 
-	// Issue #70 requested user configuration of the help year
-	//           this implements the proposed solution of extracting it from the launch configuration
-	private getYearFromSettings(): string|null {
-		let acad = getExtensionSettingString('debug.LaunchProgram');
-		let qualifier = /(?<=AUTOCAD\s*)20\d{2}(?!ACAD.EXE)/i;
-		if (qualifier.test(acad)) {
-			return qualifier.exec(acad)[0];
-		} else {
-			return null;
-		}
+	get jsonCreatedWithVersionYear(): string {
+		return this._jsonYear;
 	}
+
 
 	// consumes a JSON converted object into the WebHelpLibrary
 	loadFromJsonObject(obj: object): void{		
-		this._fallbackYear = obj['year'] ?? '2021';
+		// Issue #70, A user configured extension setting was requested by Issue #70 and deprecated the use of the embedded json year
+		//            However, this was left available in case we would like to setup a unit test that insures the JSON isn't stale.
+		this._jsonYear = obj['year'] ?? '2021';
+
 		Object.keys(obj["dclAttributes"]).forEach(key => {
 			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
 			this.dclAttributes[key] = newObj;

@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "Valor de sangría utilizado en el estilo de formato estrecho de los argumentos de función. El valor debe encontrarse en el intervalo entre 1 y 6.",
   "autolispext.configuration.closeparenstyle.desc": "Controla el estilo del paréntesis de cierre. El paréntesis de cierre se coloca en la misma línea que la función o se alinea con el paréntesis de apertura de la función.",
   "autolispext.configuration.longlistformatstyle": "Controla el estilo de formato de las listas largas. Uno o varios parámetros de una función se colocan en líneas independientes.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Nombre del proceso por el que filtrar para Debug Attach.",
   "autolispext.configuration.launchprogram.desc": "Ruta absoluta al archivo ejecutable de AutoCAD.",
   "autolispext.configuration.launchparameters.desc": "Conmutadores de inicio de la línea de comando de AutoCAD.",

@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "함수 인수의 좁은 형식 스타일에 사용되는 들여쓰기 값입니다. 값은 1과 6 범위 내에 있어야 합니다.",
   "autolispext.configuration.closeparenstyle.desc": "닫는 괄호의 스타일을 조정합니다. 닫는 괄호는 함수와 같은 행에 배치되거나 함수의 여는 괄호에 정렬됩니다.",
   "autolispext.configuration.longlistformatstyle": "긴 리스트의 형식 스타일을 조정합니다. 함수의 각 또는 여러 매개변수는 별도의 행에 배치됩니다.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Debug Attach에 대해 필터링할 프로세스 이름입니다.",
   "autolispext.configuration.launchprogram.desc": "AutoCAD 실행 파일의 절대 경로입니다.",
   "autolispext.configuration.launchparameters.desc": "AutoCAD 명령행 시작 스위치입니다.",
