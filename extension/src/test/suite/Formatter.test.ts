@@ -10,13 +10,22 @@ let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
 let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
-
+let setting = `
+{
+    "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
+	"autolispext.format.LongListFormatStyle": "Fill to Margin",
+	"autolispext.format.NarrowStyleIndent": 2,
+    "autolispext.format.MaxLineChars": 85
+}`
 if(!fs.existsSync(configPath)){
-	fs.writeFileSync(configPath,'{\n}');
+	fs.writeFileSync(configPath,setting);
 }
 
 if(fs.existsSync(configPath)){
 	console.log('code/user/settings.json exist');
+	let content = fs.readFileSync(configPath);
+	console.log(`content is ${content.toString()}`);
+
 }else{
 	console.log('code/user/settings.json NOT exist');
 }
