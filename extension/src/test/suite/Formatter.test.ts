@@ -14,16 +14,16 @@ let Code =path.join(process.env.APPDATA,'/Code');
 let User =path.join(process.env.APPDATA,'/Code/User');
 let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
 
-// let setting = `
-// {
-//   "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
-//   "autolispext.format.LongListFormatStyle": "Fill to Margin",
-//   "autolispext.format.NarrowStyleIndent": 2,
-//   "autolispext.format.MaxLineChars": 85
-// }`
-// if(!fs.existsSync(configPath)){
-// 	fs.writeFileSync(configPath,setting);
-// }
+let setting = `
+{
+  "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
+  "autolispext.format.LongListFormatStyle": "Fill to Margin",
+  "autolispext.format.NarrowStyleIndent": 2,
+  "autolispext.format.MaxLineChars": 85
+}`
+if(!fs.existsSync(configPath)){
+	fs.writeFileSync(configPath,setting);
+}
 
 if(fs.existsSync(Code)){
 	console.log(`${Code} exist`);
@@ -111,8 +111,11 @@ suite("Lisp Formatter Tests", function () {
 
 	before(async ()=>{
 		try {
-			await vscode.extensions.getExtension('autolispext')?.activate();
+			// await vscode.extensions.getExtension('autolispext')?.activate();
 			config = vscode.workspace.getConfiguration('autolispext');
+			let CloseParenthesisStyle = vscode.workspace.getConfiguration('autolispext.format.CloseParenthesisStyle');
+			console.log(`CloseParenthesisStyle is ${CloseParenthesisStyle}`);
+
 			// let value = vscode.workspace.getConfiguration('autolispext').inspect('format');
 
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);

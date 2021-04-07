@@ -615,7 +615,6 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"watch": "tsc -p -watch ./",
-		"pretest": "winCompile.bat",
 		"test": "npm run compile && node ./out/test/runTest.js",
 		"cc": "npm run compile && node ./out/test/runTest.js --codecoverage",
 		"e2etest": "npm run compile && extest setup-and-run -c 1.50.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js -u"
