@@ -93,6 +93,7 @@ suite("Lisp Formatter Tests", function () {
 				console.log('code/user/settings.json exist');
 			}else{
 				console.log('code/user/settings.json NOT exist');
+				fs.writeFileSync(configPath,'{}');
 			}
 
 
