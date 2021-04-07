@@ -1100,7 +1100,7 @@ export class Sexpression extends LispAtom {
                     else if (opName == "setq") {
                         return exp.formatSetq(startColumn);
                     }
-                    else if (opName == "foreach") {
+                    else if (opName === "foreach" || opName === "vlax-for") {
                         return exp.formatForeach(startColumn);
                     }
                     else if (opName == "defun" || opName == "defun-q") {
