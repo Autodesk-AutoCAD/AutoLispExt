@@ -9,14 +9,14 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-let config = vscode.workspace.getConfiguration();
+let config = vscode.workspace.getConfiguration('');
 
 async function  restoreConfig() {
 	try {
-		await config.update('format.CloseParenthesisStyle','New line with outer identation',vscode.ConfigurationTarget.Global);
-		await config.update('format.MaxLineChars',85,vscode.ConfigurationTarget.Global);
-		await config.update('format.LongListFormatStyle','Fill to Margin',vscode.ConfigurationTarget.Global);
-		await config.update('format.NarrowStyleIndent',2,vscode.ConfigurationTarget.Global);
+		await config.update('format.CloseParenthesisStyle','New line with outer identation',true);
+		await config.update('format.MaxLineChars',85,true);
+		await config.update('format.LongListFormatStyle','Fill to Margin',true);
+		await config.update('format.NarrowStyleIndent',2,true);
 	} catch (error) {
 		console.log(error);
 	}
@@ -24,16 +24,16 @@ async function  restoreConfig() {
 }
 
 async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,vscode.ConfigurationTarget.Global);
+	await config.update('format.CloseParenthesisStyle',sameline,true);
 }
 async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,vscode.ConfigurationTarget.Global);
+	await config.update('format.MaxLineChars',maxchar,true);
 }
 async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,vscode.ConfigurationTarget.Global);
+	await config.update('format.LongListFormatStyle',singleCol,true);
 }
 async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,vscode.ConfigurationTarget.Global);
+	await config.update('format.NarrowStyleIndent',indent,true);
 }
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
@@ -60,16 +60,8 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		assert.fail(`Format Test Case ${i} failed!`);
 	}
 }
-before( ()=>{
-	try {
-		console.log('*** top-level before()***');
-		config = vscode.workspace.getConfiguration('autolispext');
-		console.log(`config is ${config.get('format.CloseParenthesisStyle')} in before()`);
-	} catch (error) {
-		console.log(error);
-	}
-})
-suite("Lisp Formatter Tests", function () {
+
+suite.only("Lisp Formatter Tests", function () {
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
 	// in the fmtconfig.ts
@@ -80,10 +72,18 @@ suite("Lisp Formatter Tests", function () {
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
 
+	before( ()=>{
+		try {
+			config = vscode.workspace.getConfiguration('autolispext');
+			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
+			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
+		} catch (error) {
+			console.log(error);
+		}
+	})
 
 	beforeEach(async () => {
 		//Set the default value to run the test
-		console.log('*** top-level beforeEach()***');
 		await restoreConfig();
 	});
 
