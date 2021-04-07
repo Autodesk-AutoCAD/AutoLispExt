@@ -9,6 +9,18 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
+let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
+
+if(!fs.existsSync(configPath)){
+	fs.writeFileSync(configPath,'{\n}');
+}
+
+if(fs.existsSync(configPath)){
+	console.log('code/user/settings.json exist');
+}else{
+	console.log('code/user/settings.json NOT exist');
+}
+
 let config = vscode.workspace.getConfiguration('');
 
 async function  restoreConfig() {
@@ -74,28 +86,7 @@ suite("Lisp Formatter Tests", function () {
 
 	before( ()=>{
 		try {
-			let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
-			// fs.existsSync( path.join(process.env.APPDATA,'/code/user') )
-
-			if(fs.existsSync(path.join(process.env.APPDATA,'/code/user'))){
-				console.log('code/user exist');
-			}else{
-				console.log('code/user NOT exist');
-			}
-
-			if(fs.existsSync(path.join(process.env.APPDATA,'/code'))){
-				console.log('code exist');
-			}else{
-				console.log('code NOT exist');
-			}
-
-			if(fs.existsSync(configPath)){
-				console.log('code/user/settings.json exist');
-			}else{
-				console.log('code/user/settings.json NOT exist');
-				fs.writeFileSync(configPath,'{}');
-			}
-
+			
 
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
