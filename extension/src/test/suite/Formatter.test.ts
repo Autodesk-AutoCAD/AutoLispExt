@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import * as fs from 'fs'
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { before, beforeEach, afterEach } from 'mocha';
+import { before, beforeEach, after } from 'mocha';
 import { LispFormatter } from '../../format/formatter';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
@@ -12,10 +12,10 @@ const outputDir = path.join(testDir + "/OutputFile");
 let configPath =path.join(process.env.APPDATA,'/code/user/settings.json');
 let setting = `
 {
-    "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
-	"autolispext.format.LongListFormatStyle": "Fill to Margin",
-	"autolispext.format.NarrowStyleIndent": 2,
-    "autolispext.format.MaxLineChars": 85
+  "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
+  "autolispext.format.LongListFormatStyle": "Fill to Margin",
+  "autolispext.format.NarrowStyleIndent": 2,
+  "autolispext.format.MaxLineChars": 85
 }`
 if(!fs.existsSync(configPath)){
 	fs.writeFileSync(configPath,setting);
@@ -93,16 +93,29 @@ suite("Lisp Formatter Tests", function () {
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
 
-	before( ()=>{
+	before(async ()=>{
 		try {
+			if (vscode.workspace.workspaceFolders) {
+				console.log(`vscode.workspace.workspaceFolders exist`);
+				
+			}else{
+				console.log(`vscode.workspace.workspaceFolders NOT exist`);
+			}
+
+			// await vscode.extensions.getExtension('autolispext')?.activate();
+
 			config = vscode.workspace.getConfiguration('autolispext');
+			let value = vscode.workspace.getConfiguration('autolispext').inspect('format');
+
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
 		} catch (error) {
 			console.log(error);
 		}
 	})
-
+	after( async ()=>{
+		await restoreConfig();
+	})
 	beforeEach(async () => {
 		//Set the default value to run the test
 		await restoreConfig();
