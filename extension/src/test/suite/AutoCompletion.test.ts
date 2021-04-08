@@ -16,9 +16,8 @@ fs.mkdir(outputDir, { recursive: true }, (err) => {
   }
 });
 
-
-function createFile(f : string) {
-	autocompletionFile = path.join(testDir + "/OutputFile/" + f);
+function createFile(f: string) {
+  autocompletionFile = path.join(testDir + "/OutputFile/" + f);
   try {
     if (!fs.existsSync(autocompletionFile)) {
       fs.writeFileSync(autocompletionFile, "");
@@ -29,45 +28,63 @@ function createFile(f : string) {
 }
 
 suite("AutoCompletion Tests", function () {
+  before(async () => {
+    if (vscode.extensions.getExtension("Autodesk.autolispext") == undefined) {
+      console.log("Autodesk.autolispext NOT exist");
+    } else {
+      await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+    }
+  });
 
- before(async () =>{
-   
-  const activate = vscode.extensions.getExtension('Autodesk.autolispext').isActive;
-  console.log(` lisp extension activate? ${activate}`);
-  const extpath = vscode.extensions.getExtension('Autodesk.autolispext').extensionPath;
-  console.log(` lisp extension extpath: ${extpath}`);
-  await vscode.extensions.getExtension('Autodesk.autolispext').activate();
-
- })
-
-  test.only("AutoCompletion Test for De", function () {
+  test("AutoCompletion Test for de", function () {
+    const inputword = "de";
     try {
       const f = "test.lsp";
       createFile(f);
       let doc: vscode.TextDocument = ReadonlyDocument.open(autocompletionFile);
-      const inputword = "De";
       const isupper = false;
-      const suggestionList: Array<vscode.CompletionItem> = getLispAndDclCompletions(doc, inputword, isupper);
+      const suggestionList: Array<vscode.CompletionItem> = getLispAndDclCompletions(
+        doc,
+        inputword,
+        isupper
+      );
       let suggestLabel = [];
-      suggestionList.forEach((item) =>{
+      suggestionList.forEach((item) => {
         suggestLabel.push(item.label);
-    })
-      let expectedList =  ['defun','defun-q'];
-    // 0:W {label: 'defun', kind: undefined}
-    // kind:undefined
-    // label:'defun'
-    // 1:W {label: 'defun-q', kind: undefined}
-    // kind:undefined
-    // label:'defun-q'
-    // length:2
-	  // const expectedList = [
-
-	  // ];
-	  assert.equal(suggestLabel,expectedList);
+      });
+      let expectedList = ["defun", "defun-q"];
+      chai.expect(suggestLabel).to.eql(expectedList);
 
     } catch (err) {
-		assert.fail('AutoCompletion test for De failed')
-	}
+      assert.fail(`AutoCompletion test for ${inputword} failed`);
+    }
   });
+
+  test.only("AutoCompletion Test for vlax-get", function () {
+    const inputword = "vlax-get";
+    try {
+      const f = "test.lsp";
+      createFile(f);
+      let doc: vscode.TextDocument = ReadonlyDocument.open(autocompletionFile);
+      const isupper = false;
+      const suggestionList: Array<vscode.CompletionItem> = getLispAndDclCompletions(
+        doc,
+        inputword,
+        isupper
+      );
+      let suggestLabel = [];
+      suggestionList.forEach((item) => {
+        suggestLabel.push(item.label);
+      });
+      console.log(`suggestLabel is ${suggestLabel.toString()}`);
+      let expectedList = ["defun", "defun-q"];
+      chai.expect(suggestLabel).to.eql(expectedList);
+
+    } catch (err) {
+      assert.fail(`AutoCompletion test for ${inputword} failed`);
+    }
+  });
+
+  
 
 });
