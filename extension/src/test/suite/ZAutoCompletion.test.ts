@@ -61,11 +61,11 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
 }
 suite("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
-  before(async () => {
+  before(() => {
     if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
       console.log("Autodesk.autolispext NOT exist");
     } else {
-      await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+      vscode.extensions.getExtension("Autodesk.autolispext").activate();
     }
     createFakeTextDcoument();
   });
