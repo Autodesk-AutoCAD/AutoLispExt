@@ -10,6 +10,7 @@ import { calculateABSPathForDAP } from './platform';
 import { existsSync } from 'fs';
 import { ProcessPathCache } from './process/processCache';
 import { DiagnosticsCtrl } from './diagnosticsCtrl';
+import { getExtensionSettingString } from './resources';
 
 let strNoADPerr: string = localize("autolispext.debug.nodap", "doesn’t exist. Verify that the file exists in the same folder as that for the product specified in the launch.json file.");
 let strNoACADerr: string = localize("autolispext.debug.noacad", "doesn’t exist. Verify and correct the folder path to the product executable.");
@@ -239,17 +240,6 @@ class LispAttachConfigurationProvider implements vscode.DebugConfigurationProvid
     }
 }
 
-function getExtensionSettingString(settingName: string): string {
-    let settingGroup = vscode.workspace.getConfiguration('autolispext');
-    if (!settingGroup)
-        return null;
-
-    let setting = settingGroup.get(settingName);
-    if (!setting)
-        return null;
-
-    return setting.toString().trim();
-}
 
 function rememberLaunchPath(path: string) {
     if (existsSync(path) == false)

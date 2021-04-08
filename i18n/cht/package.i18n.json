@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "函數引數的窄格式型式使用的縮排值。值必須在 1 到 6 的範圍內。",
   "autolispext.configuration.closeparenstyle.desc": "控制右圓括號的型式。右圓括號會放在與函數同一行的位置，或與函數的左圓括號對齊。",
   "autolispext.configuration.longlistformatstyle": "控制長清單的格式型式。函數的每個參數或多個參數都會放在單獨的一行。",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "要篩選以用於「偵錯連接」的程序名稱。",
   "autolispext.configuration.launchprogram.desc": "AutoCAD 可執行檔的絕對路徑。",
   "autolispext.configuration.launchparameters.desc": "AutoCAD 指令行啟動參數。",
