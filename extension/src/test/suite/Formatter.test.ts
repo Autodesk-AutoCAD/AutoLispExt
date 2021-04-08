@@ -16,6 +16,7 @@ let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
 
 import * as fmtConfig from '../../format/fmtconfig';
 import { ImportMock } from 'ts-mock-imports';
+import * as resources from '../../resources';
 
 // let setting = `
 // {
@@ -45,8 +46,8 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		fs.writeFileSync(output,fmt);
 		let baseString = fs.readFileSync(baseline, { encoding: 'utf8', flag: 'r' });
 		//Trick to pass the test is to ignore the \r 
-		//fmt = fmt.replace(/(\r)/gm, "");
-		//baseString = baseString.replace(/(\r)/gm, "");
+		fmt = fmt.replace(/(\r)/gm, "");
+		baseString = baseString.replace(/(\r)/gm, "");
 		console.log(fmt);
 		console.log("=================================");
 		console.log(baseString);
@@ -71,13 +72,27 @@ suite("Lisp Formatter Tests", function () {
 	let maximumLineCharsStub;
 	let longListFormatStyleStub;
 	let indentSpacesStub;
+	let internalLispFuncsStub;
+
+	let internalOperators;
+	
+	setup(() => {
+		let keyFile = path.join(__dirname + "/../../../extension/data/alllispkeys.txt");
+
+		internalOperators = fs.readFileSync(keyFile).toString().split('\r\n');
+		internalLispFuncsStub = ImportMock.mockOther(resources, 'internalLispFuncs', internalOperators);
+	});
+
+	teardown(()=>{
+		internalLispFuncsStub.restore();
+	});
 
 	suiteTeardown( async ()=>{
 		closeParenStyleStub.restore();
 		maximumLineCharsStub.restore();
 		longListFormatStyleStub.restore();
 		indentSpacesStub.restore();
-	})
+	});
 	suiteSetup(async () => {
 		closeParenStyleStub = ImportMock.mockFunction(fmtConfig, 'closeParenStyle', 'New line with outer indentation');
 		maximumLineCharsStub = ImportMock.mockFunction(fmtConfig, 'maximumLineChars', 85);
