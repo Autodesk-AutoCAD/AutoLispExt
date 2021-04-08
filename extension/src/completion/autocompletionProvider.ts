@@ -114,7 +114,7 @@ function getMatchingWord(document: vscode.TextDocument, position: vscode.Positio
     return [word, inputIsUpper];
 }
 
-function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
+export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
     let candidatesItems = internalLispFuncs;
