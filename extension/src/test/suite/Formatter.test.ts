@@ -14,6 +14,9 @@ let Code =path.join(process.env.APPDATA,'/Code');
 let User =path.join(process.env.APPDATA,'/Code/User');
 let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
 
+import * as fmtConfig from '../../format/fmtconfig';
+import { ImportMock } from 'ts-mock-imports';
+
 // let setting = `
 // {
 //   "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
@@ -24,54 +27,6 @@ let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
 // if(!fs.existsSync(configPath)){
 // 	fs.writeFileSync(configPath,setting);
 // }
-
-if(fs.existsSync(Code)){
-	console.log(`${Code} exist`);
-
-}else{
-	console.log(`${Code} NOT exist`);
-}
-if(fs.existsSync(User)){
-	console.log(`${User} exist`);
-
-}else{
-	console.log(`${User} NOT exist`);
-}
-if(fs.existsSync(configPath)){
-	console.log(`${configPath} exist`);
-	let content = fs.readFileSync(configPath);
-	console.log(`content is ${content.toString()}`);
-
-}else{
-	console.log(`${configPath} NOT exist`);
-}
-
-let config = vscode.workspace.getConfiguration();
-
-async function  restoreConfig() {
-	try {
-		await config.update('format.CloseParenthesisStyle','New line with outer identation',true);
-		await config.update('format.MaxLineChars',85,true);
-		await config.update('format.LongListFormatStyle','Fill to Margin',true);
-		await config.update('format.NarrowStyleIndent',2,true);
-	} catch (error) {
-		console.log(error);
-	}
-
-}
-
-async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,true);
-}
-async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,true);
-}
-async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,true);
-}
-async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,true);
-}
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
 	if (err) {
@@ -90,8 +45,11 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		fs.writeFileSync(output,fmt);
 		let baseString = fs.readFileSync(baseline, { encoding: 'utf8', flag: 'r' });
 		//Trick to pass the test is to ignore the \r 
-		fmt = fmt.replace(/(\r)/gm, "");
-		baseString = baseString.replace(/(\r)/gm, "");
+		//fmt = fmt.replace(/(\r)/gm, "");
+		//baseString = baseString.replace(/(\r)/gm, "");
+		console.log(fmt);
+		console.log("=================================");
+		console.log(baseString);
 		assert.isTrue(fmt === baseString);
 	} catch (err) {
 		assert.fail(`Format Test Case ${i} failed!`);
@@ -109,22 +67,22 @@ suite("Lisp Formatter Tests", function () {
 	// LongListFormatStyle: 'Fill to margin'
 	// Need to remove the \r to do the format output compare
 
-	before(async ()=>{
-		try {
-			await vscode.extensions.getExtension('autolispext')?.activate();
-			config = vscode.workspace.getConfiguration('autolispext');
-			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
-			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
-		} catch (error) {
-			console.log(error);
-		}
+	let closeParenStyleStub;
+	let maximumLineCharsStub;
+	let longListFormatStyleStub;
+	let indentSpacesStub;
+
+	suiteTeardown( async ()=>{
+		closeParenStyleStub.restore();
+		maximumLineCharsStub.restore();
+		longListFormatStyleStub.restore();
+		indentSpacesStub.restore();
 	})
-	after( async ()=>{
-		await restoreConfig();
-	})
-	beforeEach(async () => {
-		//Set the default value to run the test
-		await restoreConfig();
+	suiteSetup(async () => {
+		closeParenStyleStub = ImportMock.mockFunction(fmtConfig, 'closeParenStyle', 'New line with outer indentation');
+		maximumLineCharsStub = ImportMock.mockFunction(fmtConfig, 'maximumLineChars', 85);
+		longListFormatStyleStub = ImportMock.mockFunction(fmtConfig, 'longListFormatStyle', 'Fill to margin');
+		indentSpacesStub = ImportMock.mockFunction(fmtConfig, 'indentSpaces', 2);
 	});
 
 	test("Lisp Formatter Test case 1", function () {
@@ -191,15 +149,18 @@ suite("Lisp Formatter Tests", function () {
 		try {
 			const [source, output, baseline] = getFileName(i);
 			const doc = ReadonlyDocument.open(source);
-			await setMaxLineChars(65);
+			if(maximumLineCharsStub)
+				maximumLineCharsStub.restore();
+			maximumLineCharsStub = ImportMock.mockFunction(fmtConfig, 'maximumLineChars', 65);
 			let fmt = LispFormatter.format(doc, null);
 			comparefileSync(i,output,fmt,baseline);
 		}
 		catch (err) {
+			console.log(err);
 			assert.fail(`The lisp format test case ${i} failed`);
 		}
 	});
-
+/*
 	test("Lisp Formatter Test case 6", function () {
 		// Test the indent, the default indent should be 2
 		let i = 6;
@@ -381,5 +342,5 @@ suite("Lisp Formatter Tests", function () {
 			assert.fail(`The lisp format test case ${i} failed`);
 		}
 	});
-
+*/
 });
