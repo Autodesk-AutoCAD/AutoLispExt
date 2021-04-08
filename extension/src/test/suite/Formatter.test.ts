@@ -111,7 +111,11 @@ suite("Lisp Formatter Tests", function () {
 
 	before(async ()=>{
 		try {
-			await vscode.extensions.getExtension('autolispext')?.activate();
+			const activate = vscode.extensions.getExtension('Autodesk.autolispext').isActive;
+			console.log(` lisp extension activate? ${activate}`);
+			const extpath = vscode.extensions.getExtension('Autodesk.autolispext').extensionPath;
+			console.log(` lisp extension extpath: ${extpath}`);
+			await vscode.extensions.getExtension('Autodesk.autolispext').activate();
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
