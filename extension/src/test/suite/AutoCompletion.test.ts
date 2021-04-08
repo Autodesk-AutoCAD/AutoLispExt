@@ -62,7 +62,7 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
 suite("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
   before(async () => {
-    if (vscode.extensions.getExtension("Autodesk.autolispext") == undefined) {
+    if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
       console.log("Autodesk.autolispext NOT exist");
     } else {
       await vscode.extensions.getExtension("Autodesk.autolispext").activate();
@@ -75,7 +75,7 @@ suite("AutoCompletion Tests", function () {
     try {
       const isupper = false;
       let suggestLabel = getSuggestLabel(lispdoc,inputword,isupper);
-      let expectedList = ["defun", "defun-q"];
+      let expectedList = ['defun', 'defun-q'];
       chai.expect(suggestLabel).to.eql(expectedList);
     } catch (err) {
       assert.fail(`AutoCompletion test for ${inputword} failed`);
