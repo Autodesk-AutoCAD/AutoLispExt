@@ -48,9 +48,6 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		//Trick to pass the test is to ignore the \r 
 		fmt = fmt.replace(/(\r)/gm, "");
 		baseString = baseString.replace(/(\r)/gm, "");
-		console.log(fmt);
-		console.log("=================================");
-		console.log(baseString);
 		assert.isTrue(fmt === baseString);
 	} catch (err) {
 		assert.fail(`Format Test Case ${i} failed!`);
@@ -156,7 +153,7 @@ suite("Lisp Formatter Tests", function () {
 		}
 	});
 
-	test.only("Lisp Formatter Test case 5", async function () {
+	test("Lisp Formatter Test case 5", async function () {
 		// Test the Max line chars setting
 		// Test the bug that it will be a space between the last two brackets ) )
 		// MaxLineChars: 65
