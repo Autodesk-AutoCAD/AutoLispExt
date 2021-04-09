@@ -7,8 +7,7 @@ paths:
 - '**/extension/src/**'
 
 paths-ignore:
-- '**/.vscode-test/**'
+  - '**/.vscode-test/**'
   - '**/.vscode-test/**'
   - '**/AutoLispExt/out/**/*.js'
   - '**/test-resources/**'
-  
