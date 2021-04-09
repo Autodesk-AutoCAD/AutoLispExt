@@ -9,3 +9,4 @@ paths:
 paths-ignore:
   - '**/.vscode-test/**'
   - '**/AutoLispExt/out/**/*.js'
+  - '**/test-resources/**'
