@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "Valeur de retrait utilisée dans les arguments de la fonction Style de formatage étroit. La valeur doit être comprise entre 1 et 6.",
   "autolispext.configuration.closeparenstyle.desc": "Contrôle le style de parenthèse fermante. La parenthèse fermante est placée sur la même ligne que la fonction ou alignée sur la parenthèse ouvrante de la fonction.",
   "autolispext.configuration.longlistformatstyle": "Contrôle le style de format des listes longues. Chaque paramètre, ou plusieurs paramètres, d'une fonction sont placés sur des lignes distinctes.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Nom du processus sur lequel filtrer pour Debug Attach.",
   "autolispext.configuration.launchprogram.desc": "Chemin absolu de l'exécutable d'AutoCAD.",
   "autolispext.configuration.launchparameters.desc": "Commutateurs de démarrage de ligne de commande d'AutoCAD.",

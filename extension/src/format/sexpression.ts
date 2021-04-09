@@ -247,11 +247,6 @@ export class LispContainer extends LispAtom {
     }
 
 
-    // Returns true if this LispContainer encapsulates the provided Position
-    contains(position: Position): boolean {
-        return this.getRange().contains(position);
-    }
-
 
     // This version was necessary to properly alternate over SETQ Name vs Value 
     private isValidForSetq(atom: ILispFragment): boolean {
@@ -1105,7 +1100,7 @@ export class Sexpression extends LispAtom {
                     else if (opName == "setq") {
                         return exp.formatSetq(startColumn);
                     }
-                    else if (opName == "foreach") {
+                    else if (opName === "foreach" || opName === "vlax-for") {
                         return exp.formatForeach(startColumn);
                     }
                     else if (opName == "defun" || opName == "defun-q") {
