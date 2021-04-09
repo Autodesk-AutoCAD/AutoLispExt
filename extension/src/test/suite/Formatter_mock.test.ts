@@ -291,10 +291,6 @@ suite("Lisp Formatter mock Tests", function () {
       await setIndentSpaces(4);
       await setMaxLineChars(65);
       await setLongListFormat("single column");
-      //   setClosedParenInSameLine("same line");
-      //   setIndentSpaces(4);
-      //   setMaxLineChars(65);
-      //   setLongListFormat("single column");
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
