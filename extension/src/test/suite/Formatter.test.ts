@@ -11,7 +11,10 @@ let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
 let extpath = path.join(__dirname + "../../../autolispext.vsix");
 console.log(`-----------__dirname in Formatter.test.ts is ${__dirname}---------`);
-
+let cipath = "D:/a/AutoLispExt/AutoLispExt/autolispext.vsix";
+console.log(`-----------autolispext.vsix path in Formatter.test.ts is ${extpath}---------`);
+// __dirname in Formatter.test.ts is d:\a\AutoLispExt\AutoLispExt\out\test\suite
+// Packaged: D:\a\AutoLispExt\AutoLispExt\autolispext.vsix
 let config = vscode.workspace.getConfiguration();
 
 async function  restoreConfig() {
@@ -70,7 +73,7 @@ async function installExt():Promise<void>{
 			progress.report({ message: "Installing Autodesk.autolispext" });
 			return new Promise((resolve,reject) => {
 				vscode.extensions.onDidChange((e) => resolve('finished'));
-				vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(extpath));
+				vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(cipath));
 			}).catch(err=>{
 				console.log(err);
 			});
