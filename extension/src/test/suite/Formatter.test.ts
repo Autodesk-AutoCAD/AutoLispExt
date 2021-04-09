@@ -10,6 +10,7 @@ let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
 let extpath = path.join(__dirname + "../../../autolispext.vsix");
+console.log(`-----------__dirname in Formatter.test.ts is ${__dirname}---------`);
 
 let config = vscode.workspace.getConfiguration();
 
@@ -63,12 +64,15 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 	}
 }
 async function installExt():Promise<void>{
+	console.log(`--------------Formatter.test.ts----function installExt()--------------`);
 	await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
 		(progress) => {
 			progress.report({ message: "Installing Autodesk.autolispext" });
-			return new Promise((resolve) => {
+			return new Promise((resolve,reject) => {
 				vscode.extensions.onDidChange((e) => resolve('finished'));
 				vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(extpath));
+			}).catch(err=>{
+				console.log(err);
 			});
 		},
 	);
