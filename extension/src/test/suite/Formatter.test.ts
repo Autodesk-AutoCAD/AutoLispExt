@@ -9,42 +9,7 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-
-let Code =path.join(process.env.APPDATA,'/Code');
-let User =path.join(process.env.APPDATA,'/Code/User');
-let configPath =path.join(process.env.APPDATA,'/Code/User/settings.json');
-
-// let setting = `
-// {
-//   "autolispext.format.CloseParenthesisStyle": "New line with outer identation",
-//   "autolispext.format.LongListFormatStyle": "Fill to Margin",
-//   "autolispext.format.NarrowStyleIndent": 2,
-//   "autolispext.format.MaxLineChars": 85
-// }`
-// if(!fs.existsSync(configPath)){
-// 	fs.writeFileSync(configPath,setting);
-// }
-
-if(fs.existsSync(Code)){
-	console.log(`${Code} exist`);
-
-}else{
-	console.log(`${Code} NOT exist`);
-}
-if(fs.existsSync(User)){
-	console.log(`${User} exist`);
-
-}else{
-	console.log(`${User} NOT exist`);
-}
-if(fs.existsSync(configPath)){
-	console.log(`${configPath} exist`);
-	let content = fs.readFileSync(configPath);
-	console.log(`content is ${content.toString()}`);
-
-}else{
-	console.log(`${configPath} NOT exist`);
-}
+let extpath = path.join(__dirname + "../../../autolispext.vsix");
 
 let config = vscode.workspace.getConfiguration();
 
@@ -97,8 +62,20 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 		assert.fail(`Format Test Case ${i} failed!`);
 	}
 }
-
+async function installExt():Promise<void>{
+	await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification },
+		(progress) => {
+			progress.report({ message: "Installing Autodesk.autolispext" });
+			return new Promise((resolve) => {
+				vscode.extensions.onDidChange((e) => resolve('finished'));
+				vscode.commands.executeCommand("workbench.extensions.installExtension", vscode.Uri.file(extpath));
+			});
+		},
+	);
+}
 suite("Lisp Formatter Tests", function () {
+	console.log(`--------------Formatter.test.ts----function suite()--------------`);
+
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
 	// in the fmtconfig.ts
@@ -110,12 +87,21 @@ suite("Lisp Formatter Tests", function () {
 	// Need to remove the \r to do the format output compare
 
 	before(async ()=>{
+	console.log(`--------------Formatter.test.ts----function before()--------------`);
+
 		try {
-			const activate = vscode.extensions.getExtension('Autodesk.autolispext').isActive;
-			console.log(` lisp extension activate? ${activate}`);
-			const extpath = vscode.extensions.getExtension('Autodesk.autolispext').extensionPath;
-			console.log(` lisp extension extpath: ${extpath}`);
-			await vscode.extensions.getExtension('Autodesk.autolispext').activate();
+			// const activate = vscode.extensions.getExtension('Autodesk.autolispext').isActive;
+			// console.log(` lisp extension activate? ${activate}`);
+			// const extpath = vscode.extensions.getExtension('Autodesk.autolispext').extensionPath;
+			// console.log(` lisp extension extpath: ${extpath}`);
+			if(vscode.extensions.getExtension('Autodesk.autolispext') === undefined){
+				console.log('Autodesk.autolispext NOT exist');
+				await installExt();
+			}
+			else{
+				console.log('Autodesk.autolispext exist');
+				await vscode.extensions.getExtension('Autodesk.autolispext').activate();
+			}
 			config = vscode.workspace.getConfiguration('autolispext');
 			console.log(`vscode.workspace has('format') is ${config.has('format')}`);
 			console.log(`config.CloseParenthesisStyle is ${config.get('format.CloseParenthesisStyle')} in before()`);
@@ -127,6 +113,8 @@ suite("Lisp Formatter Tests", function () {
 		await restoreConfig();
 	})
 	beforeEach(async () => {
+	console.log(`--------------Formatter.test.ts----function beforeEach()--------------`);
+
 		//Set the default value to run the test
 		await restoreConfig();
 	});
@@ -191,6 +179,8 @@ suite("Lisp Formatter Tests", function () {
 		// Test the Max line chars setting
 		// Test the bug that it will be a space between the last two brackets ) )
 		// MaxLineChars: 65
+	console.log(`--------------Formatter.test.ts----function test.only--------------`);
+
 		let i = 5;
 		try {
 			const [source, output, baseline] = getFileName(i);
