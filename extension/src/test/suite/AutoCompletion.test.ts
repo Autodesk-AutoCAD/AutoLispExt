@@ -61,16 +61,21 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
 }
 suite("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
-  before(() => {
+  before(async () => {
+    this.timeout(0);
+    await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+
     if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
       console.log("Autodesk.autolispext NOT exist");
     } else {
-      vscode.extensions.getExtension("Autodesk.autolispext").activate();
+      await vscode.extensions.getExtension("Autodesk.autolispext").activate();
     }
     createFakeTextDcoument();
   });
 
-  test("AutoCompletion Test for de", function () {
+  test("AutoCompletion Test for de",async function () {
+    this.timeout(0);
+    await vscode.extensions.getExtension("Autodesk.autolispext").activate();
     const inputword = "de";
     try {
       const isupper = false;
