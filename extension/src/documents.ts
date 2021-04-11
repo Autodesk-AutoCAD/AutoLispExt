@@ -4,6 +4,7 @@ import { ReadonlyDocument } from "./project/readOnlyDocument";
 import { AutoLispExt } from './extension';
 import { ProjectTreeProvider  } from "./project/projectTree";
 import * as fs from	'fs-extra';
+import { glob } from 'glob';
 
 
 enum Origins {
@@ -38,6 +39,16 @@ namespace DocumentSources{
 export class DocumentManager{	
 	private _cached: Map<string, DocumentSources> = new Map();
 	private _watchers: vscode.FileSystemWatcher[] = [];
+	
+	// The _delayedEvent variable holds a function to be ran after a duration and having a value compensates for filewatcher actions firing
+	// multiple times before and after the internal contents have actually changed. The updateExcludes() function nulls this value on completion
+	private _delayedEvent = null;
+	private _excludes: Array<string> = [];
+
+	get ExcludedFiles(): Array<string> {
+		// spread the array to make sure outside influences can't actually change its values.
+		return [...this._excludes];
+	}
 	
 	get OpenedDocuments(): ReadonlyDocument[] { 
 		return this.getOpenedAsReadonlyDocuments(); 
@@ -96,6 +107,23 @@ export class DocumentManager{
 		} else {
 			return "";
 		}
+	}
+	
+	// This function is called once on startup, but again by relevant workspace events using the bind(this) to maintain proper context
+	private updateExcludes() {
+		this._excludes = [];
+		const wsExcludes = AutoLispExt.Resources.getWorkspaceExcludes();
+		wsExcludes.forEach(entry => {
+			if (entry.excluded) {
+				glob(entry.glob, { cwd: entry.root, nocase: true, realpath: true }, (err, mlst) => {
+					if (!err) {
+						this._excludes.push(...mlst.map(p => this.normalizePath(p)));
+					}
+				});
+			}
+		});
+		// Nulling this value informs the bind(this) workspace events they are allowed to queue up the event again.
+		this._delayedEvent = null;
 	}
 
 	private normalizePath(path: string): string {
@@ -200,6 +228,9 @@ export class DocumentManager{
 			w.dispose();
 		});
 		this._watchers.length = 0;
+		
+		// load current workspace file.exclude & search.exclude settings glob targets
+		this.updateExcludes();
 
 		// Grab the opened document (if available) and add it as our first known opened document
 		//		It is important to start tracking this early because we can't actually see what is opened by VSCode during its internal workspace reload.
@@ -253,11 +284,20 @@ export class DocumentManager{
 			AutoLispExt.Subscriptions.push(watcher.onDidCreate((e: vscode.Uri) => {
 				const key = this.normalizePath(e.fsPath);
 				this.pathConsumeOrValidate(key, Origins.WSPACE);
+				// New files require the file.exclude & search.exclude settings to be re-evaluated
+				if (this._delayedEvent === null) {	
+					this._delayedEvent = this.updateExcludes;				
+					setTimeout(this._delayedEvent.bind(this), 3000);
+				}
 			}));
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidChange((e: vscode.Uri) => {
 				const key = this.normalizePath(e.fsPath);
-				this.pathConsumeOrValidate(key, Origins.WSPACE);				
+				this.pathConsumeOrValidate(key, Origins.WSPACE);
+				if (e.fsPath.toUpperCase().endsWith('SETTINGS.JSON') && this._delayedEvent === null) {	
+					this._delayedEvent = this.updateExcludes;				
+					setTimeout(this._delayedEvent.bind(this), 3000);
+				}
 			}));
 
 			this._watchers.push(watcher);

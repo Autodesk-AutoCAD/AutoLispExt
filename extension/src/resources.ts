@@ -1,6 +1,7 @@
 import * as path from 'path';
 import { WebHelpLibrary } from "./help/openWebHelp";
 import * as vscode from 'vscode';
+import * as fs from 'fs-extra';
 
 
 export let internalLispFuncs: Array<string> = [];
@@ -30,8 +31,7 @@ export interface IJsonLoadable {
 
 
 function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
-	var fs = require("fs");
-	var dataPath = path.resolve(__dirname, datafile);
+	let dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {        
 		if (err === null && intoObject["loadFromJsonObject"]) {
 			intoObject.loadFromJsonObject(JSON.parse(data));
@@ -41,8 +41,7 @@ function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
 
 
 function readDataFileByLine(datafile: string, action: (items: string[]) => void) {
-	var fs = require("fs");
-	var dataPath = path.resolve(__dirname, datafile);
+	let dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
 		if (err === null) {
 			if (data.includes("\r\n")) {
@@ -57,10 +56,9 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
 
 
 function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
-	var fs = require("fs");
-	var dataPath = path.resolve(__dirname, datafile);
+	let dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
-		var lineList = new Array<String>();
+		let lineList = new Array<String>();
 		if (err === null) {
 			if (data.includes("\r\n")) {
 				lineList = data.split("\r\n");
@@ -70,8 +68,8 @@ function readDataFileByDelimiter(datafile: string, delimiter: string, action: (i
 			}
 
 			lineList.forEach(line => {
-				var items = line.split(delimiter);
-				var item = items[0];
+				let items = line.split(delimiter);
+				let item = items[0];
 				item = item.trim();
 				if (item.length > 0){
 					action(item);
@@ -95,4 +93,32 @@ export function getExtensionSettingString(settingName: string): string {
 	}
 
     return setting.toString().trim();
+}
+
+
+interface WorkspaceExclude {
+	root: string;
+	glob: string;
+	excluded: boolean;
+}
+
+export function getWorkspaceExcludes(): Array<WorkspaceExclude> {
+	const result : Array<WorkspaceExclude> = [];
+	const wsFolders = vscode.workspace.workspaceFolders;
+	wsFolders?.forEach(entry => {
+		const rootPath = entry.uri.path.substring(1);
+		const fileExcludes = vscode.workspace.getConfiguration('files.exclude', entry.uri);
+		Object.keys(fileExcludes).forEach(key => {
+			if (typeof(fileExcludes[key]) === 'boolean') {
+				result.push({ root: rootPath, glob: key, excluded: fileExcludes[key] });
+			}
+		});
+		const searchExcludes = vscode.workspace.getConfiguration('search.exclude', entry.uri);
+		Object.keys(searchExcludes).forEach(key => {
+			if (typeof(searchExcludes[key]) === 'boolean') {
+				result.push({ root: rootPath, glob: key, excluded: searchExcludes[key] });
+			}
+		});
+	});
+	return result;
 }
