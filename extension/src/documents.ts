@@ -40,9 +40,9 @@ export class DocumentManager{
 	private _cached: Map<string, DocumentSources> = new Map();
 	private _watchers: vscode.FileSystemWatcher[] = [];
 	
-	// The _delayedEvent variable holds a function to be ran after a duration and having a value compensates for filewatcher actions firing
+	// The _delayedGlobEvent variable holds a function to be ran after a duration and having a value compensates for filewatcher actions firing
 	// multiple times before and after the internal contents have actually changed. The updateExcludes() function nulls this value on completion
-	private _delayedEvent = null;
+	private _delayedGlobEvent = null;
 	private _excludes: Array<string> = [];
 
 	get ExcludedFiles(): Array<string> {
@@ -112,7 +112,7 @@ export class DocumentManager{
 	// This function is called once on startup, but again by relevant workspace events using the bind(this) to maintain proper context
 	private updateExcludes() {
 		this._excludes = [];
-		const wsExcludes = AutoLispExt.Resources.getWorkspaceExcludes();
+		const wsExcludes = AutoLispExt.Resources.getWorkspaceExcludeGlobs();
 		wsExcludes.forEach(entry => {
 			if (entry.excluded) {
 				glob(entry.glob, { cwd: entry.root, nocase: true, realpath: true }, (err, mlst) => {
@@ -123,7 +123,7 @@ export class DocumentManager{
 			}
 		});
 		// Nulling this value informs the bind(this) workspace events they are allowed to queue up the event again.
-		this._delayedEvent = null;
+		this._delayedGlobEvent = null;
 	}
 
 	private normalizePath(path: string): string {
@@ -285,18 +285,18 @@ export class DocumentManager{
 				const key = this.normalizePath(e.fsPath);
 				this.pathConsumeOrValidate(key, Origins.WSPACE);
 				// New files require the file.exclude & search.exclude settings to be re-evaluated
-				if (this._delayedEvent === null) {	
-					this._delayedEvent = this.updateExcludes;				
-					setTimeout(this._delayedEvent.bind(this), 3000);
+				if (this._delayedGlobEvent === null) {	
+					this._delayedGlobEvent = this.updateExcludes;				
+					setTimeout(this._delayedGlobEvent.bind(this), 3000);
 				}
 			}));
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidChange((e: vscode.Uri) => {
 				const key = this.normalizePath(e.fsPath);
 				this.pathConsumeOrValidate(key, Origins.WSPACE);
-				if (e.fsPath.toUpperCase().endsWith('SETTINGS.JSON') && this._delayedEvent === null) {	
-					this._delayedEvent = this.updateExcludes;				
-					setTimeout(this._delayedEvent.bind(this), 3000);
+				if (e.fsPath.toUpperCase().endsWith('SETTINGS.JSON') && this._delayedGlobEvent === null) {	
+					this._delayedGlobEvent = this.updateExcludes;				
+					setTimeout(this._delayedGlobEvent.bind(this), 3000);
 				}
 			}));
 

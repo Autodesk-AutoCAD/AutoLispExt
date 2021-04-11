@@ -102,7 +102,7 @@ interface WorkspaceExclude {
 	excluded: boolean;
 }
 
-export function getWorkspaceExcludes(): Array<WorkspaceExclude> {
+export function getWorkspaceExcludeGlobs(): Array<WorkspaceExclude> {
 	const result : Array<WorkspaceExclude> = [];
 	const wsFolders = vscode.workspace.workspaceFolders;
 	wsFolders?.forEach(entry => {
