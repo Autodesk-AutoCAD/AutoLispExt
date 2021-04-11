@@ -7,7 +7,6 @@ import { getLispAndDclCompletions,getCmdAndVarsCompletionCandidates } from "../.
 import { before } from "mocha";
 import { ReadonlyDocument } from "../../project/readOnlyDocument";
 import { allCmdsAndSysvars } from "../../resources";
-
 let assert = chai.assert;
 const testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
@@ -15,6 +14,12 @@ let LispFile = "";
 let DclFile = "";
 let lispdoc: vscode.TextDocument;
 let dcldoc: vscode.TextDocument;
+
+// loadAllResources();
+// console.log(`internalLispFuncs is ${internalLispFuncs}`);
+// console.log(`internalDclKeys is ${internalDclKeys}`);
+// console.log(`allCmdsAndSysvars is ${allCmdsAndSysvars}`);
+
 fs.mkdir(outputDir, { recursive: true }, (err) => {
   if (err) {
     return console.error(err);
@@ -59,23 +64,26 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
   });
   return suggestLabel;
 }
-suite("AutoCompletion Tests", function () {
+suite.only("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
   before(async () => {
     this.timeout(0);
-    await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+    let ext = vscode.extensions.getExtension("Autodesk.autolispext")!;
+    await ext.activate();
 
-    if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
-      console.log("Autodesk.autolispext NOT exist");
-    } else {
-      await vscode.extensions.getExtension("Autodesk.autolispext").activate();
-    }
+    // if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
+    //   console.log("Autodesk.autolispext NOT exist");
+    // } else {
+    //   await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+   
+    
+    // }
     createFakeTextDcoument();
   });
 
   test("AutoCompletion Test for de",async function () {
-    this.timeout(0);
-    await vscode.extensions.getExtension("Autodesk.autolispext").activate();
+    // this.timeout(0);
+    // await vscode.extensions.getExtension("Autodesk.autolispext").activate();
     const inputword = "de";
     try {
       const isupper = false;
