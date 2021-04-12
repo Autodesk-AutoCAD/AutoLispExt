@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as Mocha from 'mocha';
 import * as glob from 'glob';
-
+import * as vscode from 'vscode';
 export function run(): Promise<void> {
 	// Create the mocha test
 	const mocha = new Mocha({
@@ -20,6 +20,7 @@ export function run(): Promise<void> {
 			files.forEach(f => mocha.addFile(path.resolve(testsRoot, f)));
 
 			try {
+				activate();
 				// Run the mocha test
 				mocha.run(failures => {
 					if (failures > 0) {
@@ -36,3 +37,17 @@ export function run(): Promise<void> {
 	});
 }
 
+export async function activate() {
+	// The extensionId is `publisher.name` from package.json
+	const ext = vscode.extensions.getExtension('Autodesk.autolispext')!;
+	try {
+		await ext.activate();
+		await sleep(10000); // Wait for server activation
+	} catch (e) {
+		console.error(e);
+	}
+}
+
+async function sleep(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+}
