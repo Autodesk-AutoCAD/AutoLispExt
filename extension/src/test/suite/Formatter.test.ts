@@ -90,22 +90,10 @@ suite("Lisp Formatter mock Tests", function () {
     indentSpacesStub.restore();
   });
   suiteSetup(async () => {
-    closeParenStyleStub = ImportMock.mockFunction(
-      fmtConfig,
-      "closeParenStyle",
-      "New line with outer indentation"
-    );
-    maximumLineCharsStub = ImportMock.mockFunction(
-      fmtConfig,
-      "maximumLineChars",
-      85
-    );
-    longListFormatStyleStub = ImportMock.mockFunction(
-      fmtConfig,
-      "longListFormatStyle",
-      "Fill to margin"
-    );
-    indentSpacesStub = ImportMock.mockFunction(fmtConfig, "indentSpaces", 2);
+    setClosedParenInSameLine('New line with outer indentation');
+    setMaxLineChars(85);
+    setLongListFormat('Fill to margin');
+    setIndentSpaces(2);
   });
 
   test("Lisp Formatter Test case 1", function () {
@@ -168,7 +156,7 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       const doc = ReadonlyDocument.open(source);
-      await setMaxLineChars(65);
+      setMaxLineChars(65);
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -196,8 +184,7 @@ suite("Lisp Formatter mock Tests", function () {
       const [source, output, baseline] = getFileName(i);
       const doc = ReadonlyDocument.open(source);
       // set as wide single column format
-      // await setLongListFormat('Single Column');
-      await setLongListFormat("Single Column");
+      setLongListFormat("Single Column");
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -212,8 +199,7 @@ suite("Lisp Formatter mock Tests", function () {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
       // set as wide single column format
-      // await setLongListFormat('Single Column');
-      await setLongListFormat("Single Column");
+      setLongListFormat("Single Column");
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -255,7 +241,7 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setIndentSpaces(4);
+      setIndentSpaces(4);
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -269,7 +255,7 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setClosedParenInSameLine("same line");
+      setClosedParenInSameLine("same line");
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -287,10 +273,10 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setClosedParenInSameLine("same line");
-      await setIndentSpaces(4);
-      await setMaxLineChars(65);
-      await setLongListFormat("single column");
+      setClosedParenInSameLine("same line");
+      setIndentSpaces(4);
+      setMaxLineChars(65);
+      setLongListFormat("single column");
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -306,8 +292,8 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setIndentSpaces(4);
-      await setMaxLineChars(80);
+      setIndentSpaces(4);
+      setMaxLineChars(80);
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -323,8 +309,8 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setIndentSpaces(2);
-      await setMaxLineChars(60);
+      setIndentSpaces(2);
+      setMaxLineChars(60);
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -340,8 +326,8 @@ suite("Lisp Formatter mock Tests", function () {
     try {
       const [source, output, baseline] = getFileName(i);
       let doc = ReadonlyDocument.open(source);
-      await setIndentSpaces(8);
-      await setMaxLineChars(30);
+      setIndentSpaces(8);
+      setMaxLineChars(30);
       let fmt = LispFormatter.format(doc, null);
       comparefileSync(i, output, fmt, baseline);
     } catch (err) {
@@ -349,7 +335,7 @@ suite("Lisp Formatter mock Tests", function () {
     }
   });
 
-  async function setIndentSpaces(indent: number) {
+  function setIndentSpaces(indent: number) {
     if (indentSpacesStub) {
       indentSpacesStub.restore();
     }
@@ -359,7 +345,7 @@ suite("Lisp Formatter mock Tests", function () {
       indent
     );
   }
-  async function setClosedParenInSameLine(closeParenStyle: string) {
+  function setClosedParenInSameLine(closeParenStyle: string) {
     if (closeParenStyleStub) {
       closeParenStyleStub.restore();
     }
@@ -369,7 +355,7 @@ suite("Lisp Formatter mock Tests", function () {
       closeParenStyle
     );
   }
-  async function setMaxLineChars(maxchar: number) {
+  function setMaxLineChars(maxchar: number) {
     if (maximumLineCharsStub) {
       maximumLineCharsStub.restore();
     }
@@ -379,7 +365,7 @@ suite("Lisp Formatter mock Tests", function () {
       maxchar
     );
   }
-  async function setLongListFormat(LongListFormat: string) {
+  function setLongListFormat(LongListFormat: string) {
     if (longListFormatStyleStub) {
       longListFormatStyleStub.restore();
     }
