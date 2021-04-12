@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { getExtensionSettingString } from '../resources';
 import { IJsonLoadable, webHelpContainer } from "../resources";
 
 
@@ -26,11 +27,23 @@ export class WebHelpLibrary implements IJsonLoadable {
 	functions: Dictionary<WebHelpFunction> = {};
 	ambiguousFunctions: Dictionary<WebHelpFunction[]> = {};
 	enumerators: Dictionary<string> = {};	
-	year: string;
+	_jsonYear: string = '';
 	
+	get year(): string {
+		return getExtensionSettingString('help.TargetYear');
+	}
+
+	get jsonCreatedWithVersionYear(): string {
+		return this._jsonYear;
+	}
+
+
 	// consumes a JSON converted object into the WebHelpLibrary
 	loadFromJsonObject(obj: object): void{		
-		this.year = obj['year'] ?? '2021';
+		// Issue #70, A user configured extension setting was requested by Issue #70 and deprecated the use of the embedded json year
+		//            However, this was left available in case we would like to setup a unit test that insures the JSON isn't stale.
+		this._jsonYear = obj['year'] ?? '2021';
+
 		Object.keys(obj["dclAttributes"]).forEach(key => {
 			let newObj = new WebHelpDclAtt(obj["dclAttributes"][key]);
 			this.dclAttributes[key] = newObj;

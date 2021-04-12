@@ -29,7 +29,7 @@ export class ContextManager{
 	get ExtPath(): string { 
 		return this._ctx ? this._ctx.extensionPath : ""; 
 	}
-	get Data() { 
+	get Resources() { 
 		return Resources; 
 	}
 

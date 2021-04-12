@@ -64,12 +64,22 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
   });
   return suggestLabel;
 }
+before(async () => {
+  let ext = vscode.extensions.getExtension("Autodesk.autolispext")!;
+  if(ext){
+    await ext.activate();
+  }
+  else{
+    console.log('Can not find Autodesk.autolispext');
+    
+  }
+});
 suite.only("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
   before(async () => {
-    this.timeout(0);
-    let ext = vscode.extensions.getExtension("Autodesk.autolispext")!;
-    await ext.activate();
+    // this.timeout(0);
+    // let ext = vscode.extensions.getExtension("Autodesk.autolispext")!;
+    // await ext.activate();
 
     // if (vscode.extensions.getExtension("Autodesk.autolispext") === undefined) {
     //   console.log("Autodesk.autolispext NOT exist");
