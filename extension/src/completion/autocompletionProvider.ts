@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
 import { isCursorInDoubleQuoteExpr } from "../format/autoIndent";
-import { allCmdsAndSysvars, internalDclKeys, internalLispFuncs, winOnlyListFuncPrefix  } from "../resources";
+import { allCmdsAndSysvars, internalDclKeys, internalLispFuncs, loadAllResources, winOnlyListFuncPrefix  } from "../resources";
 
 
 export function isInternalAutoLispOp(item: string): boolean {
@@ -117,6 +117,11 @@ export function getMatchingWord(document: vscode.TextDocument, position: vscode.
 export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
+    if(internalLispFuncs == [] || internalDclKeys == [] || allCmdsAndSysvars == [] || winOnlyListFuncPrefix == []){
+        console.log('Reload the resource since the value are empty');
+        
+        loadAllResources();
+    }
     let candidatesItems = internalLispFuncs;
     if (ext === ".DCL") {
         candidatesItems = internalDclKeys;
