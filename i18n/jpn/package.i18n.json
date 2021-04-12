@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "関数の引数の幅狭整形スタイルで使用されるインデント値。値は 1 ~ 6 の範囲でなければなりません。",
   "autolispext.configuration.closeparenstyle.desc": "右括弧のスタイルをコントロールします。右括弧は、関数と同じ行に配置されるか、関数の左括弧に位置合わせて配置されます。",
   "autolispext.configuration.longlistformatstyle": "長いリストの整形スタイルをコントロールします。関数の各パラメータまたは複数のパラメータは、別々の行に配置されます。",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "デバッグ アタッチ用にフィルタするプロセス名。",
   "autolispext.configuration.launchprogram.desc": "AutoCAD 実行ファイルへの絶対パス。",
   "autolispext.configuration.launchparameters.desc": "AutoCAD コマンド ライン起動スイッチ。",

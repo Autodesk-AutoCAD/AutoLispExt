@@ -221,6 +221,18 @@
 					"type": "string",
 					"default": "",
 					"description": "%autolispext.configuration.launchparameters.desc%"
+				},
+				"autolispext.help.TargetYear": {
+					"type": "string",
+					"enum": [
+						"2018",
+						"2019",
+						"2020",
+						"2021",
+						"2022"
+					],
+					"default": "2022",
+					"description": "%autolispext.configuration.helptargetyear%"
 				}
 			}
 		},

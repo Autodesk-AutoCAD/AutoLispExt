@@ -8,6 +8,7 @@
   "autolispext.configuration.narrowstyleindent.desc": "Valor de recuo usado no Estilo de formatação estreito dos argumentos de função. O valor deve estar na faixa de 1 e 6.",
   "autolispext.configuration.closeparenstyle.desc": "Controla o estilo de parênteses de fechamento. O parêntese de fechamento é colocado na mesma linha que a função ou alinhado com o parêntese de abertura da função.",
   "autolispext.configuration.longlistformatstyle": "Controla o estilo de formato de listas longas. Cada parâmetro ou vários parâmetros de uma função são inseridos em linhas separadas.",
+  "autolispext.configuration.helptargetyear": "",
   "autolispext.configuration.attachprocess.desc": "Nome do processo a ser filtrado para anexar a depuração.",
   "autolispext.configuration.launchprogram.desc": "Caminho absoluto para o executável do AutoCAD.",
   "autolispext.configuration.launchparameters.desc": "Botões de inicialização da linha de comando do AutoCAD.",

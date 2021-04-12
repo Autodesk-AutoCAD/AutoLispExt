@@ -1,5 +1,6 @@
 import * as path from 'path';
 import { WebHelpLibrary } from "./help/openWebHelp";
+import * as vscode from 'vscode';
 
 
 export let internalLispFuncs: Array<string> = [];
@@ -78,4 +79,20 @@ function readDataFileByDelimiter(datafile: string, delimiter: string, action: (i
 			});
 		}
 	});
+}
+
+
+
+export function getExtensionSettingString(settingName: string): string {
+    let settingGroup = vscode.workspace.getConfiguration('autolispext');
+    if (!settingGroup) {
+        return null;
+	}
+
+    let setting = settingGroup.get(settingName);
+    if (!setting) {
+        return null;
+	}
+
+    return setting.toString().trim();
 }
