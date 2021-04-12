@@ -30,7 +30,6 @@ loadAllResources();
 
 export function activate(context: vscode.ExtensionContext) {
 	AutoLispExt.initialize(context);	
-
 	//-----------------------------------------------------------
 	//1. lisp autoformat
 	//-----------------------------------------------------------
