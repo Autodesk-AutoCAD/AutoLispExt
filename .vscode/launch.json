@@ -23,11 +23,16 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index",
+                "--timeout=999999"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/test/**/*.js"
-            ]
+            ],
+            "skipFiles": [
+                "${workspaceFolder}/node_modules/**/*.js",
+                "<node_internals>/**/*.js"
+              ]
         },
         {
             "name": "Extension Tests + Reporting",

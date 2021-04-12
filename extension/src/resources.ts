@@ -3,19 +3,17 @@ import * as fs from 'fs';
 import { WebHelpLibrary } from "./help/openWebHelp";
 import * as vscode from 'vscode';
 
-
 export let internalLispFuncs: Array<string> = [];
 export let internalDclKeys: Array<string> = [];
 export let winOnlyListFuncPrefix: Array<string> = [];
 export let allCmdsAndSysvars: Array<string> = [];
 export let webHelpContainer: WebHelpLibrary = new WebHelpLibrary();
 
-
 export function loadAllResources(){
-	readDataFileByLine("../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items; });
-	readDataFileByLine("../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items; });
-	readDataFileByLine("../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items; });
-	readDataFileByDelimiter("../extension/data/cmdAndVarsList.txt", ",", (item) => {
+	 readDataFileByLine("../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items; });
+	 readDataFileByLine("../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items; });
+	 readDataFileByLine("../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items; });
+	 readDataFileByDelimiter("../extension/data/cmdAndVarsList.txt", ",", (item) => {
 		let isLispCmds = item.startsWith("C:") || item.startsWith("c:");
 		if (!isLispCmds && allCmdsAndSysvars.indexOf(item) < 0){
 			allCmdsAndSysvars.push(item);
@@ -31,9 +29,8 @@ export interface IJsonLoadable {
 
 
 function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
-	var fs = require("fs");
 	var dataPath = path.resolve(__dirname, datafile);
-	fs.readFileSync(dataPath, "utf8", function(err: Error, data: string) {        
+	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {        
 		if (err === null && intoObject["loadFromJsonObject"]) {
 			intoObject.loadFromJsonObject(JSON.parse(data));
 		}
@@ -41,28 +38,27 @@ function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
 }	
 
 
-function readDataFileByLine(datafile: string, action: (items: string[]) => void) {
-	var fs = require("fs");
+function readDataFileByLine(datafile: string,action: (items: string[]) => void) {
 	var dataPath = path.resolve(__dirname, datafile);
-	fs.readFileSync(dataPath, "utf8", function(err: Error, data: string) {
-		if (err === null) {
-			if (data.includes("\r\n")) {
-				action(data.split("\r\n"));
-			}
-			else {
-				action(data.split("\n"));
-			}
+	let data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
+	try {
+		if (data.includes("\r\n")) {
+			action(data.split("\r\n"));
 		}
-	});
+		else {
+			action(data.split("\n"));
+		}
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 
 function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
-	var fs = require("fs");
 	var dataPath = path.resolve(__dirname, datafile);
-	fs.readFileSync(dataPath, "utf8", function(err: Error, data: string) {
+	let data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
+	try {
 		var lineList = new Array<String>();
-		if (err === null) {
 			if (data.includes("\r\n")) {
 				lineList = data.split("\r\n");
 			}
@@ -78,8 +74,9 @@ function readDataFileByDelimiter(datafile: string, delimiter: string, action: (i
 					action(item);
 				}
 			});
-		}
-	});
+	} catch (error) {
+		console.log(error);
+	}
 }
 
 
