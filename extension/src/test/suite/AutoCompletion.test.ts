@@ -15,11 +15,6 @@ let DclFile = "";
 let lispdoc: vscode.TextDocument;
 let dcldoc: vscode.TextDocument;
 
-// loadAllResources();
-// console.log(`internalLispFuncs is ${internalLispFuncs}`);
-// console.log(`internalDclKeys is ${internalDclKeys}`);
-// console.log(`allCmdsAndSysvars is ${allCmdsAndSysvars}`);
-
 fs.mkdir(outputDir, { recursive: true }, (err) => {
   if (err) {
     return console.error(err);
