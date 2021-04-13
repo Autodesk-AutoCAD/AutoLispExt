@@ -40,8 +40,8 @@ function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
 
 function readDataFileByLine(datafile: string,action: (items: string[]) => void) {
 	var dataPath = path.resolve(__dirname, datafile);
-	let data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
 	try {
+		var data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
 		if (data.includes("\r\n")) {
 			action(data.split("\r\n"));
 		}
@@ -56,8 +56,8 @@ function readDataFileByLine(datafile: string,action: (items: string[]) => void) 
 
 function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
 	var dataPath = path.resolve(__dirname, datafile);
-	let data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
 	try {
+		var data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
 		var lineList = new Array<String>();
 			if (data.includes("\r\n")) {
 				lineList = data.split("\r\n");

@@ -4,7 +4,6 @@ import * as fs from "fs";
 import * as path from "path";
 import * as os from 'os';
 import { getLispAndDclCompletions,getCmdAndVarsCompletionCandidates } from "../../completion/autocompletionProvider";
-import { before } from "mocha";
 import { ReadonlyDocument } from "../../project/readOnlyDocument";
 import { allCmdsAndSysvars } from "../../resources";
 let assert = chai.assert;
@@ -62,10 +61,9 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
 
 suite("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
-  before(() => {
+  suiteSetup(() => {
     createFakeTextDcoument();
   });
-
   test("AutoCompletion Test for de",async function () {
     // this.timeout(0);
     // await vscode.extensions.getExtension("Autodesk.autolispext").activate();
