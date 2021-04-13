@@ -58,7 +58,7 @@ function readDataFileByDelimiter(datafile: string, delimiter: string, action: (i
 	var dataPath = path.resolve(__dirname, datafile);
 	try {
 		var data = fs.readFileSync(dataPath,{encoding:'utf8', flag:'r'});
-		var lineList = new Array<String>();
+		var lineList: Array<String>;
 			if (data.includes("\r\n")) {
 				lineList = data.split("\r\n");
 			}
