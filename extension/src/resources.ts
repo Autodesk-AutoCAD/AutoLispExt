@@ -1,7 +1,6 @@
 import * as path from 'path';
 import { WebHelpLibrary } from "./help/openWebHelp";
 import * as vscode from 'vscode';
-import * as fs from 'fs-extra';
 
 
 export let internalLispFuncs: Array<string> = [];
@@ -31,7 +30,8 @@ export interface IJsonLoadable {
 
 
 function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
-	let dataPath = path.resolve(__dirname, datafile);
+	var fs = require("fs");
+	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {        
 		if (err === null && intoObject["loadFromJsonObject"]) {
 			intoObject.loadFromJsonObject(JSON.parse(data));
@@ -41,7 +41,8 @@ function readJsonDataFile(datafile: string, intoObject: IJsonLoadable): void {
 
 
 function readDataFileByLine(datafile: string, action: (items: string[]) => void) {
-	let dataPath = path.resolve(__dirname, datafile);
+	var fs = require("fs");
+	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
 		if (err === null) {
 			if (data.includes("\r\n")) {
@@ -56,9 +57,10 @@ function readDataFileByLine(datafile: string, action: (items: string[]) => void)
 
 
 function readDataFileByDelimiter(datafile: string, delimiter: string, action: (item: string) => void) {
-	let dataPath = path.resolve(__dirname, datafile);
+	var fs = require("fs");
+	var dataPath = path.resolve(__dirname, datafile);
 	fs.readFile(dataPath, "utf8", function(err: Error, data: string) {
-		let lineList = new Array<String>();
+		var lineList = new Array<String>();
 		if (err === null) {
 			if (data.includes("\r\n")) {
 				lineList = data.split("\r\n");
@@ -68,8 +70,8 @@ function readDataFileByDelimiter(datafile: string, delimiter: string, action: (i
 			}
 
 			lineList.forEach(line => {
-				let items = line.split(delimiter);
-				let item = items[0];
+				var items = line.split(delimiter);
+				var item = items[0];
 				item = item.trim();
 				if (item.length > 0){
 					action(item);
