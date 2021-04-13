@@ -451,7 +451,7 @@ function getIndentationInBlockComment(document: vscode.TextDocument, commentRang
     return indentStr;
 }
 
-function getIndentation(document: TextDocument, containerInfo: ContainerElements, cursorPos2d: Position): string {
+export function getIndentation(document: TextDocument, containerInfo: ContainerElements, cursorPos2d: Position): string {
     if (containerInfo.containerBlockComment != null)
         return getIndentationInBlockComment(document, containerInfo.containerBlockComment, cursorPos2d);
 
