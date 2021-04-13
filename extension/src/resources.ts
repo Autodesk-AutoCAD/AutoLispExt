@@ -94,3 +94,30 @@ export function getExtensionSettingString(settingName: string): string {
 
     return setting.toString().trim();
 }
+
+interface WorkspaceExclude {
+	root: string;
+	glob: string;
+	excluded: boolean;
+}
+
+export function getWorkspaceExcludeGlobs(): Array<WorkspaceExclude> {
+	const result : Array<WorkspaceExclude> = [];
+	const wsFolders = vscode.workspace.workspaceFolders;
+	wsFolders?.forEach(entry => {
+		const rootPath = entry.uri.path.substring(1);
+		const fileExcludes = vscode.workspace.getConfiguration('files.exclude', entry.uri);
+		Object.keys(fileExcludes).forEach(key => {
+			if (typeof(fileExcludes[key]) === 'boolean') {
+				result.push({ root: rootPath, glob: key, excluded: fileExcludes[key] });
+			}
+		});
+		const searchExcludes = vscode.workspace.getConfiguration('search.exclude', entry.uri);
+		Object.keys(searchExcludes).forEach(key => {
+			if (typeof(searchExcludes[key]) === 'boolean') {
+				result.push({ root: rootPath, glob: key, excluded: searchExcludes[key] });
+			}
+		});
+	});
+	return result;
+}
