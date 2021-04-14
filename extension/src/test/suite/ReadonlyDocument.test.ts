@@ -3,12 +3,8 @@ import { TextDocument } from 'vscode';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
-<<<<<<< HEAD
-let lispFileTest = path.join(__dirname + "/../../../test_case/pdfMarkups.lsp");
-=======
 let prefixpath = __filename + "/../../../../extension/src/test/SourceFile/test_case/";
-let project_path = path.join(prefixpath + "pdfMarkups.lsp");
->>>>>>> wip/ss/add_lisp_to_project
+let lispFileTest = path.join(prefixpath + "pdfMarkups.lsp");
 
 
 suite("ReadonlyDocument Tests", function () {
