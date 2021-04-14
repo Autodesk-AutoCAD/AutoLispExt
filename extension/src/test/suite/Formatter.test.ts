@@ -78,11 +78,8 @@ suite("Lisp Formatter mock Tests", function () {
     resetDefault();
   });
 
-  teardown(() => {
+  suiteTeardown(() => {
     internalLispFuncsStub.restore();
-  });
-
-  suiteTeardown(async () => {
     closeParenStyleStub.restore();
     maximumLineCharsStub.restore();
     longListFormatStyleStub.restore();
