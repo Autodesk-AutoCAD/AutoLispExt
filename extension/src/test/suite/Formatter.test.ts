@@ -76,7 +76,7 @@ suite("Lisp Formatter mock Tests", function () {
 
   setup(()=>{
     resetDefault();
-  })
+  });
 
   teardown(() => {
     internalLispFuncsStub.restore();
