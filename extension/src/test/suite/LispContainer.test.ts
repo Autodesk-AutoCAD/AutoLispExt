@@ -5,7 +5,9 @@ import { ILispFragment, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { LispParser } from '../../format/parser';
 
-let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
+let prefixpath = __filename + "/../../../../extension/src/test/SourceFile/test_case/";
+let project_path = path.join(prefixpath + "pdfMarkups.lsp");
+// let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
 let pos1: Position = new Position(98,  100); // based on line: "           downloadPdfs (cadr (NS:ACAD:ListBox "Select PDFs to Download" "Download Drawings" (acad_strlsort (mapcar 'car contractDrawings)) t)))"
 let pos2: Position = new Position(100, 100); // based on line: "     (setq downloadPath (caadr (NS:ACAD:DirPicker "Select Download Path" "Download files" GV:ProjPath)))"
 

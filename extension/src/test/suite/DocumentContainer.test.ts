@@ -5,7 +5,8 @@ import { Sexpression, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 
 var assert = require('chai').assert;
-let project_path = path.join(__dirname + "\\..\\..\\..\\test_case\\pdfMarkups.lsp");
+let prefixpath = __filename + "/../../../../extension/src/test/SourceFile/test_case/";
+let project_path = path.join(prefixpath + "pdfMarkups.lsp");
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
