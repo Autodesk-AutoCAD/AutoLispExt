@@ -27,7 +27,11 @@
             ],
             "outFiles": [
                 "${workspaceFolder}/out/test/**/*.js"
-            ]
+            ],
+            "skipFiles": [
+                "${workspaceFolder}/node_modules/**/*.js",
+                "<node_internals>/**/*.js"
+              ]
         },
         {
             "name": "Extension Tests + Reporting",
