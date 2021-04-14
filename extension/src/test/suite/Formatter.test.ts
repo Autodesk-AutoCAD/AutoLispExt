@@ -62,7 +62,7 @@ suite("Lisp Formatter mock Tests", function () {
   let internalLispFuncsStub;
   let internalOperators;
 
-  setup(async () => {
+  suiteSetup(() => {
     let keyFile = path.join(
       __dirname + "/../../../extension/data/alllispkeys.txt"
     );
@@ -72,11 +72,11 @@ suite("Lisp Formatter mock Tests", function () {
       "internalLispFuncs",
       internalOperators
     );
-    closeParenStyleStub.restore();
-    maximumLineCharsStub.restore();
-    longListFormatStyleStub.restore();
-    indentSpacesStub.restore();
   });
+
+  setup(()=>{
+    resetDefault();
+  })
 
   teardown(() => {
     internalLispFuncsStub.restore();
@@ -87,12 +87,6 @@ suite("Lisp Formatter mock Tests", function () {
     maximumLineCharsStub.restore();
     longListFormatStyleStub.restore();
     indentSpacesStub.restore();
-  });
-  suiteSetup(async () => {
-    setClosedParenInSameLine('New line with outer indentation');
-    setMaxLineChars(85);
-    setLongListFormat('Fill to margin');
-    setIndentSpaces(2);
   });
 
   test("Lisp Formatter Test case 1", function () {
@@ -429,5 +423,11 @@ suite("Lisp Formatter mock Tests", function () {
       "longListFormatStyle",
       LongListFormat
     );
+  }
+  function resetDefault(){
+    setClosedParenInSameLine('New line with outer indentation');
+    setMaxLineChars(85);
+    setLongListFormat('Fill to margin');
+    setIndentSpaces(2);
   }
 });
