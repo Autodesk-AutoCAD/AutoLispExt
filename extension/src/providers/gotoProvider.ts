@@ -23,7 +23,7 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 		try {
 			// determine scope
 			const {isFunction, parentContainer} = SearchHandlers.getSelectionScopeOfWork(rDoc, position, selected);
-			const locations: vscode.Location[] = [];
+			const locations: Array<vscode.Location> = [];
 			if (isFunction) {
 				// This has a "preference" for opened and project documents for actual definitions, but will only handle variables on the opened document.
 				let possible = this.findDefunMatches(selected, [AutoLispExt.Documents.ActiveDocument]);
@@ -41,7 +41,13 @@ export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
 					locations.push(item);
 				});
 			}
-			return locations;
+
+			if (locations.length >= 1) {
+				const filterList = AutoLispExt.Documents.ExcludedFiles;
+				return locations.filter(f => !filterList.includes(f.uri.fsPath));
+			} else {
+				return locations;
+			}
 		} catch (error) {
 			return;	// I don't believe this requires a localized error since VSCode has a default "no definition found" response
 		}

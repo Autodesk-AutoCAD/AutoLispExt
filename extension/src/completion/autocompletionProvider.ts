@@ -16,7 +16,7 @@ export function isInternalAutoLispOp(item: string): boolean {
 }
 
 
-function getCmdAndVarsCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
+export function getCmdAndVarsCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
     var hasUnderline = false;
     if (word[0] == "_") {
         hasUnderline = true;
@@ -75,7 +75,7 @@ function getCompletionCandidates(allCandiates: string[], word: string, userInput
     return suggestions;
 }
 
-function getMatchingWord(document: vscode.TextDocument, position: vscode.Position): [string, boolean] {
+export function getMatchingWord(document: vscode.TextDocument, position: vscode.Position): [string, boolean] {
     let linetext = document.lineAt(position).text;
 
     let word = document.getText(document.getWordRangeAtPosition(position));
@@ -114,7 +114,7 @@ function getMatchingWord(document: vscode.TextDocument, position: vscode.Positio
     return [word, inputIsUpper];
 }
 
-function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
+export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
     let candidatesItems = internalLispFuncs;
