@@ -12,7 +12,6 @@ import { getTreeItemTitle } from '../../project/projectutil';
 import { openLspFile } from '../../project/openLspFile';
 import { hasFileWithSameName } from '../../project/projectTree';
 
-var sinon = require("sinon");
 var expect = require('chai').expect;
 
 suite("Project related Tests", function () {
