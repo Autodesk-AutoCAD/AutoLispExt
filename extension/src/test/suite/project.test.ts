@@ -242,4 +242,8 @@ suite("Project related Tests", function () {
 			}
 		});
 	});
+<<<<<<< HEAD
 });
+=======
+});
+>>>>>>> wip/ss/add_lisp_to_project
