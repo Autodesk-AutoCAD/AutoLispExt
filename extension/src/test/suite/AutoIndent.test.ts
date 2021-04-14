@@ -16,11 +16,13 @@ fs.mkdir(outputDir, { recursive: true }, (err) => {
   }
 });
 
-function createFakeTextDcoument() {
+function openLspTestFile() {
   indentTestFile = path.join(testDir + "/SourceFile/autoIndentTestFile.lsp");
   try {
     if (fs.existsSync(indentTestFile)) {
       indentTestDoc = ReadonlyDocument.open(indentTestFile);
+    }else{
+      console.log(`Can't find the file ${indentTestFile}`);
     }
   } catch (error) {
     console.log(error);
@@ -42,7 +44,7 @@ suite("Autoindent Tests", function () {
   // the limitation of the unit test
   // In the client the OnTypeFormattingEdit is trigged after enter so the cursor position is from new line.
   suiteSetup(() => {
-    createFakeTextDcoument();
+    openLspTestFile();
   });
 
   test("Autoindent for defun enter should have 2 indentation", async function () {
