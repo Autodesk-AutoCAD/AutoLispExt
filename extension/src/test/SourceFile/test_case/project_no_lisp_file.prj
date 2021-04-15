@@ -1,0 +1,16 @@
+;;; VLisp project file [V2.0] project_no_lisp_file saved to:[d:\2\AutoLispExt\test_case] at:[4/13/2021]
+(VLISP-PROJECT-LIST 
+  :NAME
+  project_no_lisp_file
+  :OWN-LIST
+  nil
+  :FAS-DIRECTORY
+  nil
+  :TMP-DIRECTORY
+  nil
+  :PROJECT-KEYS
+  (:BUILD (:standard))
+  :CONTEXT-ID
+  :AUTOLISP
+)
+;;; EOF
