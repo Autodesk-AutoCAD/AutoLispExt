@@ -69,8 +69,6 @@ suite("AutoCompletion Tests", function () {
     await createTextDcoument();
   });
   test("AutoCompletion Test for de",async function () {
-    // this.timeout(0);
-    // await vscode.extensions.getExtension("Autodesk.autolispext").activate();
     const inputword = "de";
     try {
       const isupper = false;

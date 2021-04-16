@@ -15,8 +15,10 @@ export function princ(str : any){
 export async function readFile2TextDocument(filepath: string) : Promise<vscode.TextDocument | undefined> {
 	let doc : vscode.TextDocument;
 	try {
-        return doc = await vscode.workspace.openTextDocument(filepath);
+        doc = await vscode.workspace.openTextDocument(filepath);
+        return doc;
       } catch (error) {
+		  console.log(error);
         return undefined;
       }
 }
