@@ -1,8 +1,4 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import { DocumentManager } from '../../documents';
-import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export async function sleep(ms: number) {
 	console.log(`sleep for ${ms} ms for the extension activated`);
