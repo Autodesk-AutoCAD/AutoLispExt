@@ -408,7 +408,7 @@
 			"(nth ${1:n} '(${2:lst}))"	
 			
 		],
-		"description": "Evaluates each expression a specified number of times, and returns the value of the last expression"
+		"description": "Returns the nth element of a list"
 	},
 	"vl-string-left-trim": {
 		"prefix": "lefttrim",
