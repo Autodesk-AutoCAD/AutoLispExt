@@ -3,16 +3,21 @@ import * as vscode from "vscode";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from 'os';
-import { getLispAndDclCompletions,getCmdAndVarsCompletionCandidates } from "../../completion/autocompletionProvider";
-import { ReadonlyDocument } from "../../project/readOnlyDocument";
+import { getLispAndDclCompletions,
+  getCmdAndVarsCompletionCandidates,
+  getMatchingWord } from "../../completion/autocompletionProvider";
 import { allCmdsAndSysvars } from "../../resources";
+import { readFile2TextDocument } from "./helper";
 let assert = chai.assert;
 const testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-let LispFile = "";
-let DclFile = "";
-let lispdoc: vscode.TextDocument;
-let dcldoc: vscode.TextDocument;
+const sourceDir = path.join(testDir + "/SourceFile");
+let getWordmatchLispFile = path.join(sourceDir + "/getWordmatch.lsp");
+let LispFile = path.join(testDir + "/OutputFile/test.lsp"),
+    DclFile = path.join(testDir + "/OutputFile/test.dcl"),
+    lispdoc: vscode.TextDocument,
+    dcldoc: vscode.TextDocument,
+    wordmatchDoc: vscode.TextDocument;
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
   if (err) {
@@ -20,9 +25,7 @@ fs.mkdir(outputDir, { recursive: true }, (err) => {
   }
 });
 
-function createFakeTextDcoument() {
-  LispFile = path.join(testDir + "/OutputFile/test.lsp");
-  DclFile = path.join(testDir + "/OutputFile/test.dcl");
+async function createTextDcoument() {
   try {
     if (!fs.existsSync(LispFile)) {
       fs.writeFileSync(LispFile, "");
@@ -30,8 +33,9 @@ function createFakeTextDcoument() {
     if (!fs.existsSync(DclFile)) {
       fs.writeFileSync(DclFile, "");
     }
-    lispdoc  = ReadonlyDocument.open(LispFile);
-    dcldoc = ReadonlyDocument.open(DclFile);
+    lispdoc = await readFile2TextDocument(LispFile);
+    dcldoc = await readFile2TextDocument(DclFile);
+    wordmatchDoc = await readFile2TextDocument(getWordmatchLispFile);
   } catch (error) {
     console.log(error);
   }
@@ -61,12 +65,10 @@ function getSuggestLabelCMD(cmd :string[] ,inputword : string,isupper :boolean){
 
 suite("AutoCompletion Tests", function () {
   // Windows only functions (vla-,vlax-,vlr-,vl-load-com,vl-load-reactors,vlisp-)
-  suiteSetup(() => {
-    createFakeTextDcoument();
+  suiteSetup(async () => {
+    await createTextDcoument();
   });
   test("AutoCompletion Test for de",async function () {
-    // this.timeout(0);
-    // await vscode.extensions.getExtension("Autodesk.autolispext").activate();
     const inputword = "de";
     try {
       const isupper = false;
@@ -265,6 +267,41 @@ suite("AutoCompletion Tests", function () {
       chai.expect(suggestLabel).to.eql(expectedList);
     } catch (err) {
       assert.fail(`AutoCompletion test for ${inputword} failed`);
+    }
+  });
+
+  //Test GetMatchingWord function
+  test("GetMatchingWord Test for [p,true]", async function () {
+    let fn = "GetMatchingWord Test for [p,true]";
+    try {
+      let cursorPos = new vscode.Position(0, 0);
+      let expectedList = ["p", false];
+      chai.expect(getMatchingWord(wordmatchDoc, cursorPos)).to.eql(expectedList);
+    } catch (err) {
+      assert.fail(`AutoCompletion test for ${fn} failed`);
+    }
+  });
+
+  test("GetMatchingWord Test for [A,false]", async function () {
+    let fn = "GetMatchingWord Test for [A,false]";
+    try {
+      let cursorPos = new vscode.Position(1, 0);
+      let expectedList = ["A", true];
+      chai.expect(getMatchingWord(wordmatchDoc, cursorPos)).to.eql(expectedList);
+    } catch (err) {
+      assert.fail(`AutoCompletion test for ${fn} failed`);
+    }
+  });
+
+  test("GetMatchingWord Test for [(,false]", async function () {
+    //Test wordSep = " &#^()[]|;'\".";
+    let fn = "GetMatchingWord Test for [(,false]";
+    try {
+      let cursorPos = new vscode.Position(2, 3);
+      let expectedList = ["(", false];
+      chai.expect(getMatchingWord(wordmatchDoc, cursorPos)).to.eql(expectedList);
+    } catch (err) {
+      assert.fail(`AutoCompletion test for ${fn} failed`);
     }
   });
 
