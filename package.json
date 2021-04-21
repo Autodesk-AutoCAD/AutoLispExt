@@ -58,6 +58,11 @@
 				"title": "%autolispext.regionsnippet.title%"
 			},
 			{
+				"command": "autolisp.generateDocumentation",
+				"category": "AutoLISP",
+				"title": "%autolispext.commentdefun.title%"
+			},
+			{
 				"command": "autolisp.createProject",
 				"category": "AutoLISP",
 				"title": "%autolispext.project.createproject.title%",
@@ -233,6 +238,11 @@
 					],
 					"default": "2022",
 					"description": "%autolispext.configuration.helptargetyear%"
+				},
+				"autolispext.completion.FilterMacOS": {
+					"type": "boolean",
+					"default": true,
+					"description": "%autolispext.configuration.macfilter.desc%"
 				}
 			}
 		},
@@ -608,6 +618,11 @@
 					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.insertFoldingRegion",
 					"group": "navigation@3"
+				},
+				{
+					"when": "resourceLangId == autolisp",
+					"command": "autolisp.generateDocumentation",
+					"group": "navigation@4"
 				}
 			],
 			"explorer/context": [

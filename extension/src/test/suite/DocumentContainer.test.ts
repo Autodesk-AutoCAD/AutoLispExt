@@ -9,6 +9,7 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 var assert = require('chai').assert;
 let prefixpath = __filename + "/../../../../extension/src/test/SourceFile/test_case/";
 let lispFileTest = path.join(prefixpath + "pdfMarkups.lsp");
+let commentFileTest = path.join(prefixpath + "comments.lsp");
 
 suite("LispParser.DocumentContainer Tests", function () {	
 	test("Original atomsForest vs DocumentContainer", function () {	
@@ -91,6 +92,44 @@ suite("LispParser.DocumentContainer Tests", function () {
 		}
 		catch (err) {
 			assert.fail("Incorrect parse quantity or EOL value");
+		}
+	});
+
+	test("Comment Extraction Test", function () {
+		try { 
+			const positions = [
+				new Position(0 , 5 ),
+				new Position(6 , 14),
+				new Position(20, 12),
+				new Position(31, 25),
+				new Position(41, 11)
+			];
+			const accumulator = {};
+			const doc = ReadonlyDocument.open(commentFileTest); 
+			const con = LispParser.getDocumentContainer(doc.fileContent);			
+			for (const pos of positions) {
+				const atom = con.getAtomFromPos(pos);
+				const lsdoc = LispParser.parseDocumentation(atom);
+				Object.keys(lsdoc).forEach(k => {
+					if (!accumulator[k]) {
+						accumulator[k] = [];
+					}
+					if (k === 'params') {
+						accumulator[k].push(...lsdoc[k]);
+					} else {
+						accumulator[k].push(lsdoc[k]);
+					}
+				});
+			}	
+			let paramNames = accumulator['params'].map(p => p.name);
+			chai.expect(accumulator['params'].length).to.equal(6);
+			chai.expect(accumulator['description'].length).to.equal(5);
+			chai.expect(accumulator['returns'].length).to.equal(4);
+			chai.expect(accumulator['remarks'].length).to.equal(1);
+			chai.expect(paramNames).to.not.have.members(['Param']);
+		}
+		catch (err) {
+			assert.fail("Incorrect parsed comment field block quantities or didn't migrate param variable name");
 		}
 	});
 

@@ -95,6 +95,20 @@ export function getExtensionSettingString(settingName: string): string {
     return setting.toString().trim();
 }
 
+export function getExtensionSettingBoolean(settingName: string): boolean {
+    let settingGroup = vscode.workspace.getConfiguration('autolispext');
+    if (!settingGroup) {
+        return null;
+	}
+
+    let setting = settingGroup.get(settingName);
+    if (!setting) {
+        return null;
+	}
+
+    return setting === true;
+}
+
 interface WorkspaceExclude {
 	root: string;
 	glob: string;
