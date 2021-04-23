@@ -9,7 +9,6 @@ export class ContextManager{
 	private _ctx: vscode.ExtensionContext;
 	private _docManager: DocumentManager;
 	
-	localize = nls.config({ messageFormat: nls.MessageFormat.file })();	
 	
 	get Context(): vscode.ExtensionContext { 
 		return this._ctx; 
