@@ -7,6 +7,8 @@ import { showErrorMessage } from './project/projectCommands';
 import { AutolispDefinitionProvider } from './providers/gotoProvider';
 import * as shared from './providers/providerShared';
 
+const localize = nls.loadMessageBundle();
+
 export function registerCommands(context: vscode.ExtensionContext){
 
 	// Associated with the right click "Open Online Help" menu item
@@ -16,7 +18,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 		catch (err) {
 			if (err){
-				let msg = AutoLispExt.localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
+				let msg = localize("autolispext.help.commands.openWebHelp", "Failed to load the webHelpAbstraction.json file");
 				showErrorMessage(msg, err);
 			}
 		}
@@ -32,7 +34,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 		catch (err) {
 			if (err){
-				let msg = AutoLispExt.localize("autolispext.commands.addFoldingRegion", "Failed to insert snippet");
+				let msg = localize("autolispext.commands.addFoldingRegion", "Failed to insert snippet");
 				showErrorMessage(msg, err);
 			}
 		}
@@ -84,7 +86,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 		catch (err) {
 			if (err) {
-				let msg = AutoLispExt.localize("autolispext.help.commands.generateDocumentation", "A valid defun name could not be located");
+				let msg = localize("autolispext.help.commands.generateDocumentation", "A valid defun name could not be located");
 				showErrorMessage(msg, err);
 			}
 		}

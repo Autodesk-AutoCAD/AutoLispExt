@@ -19,7 +19,7 @@ import * as fs from 'fs-extra';
 
 import * as nls from 'vscode-nls';
 import { grantExePermission } from './findReplace/ripGrep';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+const localize = nls.loadMessageBundle();
 
 export function registerProjectCommands(context: vscode.ExtensionContext) {
     try {
@@ -98,7 +98,7 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 await SaveProject(true);
             }
             catch (err) {
-                let msg = AutoLispExt.localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
+                let msg = localize("autolispext.project.commands.saveprojectfailed", "Failed to save the project.");
                 showErrorMessage(msg, err);
             }
         }));
@@ -129,12 +129,12 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
                 if (!addedFiles){
                     return; //it's possible that the user cancelled the operation
                 } else {                    
-                    const msg = AutoLispExt.localize("autolispext.project.commands.addedworkspacefiles", 'lisp files have been added to');
+                    const msg = localize("autolispext.project.commands.addedworkspacefiles", 'lisp files have been added to');
                     vscode.window.showInformationMessage(addedFiles.length + ' ' + msg + ' ' + ProjectTreeProvider.instance().projectNode.projectName + '.prj');
                 }
             }
             catch (err) {
-                let msg = AutoLispExt.localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
+                let msg = localize("autolispext.project.commands.addfilefailed", "Failed to add selected files to project.");
                 showErrorMessage(msg, err);
                 return;
             }
