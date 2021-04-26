@@ -10,7 +10,7 @@ const localize = nls.loadMessageBundle();
 // 		/extension/src/commands.ts
 
 // locates the nearest defun(s) from a position and prompts the user to choose if ambiguity exists
-export async function getDefunAtPosition(atom: ILispFragment, pos: vscode.Position): Promise<LispContainer> {
+export async function getDefunAtPosition(atom: ILispFragment, pos: vscode.Position, testIndex?: number): Promise<LispContainer> {
 	let defs = atom?.body?.findChildren(SearchPatterns.DEFINES, true).filter(p => p.contains(pos)) ?? [];
 	if (defs.length === 0) {
 		return;
@@ -18,8 +18,10 @@ export async function getDefunAtPosition(atom: ILispFragment, pos: vscode.Positi
 	if (defs.length > 1) {
 		// if this was performed within a nested defun, then the user has to select which defun to document
 		const quickPicks = defs.map(d => d.getNthKeyAtom(1).symbol);
-		let outResult = '';
-		await vscode.window.showQuickPick(quickPicks).then(response => { outResult = response; });
+		let outResult = testIndex ? quickPicks[testIndex] : '';
+		if (!testIndex) {
+			await vscode.window.showQuickPick(quickPicks).then(response => { outResult = response; });
+		}
 		defs = defs.filter(d => d.getNthKeyAtom(1).symbol === outResult);
 	}	
 	// Now we know what defun we are documenting, so we extract arguments; if applicable
