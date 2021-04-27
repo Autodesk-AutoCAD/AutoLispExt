@@ -1,4 +1,5 @@
 {
   "autolispext.help.commands.openWebHelp": "Не удалось загрузить файл webHelpAbstraction.json",
-  "autolispext.commands.addFoldingRegion": "Не удалось вставить фрагмент"
+  "autolispext.commands.addFoldingRegion": "Не удалось вставить фрагмент",
+  "autolispext.help.commands.generateDocumentation": ""
 }

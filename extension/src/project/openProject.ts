@@ -9,7 +9,7 @@ import * as path from 'path'
 import { ReadonlyDocument } from './readOnlyDocument';
 
 import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+const localize = nls.loadMessageBundle();
 const fs = require('fs');
 import * as os from 'os';
 
@@ -68,7 +68,7 @@ async function SelectProjectFile() {
         if (path.basename(fileUri[0].fsPath).indexOf(' ') === -1){
             return Promise.resolve(fileUri[0]);
         } else {
-            let msg = AutoLispExt.localize("autolispext.project.openproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
+            let msg = localize("autolispext.project.openproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
             return Promise.reject(msg);
         }
     } else {

@@ -247,10 +247,14 @@ namespace autolispext.i18.helper
         {
             filePath = tspath;
             List<string> Lines = System.IO.File.ReadAllLines(tspath).ToList();
+            var nlsPattern = "constlocalize=nls";
+            var hasNLS = false;
             foreach (var lin in Lines)
             {
-                var parts = lin.Split(new string[] { "AutoLispExt.localize(" }, StringSplitOptions.None).ToList();
-                if (parts.Count > 1)
+                if (!hasNLS && lin.ToLower().Replace(" ", "").Contains(nlsPattern))
+                    hasNLS = true;
+                var parts = lin.Split(new string[] { "localize(" }, StringSplitOptions.None).ToList();
+                if (hasNLS && parts.Count > 1)
                 {
                     bool stop = filePath.ToUpper().Contains("URI");
                     int endindex = parts[1].IndexOf(',') == -1 ? parts[1].IndexOf(')') : parts[1].IndexOf(',');

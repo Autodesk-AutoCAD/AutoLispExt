@@ -1,4 +1,5 @@
 {
   "autolispext.help.commands.openWebHelp": "Impossibile caricare il file webHelpAbstraction.json",
-  "autolispext.commands.addFoldingRegion": "Impossibile inserire il frammento"
+  "autolispext.commands.addFoldingRegion": "Impossibile inserire il frammento",
+  "autolispext.help.commands.generateDocumentation": ""
 }
