@@ -2,7 +2,7 @@
 (defun c:flower (/ R1 n1 n2 pt1 pt2 pt3 pt4 pt5) 
       (princ "中文测试")
       (setq lst '("abc" nil nil 1 nil 10 nil 12))
-      (setq centerPt0 (getpoint "\n Please pick point in screen" )
+      (setq centerPt0 (getpoint "\n Please pick point in screen")
             R1        5
             R2        (* 2 R1)
             R3        R1

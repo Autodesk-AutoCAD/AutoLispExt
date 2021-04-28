@@ -822,8 +822,12 @@ export class Sexpression extends LispAtom {
         }
 
         // Last atom may be )
-        if (hasCloseParen)
-            res += this.formatLastAtom(startColumn, columnWidth, this.isMultilineString(res));
+        if (hasCloseParen) {
+            let str2Append = this.formatLastAtom(startColumn, columnWidth, this.isMultilineString(res));
+            if(str2Append === ')')
+                res = res.trimRight(); // to avoid extra whitespace before the closing paren.
+            res += str2Append;
+        }
 
         return res;
     }
