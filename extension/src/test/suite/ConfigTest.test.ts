@@ -10,14 +10,14 @@ import { readFile2TextDocument } from '../suite/helper';
 let assert = chai.assert;
 let testDir = path.join(__dirname + "/../../../extension/src/test");
 const outputDir = path.join(testDir + "/OutputFile");
-let config = vscode.workspace.getConfiguration("autolispext");
+let config = vscode.workspace.getConfiguration();
 
 async function  restoreConfig() {
 	try {
-		await config.update('format.CloseParenthesisStyle','New line with outer identation',true);
-		await config.update('format.MaxLineChars',85,true);
-		await config.update('format.LongListFormatStyle','Fill to Margin',true);
-		await config.update('format.NarrowStyleIndent',2,true);
+		await config.update('autolispext.format.CloseParenthesisStyle','New line with outer identation',true);
+		await config.update('autolispext.format.MaxLineChars',85,true);
+		await config.update('autolispext.format.LongListFormatStyle','Fill to Margin',true);
+		await config.update('autolispext.format.NarrowStyleIndent',2,true);
 	} catch (error) {
 		console.log(error);
 	}
@@ -25,16 +25,16 @@ async function  restoreConfig() {
 }
 
 async function setClosedParenInSameLine(sameline : string){
-	await config.update('format.CloseParenthesisStyle',sameline,true);
+	await config.update('autolispext.format.CloseParenthesisStyle',sameline,true);
 }
 async function setMaxLineChars(maxchar : number){
-	await config.update('format.MaxLineChars',maxchar,true);
+	await config.update('autolispext.format.MaxLineChars',maxchar,true);
 }
 async function setLongListFormat(singleCol : string){
-	await config.update('format.LongListFormatStyle',singleCol,true);
+	await config.update('autolispext.format.LongListFormatStyle',singleCol,true);
 }
 async function setIndentSpaces(indent : number){
-	await config.update('format.NarrowStyleIndent',indent,true);
+	await config.update('autolispext.format.NarrowStyleIndent',indent,true);
 }
 
 fs.mkdir(outputDir, { recursive: true }, (err) => {
