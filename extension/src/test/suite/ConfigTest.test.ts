@@ -62,7 +62,7 @@ function comparefileSync(i : number, output : string,fmt : string, baseline : st
 	}
 }
 
-suite.only("Lisp Formatter Tests", function () {
+suite("Lisp Formatter Tests", function () {
 	// Notes:
 	// Format test is a setting sensitive which depends on the format settings defined 
 	// in the fmtconfig.ts
