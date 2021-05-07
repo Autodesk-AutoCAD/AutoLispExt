@@ -29,7 +29,7 @@ suite("Lisp Formatter Tests", function () {
 	// Need to remove the \r to do the format output compare
 	after(async () => {
 		await restoreConfig();
-	})
+	});
 	beforeEach(async () => {
 		await restoreConfig();
 	});
