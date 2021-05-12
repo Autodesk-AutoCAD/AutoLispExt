@@ -22,7 +22,7 @@ export async function findInProject() {
     if (ProjectTreeProvider.hasProjectOpened() == false) {
         let msg = localize("autolispext.project.find.openproject", "A project must be open before you can search for a text string.");
         vscode.window.showInformationMessage(msg);
-        return;
+        return Promise.reject(msg);
     }
 
     //get search option
@@ -38,9 +38,9 @@ export async function findInProject() {
     //find in project
     let finder = new FindInProject();
     await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
-
     //update the UI
     SearchTreeProvider.instance.reset(finder.resultByFile, finder.summaryNode, opt);
+  
 }
 
 export class FindInProject {
@@ -59,7 +59,7 @@ export class FindInProject {
                 return Promise.reject(msg);
             }
         }
-
+        
         this.timeStarted = Date.now();
 
         setIsSearching(true);
