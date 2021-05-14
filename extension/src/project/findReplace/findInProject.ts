@@ -22,7 +22,7 @@ export async function findInProject() {
     if (ProjectTreeProvider.hasProjectOpened() == false) {
         let msg = localize("autolispext.project.find.openproject", "A project must be open before you can search for a text string.");
         vscode.window.showInformationMessage(msg);
-        return Promise.reject(msg);
+        return;
     }
 
     //get search option

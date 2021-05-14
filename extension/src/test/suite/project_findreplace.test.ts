@@ -39,18 +39,25 @@ suite("Project find and replace in project Tests", function () {
 
 	ProjectTreeProvider.instance().updateData(rootNode);
 		
-	let closeParenStyleStub;
+	let closeOsArchStub, closeOptGetSearchStub, closeVscodeCommandsStub, 
+	closeOptgetStringStub, closeOsTypeStub, closefsAccessSyncStub, closefsChmodSyncStub;
 	suiteTeardown( async ()=>{
-		closeParenStyleStub.restore();
+		closeOsArchStub.restore();
+		closeOptGetSearchStub.restore();
+		closeVscodeCommandsStub.restore();
+		closeOptgetStringStub.restore();
+		closeOsTypeStub.restore();
+		closefsAccessSyncStub.restore();
+		closefsChmodSyncStub.restore();
 	});
 	suiteSetup(async () => {
-		closeParenStyleStub = ImportMock.mockFunction(os, 'arch', 'x64');
-		closeParenStyleStub = ImportMock.mockFunction(opt, 'getSearchOption', searchobj);
-		closeParenStyleStub = ImportMock.mockFunction(vscode.commands, 'executeCommand', mock_value);
-		closeParenStyleStub = ImportMock.mockFunction(opt, 'getString', "remove -layer");
-		closeParenStyleStub = ImportMock.mockFunction(os, 'type', 'Darwin');
-		closeParenStyleStub = ImportMock.mockFunction(fs, 'accessSync', null);
-		closeParenStyleStub = ImportMock.mockFunction(fs, 'chmodSync', null);
+		closeOsArchStub = ImportMock.mockFunction(os, 'arch', 'x64');
+		closeOptGetSearchStub = ImportMock.mockFunction(opt, 'getSearchOption', searchobj);
+		closeVscodeCommandsStub = ImportMock.mockFunction(vscode.commands, 'executeCommand', mock_value);
+		closeOptgetStringStub = ImportMock.mockFunction(opt, 'getString', "remove -layer");
+		closeOsTypeStub = ImportMock.mockFunction(os, 'type', 'Darwin');
+		closefsAccessSyncStub = ImportMock.mockFunction(fs, 'accessSync', null);
+		closefsChmodSyncStub = ImportMock.mockFunction(fs, 'chmodSync', null);
 	});
 
 	suite("Open search result Tests", function(){
@@ -101,17 +108,6 @@ suite("Project find and replace in project Tests", function () {
 				expect(err).to.be.equals("");
 			}
 		});
-
-		test("Find in unopened project ", async function () {
-			ProjectTreeProvider.instance().updateData(null);
-			try {
-				await findInProject();
-			}
-			catch (err) {
-				expect(err.startsWith("A project must be open before")).to.be.true;
-			}
-		});
-
 	});
 
 	suite("Clear search result Tests", function(){
@@ -143,13 +139,14 @@ suite("Project find and replace in project Tests", function () {
 		filenode.filePath = projpath2;
 		let doc = ReadonlyDocument.open(projpath2);
 		
-		let closeParenStyleStub;
+		let closeVscodeWorkspaceStub, closeUtGetDocumentStub;
 		suiteTeardown( async ()=>{
-			closeParenStyleStub.restore();
+			closeVscodeWorkspaceStub.restore();
+			closeUtGetDocumentStub.restore();
 		});
 		suiteSetup(async () => {
-			closeParenStyleStub = ImportMock.mockFunction(vscode.workspace, "applyEdit", true);
-			closeParenStyleStub = ImportMock.mockFunction(ut, "getDocument", doc);
+			closeVscodeWorkspaceStub = ImportMock.mockFunction(vscode.workspace, "applyEdit", true);
+			closeUtGetDocumentStub = ImportMock.mockFunction(ut, "getDocument", doc);
 		});
 
 		test("Apply change in editor in File", async function(){
@@ -165,12 +162,12 @@ suite("Project find and replace in project Tests", function () {
 	});
 
 	suite("Apply replacement in project Test2", function() {
-		let closeParenStyleStub;
+		let closeUtGetDocumentStub;
 		suiteTeardown( async ()=>{
-			closeParenStyleStub.restore();
+			closeUtGetDocumentStub.restore();
 		});
 		suiteSetup(async () => {
-			closeParenStyleStub = ImportMock.mockFunction(ut, "getDocument", null);
+			closeUtGetDocumentStub = ImportMock.mockFunction(ut, "getDocument", null);
 		});
 		test("Apply change by File", async function(){
 			try {
