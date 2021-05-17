@@ -680,7 +680,7 @@
 		"fs-extra": "^8.1.0",
 		"jschardet": "2.1.1",
 		"os-locale": "5.0.0",
-		"vsce": "1.57.0",
+		"vsce": "1.88.0",
 		"vscode-languageclient": "4.2.0",
 		"vscode-nls": "3.2.5",
 		"vscode-ripgrep": "1.5.8"
