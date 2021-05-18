@@ -369,29 +369,8 @@
 					"program": "${lispadapterpath}"
 				},
 				"languages": [
-					{
-						"id": "autolisp",
-						"aliases": [
-							"AutoLISP",
-							"autolisp"
-						],
-						"extensions": [
-							".lsp",
-							".mnl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration.json"
-					},
-					{
-						"id": "autolispdcl",
-						"aliases": [
-							"AutoLISPDCL",
-							"autolispdcl"
-						],
-						"extensions": [
-							".dcl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
-					}
+					"autolisp",
+					"autolispdcl"
 				],
 				"configurationAttributes": {
 					"attach": {
