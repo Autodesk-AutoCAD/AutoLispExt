@@ -9,7 +9,7 @@
 	"autolispext.configuration.narrowstyleindent.desc": "Indentation value used in the Narrow Formatting Style of function arguments. Value must be in the range of 1 and 6.",
 	"autolispext.configuration.closeparenstyle.desc": "Controls the style of closing parenthesis. Closing parenthesis is placed on the same line as the function or aligned with the function’s opening parenthesis.",
 	"autolispext.configuration.longlistformatstyle": "Controls the format style of long lists. Each or multiple parameters of a function are placed on separate lines.",
-	"autolispext.configuration.helptargetyear": "Determines the targeted AutoCAD year version of the 'Open Online Help' command.",
+	"autolispext.configuration.helptargetyear": "Target AutoCAD release for the 'Open Online Help' command.",
 	"autolispext.configuration.macfilter.desc" : "Enabling this feature will remove Windows-Only fuctions from auto-completion results while using Mac OS",
 	"autolispext.configuration.attachprocess.desc": "Process name to filter on for Debug Attach.",
 	"autolispext.configuration.launchprogram.desc": "Absolute path to the AutoCAD executable.",
