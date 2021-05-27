@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "nem létezik. Győződjön meg arról, hogy a fájl ugyanabban a mappában található, mint amelyet a launch.json fájlban lévő termékhez megadott.",
+  "autolispext.debug.nodap": "nem létezik. Használjon az AutoCAD 2020-nál újabb kiadást. Győződjön meg arról, hogy a fájl ugyanabban a mappában található, mint a hibakereséssel érintett termék.",
   "autolispext.debug.noacad": "nem létezik. Ellenőrizze és javítsa ki a termék végrehajtható fájljához tartozó mappa elérési útját.",
   "autolispext.debug.acad.nosupport": "Az AutoCAD ezen példánya nem támogatja az AutoLISP-fájlok hibakeresését. Használjon egy AutoCAD 2020-nál újabb kiadást.",
   "autolispext.debug.launchjson.path": "Adja meg a termék abszolút elérési útját és launch.json fájl Elérési út attribútumával.",

@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "não existe. Verifique se o arquivo existe na mesma pasta do produto especificado no arquivo launch.json.",
+  "autolispext.debug.nodap": "não existe. Use uma versão posterior do AutoCAD 2020. Verifique se o arquivo existe na mesma pasta do produto para depuração.",
   "autolispext.debug.noacad": "não existe. Verifique e corrija o caminho da pasta para o executável do produto.",
   "autolispext.debug.acad.nosupport": "Essa instância do AutoCAD não suporta a depuração de arquivos do AutoLISP, use uma versão posterior do AutoCAD 2020.",
   "autolispext.debug.launchjson.path": "Especifique o caminho absoluto para o produto com o atributo Caminho do arquivo launch.json.",

@@ -1,5 +1,5 @@
 {
   "autolispext.help.commands.openWebHelp": "Falha ao carregar o arquivo webHelpAbstraction.json",
   "autolispext.commands.addFoldingRegion": "Falha ao inserir trecho",
-  "autolispext.help.commands.generateDocumentation": ""
+  "autolispext.help.commands.generateDocumentation": "Não foi possível localizar um nome de defun válido"
 }
