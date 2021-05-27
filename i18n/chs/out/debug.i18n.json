@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "不存在。请确认该文件与 launch.json 文件中指定的产品位于同一文件夹中。",
+  "autolispext.debug.nodap": "不存在。请使用高于 AutoCAD 2020 的版本。请确认该文件与要调试的产品位于同一文件夹中。",
   "autolispext.debug.noacad": "不存在。请验证并更正产品可执行文件的文件夹路径。",
   "autolispext.debug.acad.nosupport": "此 AutoCAD 实例不支持调试 AutoLISP 文件，请使用高于 AutoCAD 2020 的版本。",
   "autolispext.debug.launchjson.path": "使用 launch.json 文件的“路径”属性指定产品的绝对路径。",

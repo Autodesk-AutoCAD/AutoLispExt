@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "ist nicht vorhanden. Stellen Sie sicher, dass die Datei im selben Ordner wie für das Produkt in launch.json angegeben vorhanden ist.",
+  "autolispext.debug.nodap": "ist nicht vorhanden. Verwenden Sie eine höhere Version als AutoCAD 2020. Stellen Sie sicher, dass die Datei im selben Ordner liegt wie das Produkt für die Fehlerbehebung.",
   "autolispext.debug.noacad": "ist nicht vorhanden. Überprüfen und korrigieren Sie den Ordnerpfad für die ausführbare Datei des Produkts.",
   "autolispext.debug.acad.nosupport": "Diese Instanz von AutoCAD unterstützt das Debuggen von AutoLISP-Dateien nicht. Verwenden Sie eine höhere Version als AutoCAD 2020.",
   "autolispext.debug.launchjson.path": "Geben Sie den absoluten Pfad zum Produkt mit dem Pfadattribut der Datei launch.json an.",

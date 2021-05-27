@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "不存在。請確認檔案所在的資料夾與 launch.json 檔中指定的產品資料夾相同。",
+  "autolispext.debug.nodap": "不存在。請使用高於 AutoCAD 2020 的版本。確認檔案與要偵錯的產品在同一個資料夾。",
   "autolispext.debug.noacad": "不存在。請確認並更正產品可執行檔的資料夾路徑。",
   "autolispext.debug.acad.nosupport": "此 AutoCAD 例證不支援偵錯 AutoLISP 檔，請使用比 AutoCAD 2020 更高的版本。",
   "autolispext.debug.launchjson.path": "請使用 launch.json 檔的 Path 屬性指定產品的絕對路徑。",

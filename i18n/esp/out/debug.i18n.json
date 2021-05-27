@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "no existe. Compruebe que el archivo se encuentre en la misma carpeta que el producto especificado en el archivo launch.json.",
+  "autolispext.debug.nodap": "no existe. Utilice una versión posterior a AutoCAD 2020. Compruebe que el archivo se encuentre en la misma carpeta con el producto que se va a depurar.",
   "autolispext.debug.noacad": "no existe. Compruebe y corrija la ruta de carpeta al archivo ejecutable del producto.",
   "autolispext.debug.acad.nosupport": "Este ejemplar de AutoCAD no admite la depuración de archivos de AutoLISP: utilice una versión posterior a AutoCAD 2020.",
   "autolispext.debug.launchjson.path": "Especifique la ruta absoluta al producto con el atributo Path del archivo launch.json.",
