@@ -79,7 +79,7 @@ Example (on Windows):
 * Attach Process: acad
 
 Example (on Mac OS):
-* Launch Program: /Applications/Autodesk/AutoCAD /AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD
+* Launch Program: /Applications/Autodesk/AutoCAD &lt;release&gt;/AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD
 * Attach Process: AutoCAD
 
 For more information, see the [documentation online](https://www.autodesk.com/autolisp-extension).
