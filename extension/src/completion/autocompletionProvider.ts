@@ -3,6 +3,9 @@ import * as os from 'os';
 import { isCursorInDoubleQuoteExpr } from "../format/autoIndent";
 import { allCmdsAndSysvars, internalDclKeys, internalLispFuncs, winOnlyListFuncPrefix  } from "../resources";
 
+//I haven't learned ts, I can only use js to modify it and hope it's useful。
+// the function name 'vla-set-XXX' must change to 'vla-put-XXX'  in webHelpAbstraction.json
+const InternalFuncHelpObj=require('../help/webHelpAbstraction.json');
 
 export function isInternalAutoLispOp(item: string): boolean {
     if (!item)
@@ -56,18 +59,24 @@ export function getCmdAndVarsCompletionCandidates(allCandiates: string[], word: 
     return suggestions;
 }
 
-function getCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean): Array<vscode.CompletionItem> {
+function getCompletionCandidates(allCandiates: string[], word: string, userInputIsUpper: boolean, range:vscode.Range): Array<vscode.CompletionItem> {
     let suggestions: Array<vscode.CompletionItem> = [];
     allCandiates.forEach((item) => {
-        var candidate = item;
+        var candidate = item.toLowerCase();
+        var helpFuncStr = candidate;
         if (userInputIsUpper)
             candidate = item.toUpperCase();
-        else
-            candidate = item.toLowerCase();
 
         if (candidate.startsWith(word)) {
             var label = candidate;
             const completion = new vscode.CompletionItem(label);
+            //========show help in pop menu of suggestions =====================
+            if(InternalFuncHelpObj.functions[helpFuncStr]){
+                completion.documentation= InternalFuncHelpObj.functions[helpFuncStr]['signature'] + InternalFuncHelpObj.functions[helpFuncStr]["description"]
+            }
+            // completion correct: exp:type "vl-str" and type esc or backspace,  continue to type "ing" and 
+            // select 'vl-string->list' from menu,it will be: 'vl-vl-string->list'. Add range PROPERTIES to correct it
+            completion.range = range;          
             suggestions.push(completion);
         }
     });
@@ -76,28 +85,29 @@ function getCompletionCandidates(allCandiates: string[], word: string, userInput
 }
 
 export function getMatchingWord(document: vscode.TextDocument, position: vscode.Position): [string, boolean] {
-    let linetext = document.lineAt(position).text;
+//     let linetext = document.lineAt(position).text;
 
-    let word = document.getText(document.getWordRangeAtPosition(position));
-    let wordSep = " &#^()[]|;'\".";
-
+//     let word = document.getText(document.getWordRangeAtPosition(position));
+//     let wordSep = " &#^()[]|;'\".";
+    let range = document.getWordRangeAtPosition(position,/(?<=[\s\(\)\^]*)[^\s\(\)\"\';]+(?=[\s\(\)\$]*)/i);
+    let word = document.getText(range);
     // Autolisp has special word range rules and now VScode has some issues to check the "word" range, 
     // so it needs this logic to check the REAL word range
-    let pos = position.character;
-    pos -= 2;
-    let length = 1;
-    let hasSetLen = false;
-    for (; pos >= 0; pos--) {
-        let ch = linetext.charAt(pos);
-        if (wordSep.includes(ch)) {
-            if (!hasSetLen)
-                length = word.length;
-            word = linetext.substr(pos + 1, length);
-            break;
-        }
-        length++;
-        hasSetLen = true;
-    }
+//     let pos = position.character;
+//     pos -= 2;
+//     let length = 1;
+//     let hasSetLen = false;
+//     for (; pos >= 0; pos--) {
+//         let ch = linetext.charAt(pos);
+//         if (wordSep.includes(ch)) {
+//             if (!hasSetLen)
+//                 length = word.length;
+//             word = linetext.substr(pos + 1, length);
+//             break;
+//         }
+//         length++;
+//         hasSetLen = true;
+//     }
 
     var isupper = () => {
         var lastCh = word.slice(-1);
@@ -111,10 +121,10 @@ export function getMatchingWord(document: vscode.TextDocument, position: vscode.
         word = word.toUpperCase();
     else word = word.toLowerCase();
 
-    return [word, inputIsUpper];
+    return [word, inputIsUpper,range];
 }
 
-export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
+export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean,range:vscode.Range): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
     let candidatesItems = internalLispFuncs;
@@ -122,7 +132,7 @@ export function getLispAndDclCompletions(document: vscode.TextDocument, word: st
         candidatesItems = internalDclKeys;
     }
     let allSuggestions: Array<vscode.CompletionItem> = [];
-    allSuggestions = getCompletionCandidates(candidatesItems, word, isupper);
+    allSuggestions = getCompletionCandidates(candidatesItems, word, isupper,range);
 
     if (os.platform() === "win32") {
         return allSuggestions;
@@ -152,7 +162,7 @@ export function registerAutoCompletionProviders() {
                     return [];
                 }
 
-                let [inputword, userInputIsUpper] = getMatchingWord(document, position);
+                let [inputword, userInputIsUpper,range] = getMatchingWord(document, position);
                 if (inputword.length == 0)
                     return [];
 
@@ -162,7 +172,7 @@ export function registerAutoCompletionProviders() {
                     return cmds;
                 }
 
-                return getLispAndDclCompletions(document, inputword, userInputIsUpper);
+                return getLispAndDclCompletions(document, inputword, userInputIsUpper,range);
             }
             catch (err) {
                 return [];
