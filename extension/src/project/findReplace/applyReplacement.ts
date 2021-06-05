@@ -14,7 +14,6 @@ export async function applyReplacementInFile(filePlan: FileNode) {
         }
 
         let doc = getDocument(filePlan.filePath);
-
         let data = null;
         if (doc != null)
             data = doc.getText();//it's possible that the editor has latest changes that are not saved
@@ -49,12 +48,13 @@ export async function applyReplacementInFile(filePlan: FileNode) {
                 data = data.substr(newlinePos + 1);
             }
         }
-
         let done = await applyChangeInEditor(filePlan.filePath, newFileContent);
+        
         if (done)
-            return;
+            return done;
 
         filePlan.errorInReplace = applyChangeByFile(filePlan.filePath, newFileContent);
+        return filePlan.errorInReplace;
     }
     catch (err) {
         filePlan.errorInReplace = err.toString();
