@@ -6,7 +6,8 @@ async function main() {
 	try {
 		// The folder containing the Extension Manifest package.json
 		// Passed to `--extensionDevelopmentPath`
-		const extensionDevelopmentPath = path.resolve(__dirname, '../../../../');
+		// The __dirname is  \AutoLispExt\out\test
+		const extensionDevelopmentPath = path.resolve(__dirname, '../../');
 		let extensionTestsPath ='';
 		// The path to the extension test or code coverage script
 		// Passed to --extensionTestsPath
