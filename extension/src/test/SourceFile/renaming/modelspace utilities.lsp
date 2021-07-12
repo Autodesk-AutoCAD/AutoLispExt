@@ -22,6 +22,10 @@
 (defun C:LookBusy (/ *error*)
   (defun *error* (msg) (princ "processing complete!") (princ))
   
+  (if (not globalsAreLoded)
+    (LoadGlobalVariables)
+  )
+  
   (setq workItems (list 1 5 10 15 20 25)
         actvDoc (vla-get-activedocument(vlax-get-acad-object)))
   (print "Hold escape to quit doing nothing?")
