@@ -24,7 +24,7 @@
     
     (setq GlobalsAreLoded t) ; @Global
   )
-  GlobalsAreLoded
+  GlobalsAreLoaded
 )
 
 
