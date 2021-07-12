@@ -48,7 +48,7 @@
   @Param dimName desired style name
   @Returns void
 |;
-(defun SetTextStyle (dimName / activeDOCUMENT)
+(defun SetDimStyle (dimName / activeDOCUMENT)
   (setq testResult (tblsearch "DIMSTYLE" dimname)) ; @Global now non-localized 
   (if testResult
     (progn
