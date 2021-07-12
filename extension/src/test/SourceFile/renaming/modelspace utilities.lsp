@@ -22,7 +22,7 @@
 (defun C:LookBusy (/ *error*)
   (defun *error* (msg) (princ "processing complete!") (princ))
   
-  (if (not globalsAreLoded)
+  (if (not GlobalsAreLoaded)
     (LoadGlobalVariables)
   )
   

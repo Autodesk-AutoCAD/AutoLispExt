@@ -12,7 +12,7 @@
   @Global
 |;
 (defun LoadGlobalVariables ()
-  (if (not globalsAreLoded) 
+  (if (not GlobalsAreLoaded) 
     (vl-load-com)
     
     ; @Global Style Names
@@ -22,7 +22,7 @@
           sfc:style4 "SFC-Paperspace"
     )
     
-    (setq GlobalsAreLoded t) ; @Global
+    (setq GlobalsAreLoaded t) ; @Global
   )
   GlobalsAreLoaded
 )
