@@ -1,5 +1,5 @@
 import { AutoLispExt } from '../extension';
-import { ILispFragment, LispAtom, LispContainer } from '../format/sexpression';
+import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { ISymbolBase } from '../symbols';
 import { FlatContainerServices } from './flatContainerServices';
