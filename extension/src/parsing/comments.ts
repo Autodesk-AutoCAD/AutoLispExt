@@ -1,4 +1,7 @@
-import { LispAtom } from "../format/sexpression";
+import * as vscode from 'vscode';
+import { ILispFragment, LispAtom } from "../format/sexpression";
+import { escapeRegExp, StringEqualsIgnoreCase } from '../utils';
+import { getDocumentContainer } from './containers';
 
 
 interface ILspDocPair {
@@ -23,9 +26,9 @@ function normalizeComment(str: string) : string {
 /**
  * This function extracts the user documentation into a basic structure for completion data
  * @param value This should be a LispAtom that represents a comment or comment block
- * @returns LspDoc interface that specifically represents "planned" documentation types
+ * @returns ILispDocs specifically represents the "planned" documentation types
  */
-export function parseDocumentation(value: LispAtom): ILispDocs {
+export function parseDocumentation(value: ILispFragment): ILispDocs {
 	const result: ILispDocs = { };
 	let active: ILspDocPair = null;
 
@@ -85,4 +88,27 @@ export function parseDocumentation(value: LispAtom): ILispDocs {
 		});
 	}
 	return result;
+}
+
+/**
+ * Supports F2 renaming system by keeping the Lisp function documentation aligned with code
+ * @param atom Must be a multi-line comment
+ * @param name The expected value of an @Param name, subsequent documentation is ignored
+ * @returns Range of the found name or null if it wasn't included in documentation
+ */
+export function getBlockCommentParamNameRange(atom: ILispFragment, name: string): vscode.Range|null {
+	if (!atom.isComment() || atom.isLineComment()) {
+		return null;
+	}
+	const lines = atom.symbol.split('\n');
+	const filter = new RegExp(`^[\\s\\|]*@PARAM\\s+${escapeRegExp(name)}\\s[\\s\\S]*$`, 'i');
+	for (let i = 0; i < lines.length; i++) {
+		const completeLine = lines[i] + '\n';
+		if (filter.test(completeLine)) {
+			const temp = getDocumentContainer(completeLine).atoms
+						 .find(innerAtom => StringEqualsIgnoreCase(name, innerAtom.symbol));			
+			return !temp ? null : new vscode.Range(atom.line + i, temp.column, atom.line + i, temp.column + temp.symbol.length);
+		}
+	}
+	return null;
 }

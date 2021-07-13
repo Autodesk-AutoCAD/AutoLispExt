@@ -5,12 +5,15 @@ import { AutoLispExt } from './extension';
 import { ProjectTreeProvider  } from "./project/projectTree";
 import * as fs from	'fs-extra';
 import { glob } from 'glob';
+import { DocumentServices } from './services/documentServices';
+import { SymbolManager } from './symbols';
 
 
 enum Origins {
 	OPENED,
 	WSPACE,
-	PROJECT
+	PROJECT,
+	UNKNOWN
 }
 
 
@@ -132,7 +135,13 @@ export class DocumentManager{
 
 	private tryUpdateInternal(sources: DocumentSources){
 		if (sources.native && (!sources.internal || !sources.internal.equal(sources.native))) {
-			sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);
+			sources.internal = ReadonlyDocument.getMemoryDocument(sources.native);			
+			if (DocumentServices.hasUnverifiedGlobalizers(sources.internal)) {
+				// symbol mapping actually takes slightly more time than parsing, so the goal is
+				// to keep a persistent representation of anything containing @global exported
+				// variable/function name. Use cases are Rename, Autocomplete and Signature helpers
+				SymbolManager.updateOrCreateSymbolMap(sources.internal, true);
+			}
 		}
 	}
 
@@ -176,7 +185,17 @@ export class DocumentManager{
 	getDocument(nDoc: vscode.TextDocument): ReadonlyDocument {
 		const key = this.documentConsumeOrValidate(nDoc, Origins.OPENED);			
 		return this._cached.get(key)?.internal;
-	}	
+	}
+	
+	tryGetDocument(fsPath: string): ReadonlyDocument {
+		// This is something of a hack to query an existing document from a randomly acquired file path.
+		// ultimately, if the LSP file exists, it will return a document, but it may or may not be part
+		// of the "normal sources" and thats why the origin is unknown. More often than not, this will
+		// yield what it already processed in a production setting. However, while running tests this
+		// UNKNOWN version could be the only origin and won't be useable in any "non-testing operations"
+		const key = this.pathConsumeOrValidate(fsPath, Origins.UNKNOWN);
+		return this._cached.get(this.normalizePath(fsPath))?.internal;
+	}
 
 	// Gets an array of PRJ ReadonlyDocument references, but verifies the content is based on a vscode.TextDocument's when available
 	private getProjectDocuments(): ReadonlyDocument[] {

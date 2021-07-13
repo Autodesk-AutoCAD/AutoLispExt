@@ -268,18 +268,11 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     
-    // This is very similar to a DOM querySelector and is to be used for quickly finding all the Defun's or Setq's to determine available function/variable names.
-    // The 'all' variable determines whether the function will continue digging inside a function it was able to match for nested versions.
-    // Test Case: Temporarily added the following to extension.ts	
-    //              let rod = ReadonlyDocument.getMemoryDocument(vscode.window.activeTextEditor.document);
-    //              let forest = rod.atomsForest;
-    //              let expl = rod.findExpressions(/(DEFUN|LAMBDA|FOREACH)/ig, true);
-    findExpressions(regx: RegExp, all: boolean = false): LispContainer[]{
-        let result: LispContainer[] = [];
-        this.atomsForest.filter(f => f instanceof LispContainer).forEach((sexp: LispContainer) => {
-            result = result.concat(sexp.findChildren(regx, all));
-        });
-        return result;
+    get documentContainer(): LispContainer {
+        if (this._documentContainer) {
+            return this._documentContainer;
+        } else {
+            return this._documentContainer = LispParser.getDocumentContainer(this.fileContent);
+        }
     }
-    // Relocated the atomsForestExplorer() to be an LispContainer utility function so more things had a logical path to using it.
 }

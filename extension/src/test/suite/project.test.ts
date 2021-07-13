@@ -242,4 +242,8 @@ suite("Project related Tests", function () {
 			}
 		});
 	});
+}).afterAll(async () => {
+	// This is necessary because subsequent test instances will remember the opened
+	// file; which ultimate causes the code coverage to be incomplete.
+	await vscode.commands.executeCommand('workbench.action.closeAllEditors');
 });
