@@ -34,8 +34,8 @@
   @Param sfc:style1 desired style name
   @Returns void
 |;
-(defun SetTextStyle (sfc:style1 / testResult) ; sfc:style1 was re-used as localized on purpose
-  (setq testResult (tblsearch "STYLE" sfc:style1)) ; @Global but not valid because of localization
+(defun SetTextStyle (sfc:style1 / testResult) ; re-used variable in localized context
+  (setq testResult (tblsearch "STYLE" sfc:style1)) ; @Global invalid because of localization
   (if testResult
     (setvar "textstyle" sfc:style1)
   )
