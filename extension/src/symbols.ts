@@ -309,7 +309,7 @@ class NamedSymbolHost extends AnonymousSymbolHost {
 
 export class RootSymbolMapHost extends AnonymousSymbolHost {
 	constructor(fsPath: string, source: LispContainer) {
-		super(null, fsPath, source, true);
+		super(null, DocumentServices.normalizeFilePath(fsPath), source, true);
 		this.aggregateContainer(source);
 	}
 

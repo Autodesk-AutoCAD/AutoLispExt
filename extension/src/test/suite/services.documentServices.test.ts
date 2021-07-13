@@ -11,6 +11,8 @@ import { ReadonlyDocument } from '../../project/readOnlyDocument';
 suite("Analysis Support: DocumentServices Tests", function () {
 	
 	let roDoc: ReadonlyDocument;
+	let projUri: vscode.Uri;
+	const ptp = ProjectTreeProvider.instance();
 
 	suiteSetup(() => {
 		try {
@@ -20,9 +22,7 @@ suite("Analysis Support: DocumentServices Tests", function () {
 			roDoc = ReadonlyDocument.open(lispFileTest);
 			
 			const projectPath = path.resolve(extRootPath, "./extension/src/test/SourceFile/test_case/assorted.prj");
-			const ret = vscode.Uri.file(projectPath);
-			const rootNode = OpenProjectFile(ret);	
-			ProjectTreeProvider.instance().updateData(rootNode);
+			projUri = vscode.Uri.file(projectPath);
 		} catch (error) {
 			assert.fail("Failed to initialize shared suite data sources");
 		}
@@ -37,9 +37,9 @@ suite("Analysis Support: DocumentServices Tests", function () {
 
 	test("normalizePath() - should matched expected normalized output", function () {	
 		try {
-			const testPath = 'C:/test/folder/and/File.lsp';
+			const testPath = 'C:\\test\\folder\\and\\File.lsp';
 			const output = DocumentServices.normalizeFilePath(testPath);			
-			expect(output).to.equal('C:\\test\\folder\\and\\File.lsp');
+			expect(output).to.equal('C:/test/folder/and/File.lsp');
 		}
 		catch (err) {
 			assert.fail("Path normalizer function did not return expected normalized path");
@@ -61,6 +61,8 @@ suite("Analysis Support: DocumentServices Tests", function () {
 	
 	test("findAllDocumentsWithSymbolKey() - expect 0 documents returned", function () {	
 		try {
+			const rootNode = OpenProjectFile(projUri);	
+			ProjectTreeProvider.instance().updateData(rootNode);
 			const output = DocumentServices.findAllDocumentsWithCustomSymbolKey('command');
 			expect(output.length).to.equal(0);
 		}

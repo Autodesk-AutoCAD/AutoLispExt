@@ -130,7 +130,7 @@ export class DocumentManager{
 	}
 
 	private normalizePath(path: string): string {
-		return path.replace(/\//g, '\\');
+		return path.replace(/\\/g, '/');
 	}
 
 	private tryUpdateInternal(sources: DocumentSources){
@@ -193,8 +193,8 @@ export class DocumentManager{
 		// of the "normal sources" and thats why the origin is unknown. More often than not, this will
 		// yield what it already processed in a production setting. However, while running tests this
 		// UNKNOWN version could be the only origin and won't be useable in any "non-testing operations"
-		const key = this.pathConsumeOrValidate(fsPath, Origins.UNKNOWN);
-		return this._cached.get(this.normalizePath(fsPath))?.internal;
+		const key = this.pathConsumeOrValidate(DocumentServices.normalizeFilePath(fsPath), Origins.UNKNOWN);
+		return this._cached.get(key)?.internal;
 	}
 
 	// Gets an array of PRJ ReadonlyDocument references, but verifies the content is based on a vscode.TextDocument's when available

@@ -1,10 +1,7 @@
-import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
 import { ILispFragment, LispAtom, LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
-import { SearchPatterns } from '../providers/providerShared';
-import { SymbolManager, ISymbolBase } from '../symbols';
-import { StringEqualsIgnoreCase } from '../utils';
+import { ISymbolBase } from '../symbols';
 import { FlatContainerServices } from './flatContainerServices';
 
 

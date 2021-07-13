@@ -1,13 +1,11 @@
 import * as vscode from "vscode";
 import * as nls from 'vscode-nls';
 import { AutoLispExt } from './extension';
-import { LispContainer } from './format/sexpression';
 import { openWebHelp } from './help/openWebHelp';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
 import { AutolispDefinitionProvider } from './providers/gotoProvider';
 import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
-import * as shared from './providers/providerShared';
 import { SymbolManager } from './symbols';
 
 const localize = nls.loadMessageBundle();

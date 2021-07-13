@@ -1,5 +1,5 @@
 import { AutoLispExt } from '../extension';
-import { ILispFragment, LispAtom, LispContainer } from '../format/sexpression';
+import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SymbolManager } from '../symbols';
 
@@ -12,7 +12,7 @@ export namespace DocumentServices {
 	//		The objective is to trim down that already bloated file, centralize some shared
 	//		functionality and create a specific place for extension that doesn't increase bloating.
 	export function normalizeFilePath(path: string): string {
-		return path.replace(/\//g, '\\');
+		return path.replace(/\\/g, '/');
 	}
 
 

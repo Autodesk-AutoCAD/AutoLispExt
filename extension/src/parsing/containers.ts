@@ -152,7 +152,6 @@ const sglQuote = '\''.charCodeAt(0);
 const verticalBar = '|'.charCodeAt(0);
 const strCloseTest1 = StringBuilder.toCharCodeArray("\\\\\"");
 const strCloseTest2 = StringBuilder.toCharCodeArray("\\\"");
-const multiLineCommentClose = StringBuilder.toCharCodeArray('|;');
 
 
 export function getDocumentContainer(ContextOrContent: ContainerBuildContext|string): LispContainer {

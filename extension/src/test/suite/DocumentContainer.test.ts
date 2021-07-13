@@ -1,20 +1,17 @@
 import * as path from 'path';
 import { assert, expect } from 'chai';
 
-import { Position } from 'vscode';
 import { LispParser } from '../../format/parser';
-import { parseDocumentation } from '../../parsing/comments';
 import { getDocumentContainer } from '../../parsing/containers';
 import { Sexpression, LispContainer } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { SymbolManager } from '../../symbols';
 import { SymbolServices } from '../../services/symbolServices';
 
 
 const extRootPath = path.resolve(__dirname, '../../../');
 const symbolsFileTest = path.resolve(extRootPath, "./extension/src/test/SourceFile/test_case/symbols.lsp");
 const commentsFileTest = path.resolve(extRootPath, "./extension/src/test/SourceFile/test_case/comments.lsp");
-const markupsFileTest = path.resolve(extRootPath, "./extension/src/test/SourceFile/test_case/pdfMarkups.lsp");
+//const markupsFileTest = path.resolve(extRootPath, "./extension/src/test/SourceFile/test_case/pdfMarkups.lsp");
 const largeFileTest = path.resolve(extRootPath, "./extension/src/test/SourceFile/unFormatted10.lsp");
 
 

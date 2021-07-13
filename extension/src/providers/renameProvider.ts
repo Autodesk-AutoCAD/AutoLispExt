@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { ILispFragment, LispAtom, primitiveRegex } from '../format/sexpression';
+import { ILispFragment, primitiveRegex } from '../format/sexpression';
 import { ISymbolHost, ISymbolReference, RootSymbolMapHost, SymbolManager } from '../symbols';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SharedAtomic } from './providerShared';
@@ -20,7 +20,7 @@ export function AutoLispExtPrepareRename(document: vscode.TextDocument, position
 }
 
 
-export async function AutoLispExtProvideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string): Promise<vscode.WorkspaceEdit>
+export function AutoLispExtProvideRenameEdits(document: vscode.TextDocument, position: vscode.Position, newName: string): vscode.WorkspaceEdit
 {
 	const roDoc = AutoLispExt.Documents.getDocument(document);
 	const selectedAtom = SharedAtomic.getNonPrimitiveAtomFromPosition(roDoc, position);	

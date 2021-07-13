@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { ILispFragment, LispAtom } from "../format/sexpression";
+import { ILispFragment } from "../format/sexpression";
 import { escapeRegExp, StringEqualsIgnoreCase } from '../utils';
 import { getDocumentContainer } from './containers';
 

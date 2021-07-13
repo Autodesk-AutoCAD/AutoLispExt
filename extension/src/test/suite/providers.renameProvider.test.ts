@@ -64,7 +64,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() Un-Hosted Atom", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, outlier, 'anything');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, outlier, 'anything');
 			expect(sut.entries().length).to.equal(1);
 		}
 		catch (err) {
@@ -74,7 +74,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() Localized Atom", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, localized, 'activeDOC');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, localized, 'activeDOC');
 			expect(sut.entries().length).to.equal(1);
 		}
 		catch (err) {
@@ -84,7 +84,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() Exported Defun", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, globalDefun, 'otherFunc');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, globalDefun, 'otherFunc');
 			expect(sut.entries().length).to.equal(3);
 		}
 		catch (err) {
@@ -94,7 +94,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() Documented Local Argument", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, localArg, 'dim');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, localArg, 'dim');
 			expect(sut.entries().length).to.equal(1);
 		}
 		catch (err) {
@@ -104,7 +104,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() bad user input", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, good, 'a b c');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, good, 'a b c');
 			expect(sut).to.equal(null);
 		}
 		catch (err) {
@@ -114,7 +114,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() bad user target", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, native, 'whatever');
+			const sut = AutoLispExtProvideRenameEdits(roDoc, native, 'whatever');
 			expect(sut.entries().length).to.equal(1);
 		}
 		catch (err) {
@@ -124,7 +124,7 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits() good user input", async function () {	
 		try {
-			const sut = await AutoLispExtProvideRenameEdits(roDoc, good, 'anything');			
+			const sut = AutoLispExtProvideRenameEdits(roDoc, good, 'anything');			
 			expect(sut.size).to.equal(2);
 			expect(sut['_edits'].length).to.equal(4);
 		}
@@ -135,9 +135,8 @@ suite("RenameProvider: Tests", function () {
 
 	test("Testing: AutoLispExtProvideRenameEdits()", async function () {	
 		try {
-			const prepResult = await AutoLispExtProvideRenameEdits(roDoc, good, 'Autoquad');
+			const prepResult = AutoLispExtProvideRenameEdits(roDoc, good, 'Autoquad');
 			prepResult.entries().forEach(item => {
-				const uri: Uri = item[0];
 				item[1].forEach(edit => {
 					expect(edit.newText).to.equal('Autoquad');
 				});

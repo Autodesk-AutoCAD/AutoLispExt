@@ -1,4 +1,4 @@
-import { ILispFragment, LispAtom, LispContainer } from '../format/sexpression';
+import { ILispFragment, LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import * as vscode from	'vscode';
 

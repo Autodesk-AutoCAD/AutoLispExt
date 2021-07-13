@@ -4,6 +4,7 @@ import * as nls from 'vscode-nls';
 import { LispParser } from '../format/parser';
 import { ILispFragment, LispContainer } from '../format/sexpression';
 import { DocumentManager } from '../documents';
+import { DocumentServices } from '../services/documentServices';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
@@ -41,7 +42,7 @@ export class ReadonlyLine implements vscode.TextLine {
 export class ReadonlyDocument implements vscode.TextDocument {
     private constructor(filePath: string) {
         this.uri = vscode.Uri.file(filePath);
-        this.fileName = filePath;
+        this.fileName = DocumentServices.normalizeFilePath(filePath);
         this.isUntitled = false;
         this.version = 1;
         this.isDirty = false;
@@ -263,7 +264,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
 
     equal(doc: vscode.TextDocument): boolean {
-        return this.fileName.toUpperCase().replace(/\//g, '\\') === doc.fileName.toUpperCase().replace(/\//g, '\\')
+        return this.fileName.toUpperCase().replace(/\\/g, '/') === doc.fileName.toUpperCase().replace(/\\/g, '/')
                && this.fileContent === doc.getText().replace(/\r\n|\r|\n/g, '\r\n'); //.split('\r\n').join('\n').split('\n').join('\r\n');
     }
 
