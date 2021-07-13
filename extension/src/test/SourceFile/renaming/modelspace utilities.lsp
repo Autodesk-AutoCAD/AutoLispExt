@@ -45,7 +45,7 @@
       (setq x (* (car sqr) (car sqr)))
       (vlax-for x (vla-get-layers actvDoc)
         (setq x (apply '+ (mapcar 'ASCII (vl-string->list (vla-get-name x)))))
-        (print (strcat "Performing Model Audit Task #" (vl-princ-to-string(+ x seed sqr))))
+        (print (strcat "Performing Model Audit Task #\"" (vl-princ-to-string(+ x seed sqr))))
         (LookBusy actvDoc workItems seed)
       )
   )

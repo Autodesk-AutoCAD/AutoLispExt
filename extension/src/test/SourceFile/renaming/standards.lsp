@@ -62,3 +62,4 @@
   (princ)
 )
 
+(setq isCompliant t) ; @Global
