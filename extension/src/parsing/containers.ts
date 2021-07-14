@@ -10,7 +10,6 @@ enum ParseState {
 	STRING = 1,
 	COMMENT = 2
 }
-// I think i need a generic version of the appendstring that just returns the list of charCodes
 
 
 export class ContainerBuildContext implements vscode.Disposable {
@@ -24,6 +23,7 @@ export class ContainerBuildContext implements vscode.Disposable {
 	groupColumn: number = 0;
 
 	groupStarted: boolean;
+	isEscaping: boolean;
 	
 	linefeed: string;
 	data: string;
@@ -41,6 +41,7 @@ export class ContainerBuildContext implements vscode.Disposable {
 		this.flatView = [];
 		this.containerView = [];
 		this.state = ParseState.UNKNOWN;
+		this.isEscaping = false;
 		this.temp = new StringBuilder();
 		if (typeof(docOrText) === 'string') {
 			this.data = docOrText;
@@ -150,8 +151,7 @@ const semiColon = ';'.charCodeAt(0);
 const dblQuote = '"'.charCodeAt(0);
 const sglQuote = '\''.charCodeAt(0);
 const verticalBar = '|'.charCodeAt(0);
-const strCloseTest1 = StringBuilder.toCharCodeArray("\\\\\"");
-const strCloseTest2 = StringBuilder.toCharCodeArray("\\\"");
+const backSlash = '\\'.charCodeAt(0);
 
 
 export function getDocumentContainer(ContextOrContent: ContainerBuildContext|string): LispContainer {
@@ -211,6 +211,7 @@ export function _getDocumentContainer(ctx: ContainerBuildContext): number {
 				ctx.temp.appendCode(dblQuote);
 				ctx.setGroupStartFromCurrentPosition();
 				ctx.state = ParseState.STRING;
+				ctx.isEscaping = false;
 			} else if (ctx.isStandardWhitespace(curr)) {
 				// all forms of whitespace in an UNKNOWN context should break previously tracked temp data as its own symbol
 				ctx.createAtomFromTempAndResetIf(containerIndex, ctx.temp.hasValues());
@@ -228,10 +229,13 @@ export function _getDocumentContainer(ctx: ContainerBuildContext): number {
 			}
 		} else if (ctx.state === ParseState.STRING) {
 			ctx.temp.appendCode(curr);
-			// these 2 endsWith tests are hard to understand, but they were vetted on a previous C# lisp parser to detect escaped double quotes
-			if (curr === dblQuote && (ctx.temp.endsWithCodes(strCloseTest1) || !ctx.temp.endsWithCodes(strCloseTest2))) {    
+			if (curr === backSlash) {
+				ctx.isEscaping = !ctx.isEscaping;
+			} else if (curr === dblQuote && !ctx.isEscaping) {
 				ctx.createAtomFromTempAndReset(containerIndex, ParseState.UNKNOWN);
-			} 
+			} else if (ctx.isEscaping) {
+				ctx.isEscaping = false;
+			}
 			ctx.incrementAtLineBreakIf(curr === lf);
 		} else if (ctx.state === ParseState.COMMENT) {
 			if (ctx.temp.charCodeAt(1) === verticalBar) {

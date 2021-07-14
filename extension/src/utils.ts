@@ -128,16 +128,6 @@ export function StringEqualsIgnoreCase(str1: string, str2: string): boolean {
 export class StringBuilder {
 	private _charCodes: Array<number> = [];
 
-	static toCharCodeArray(chars: string, inArray?: Array<number>): Array<number> {
-        if (!inArray) {
-            inArray = [];
-        }
-		for (let i = 0; i < chars.length; i++) {
-			inArray.push(chars.charCodeAt(i));
-		}
-		return inArray;
-	}
-
     charCodeAt(index: number): number {
         return this._charCodes[index];
     }
@@ -150,35 +140,55 @@ export class StringBuilder {
 		this._charCodes.push(charCode);
 	}
 
-    // Not currently used, uncomment it if you need this traditional StringBuilder interface
-	// appendString(char: string): void {
-	// 	for (let i = 0; i < char.length; i++) {
-	// 		this._charCodes.push(char.charCodeAt(i));
-	// 	}
-	// }
-
-	endsWith(charCode: number): boolean {
+    endsWith(charCode: number): boolean {
 		return this._charCodes[this._charCodes.length - 1] === charCode;
 	}
 
-	endsWithCodes(charCodes: Array<number>): boolean {
-		let offsetLength = this._charCodes.length - charCodes.length;
-		if (offsetLength < 0) {
-			return false;
-		}
-		for (let i = offsetLength, j = 0; j < charCodes.length; i++, j++) {
-			if (this._charCodes[i] !== charCodes[j]) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	materialize(): string {
+    materialize(): string {
 		try {
 			return String.fromCharCode(...this._charCodes);	
 		} finally {
 			this._charCodes.length = 0;
 		}
 	}
+
+
+    // This is no longer used, but functional and can be put back in if you need it
+    //------------------------------------------------------------------------------
+	// appendString(char: string): void {
+	// 	for (let i = 0; i < char.length; i++) {
+	// 		this._charCodes.push(char.charCodeAt(i));
+	// 	}
+	// }
+
+
+    // This is no longer used, but functional and can be put back in if you need it
+    //------------------------------------------------------------------------------
+	// static toCharCodeArray(chars: string, inArray?: Array<number>): Array<number> {
+    //     if (!inArray) {
+    //         inArray = [];
+    //     }
+	// 	for (let i = 0; i < chars.length; i++) {
+	// 		inArray.push(chars.charCodeAt(i));
+	// 	}
+	// 	return inArray;
+	// }
+
+    
+    // This is no longer used, but functional and can be put back in if you need it
+    //------------------------------------------------------------------------------
+	// endsWithCodes(charCodes: Array<number>): boolean {
+	// 	let offsetLength = this._charCodes.length - charCodes.length;
+	// 	if (offsetLength < 0) {
+	// 		return false;
+	// 	}
+	// 	for (let i = offsetLength, j = 0; j < charCodes.length; i++, j++) {
+	// 		if (this._charCodes[i] !== charCodes[j]) {
+	// 			return false;
+	// 		}
+	// 	}
+	// 	return true;
+	// }
+
+	
 }
