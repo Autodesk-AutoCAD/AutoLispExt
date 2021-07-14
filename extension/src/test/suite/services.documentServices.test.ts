@@ -12,7 +12,6 @@ suite("Analysis Support: DocumentServices Tests", function () {
 	
 	let roDoc: ReadonlyDocument;
 	let projUri: vscode.Uri;
-	const ptp = ProjectTreeProvider.instance();
 
 	suiteSetup(() => {
 		try {
