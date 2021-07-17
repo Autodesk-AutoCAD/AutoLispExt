@@ -1,5 +1,6 @@
 {
   "autolispext.help.commands.openWebHelp": "webHelpAbstraction.json ファイルのロードに失敗しました",
   "autolispext.commands.addFoldingRegion": "スニペットの挿入に失敗しました",
-  "autolispext.help.commands.generateDocumentation": "有効な defun 名が見つかりませんでした"
+  "autolispext.help.commands.generateDocumentation": "有効な defun 名が見つかりませんでした",
+  "autolispext.providers.rename.failed": ""
 }

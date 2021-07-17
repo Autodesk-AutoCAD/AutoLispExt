@@ -1,5 +1,6 @@
 {
   "autolispext.help.commands.openWebHelp": "Échec de chargement du fichier webHelpAbstraction.json",
   "autolispext.commands.addFoldingRegion": "Échec d'insertion de l'extrait de code",
-  "autolispext.help.commands.generateDocumentation": "Impossible de localiser un nom de fichier defun valide"
+  "autolispext.help.commands.generateDocumentation": "Impossible de localiser un nom de fichier defun valide",
+  "autolispext.providers.rename.failed": ""
 }

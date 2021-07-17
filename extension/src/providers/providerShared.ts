@@ -1,4 +1,4 @@
-import { LispContainer } from '../format/sexpression';
+import { ILispFragment, LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import * as vscode from	'vscode';
 
@@ -37,4 +37,16 @@ export namespace SearchHandlers {
 		}
 		return {isFunction, parentContainer};
 	}
+}
+
+
+export namespace SharedAtomic {
+	export function getNonPrimitiveAtomFromPosition(roDoc: ReadonlyDocument, pos: vscode.Position): ILispFragment {
+		const atom = roDoc.documentContainer.getAtomFromPos(pos);
+		if (!atom || atom.isPrimitive()) {
+			return null;
+		}
+		return atom;
+	}
+	
 }

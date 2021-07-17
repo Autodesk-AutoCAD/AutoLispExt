@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import * as nls from 'vscode-nls';
 import { AutoLispExt } from './extension';
-import { LispContainer } from './format/sexpression';
 import { openWebHelp } from './help/openWebHelp';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
 import { AutolispDefinitionProvider } from './providers/gotoProvider';
-import * as shared from './providers/providerShared';
+import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
+import { SymbolManager } from './symbols';
 
 const localize = nls.loadMessageBundle();
 
@@ -73,4 +73,48 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], new AutolispDefinitionProvider()));
+
+	const msgRenameFail = localize("autolispext.providers.rename.failed", "The symbol was invalid for renaming operations");
+	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider(['autolisp', 'lisp'], {
+		prepareRename: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
+							    : vscode.ProviderResult<vscode.Range | { range: vscode.Range; placeholder: string; }> 
+		{
+			// Purpose: collect underlying symbol range and feed it as rename popup's initial value
+			try {
+				// offload all meaningful work to something that can be tested.
+				const result = AutoLispExtPrepareRename(document, position);
+				if (!result) {
+					return;
+				}
+				return result;
+			} catch (err) {
+				if (err){
+					showErrorMessage(msgRenameFail, err);
+				}
+			}
+		},
+
+		provideRenameEdits: function (document: vscode.TextDocument, position: vscode.Position, newName: string, token: vscode.CancellationToken)
+						             : vscode.ProviderResult<vscode.WorkspaceEdit> 
+		{
+			// Purpose: only fires if the user provided rename popup with a tangible non-equal value. From here, our
+			//			goal is to find & generate edit information for all valid rename targets within known documents
+			try {
+				// offload all meaningful work to something that can be tested.
+				const result = AutoLispExtProvideRenameEdits(document, position, newName);
+				if (!result) {
+					return;
+				}
+				// subsequent renaming operations could pull outdated cached symbol maps if we don't clear the cache.
+				SymbolManager.invalidateSymbolMapCache();
+				return result;
+			} catch (err) {
+				if (err){
+					showErrorMessage(msgRenameFail, err);
+				}
+			}
+		}
+	}));
+
+
 }

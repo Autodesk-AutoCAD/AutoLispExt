@@ -22,7 +22,7 @@
 )
 
 
-(setq some "random"     ; does this trip?
+(setq some "random"     ; @Global does this trip?
       global (list "variables" "to" "test")
       with (vl-sort '(lambda(a b) (setq c (< a b))) global)
 )

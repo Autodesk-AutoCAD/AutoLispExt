@@ -2,11 +2,19 @@ import { closeParenStyle, maximumLineChars, longListFormatStyle, indentSpaces } 
 import { isInternalAutoLispOp } from '../completion/autocompletionProvider';
 import { Position, Range } from 'vscode';
 
+// General purpose test for basic known primitive values; Including: T, NIL, Number, (single or multi-line) Strings & Comments
+export const primitiveRegex = /^([\(\)\'\.]|"[\s\S]*"|;[\s\S]*|'?[tT]|'?[nN][iI][lL]|'?-?\d+[eE][+-]?\d+|-?\d+|-?\d+\.\d+)$/;
+const primitiveGlyphs = ['\'', '(', ')', '.', ';']; //, '']; //, null, undefined];
+
 // This interface is intended to let us work in more generic ways without direct context of LispAtom|LispContainer
 export interface ILispFragment {
     symbol: string;
     line: number;
     column: number;
+    flatIndex: number;
+    commentLinks?: Array<number>;
+    hasGlobalFlag?: boolean;
+
     
     readonly body?: LispContainer|undefined;
     
@@ -18,6 +26,7 @@ export interface ILispFragment {
     isComment(): boolean;
     isRightParen(): boolean;
     isLeftParen(): boolean;
+    isPrimitive(): boolean;
     contains(pos: Position): boolean;
     getRange(): Range;
 }
@@ -25,13 +34,25 @@ export interface ILispFragment {
 // Represents the most fundamental building blocks of a lisp document
 export class LispAtom implements ILispFragment {
     public symbol: string;
-    public line: number;
-    public column: number;
+    protected _line: number;
+    protected _column: number;
 
-    constructor(line: number, column: number, sym: string) {
-        this.line = line;
-        this.column = column;
+    get line(): number { return this._line; }
+    set line(value) { this._line = value; }
+    get column(): number { return this._column; }
+    set column(value) { this._column = value; }
+
+    // These 3 fields exist to support comment driven intelligence. Creation of Symbol mappings is an expensive operation
+    // and these 2 fields prevent ~80% of the required overhead when working in concert with the highly efficient parser
+    public flatIndex: number;
+    public commentLinks?: Array<number>;
+    public hasGlobalFlag?: boolean;
+
+    constructor(line: number, column: number, sym: string, flatIdx = -1) {
+        this._line = line;
+        this._column = column;
         this.symbol = sym;
+        this.flatIndex = flatIdx;
     }
 
 
@@ -99,6 +120,14 @@ export class LispAtom implements ILispFragment {
 		return this.symbol === '(';
     }
 
+    isPrimitive(): boolean {
+        // if (!this['atoms']) {
+        //     return primitiveRegex.test(this.symbol);
+        // }
+        // return false;
+        return primitiveGlyphs.indexOf(this.symbol[0]) > -1
+               || primitiveRegex.test(this.symbol);
+    }
 
     // Returns true if this LispAtom encapsulates the provided Position
     contains(position: Position): boolean {
@@ -131,15 +160,20 @@ export class LispAtom implements ILispFragment {
 export class LispContainer extends LispAtom {
     atoms: Array<ILispFragment>;
     linefeed: string;
+    userSymbols?: Map<string, Array<number>>; // this would only show up on document root LispContainers
 
     // pass through getter for the ILispFragment interface
     get body(): LispContainer { return this; }
+    get line(): number { return this.userSymbols ? 0 : this.getFirstAtom().line; }
+    set line(value) { }   // setter exists only to satisfy contract
+    get column(): number { return this.userSymbols ? 0 : this.getFirstAtom().column; }
+    set column(value) { } // setter exists only to satisfy contract
 
     // LispContainer constructor defaults to a clearly uninitialized state
-    constructor(startIndex: number = -1) {
-        super(startIndex,startIndex,'');
+    constructor(lineFeed: string = '\n') {
+        super(-1,-1,'');
         this.atoms = [];
-        this.linefeed = '\n';
+        this.linefeed = lineFeed;
     }
 
 
@@ -241,9 +275,18 @@ export class LispContainer extends LispAtom {
 
     // Gets a range representing the full LispContainer, especially useful for TextDocument.getText()
     getRange(): Range {
-        const begin: ILispFragment = this.atoms[0];
-        const close: ILispFragment = this.atoms[this.atoms.length -1];
-        return new Range(begin.line, begin.column, close.line, (close.column + close.symbol.length));
+        const begin = this.getFirstAtom().getRange().start;
+        const close = this.getLastAtom().getRange().end;
+        return new Range(begin, close);
+    }
+
+    private getFirstAtom(): ILispFragment {
+        const tail = this.atoms[0];
+        return tail.body?.getFirstAtom() ?? tail;
+    }
+    private getLastAtom(): ILispFragment {
+        const tail = this.atoms[this.atoms.length - 1];
+        return tail.body?.getLastAtom() ?? tail;
     }
 
 
@@ -310,9 +353,68 @@ export class LispContainer extends LispAtom {
         }
         return result;
     }
+
+    // Performance Note: the LispContainer parser takes ~700ms to create the tree from a 12.5mb (20K Lines/1.4M LispAtoms)
+    //                   file. In contrast, the older parsing used on formatting before it received some fixes was taking
+    //                   more than a minute and the revised version is still taking ~7000ms.
+    //                   To flatten the same 12.5mb tree for linear traversal takes ~40ms. The flattening process is
+    //                   considered to be an instantaneous operation even under extreme and highly improbable situations.
+    flatten(into?: Array<LispAtom>): Array<LispAtom> {
+        if (!into) {
+            into= [];
+        }
+        this.atoms.forEach(item => {
+            if (item instanceof LispContainer) {                
+                item.flatten(into);
+            } else if (item instanceof LispAtom) {
+                into.push(item);
+            }
+        });
+        return into;
+    }
+
+    
+    // This is only used for verification of the LispContainer parser, but could have future formatting usefullness.
+    // Note1: test files cannot contain lines with only random whitespace or readable character lines that include
+    //        trailing whitespace because a LispContainer has no context to reproduce that. 
+    // Note2: tabs between atoms will be replaced with spaces and thus are not supported in test files.
+    asText(context?: IContainerStringCompilerContext): string {
+        let isRoot = false;
+        if (context === undefined) {
+            context = { result: '', line: 0, column: 0 };
+            isRoot = true;
+        }
+        this.atoms.forEach(item => {
+            while (context.line < item.line) {
+                context.result += this.linefeed;
+                context.line++;
+                context.column = 0;
+            }
+            while (context.column < item.column) {
+                context.result += ' ';
+                context.column++;
+            }
+            if (item instanceof LispContainer) {                
+                item.asText(context);
+            }
+            else {
+                context.result += item.symbol;
+                context.column += item.symbol.length;
+                if (item.isComment() && !item.isLineComment()) {
+                    context.line += item.symbol.split(this.linefeed).length - 1;
+                }
+            }
+        });        
+        return isRoot ? context.result : '';
+    }
+
 }
 
-
+interface IContainerStringCompilerContext {
+    result: string;
+    line: number;
+    column: number;
+}
 
 
 

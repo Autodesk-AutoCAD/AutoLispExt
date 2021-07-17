@@ -35,6 +35,10 @@ export function registerLoadLispButton(context: vscode.ExtensionContext) {
 		}
 	}));
 	context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(e => {
+		if (!e) {
+			// this test resolves a non-breaking error when manually running npm test scripts from command line
+			return;
+		}
 		let currentLSPDoc = vscode.window.activeTextEditor.document.fileName;
 		if(isSupportedLispFile(currentLSPDoc)) {
 			lspLoadButton.show();

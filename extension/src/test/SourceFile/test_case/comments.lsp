@@ -14,8 +14,8 @@
   (foreach x a
     (setq d (1+ d))
   )
-  
-  
+
+
   ;|
     I set a variable
     @Returns 32
@@ -23,30 +23,30 @@
   (defun SymPtrOnly ()
     (setq gv 32)
   )
-  
-  
+
+
   ;|
     I have a useless child
     @Param a IDK we don't do anything at all with a except pass it
     along to the q function
     @Param b not too sure on this one either
     this is also passed along
-    pretty sure all this nonsense just multiplies 2 number
-    together
+    pretty sure all this nonsense just multiplies 2 number together
+    @Null means nothing
     @Returns real number
   |;
   (defun c (a b / q)
     ;|
-      Useless as can be
+      @Description Useless as can be
       @Param r
       @Param j
       @Returns real number
-	  @Remarks some random additional info
+      @Remarks some random additional info
     |;
     (defun q (r j / z)
       (setq z (* r j))
     )
-    
+
     (q a b)
   )
 )
@@ -60,3 +60,5 @@
 (foreach rando global
   (setq some (strcat some " " rando))
 )
+
+(setq gv:field1 99) ; @Global
