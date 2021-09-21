@@ -5,20 +5,55 @@ import { ILispFragment, LispAtom } from '../format/sexpression';
 
 export namespace FlatContainerServices {
 
-
-	export function verifyAtomIsSetqAndGlobalized(atoms: Array<ILispFragment>, from: ILispFragment): boolean {
-		const parentAtom = getParentRootAtomIfOfType(atoms, from.flatIndex, 'setq');
-		if (!parentAtom || !isValidSetqContext(parentAtom, atoms)) {
+	export function isPossibleFunctionReference(atoms: Array<ILispFragment>, from: ILispFragment): boolean {
+		const previous = lookBehindForPreviousNonCommentAtom(atoms, from);
+		if (!previous || from.isPrimitive()) {
 			return false;
 		}
-		return hasGlobalizationContext(from, parentAtom, atoms);
+		if (previous.symbol === '(') {
+			// this final test avoid the dynamic list constructor false positive
+			return atoms[from.flatIndex - 1]?.symbol !== '\'';
+		}
+		return /^(\'|DEFUN|DEFUN-Q)$/i.test(previous.symbol);
+	}
+
+	export function getParentAtomIfValidSetq(atoms: Array<ILispFragment>, from: ILispFragment|number): ILispFragment {
+		const index = typeof from === 'number' ? from : from.flatIndex;
+		const parentAtom = getParentRootAtomIfOfType(atoms, index, 'setq');
+		if (!parentAtom || !isValidSetqContext(atoms, index)) {
+			return null;
+		}
+		return parentAtom;
+	}
+
+	export function verifyAtomIsSetqAndGlobalized(atoms: Array<ILispFragment>, from: ILispFragment|number): boolean {
+		const [index, atom] = typeof from === 'number' ? [from, atoms[from]] : [from.flatIndex, from];
+		const parentAtom = getParentAtomIfValidSetq(atoms, index);
+		return !parentAtom ? false : hasGlobalizationContext(atom, parentAtom, atoms);
+	}
+
+	export function getParentAtomIfDefun(atoms: Array<ILispFragment>, from: ILispFragment|number): ILispFragment {
+		const index = typeof from === 'number' ? from : from.flatIndex;
+		const parentAtom = getParentRootAtomIfOfType(atoms, index, 'defun', 'defun-q');
+		if (!parentAtom) {
+			return null;
+		}
+		return parentAtom;
 	}
 
 	export function verifyAtomIsDefunAndGlobalized(atoms: Array<ILispFragment>, from: ILispFragment): boolean {
-		const parentAtom = getParentRootAtomIfOfType(atoms, from.flatIndex, 'defun', 'defun-q');
+		const parentAtom = getParentAtomIfDefun(atoms, from);
 		if (!parentAtom) {
 			return false;
 		}
+
+		// This check was added because non-localized variables within defuns used as the
+		// return value was getting artificially flagged by the defun comments as @Global
+		const next = lookAheadForNextNonCommentAtom(atoms, parentAtom.flatIndex);
+		if (next.flatIndex !== from.flatIndex) {
+			return false;
+		}
+
 		return hasGlobalizationContext(from, parentAtom, atoms);
 	}
 
@@ -55,9 +90,19 @@ export namespace FlatContainerServices {
 		return null;
 	}
 
+	function lookBehindForPreviousNonCommentAtom(atoms: Array<ILispFragment>, from: ILispFragment): ILispFragment {
+		for (let i = from.flatIndex - 1; i >= 0; i--) {
+			const atom = atoms[i];
+			if (!atom.isComment()) {
+				return atom;
+			} 
+		}
+		return null;
+	}
+
 	
 	// Logic Pattern:
-	//		every variable declaration must have a setq preceeding it
+	//		every variable declaration must have a setq preceding it
 	//		OR
 	//		the previous atom should be an assignment ending with some kind of primitive value type
 	//			Note: (, ), strings, numbers, nil and t are all primitives
@@ -65,8 +110,8 @@ export namespace FlatContainerServices {
 	// Technical Debt:
 	// 		The only known situation where this could fail is setting a variable using only another variable
 	//		Which is considered to be a bad practice for use with an explicitly exported @Global system
-	function isValidSetqContext(from: ILispFragment, atoms: Array<ILispFragment>): boolean {
-		const previous = atoms[from.flatIndex-1];
+	function isValidSetqContext(atoms: Array<ILispFragment>, from: ILispFragment|number): boolean {
+		const previous = atoms[(typeof from === 'number' ? from : from.flatIndex) - 1];
 		return previous instanceof LispAtom
 			   && previous.symbol !== '\''
 			   && (previous.isPrimitive() || StringEqualsIgnoreCase(previous.symbol, 'setq'));
@@ -90,6 +135,17 @@ export namespace FlatContainerServices {
 		            || blockComment?.symbol.toUpperCase().includes(GlobalFlag));
 	}
 
+	// This is no longer used, but could be useful in the future
+	// export function hasEmbededGlobalComment(atoms: Array<ILispFragment>, source: ILispFragment): boolean {
+	// 	let result = false;
+	// 	source.commentLinks?.forEach(index => {
+	// 		const atom = atoms[index];
+	// 		if (atom.symbol.toUpperCase().includes(GlobalFlag)) {
+	// 			result = true;
+	// 		}
+	// 	});
+	// 	return result;
+	// }
 
 	function lookBehindForBlockComment(atoms: Array<ILispFragment>, fromIndex: number): ILispFragment|null {
 		const initAtom = atoms[fromIndex];

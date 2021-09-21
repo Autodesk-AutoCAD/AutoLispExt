@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
 import { ILispFragment, primitiveRegex } from '../format/sexpression';
-import { ISymbolHost, ISymbolReference, RootSymbolMapHost, SymbolManager } from '../symbols';
+import { IRootSymbolHost, ISymbolHost, ISymbolReference, SymbolManager } from '../symbols';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SharedAtomic } from './providerShared';
 import { SymbolServices } from '../services/symbolServices';
@@ -69,7 +69,7 @@ namespace RenameProviderSupport {
 		return newValue;
 	}
 
-	export function getTargetSymbolReference(symbolMap: RootSymbolMapHost, key: string, index: number): ISymbolReference|null {
+	export function getTargetSymbolReference(symbolMap: IRootSymbolHost, key: string, index: number): ISymbolReference|null {
 		const symbolArray = symbolMap.collectAllSymbols().get(key);
 		if (!symbolArray && !Array.isArray(symbolArray)) {
 			return null;

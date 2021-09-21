@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
 import { ProjectTreeProvider, addLispFileNode2ProjectTree } from '../../project/projectTree';
 import { AddFile2Project } from '../../project/addFile2Project';
 import { SaveProject } from '../../project/saveProject';
-import { excludeFromProject } from '../../project/excludefile';
+import { excludeFromProject } from '../../project/excludeFile';
 import * as fs from	'fs-extra';
 import { RefreshProject } from '../../project/refreshProject';
 import { getTreeItemTitle } from '../../project/projectutil';

@@ -22,8 +22,14 @@ async function main() {
 		// This version can pre-load an active file, but "passive" activation of the extension is breaking NYC code coverage in an ambiguous ways
 		//await runTests({ extensionDevelopmentPath, extensionTestsPath, launchArgs: [workSpace, wsFile, '--disable-extensions']});
 
-		// Download VS Code, unzip it and run the integration test
-		await runTests({ extensionDevelopmentPath, extensionTestsPath, launchArgs: [workSpace, '--disable-extensions']});
+		// Download minimum VSCode version defined by our package.json, unzip it and run the integration test environment
+		// aside from testing against our package.json claims, it also avoids random vscode installations bloating dev environments
+		await runTests({ 
+			version: process.env.npm_package_engines_vscode.slice(1),
+			extensionDevelopmentPath,
+			extensionTestsPath,
+			launchArgs: [workSpace, '--disable-extensions']
+			});
 	} catch (err) {
 		console.error('Failed to run tests');
 		process.exit(1);

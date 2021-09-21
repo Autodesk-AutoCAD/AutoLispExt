@@ -87,8 +87,10 @@ export namespace DocumentServices {
 		return false;
 	}
 
-	function getUnverifiedGlobalizerList(roDoc: ReadonlyDocument, lowerKey: string, flatView?: Array<ILispFragment>): Array<ILispFragment> {
-		flatView = flatView ?? roDoc.documentContainer.flatten();
+	export function getUnverifiedGlobalizerList(roDoc: ReadonlyDocument, lowerKey: string, flatView?: Array<ILispFragment>): Array<ILispFragment> {
+		if (!flatView) {
+			flatView = roDoc.documentContainer.flatten();
+		}
 		const rawSymbolMap = roDoc.documentContainer.userSymbols?.get(lowerKey);
 		return rawSymbolMap?.filter(p => flatView[p].hasGlobalFlag)?.map(i => flatView[i]);
 	}

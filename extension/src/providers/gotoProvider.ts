@@ -1,140 +1,160 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { LispContainer } from '../format/sexpression';
+import { ILispFragment, LispContainer } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
-import { escapeRegExp } from "../utils";
-import { SearchPatterns, SearchHandlers } from './providerShared';
+import { DocumentServices } from '../services/documentServices';
+import { FlatContainerServices } from '../services/flatContainerServices';
+import { SymbolServices } from '../services/symbolServices';
+import { ISymbolHost, ISymbolReference, IRootSymbolHost, SymbolManager } from '../symbols';
+import { SharedAtomic } from './providerShared';
 
-export class AutolispDefinitionProvider implements vscode.DefinitionProvider{
-	async provideDefinition(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Promise<vscode.Location | vscode.Location[]> {
-		const rDoc = AutoLispExt.Documents.getDocument(document);
-		let selected = '';
-		rDoc.atomsForest.forEach(sexp => {
-			if (sexp instanceof LispContainer && sexp.contains(position)){
-				const atom = sexp.getAtomFromPos(position);
-				if (atom && !atom.isComment()) {
-					selected = atom.symbol.replace(/^[']*/, '');
+
+export async function AutoLispExtProvideDefinition(document: vscode.TextDocument|ReadonlyDocument, position: vscode.Position) 
+					: Promise<vscode.Location[]> {
+	const roDoc = document instanceof ReadonlyDocument ? document : AutoLispExt.Documents.getDocument(document);
+	let selectedAtom = SharedAtomic.getNonPrimitiveAtomFromPosition(roDoc, position);
+	if (!selectedAtom || SymbolServices.isNative(selectedAtom.symbol.toLowerCase())){
+		return null;
+	}
+	const result = await GotoProviderSupport.getDefinitionLocations(roDoc, selectedAtom);
+	if (result.length === 1 && result[0].range.contains(position)) {
+		return null;
+	} else {
+		return result;
+	}
+}
+
+
+
+// Namespace is intentionally not exported. Nothing in here is expected to be used beyond this file.
+namespace GotoProviderSupport {
+
+	interface IDocumentAtomContext {
+		atom: ILispFragment;
+		symbolKey: string;
+		symbolRefs: Array<ISymbolReference>;
+		flatView: Array<ILispFragment>;
+		reference: ISymbolReference;
+		symbolMap: IRootSymbolHost;
+		parent: ISymbolHost;
+		isFuncLike: boolean;
+	}
+
+	export function getDefinitionLocations (roDoc: ReadonlyDocument, atom: ILispFragment) : Array<vscode.Location> {
+		const context = getAtomDocumentContext(roDoc, atom);
+
+		if (!context.parent.equal(context.symbolMap)) {
+			// A localized symbol cannot have external scope, go directly to 1st parent (localization) reference
+			return [convertReferenceToLocation(context.parent.collectAllSymbols().get(context.symbolKey)[0])];
+		}
+		
+		const scope = getAllMatchingVerifiedGlobalReferences(context.symbolKey);
+		if (scope.length > 0) {
+			// return globalized reference, we don't care if its in an opened, project or workspace context
+			// not obvious, but this path doesn't care if its a variable or function; exported ids just win...
+			return scope.map(iRef => convertReferenceToLocation(iRef));
+		}
+		
+		return context.isFuncLike ? processAsFunctionReference(context) : processAsVariableReference(context);
+	}
+
+	export function processAsFunctionReference(context: IDocumentAtomContext) : Array<vscode.Location> {
+		// this previously prioritized different categories, but now just finds everything in the opened, project & workspace
+		// also note that there is no special handling for already being on a function DEFUN, it always finds all variants
+		const results: Array<vscode.Location> = [];
+		DocumentServices.findAllDocumentsWithCustomSymbolKey(context.symbolKey).forEach(roDoc => {
+			// hunting for non-globalized defuns, go ahead and build their IdocumentAtomContext
+			// IF you can't get the IsDefun from the document container symbol information.... <- Investigate
+			const flatView = roDoc.documentContainer.flatten();
+			const possible = roDoc.documentContainer.userSymbols.get(context.symbolKey);
+			let subContext: IDocumentAtomContext = null;
+			for (let i = 0; i < possible.length; i++) {
+				const possibleIndex = possible[i];
+				if (!FlatContainerServices.getParentAtomIfDefun(flatView, possibleIndex)) {
+					continue;
+				}
+				if (!subContext) {
+					// this has some performance impacts so we only want to pull it once per document
+					subContext = getAtomDocumentContext(roDoc, flatView[possibleIndex], flatView);
+				}
+				const iRef = subContext.symbolRefs.find(x => x.flatIndex === possibleIndex);
+				if (iRef.isDefinition && iRef.findLocalizingParent().equal(subContext.symbolMap)) {
+					// IReference is a named Defun[-q] and does not have a localization parent
+					results.push(convertReferenceToLocation(iRef));
 				}
 			}
 		});
-		if (selected === '' || ['(', ')', '\'', '.', ';'].includes(selected)){
-			return;
-		}
-		try {
-			// determine scope
-			const {isFunction, parentContainer} = SearchHandlers.getSelectionScopeOfWork(rDoc, position, selected);
-			const locations: Array<vscode.Location> = [];
-			if (isFunction) {
-				// This has a "preference" for opened and project documents for actual definitions, but will only handle variables on the opened document.
-				let possible = this.findDefunMatches(selected, [AutoLispExt.Documents.ActiveDocument]);
-				if (possible.length === 0) {
-					possible = this.findDefunMatches(selected, AutoLispExt.Documents.OpenedDocuments.concat(AutoLispExt.Documents.ProjectDocuments));
-				}
-				if (possible.length === 0) {
-					possible = this.findDefunMatches(selected, AutoLispExt.Documents.WorkspaceDocuments);
-				}
-				possible.forEach(item => {
-					locations.push(item);
-				});
-			} else if (parentContainer) { // Most likely a variable, but ultimately the scope of work is now only in the active document.
-				this.findFirstVariableMatch(rDoc, position, selected, parentContainer).forEach(item => {
-					locations.push(item);
-				});
-			}
+		return results;
+	}
 
-			if (locations.length >= 1) {
-				const filterList = AutoLispExt.Documents.ExcludedFiles;
-				return locations.filter(f => !filterList.includes(f.uri.fsPath));
-			} else {
-				return locations;
+	export function processAsVariableReference(context: IDocumentAtomContext) : Array<vscode.Location> {
+		// localized and exported globals scenarios were already handled
+		// This just deals the active document globals by walking up setq locations
+		const existing = context.symbolMap.collectAllSymbols().get(context.symbolKey);
+		const activeIndex = existing.indexOf(context.reference);
+		for (let i = activeIndex - 1; i >= 0; i--) {
+			const iRef = existing[i];
+			if (FlatContainerServices.getParentAtomIfValidSetq(context.flatView, context.flatView[iRef.flatIndex])) {
+				return [convertReferenceToLocation(iRef)];
 			}
-		} catch (error) {
-			return;	// I don't believe this requires a localized error since VSCode has a default "no definition found" response
 		}
+		// if no better occurrence found, then just regurgitate the starting location
+		return [convertReferenceToLocation(context.reference)];	
+	}
+
+
+	export function convertReferenceToLocation(iRef: ISymbolReference) : vscode.Location {
+		const filePointer = vscode.Uri.file(iRef.filePath);
+		return new vscode.Location(filePointer, iRef.range);
 	}
 
 	
-	private findFirstVariableMatch(doc: ReadonlyDocument, start: vscode.Position, searchFor: string, searchIn: LispContainer): vscode.Location[] {
-		const result: vscode.Location[] = [];
-		const ucName = searchFor.toUpperCase();
-		let context = searchIn.getExpressionFromPos(start);
-		let flag = true;
-		do {
-			const parent = !context ? searchIn : searchIn.getParentOfExpression(context);			
-			const atom = parent?.getNthKeyAtom(0);
-			if (atom && SearchPatterns.LOCALIZES.test(atom.symbol)) {
-				let headers = parent.getNthKeyAtom(1);
-				if (headers?.symbol.toUpperCase() === ucName){ // adds defun names to possible result. Especially useful for quoted function names.
-					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(headers.line, headers.column)));
-				}
-				if (!(headers instanceof LispContainer)){
-					headers = parent.getNthKeyAtom(2);
-				}
-				if (headers instanceof LispContainer){
-					const found = headers.atoms.find(p => p.symbol.toUpperCase() === ucName);
-					if (found) {
-						result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(found.line, found.column)));
-					}
-				}
-			} else if (atom && SearchPatterns.ITERATES.test(atom.symbol)) {
-				const tmpVar = parent.getNthKeyAtom(1);
-				if (!(tmpVar instanceof LispContainer) && tmpVar.symbol.toUpperCase() === ucName){
-					result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(tmpVar.line, tmpVar.column)));
-				}
-			}
-			if (!parent || !context || result.length > 0 || parent.equal(context)) {
-				flag = false;
-			} else {
-				context = parent;
-			}
-		} while (flag);
-		// If we still haven't found anything check the 1st occurrence of setq's. This will find globals setqs and nested ones possibly inside other defuns
-		if (result.length === 0){
-			const possible = searchIn.findChildren(SearchPatterns.DEFINES, true).filter(p => p.contains(start));			
-			if (possible.length >= 0) {
-				this.findInSetqs(possible.pop(), ucName, doc.fileName).forEach(x => { result.push(x); });
-			}
+	export function getAtomDocumentContext(roDoc: ReadonlyDocument, selected: ILispFragment, linearView?: Array<ILispFragment>) : IDocumentAtomContext {
+		const key = selected.symbol.toLowerCase();
+		const map = SymbolManager.getSymbolMap(roDoc);
+		const pointers = map.collectAllSymbols().get(key);
+		const reference = pointers.find(item => item.flatIndex === selected.flatIndex);
+		if (!linearView) {
+			linearView = roDoc.documentContainer.flatten();
 		}
-		return result;
+		return {
+			atom: selected,
+			flatView: linearView,
+			parent: reference.findLocalizingParent(),
+			symbolKey: key,
+			symbolMap: map,
+			symbolRefs: pointers,
+			reference: reference,
+			isFuncLike: FlatContainerServices.isPossibleFunctionReference(linearView, selected)
+		};
 	}
 
-	private findInSetqs(sexp: LispContainer, ucName: string, fileName: string): vscode.Location[] {
-		const result: vscode.Location[] = [];
-		const found = sexp.findChildren(SearchPatterns.ASSIGNS, false);
-		found.forEach(setq => {
-			let isVar = false;
-			let cIndex = setq.nextKeyIndex(0, true);
-			do {
-				const atom = setq.atoms[cIndex];
-				if (isVar && atom?.symbol.toUpperCase() === ucName) {
-					result.push(new vscode.Location(vscode.Uri.file(fileName), new vscode.Position(atom.line, atom.column)));
-				}
-				cIndex = setq.nextKeyIndex(cIndex, true);
-				isVar = !isVar;
-			} while (cIndex && cIndex > -1 && result.length === 0);
-		});
-		return result;
-	}
-
-	private findDefunMatches(searchFor: string, searchIn: ReadonlyDocument[]): vscode.Location[] {
-		const result: vscode.Location[] = [];
-		const regx = new RegExp('\\((DEFUN|DEFUN-Q)' + escapeRegExp(searchFor) + '\\(', 'ig');
-		searchIn.forEach((doc: ReadonlyDocument) => {
-			if (regx.test(doc.fileContent.replace(/\s/g, ''))){
-				doc.atomsForest.forEach(atom => {
-					if (atom instanceof LispContainer){
-						const defs = atom.findChildren(SearchPatterns.DEFINES, true);
-						defs.forEach(sexp => {
-							const ptr = sexp.getNthKeyAtom(1);
-							if (ptr.symbol.toUpperCase() === searchFor.toUpperCase()){
-								result.push(new vscode.Location(vscode.Uri.file(doc.fileName), new vscode.Position(ptr.line, ptr.column)));
-							}
-						});
-					}
-				});
+	export function getAllMatchingVerifiedGlobalReferences(lowerKey: string): Array<ISymbolReference> {
+		const documentReferences = DocumentServices.findAllDocumentsWithCustomSymbolKey(lowerKey);
+		const result: Array<ISymbolReference> = [];
+		for (let i = 0; i < documentReferences.length; i++) {
+			const roDoc = documentReferences[i];
+			const flatView = roDoc.documentContainer.flatten();
+			const possible = DocumentServices.getUnverifiedGlobalizerList(roDoc, lowerKey, flatView);
+			if (possible.length === 0) {
+				continue;
 			}
-		});
+			
+			const symbolMap = SymbolManager.getSymbolMap(roDoc);
+			const targets = symbolMap.collectAllSymbols().get(lowerKey);
+			possible.forEach(atom => {
+				const iRef = targets.find(x => x.flatIndex === atom.flatIndex);
+				if (iRef?.findLocalizingParent().equal(symbolMap)) {
+					result.push(iRef);
+				}
+			});
+		}
 		return result;
 	}
 
 }
+
+/**
+ * This exports the GotoProviderSupport Namespace specifically for testing, these resources are not meant for interoperability.
+ */
+export const TDD = GotoProviderSupport;

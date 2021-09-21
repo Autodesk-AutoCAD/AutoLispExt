@@ -13,7 +13,7 @@
 	},
 	"homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
 	"engines": {
-		"vscode": "^1.50.0"
+		"vscode": "^1.57.0"
 	},
 	"publisher": "Autodesk",
 	"keywords": [
