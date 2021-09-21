@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { ILispFragment, LispContainer } from '../format/sexpression';
+import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { DocumentServices } from '../services/documentServices';
 import { FlatContainerServices } from '../services/flatContainerServices';
@@ -9,14 +9,13 @@ import { ISymbolHost, ISymbolReference, IRootSymbolHost, SymbolManager } from '.
 import { SharedAtomic } from './providerShared';
 
 
-export async function AutoLispExtProvideDefinition(document: vscode.TextDocument|ReadonlyDocument, position: vscode.Position) 
-					: Promise<vscode.Location[]> {
+export function AutoLispExtProvideDefinition(document: vscode.TextDocument|ReadonlyDocument, position: vscode.Position) : vscode.Location[] {
 	const roDoc = document instanceof ReadonlyDocument ? document : AutoLispExt.Documents.getDocument(document);
 	let selectedAtom = SharedAtomic.getNonPrimitiveAtomFromPosition(roDoc, position);
 	if (!selectedAtom || SymbolServices.isNative(selectedAtom.symbol.toLowerCase())){
 		return null;
 	}
-	const result = await GotoProviderSupport.getDefinitionLocations(roDoc, selectedAtom);
+	const result = GotoProviderSupport.getDefinitionLocations(roDoc, selectedAtom);
 	if (result.length === 1 && result[0].range.contains(position)) {
 		return null;
 	} else {

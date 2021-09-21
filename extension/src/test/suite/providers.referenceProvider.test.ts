@@ -2,7 +2,7 @@ import * as path from 'path';
 import { suite, test } from 'mocha';
 import { assert, expect } from 'chai';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { Location, Position } from 'vscode';
+import { Position } from 'vscode';
 import { AutoLispExtProvideReferences } from "../../providers/referenceProvider";
 
 suite("ReferenceProvider: Tests", function () {
