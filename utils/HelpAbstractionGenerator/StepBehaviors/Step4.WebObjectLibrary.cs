@@ -583,7 +583,7 @@ namespace HelpAbstractionGenerator
             {
                 case ejoCategory.METHOD: return "vla-" + (lower ? Title.ToLower() : Title);
                 case ejoCategory.PROPGETTER: return "vla-get-" + (lower ? Title.ToLower() : Title);
-                case ejoCategory.PROPSETTER: return "vla-set-" + (lower ? Title.ToLower() : Title);
+                case ejoCategory.PROPSETTER: return "vla-put-" + (lower ? Title.ToLower() : Title);
                 case ejoCategory.DCLTILE: return (lower ? Title.Trim(" :".ToCharArray()).ToLower() : Title);
                 default: return lower ? Title.ToLower() : Title;
             }
