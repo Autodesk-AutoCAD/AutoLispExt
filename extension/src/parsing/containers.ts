@@ -119,9 +119,9 @@ export class ContainerBuildContext implements vscode.Disposable {
 	markGloballyTaggedAtoms(): void {
 		[...this.basicSymbolMap.keys()].forEach(key => {
 			this.basicSymbolMap.get(key).forEach(flatIndex => {
-				const flag1 = FlatContainerServices.verifyAtomIsDefunAndGlobalized(this.flatView, this.flatView[flatIndex])
+				const flag = FlatContainerServices.verifyAtomIsDefunAndGlobalized(this.flatView, this.flatView[flatIndex])
 							 || FlatContainerServices.verifyAtomIsSetqAndGlobalized(this.flatView, this.flatView[flatIndex]);
-				if (flag1) {
+				if (flag) {
 					this.flatView[flatIndex].hasGlobalFlag = true;
 				}
 			});

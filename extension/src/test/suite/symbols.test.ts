@@ -2,10 +2,10 @@ import * as path from 'path';
 import { suite, test } from 'mocha';
 import { assert, expect } from 'chai';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { SymbolManager, RootSymbolMapHost, ISymbolHost, ISymbolReference } from '../../symbols';
+import { SymbolManager, IRootSymbolHost, ISymbolHost, ISymbolReference } from '../../symbols';
 
 let roDoc: ReadonlyDocument;
-let symbolMap: RootSymbolMapHost;
+let symbolMap: IRootSymbolHost;
 
 suite("SymbolManager & Object Method Tests", function () {	
 
@@ -162,7 +162,7 @@ suite("SymbolManager & Object Method Tests", function () {
 
 
 
-	test("RootSymbolMapHost.collectAllSymbols() - verify effective accumulation", function () {
+	test("IRootSymbolHost.collectAllSymbols() - verify effective accumulation", function () {
 		try {
 			const sut = symbolMap.collectAllSymbols();
 
@@ -189,7 +189,7 @@ suite("SymbolManager & Object Method Tests", function () {
 		}
 	});
 
-	test("RootSymbolMapHost.collectAllSymbols() - provided vs generated symbol collection Map<>", function () {	
+	test("IRootSymbolHost.collectAllSymbols() - provided vs generated symbol collection Map<>", function () {	
 		try {
 			// Note: this needs to match because it indirectly proves out the ability to aggregate multiple
 			//		 document LispContainers into a single (provided) summary Map<> when necessary.

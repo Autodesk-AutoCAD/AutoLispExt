@@ -4,7 +4,8 @@ import { AutoLispExt } from './extension';
 import { openWebHelp } from './help/openWebHelp';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
-import { AutolispDefinitionProvider } from './providers/gotoProvider';
+import { AutoLispExtProvideDefinition } from './providers/gotoProvider';
+import { AutoLispExtProvideReferences } from './providers/referenceProvider';
 import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
 import { SymbolManager } from './symbols';
 
@@ -72,7 +73,22 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], new AutolispDefinitionProvider()));
+	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], {
+		provideDefinition: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
+						 			: vscode.ProviderResult<vscode.Definition | vscode.LocationLink[]> {
+			// Purpose: locate potential source definitions of the underlying symbol
+			try {
+				// offload all meaningful work to something that can be tested.
+				const result = AutoLispExtProvideDefinition(document, position);
+				if (!result) {
+					return;
+				}
+				return result;
+			} catch (err) {
+				return;	// I don't believe this requires a localized error since VSCode has a default "no definition found" response
+			}
+		}
+	}));
 
 	const msgRenameFail = localize("autolispext.providers.rename.failed", "The symbol was invalid for renaming operations");
 	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider(['autolisp', 'lisp'], {
@@ -116,5 +132,24 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
+
+	AutoLispExt.Subscriptions.push(vscode.languages.registerReferenceProvider([ 'autolisp', 'lisp'], {
+		provideReferences: function (document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken)
+									: vscode.ProviderResult<vscode.Location[]> 
+		{
+			// Purpose in theory: locate scoped reference across the workspace, project and/or randomly opened documents
+			// Purpose in practice: similar to theory, but mostly provides visibility to what our "renameProvider" would effect
+			try {
+				// offload all meaningful work to something that can be tested.
+				const result = AutoLispExtProvideReferences(document, position);
+				if (!result) {
+					return;
+				}
+				return result;
+			} catch (err) {
+				return;	// No localized error since VSCode has a default "no results" response
+			}
+		}
+	}));
 
 }
