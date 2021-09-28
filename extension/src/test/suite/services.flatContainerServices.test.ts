@@ -22,8 +22,32 @@ suite("Analysis Support: FlatContainerServices Tests", function () {
 		}
 	});
 
+	
+	test("isPossibleFunctionReference() - Known good function references", function () {	
+		try {
+			const sut1 = FlatContainerServices.isPossibleFunctionReference(flatView, flatView[42]);
+			const sut2 = FlatContainerServices.isPossibleFunctionReference(flatView, flatView[58]);
+			expect(sut1).to.equal(true);
+			expect(sut2).to.equal(true);
+		}
+		catch (err) {
+			assert.fail("Known value returned unexpected False result");
+		}
+	});
 
-
+	test("isPossibleFunctionReference() - Known bad function references", function () {	
+		try {
+			const sut1 = FlatContainerServices.isPossibleFunctionReference(flatView, flatView[72]);
+			const sut2 = FlatContainerServices.isPossibleFunctionReference(flatView, flatView[79]);
+			const sut3 = FlatContainerServices.isPossibleFunctionReference(flatView, flatView[95]);
+			expect(sut1).to.equal(false);
+			expect(sut2).to.equal(false);
+			expect(sut3).to.equal(false);
+		}
+		catch (err) {
+			assert.fail("Known value returned unexpected True result");
+		}
+	});
 
 	test("verifyAtomIsDefunAndGlobalized() - Valid global defun from Inline Comment", function () {	
 		try {

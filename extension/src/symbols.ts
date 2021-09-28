@@ -15,7 +15,7 @@ export namespace SymbolManager {
 
 	export function updateOrCreateSymbolMap(doc: ReadonlyDocument, forceUpdate: boolean): string {
 		const key = DocumentServices.normalizeFilePath(doc.fileName);
-		const active = vscode.window.activeTextEditor?.document?.fileName;
+		const active = vscode.window.activeTextEditor?.document?.fileName ?? '';
 		const doUpdate = forceUpdate 
 			  // If the requested symbol map does not exist, or does exists, but probably disposed
 			  || !_definedCache.get(key)?.isValid
@@ -80,8 +80,11 @@ export interface ISymbolHost extends ISymbolBase {
 	findLocalizingParent(key: string): ISymbolHost;
 }
 
-
-
+// Added this nonsense interfaces so I could remove the export from the concrete class
+// doing this makes the Symbol Manager the only possible constructor outside of this document
+// this is a protective measure for the Parent/Child references that need to be cleaned up
+// While not entirely necessary, it does improve code readability
+export interface IRootSymbolHost extends ISymbolHost {}
 
 
 
@@ -307,7 +310,7 @@ class NamedSymbolHost extends AnonymousSymbolHost {
 }
 
 
-export class RootSymbolMapHost extends AnonymousSymbolHost {
+class RootSymbolMapHost extends AnonymousSymbolHost implements IRootSymbolHost {
 	constructor(fsPath: string, source: LispContainer) {
 		super(null, DocumentServices.normalizeFilePath(fsPath), source, true);
 		this.aggregateContainer(source);

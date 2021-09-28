@@ -4,11 +4,11 @@ import { suite, test } from 'mocha';
 import { assert, expect } from 'chai';
 import { Position } from 'vscode';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { RootSymbolMapHost, SymbolManager } from '../../symbols';
+import { IRootSymbolHost, SymbolManager } from '../../symbols';
 import { TDD, AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from '../../providers/renameProvider';
 import { AutoLispExt } from '../../extension';
 
-let docSymbols: RootSymbolMapHost;
+let docSymbols: IRootSymbolHost;
 
 suite("RenameProvider: Tests", function () {	
 	let roDoc: ReadonlyDocument;

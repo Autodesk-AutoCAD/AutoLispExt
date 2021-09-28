@@ -3,11 +3,11 @@ import { suite, test } from 'mocha';
 import { assert, expect } from 'chai';
 import { SymbolServices } from '../../services/symbolServices';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { RootSymbolMapHost, SymbolManager } from '../../symbols';
+import { IRootSymbolHost, SymbolManager } from '../../symbols';
 import { LispAtom } from '../../format/sexpression';
 
 let roDoc: ReadonlyDocument;
-let symbolMap: RootSymbolMapHost;
+let symbolMap: IRootSymbolHost;
 let flatView: Array<LispAtom>;
 
 suite("Analysis Support: SymbolServices Tests", function () {

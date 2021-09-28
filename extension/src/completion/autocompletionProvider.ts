@@ -130,7 +130,7 @@ export function getLispAndDclCompletions(document: vscode.TextDocument, word: st
     else {
         return allSuggestions.filter(function(suggestion) {
             for (var prefix of winOnlyListFuncPrefix) {
-                if (suggestion.label.startsWith(prefix)) {
+                if (suggestion.label.toString().startsWith(prefix)) {
                     return false;
                 }
             }
