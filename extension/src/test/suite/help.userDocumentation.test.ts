@@ -5,7 +5,8 @@ import * as vscode from 'vscode';
 
 import * as testing from '../../help/userDocumentation';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { ILispFragment, LispContainer } from '../../format/sexpression';
+import { ILispFragment } from '../../astObjects/ILispFragment';
+import { LispContainer } from '../../astObjects/lispContainer';
 
 let prefixPath = __filename + "/../../../../extension/src/test/SourceFile/test_case/";
 let lspFilePath = path.join(prefixPath + "pdfMarkups.lsp");

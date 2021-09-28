@@ -1,4 +1,4 @@
-import { ILispFragment } from '../format/sexpression';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 
 export namespace LispContainerServices {

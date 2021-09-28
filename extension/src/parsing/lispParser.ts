@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { ListReader, CursorPosition } from "../format/listreader";
-import { Sexpression } from "../format/sexpression";
+import { Sexpression } from '../astObjects/sexpression';
 import { getDocumentContainer } from '../parsing/containers';
 import { getEOL } from './shared';
 

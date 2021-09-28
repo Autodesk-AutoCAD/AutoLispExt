@@ -4,7 +4,7 @@ import { assert, expect } from 'chai';
 import { SymbolServices } from '../../services/symbolServices';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { IRootSymbolHost, SymbolManager } from '../../symbols';
-import { LispAtom } from '../../format/sexpression';
+import { LispAtom } from '../../astObjects/lispAtom';
 
 let roDoc: ReadonlyDocument;
 let symbolMap: IRootSymbolHost;

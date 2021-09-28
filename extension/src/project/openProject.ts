@@ -1,6 +1,6 @@
 import { ProjectNode, LspFileNode, addLispFileNode2ProjectTree, isFileAlreadyInProject } from './projectTree'
 import { CursorPosition, ListReader } from '../format/listreader';
-import { Sexpression } from '../format/sexpression';
+import { Sexpression } from '../astObjects/sexpression';
 import { ProjectDefinition } from './projectDefinition';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
 import { AutoLispExt } from '../extension';

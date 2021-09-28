@@ -1,5 +1,6 @@
 import { StringEqualsIgnoreCase } from '../utils';
-import { ILispFragment, LispAtom } from '../format/sexpression';
+import { ILispFragment } from '../astObjects/ILispFragment';
+import { LispAtom } from '../astObjects/lispAtom';
 
 
 

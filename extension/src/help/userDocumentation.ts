@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import * as nls from 'vscode-nls';
-import { AutoLispExt } from '../extension';
-import { ILispFragment, LispContainer } from '../format/sexpression';
 import { SearchPatterns } from '../providers/providerShared';
+import { ILispFragment } from '../astObjects/ILispFragment';
+import { LispContainer } from '../astObjects/lispContainer';
 
 const localize = nls.loadMessageBundle();
 

@@ -1,11 +1,12 @@
 import * as path from 'path';
 import { assert, expect } from 'chai';
 
-import { LispParser } from '../../format/parser';
+import { LispParser } from '../../parsing/lispParser';
 import { getDocumentContainer } from '../../parsing/containers';
-import { Sexpression, LispContainer } from '../../format/sexpression';
+import { Sexpression} from '../../astObjects/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { SymbolServices } from '../../services/symbolServices';
+import { LispContainer } from '../../astObjects/lispContainer';
 
 
 const extRootPath = path.resolve(__dirname, '../../../');

@@ -1,6 +1,6 @@
-import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import * as vscode from	'vscode';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 export namespace SearchPatterns {
 	export const LOCALIZES = /^DEFUN$|^DEFUN-Q$|^LAMBDA$/i;

@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as nls from 'vscode-nls';
-import { LispParser } from '../format/parser';
-import { ILispFragment, LispContainer } from '../format/sexpression';
+import { LispParser } from '../parsing/lispParser';
 import { DocumentManager } from '../documents';
 import { DocumentServices } from '../services/documentServices';
+import { ILispFragment } from '../astObjects/ILispFragment';
+import { LispContainer } from '../astObjects/lispContainer';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {

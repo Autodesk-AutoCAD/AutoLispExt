@@ -1,12 +1,12 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { DocumentServices } from '../services/documentServices';
 import { FlatContainerServices } from '../services/flatContainerServices';
 import { SymbolServices } from '../services/symbolServices';
 import { ISymbolHost, ISymbolReference, IRootSymbolHost, SymbolManager } from '../symbols';
 import { SharedAtomic } from './providerShared';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 
 export function AutoLispExtProvideDefinition(document: vscode.TextDocument|ReadonlyDocument, position: vscode.Position) : vscode.Location[] {
