@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { assert } from 'console';
-import { Sexpression } from "./sexpression"
-import { LispAtom } from "./sexpression"
+import { Sexpression } from '../astObjects/sexpression'
+import { LispAtom } from '../astObjects/lispAtom';
 
 // (defun C:;|comment|;MYCMD (x) ;|inline comment|;
 //      (list 1 2 3)            ;comment-column comment

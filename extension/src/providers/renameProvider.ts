@@ -1,12 +1,13 @@
 import * as vscode from 'vscode';
 import { AutoLispExt } from '../extension';
-import { ILispFragment, primitiveRegex } from '../format/sexpression';
 import { IRootSymbolHost, ISymbolHost, ISymbolReference, SymbolManager } from '../symbols';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SharedAtomic } from './providerShared';
 import { SymbolServices } from '../services/symbolServices';
 import { DocumentServices } from '../services/documentServices';
 import { getBlockCommentParamNameRange } from "../parsing/comments";
+import { ILispFragment } from '../astObjects/ILispFragment';
+import { primitiveRegex } from '../astObjects/lispAtom';
 
 
 export function AutoLispExtPrepareRename(document: vscode.TextDocument, position: vscode.Position): { range: vscode.Range; placeholder: string; } 

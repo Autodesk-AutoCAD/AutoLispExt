@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
-import { ILispFragment } from "../format/sexpression";
 import { escapeRegExp, StringEqualsIgnoreCase } from '../utils';
 import { getDocumentContainer } from './containers';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 
 interface ILspDocPair {

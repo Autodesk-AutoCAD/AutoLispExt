@@ -1,7 +1,7 @@
 import { AutoLispExt } from '../extension';
-import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SymbolManager } from '../symbols';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 
 

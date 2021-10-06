@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
-import { LispAtom, LispContainer, primitiveRegex } from '../format/sexpression';
 import { getEOL } from './shared';
 import { SymbolServices } from '../services/symbolServices';
 import { FlatContainerServices } from '../services/flatContainerServices';
 import { StringBuilder } from '../utils';
+import { LispAtom, primitiveRegex } from '../astObjects/lispAtom';
+import { LispContainer } from '../astObjects/lispContainer';
 
 enum ParseState {
 	UNKNOWN = 0,

@@ -1,9 +1,10 @@
 import * as vscode from 'vscode';
-import { ILispFragment, LispContainer } from './format/sexpression';
 import { ReadonlyDocument } from './project/readOnlyDocument';
 import { DocumentServices } from './services/documentServices';
 import { SymbolServices } from './services/symbolServices';
 import { LispContainerServices } from './services/lispContainerServices';
+import { ILispFragment } from './astObjects/ILispFragment';
+import { LispContainer } from './astObjects/lispContainer';
 
 
 export namespace SymbolManager {

@@ -1,9 +1,11 @@
 import * as path from 'path';
 import { assert, expect } from 'chai';
 import { Position } from 'vscode';
-import { ILispFragment, LispContainer, primitiveRegex } from '../../format/sexpression';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { ContainerBuildContext, getDocumentContainer } from '../../parsing/containers';
+import { ILispFragment } from '../../astObjects/ILispFragment';
+import { primitiveRegex } from '../../astObjects/lispAtom';
+import { LispContainer } from '../../astObjects/lispContainer';
 
 suite("LispContainer Tests", function () {
 

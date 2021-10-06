@@ -1,8 +1,8 @@
 import { AutoLispExt } from '../extension';
-import { ILispFragment } from '../format/sexpression';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { ISymbolBase } from '../symbols';
 import { FlatContainerServices } from './flatContainerServices';
+import { ILispFragment } from '../astObjects/ILispFragment';
 
 
 export namespace SymbolServices {

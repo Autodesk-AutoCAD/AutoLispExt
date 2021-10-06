@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 
-import { Sexpression } from "./sexpression";
-import { LispParser } from "./parser";
+import { Sexpression } from '../astObjects/sexpression';
+import { LispParser } from "../parsing/lispParser";
 import * as nls from 'vscode-nls';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 

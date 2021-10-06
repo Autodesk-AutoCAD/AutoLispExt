@@ -3,7 +3,7 @@ import { suite, test } from 'mocha';
 import { assert, expect } from 'chai';
 import { FlatContainerServices } from '../../services/flatContainerServices';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { LispAtom } from '../../format/sexpression';
+import { LispAtom } from '../../astObjects/lispAtom';
 
 
 suite("Analysis Support: FlatContainerServices Tests", function () {

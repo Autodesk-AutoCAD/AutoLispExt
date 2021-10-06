@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 
 import { TextDocument, Position, TextEdit } from 'vscode';
 import * as format from './listreader';
-import { LispAtom, Sexpression, indentationForNarrowStyle } from './sexpression';
+import { Sexpression, indentationForNarrowStyle } from '../astObjects/sexpression';
 import { CursorPosition } from './listreader';
+import { LispAtom } from '../astObjects/lispAtom';
 
 export class ElementRange {
     constructor() {
