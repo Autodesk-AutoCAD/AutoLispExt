@@ -1,5 +1,7 @@
 # Visual Studio Code Extension for AutoCAD® AutoLISP
 
+[中文简体](README-zh-cn.md)
+
 This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your lisp programs with AutoCAD 2021.
 For information on creating lisp programs for AutoCAD with the AutoLISP programming language, see the:
    - AutoCAD AutoLISP: [Developer’s Guide](https://www.autodesk.com/autolisp-developers-guide)
