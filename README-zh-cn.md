@@ -55,7 +55,7 @@
 
 | Windows | Mac  | Linux |
 | :-----: | :--: | :---: |
-|    √    |  √   |   x   |
+<font color=green>√</font> | <font color=green>√</font> | <font color=red>x</font> |
 
 ## 如何使用
 
