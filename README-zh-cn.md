@@ -104,11 +104,10 @@ Visual Studio Code Extension for AutoCAD® AutoLISP © 版权所有 2020 Autodes
 
 要了解有关 Autodesk 联机和脱机隐私文档的详细信息，请参见 [Autodesk 隐私声明](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement)。
 
-### 商标
+### Trademarks
+The license does not grant permission to use the trade names, trademarks, service marks, or product names of Autodesk, except as required for reasonable and customary use in describing the origin of the work and reproducing the content of any notice file. Autodesk, the Autodesk logo, AutoCAD and AutoLISP are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates in the USA and/or other countries. All other brand names, product names, or trademarks belong to their respective holders. Autodesk is not responsible for typographical or graphical errors that may appear in this document.
 
-本许可证未授予使用 Autodesk 的商品名、商标、服务标志或产品名称的权限，除非在描述作品来源和复制任何通知文件内容时出于合理和习惯的需要。Autodesk、Autodesk 徽标、AutoCAD 和AutoLISP 是 Autodesk，Inc. 和/或其子公司和/或附属公司在美国和/或其他国家/地区的注册商标。所有其他品牌名称、产品名称或商标均属于其各自的持有人。Autodesk 不对本文档中可能出现的印刷或图形错误负责。
-
-所有其他品牌名称、产品名称或商标均属于其各自的持有人。
+All other brand names, product names or trademarks belong to their respective holders.
 
 ### 第三方商标等
 
