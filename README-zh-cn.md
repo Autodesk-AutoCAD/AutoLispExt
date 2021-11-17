@@ -98,7 +98,7 @@
 
 ## 法律通告
 
-Visual Studio Code Extension for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
+Visual Studio Code Extension for AutoCAD® AutoLISP © 版权所有 2020 Autodesk Inc. 保留所有权利。
 
 ### 隐私
 
