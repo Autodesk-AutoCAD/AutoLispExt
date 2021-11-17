@@ -48,7 +48,8 @@
 
 ## 安装
 
-可以通过 VSCode 中的扩展面板搜索并安装此扩展。也可以通过在 VSCode 命令面板中输入以下命令来安装此扩展：依次单击`视图` > `命令面板…`（或按 Ctrl+Shift+P）> 键入 ext install autodesk.autolispext 后回车。
+可以通过 VSCode 中的扩展面板搜索并安装此扩展。搜索AutoCAD AutoLISP Extension。
+也可以通过在 VSCode 命令面板中输入以下命令来安装此扩展：依次单击`视图` > `命令面板…`（或按 Ctrl+Shift+P）> 键入 ext install autodesk.autolispext 后回车。
 
 ## 支持平台
 
