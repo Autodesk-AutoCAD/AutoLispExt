@@ -92,7 +92,7 @@
 ## 注意
 
 1. 其他 AutoLISP 扩展可能与此扩展冲突。如果无法在 LSP 文件中设置断点或无法使用启动/附着调试配置，则应禁用或卸载所有其他 AutoLISP 扩展。
-2. 在 Mac^®^ OS 上使用此扩展时，扩展设置中的“Launch Program”应为“../AutoCAD\<release\>.app/Contents/MacOS/AutoCAD”，而不是 AutoCAD\<release\>.app 的绝对路径。
+2. 在 Mac® OS 上使用此扩展时，扩展设置中的“Launch Program”应为“.../AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD”，而不是 AutoCAD &lt;release&gt;.app 的绝对路径。
 3. 对于 AutoCAD 专用工具集或基于 OEM 的产品，产品名称可能与 AutoCAD 或 acad.exe 不同。要将此扩展用于这些产品，请根据要调试的产品在扩展设置中设置对应“Launch Program”的值。
 4. 如果以管理员身份启动 AutoCAD，则同样应以管理员身份启动 Microsoft Visual Studio Code。否则，Microsoft Visual Studio Code 将无法找到用于附加调试的 AutoCAD 进程。
 
