@@ -71,7 +71,7 @@
 
 1. 在 Visual Studio Code 中，依次单击`文件` > `首选项` > `设置`。
 2. 在“用户”选项卡下，展开“扩展”，然后单击“AutoCAD® AutoLISP 配置“。
-3. 更新 Debug: Attach Process 以指定要针对“调试附着”过滤的进程名称。
+3. 更新 Debug: Attach Process 以指定 Debug: Attach 可以附着的进程名称，以过滤无关进程。
 4. 更新 Debug: Launch Program 以指定要与 Debug: Launch 一起使用的 AutoCAD 可执行文件的路径。
 5. 更新 Debug: Launch Parameters 以指定 AutoCAD 启动参数。
 
