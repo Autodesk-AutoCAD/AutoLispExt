@@ -109,6 +109,6 @@ The license does not grant permission to use the trade names, trademarks, servic
 
 All other brand names, product names or trademarks belong to their respective holders.
 
-### 第三方商标等
+### Third-Party Trademarks, Software Credits and Attributions
 
-[NOTICE.md](https://github.com/Autodesk-AutoCAD/AutoLispExt/blob/main/NOTICE.md)。
+See [here](NOTICE.md).
