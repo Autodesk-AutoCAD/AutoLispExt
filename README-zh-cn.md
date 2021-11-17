@@ -96,7 +96,7 @@
 3. 对于 AutoCAD 专用工具集或基于 OEM 的产品，产品名称可能与 AutoCAD 或 acad.exe 不同。要将此扩展用于这些产品，请根据要调试的产品在扩展设置中设置对应“Launch Program”的值。
 4. 如果以管理员身份启动 AutoCAD，则同样应以管理员身份启动 Microsoft Visual Studio Code。否则，Microsoft Visual Studio Code 将无法找到用于附加调试的 AutoCAD 进程。
 
-## 声明
+## 法律通告
 
 Visual Studio Code Extension for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
 
