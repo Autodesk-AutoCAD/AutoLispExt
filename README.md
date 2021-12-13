@@ -1,4 +1,4 @@
-# Visual Studio Code Extension for AutoCAD® AutoLISP
+# <span id="visual-studio-code-extension-for-autocad®-autolisp">Visual Studio Code Extension for AutoCAD® AutoLISP<span>
 
 [中文简体](#autocad®-autolisp-visual-studio-code-扩展)
 
@@ -108,7 +108,7 @@ All other brand names, product names or trademarks belong to their respective ho
 
 See [here](NOTICE.md).
 
-# AutoCAD® AutoLISP Visual Studio Code 扩展
+# <span id="autocad®-autolisp-visual-studio-code-扩展">AutoCAD® AutoLISP Visual Studio Code 扩展</span>
 
 [English](#visual-studio-code-extension-for-autocad®-autolisp)
 
