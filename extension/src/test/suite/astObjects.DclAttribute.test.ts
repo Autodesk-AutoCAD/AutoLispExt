@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { assert, expect } from 'chai';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
-import { IDclContainer, IDclFragment } from '../../astObjects/dclInterfaces';
+import { IDclContainer } from '../../astObjects/dclInterfaces';
 import { Position } from 'vscode';
 import { DclAttribute } from '../../astObjects/dclAttribute';
 import { DclAtom } from '../../astObjects/dclAtom';
@@ -147,7 +147,7 @@ suite("AST Objects: DCL Attribute", function () {
 	});
 
 
-	test("DclAttribute Positional Properties", function () {
+	test("DclAttribute.isWellFormed Property", function () {
 		try {
 			const mod = (item: IDclContainer, idx: number, value: string): void => {
 				(item.atoms[idx] as any).symbol = value;
@@ -176,7 +176,7 @@ suite("AST Objects: DCL Attribute", function () {
 			
 		}
 		catch (err) {
-			assert.fail("The expected container and/or value was not returned");
+			assert.fail("At least one of the tests certifying the Attribute did not perform as expected");
 		}
 	});
 

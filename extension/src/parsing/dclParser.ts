@@ -16,13 +16,13 @@ const equalSign = '='.charCodeAt(0);
 const dblQuote = '"'.charCodeAt(0);
 const forwardSlash = '/'.charCodeAt(0);
 const backSlash = '\\'.charCodeAt(0);
-const asterisk = '\*'.charCodeAt(0);
+const asterisk = '*'.charCodeAt(0);
 
 
 export function getDocumentTileContainer(DocumentOrContent: vscode.TextDocument|string): DclTile {
 	const ctx = new DclDocContext(DocumentOrContent);
-	_getDclDocumentContainer(ctx);
 	try {
+		_getDclDocumentContainer(ctx);
 		return ctx.rootContainer;
 	} finally {
 		ctx.dispose();
@@ -131,6 +131,11 @@ class DclDocContext implements vscode.Disposable {
 		return this;
 	}
 
+	saveCurrentCharToFragments(): DclDocContext {
+		this.saveCurrentAtom(this.data.charAt(this.dataIndex));
+		return this;
+	}
+
 	createNewTileScopeFromFragments(): void {
 		const tile = new DclTile(this.linefeed, this.fragments);
 		this.activeContainer.atoms.push(tile);
@@ -229,31 +234,31 @@ function _getDclDocumentContainer(ctx: DclDocContext) {
 		} else if (curr === closeBracket) { // tile/attribute breakpoint
 			ctx.saveTempData()
 			   .saveFragmentsAsAttribute()
-			   .saveTempDataAndCurrentCharToFragments()
+			   .saveCurrentCharToFragments()
 			   .moveNext()
 			   .closeActiveTileScope();
-		} else if (curr === semiColon) { // attribute breakpoint
+		} else if (curr === semiColon) { // attribute/fragment breakpoint
 			ctx.saveTempDataAndCurrentCharToFragments()
 			   .moveNext()
 			   .saveFragmentsAsAttribute();
-		} else if (curr === forwardSlash) { // attribute breakpoint
+		} else if (curr === forwardSlash) { // attribute/fragment breakpoint
 			ctx.saveTempData()
 			   .saveFragmentsAsAttribute()
 			   .startGroupPointer()
 			   .processCommentAndSaveAsFragment(next === asterisk);
-		} else if (curr === cr || curr === lf) { // fragment/attribute breakpoint
+		} else if (curr === cr || curr === lf) { // attribute/fragment breakpoint
 			ctx.saveTempData()
 			   .saveFragmentsAsAttribute()
-			   .incrementAtLineBreak(curr) // this may need to account for the subsequent move next?????????
+			   .incrementAtLineBreak(curr)
 			   .moveNext();
 		} else if (curr < 33) { // fragment breakpoint - tabs, spaces & misc non-printable characters
 			ctx.saveTempData()
 			   .moveNext();
-		} else if (curr === dblQuote) {
+		} else if (curr === dblQuote) { // fragment breakpoint
 			ctx.saveTempData()
 			   .startGroupPointer()
 			   .processStringAndSaveAsFragment();
-		} else if (curr === equalSign || curr === colon) {
+		} else if (curr === equalSign || curr === colon) { // fragment breakpoint
 			ctx.saveTempDataAndCurrentCharToFragments()
 			   .moveNext();
 		} else { 			

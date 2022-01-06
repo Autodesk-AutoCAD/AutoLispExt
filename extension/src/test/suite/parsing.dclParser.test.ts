@@ -68,18 +68,22 @@ suite("Parsing: DCL Content", function () {
 	const poor3 = 'myDCL : dialog {\n\t: button {\n\t\twidth = 100\t\t\tlabel = "random";\n\t\t}\n\tok_cancel;\n\t}';
 	const poor4 = 'myDCL : dialog {\n\t: button {\n\t\twidth = 100;\n\t\tlabel "random";\n\t\t}\n\tok_cancel;';
 	const poor5 = 'myDCL : dialog {\n\t: button {\n\t\t= 100;\n\t\tlabel = "random"\n\tok_cancel;\n\t}';
-
-	// TODO: Add malformed syntax tests
+	const poor6 = 'myDCL : dialog {\n\tok_cancel;\n\t} randomExtra';
 
 	test("Malformed DCL Test #1", function () {	
 		try {
 			const sut1 = getDocumentTileContainer(good1);
 			const sut2 = getDocumentTileContainer(poor0);
 			const sut3 = getDocumentTileContainer(poor1);
+			const sut4 = getDocumentTileContainer(poor6);
 			
 			const baseline = sut1.flatten().length;
 			expect(sut2.flatten().length).to.equal(baseline - 1);
 			expect(sut2.atoms[0].asTile.atoms[4]).instanceOf(DclAttribute);
+
+			expect(sut4.flatten().length).to.equal(baseline + 1);
+			expect(sut4.length).to.equal(2);
+			expect(sut4.atoms[1]).instanceOf(DclAttribute);
 
 			expect(sut3.flatten().length).to.equal(10);
 			expect(sut3.atoms[0].asTile.atoms[4]).instanceOf(DclTile);
