@@ -6,6 +6,8 @@ import { DocumentManager } from '../documents';
 import { DocumentServices } from '../services/documentServices';
 import { ILispFragment } from '../astObjects/ILispFragment';
 import { LispContainer } from '../astObjects/lispContainer';
+import { DclTile } from '../astObjects/dclTile';
+import * as DclParser from '../parsing/dclParser';
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class ReadonlyLine implements vscode.TextLine {
@@ -111,10 +113,10 @@ export class ReadonlyDocument implements vscode.TextDocument {
     get atomsForest(): Array<ILispFragment> {
         if (this.languageId === DocumentManager.Selectors.lsp) {
             if (this._documentContainer){
-                return this._documentContainer.atoms;
+                return this.documentContainer.atoms;
             } else {
                 this.updateAtomsForest();
-                return this._documentContainer.atoms;
+                return this.documentContainer.atoms;
             }
         } else {
             return [];
@@ -136,7 +138,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     fileContent: string;
     lines: string[];
     eolLength: number;
-    private _documentContainer: LispContainer; // Added to drastically reduces complexity in other places.
+    private _documentContainer: LispContainer|DclTile; // Added to drastically reduces complexity in other places.
 
     //#region implementing vscode.TextDocument
 
@@ -271,10 +273,22 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
     
     get documentContainer(): LispContainer {
-        if (this._documentContainer) {
+        if (this.languageId !== DocumentManager.Selectors.lsp) {
+            return null;
+        } else if (this._documentContainer instanceof LispContainer) {
             return this._documentContainer;
         } else {
             return this._documentContainer = LispParser.getDocumentContainer(this.fileContent);
+        }
+    }
+
+    get documentDclContainer(): DclTile {
+        if (this.languageId !== DocumentManager.Selectors.dcl) {
+            return null;
+        } else if (this._documentContainer instanceof DclTile) {
+            return this._documentContainer;
+        } else {
+            return this._documentContainer = DclParser.getDocumentTileContainer(this.fileContent);
         }
     }
 }
