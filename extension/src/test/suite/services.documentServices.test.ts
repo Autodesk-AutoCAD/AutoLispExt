@@ -86,7 +86,7 @@ suite("Analysis Support: DocumentServices Tests", function () {
 	test("hasUnverifiedGlobalizers() - Expect false using a dynamic lsp", function () {	
 		try {
 			const malformed = '(defun doStuff()\n(command "line" pause pause)\n(princ))\n;some comment\n(princ)\n32)';
-			const memDoc = ReadonlyDocument.createMemoryDocument(malformed, 'lsp');
+			const memDoc = ReadonlyDocument.createMemoryDocument(malformed, 'autolisp');
 			const sut = DocumentServices.hasUnverifiedGlobalizers(memDoc);
 			expect(sut).to.equal(false);
 		}

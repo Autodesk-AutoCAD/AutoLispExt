@@ -4,7 +4,8 @@ import { SymbolManager } from '../symbols';
 import { ILispFragment } from '../astObjects/ILispFragment';
 
 
-
+// This namespace should probably be renamed to LspDocumentServices once the new DCL AST Objects
+// find the need to for extended analytical functions. IE, avoid the namespace duality issue.
 export namespace DocumentServices {
 
 	// DRY Technical Debt
