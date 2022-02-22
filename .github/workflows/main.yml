@@ -36,9 +36,6 @@ jobs:
           echo "::set-output name=VERSION::$version"
         shell: pwsh
 
-      - name: Install dependencies
-        run:  npm install
-
       - name: Build
         run: |
           python pack.py
