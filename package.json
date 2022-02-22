@@ -650,8 +650,8 @@
 		"ts-node": "^9.1.1",
 		"ts-sinon": "^2.0.1",
 		"tslint": "5.11.0",
-		"typescript": "^3.9.9",
-		"vscode-extension-tester": "^4.0.2",
+		"typescript": "^4.5.5",
+		"vscode-extension-tester": "^4.2.4",
 		"vscode-nls-dev": "^3.2.6",
 		"vscode-test": "^1.4.1"
 	},
