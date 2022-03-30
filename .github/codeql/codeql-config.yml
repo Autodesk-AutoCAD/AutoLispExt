@@ -5,8 +5,3 @@ queries:
 
 paths:
   - 'extension/src'
-
-paths-ignore:
-  - '**/.vscode-test/**'
-  - '**/AutoLispExt/out/**'
-  - '**/test-resources/**'
