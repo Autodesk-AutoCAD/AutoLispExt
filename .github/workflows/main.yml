@@ -53,14 +53,14 @@ jobs:
         run: npm run e2etest
         if: runner.os != 'Linux'
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v1
-        with:
-          languages: javascript
-          config-file: ./.github/codeql/codeql-config.yml
+      #- name: Initialize CodeQL
+      #  uses: github/codeql-action/init@v1
+      #  with:
+      #    languages: javascript
+      #    config-file: ./.github/codeql/codeql-config.yml
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v1
+      #- name: Perform CodeQL Analysis
+      #  uses: github/codeql-action/analyze@v1
 
       - name: Create release
         id: create_release
