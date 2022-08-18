@@ -234,9 +234,10 @@
 						"2019",
 						"2020",
 						"2021",
-						"2022"
+						"2022",
+						"2023"
 					],
-					"default": "2022",
+					"default": "2023",
 					"description": "%autolispext.configuration.helptargetyear%"
 				},
 				"autolispext.completion.FilterMacOS": {
