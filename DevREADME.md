@@ -21,7 +21,7 @@ npm run compile
 
 1. open the source codes folder "AutoLispExt" in the vscode.
 2. add some breakpoints as needed.
-3. hit F5 and select "Extension Client", then it will start another vscode instance with running the extension. 
+3. hit F5 and select "Extension Client", then it will start another vscode instance with running the extension.
 4. Do some operations to invoke the codes which are added breakpoints, vscode will stop in the first instance.
 
 ## How to package the extension
@@ -36,10 +36,16 @@ It will create the package in the current folder.
 
 You have two ways to run the tests:
   - Run inside the VS Code and begin debugging by choosing "Extension Tests"
-  - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation) 
+  - Run on terminal outside of VS Code and make sure no VS code is running (VS Code terminal will not work due to VS Code limitation)
 ```
 npm run test
 ```
+
+## How to sign CLA
+
+Once you finished creating your PR, a CLA bot will automatically add a comment to explain how to sign Contributor License Agreement.
+For Individual Contributor, it can be automatically done, but make sure that the 'git config user.name' and 'git config user.email'
+on your computor are identical with those you use to login in to GITHUB.
 
 ### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
@@ -69,6 +75,6 @@ It needs the BRE team help to do following things by hand:
 
 You may encounter the failure of npm install, the error message would say:
 Error installing vscode.d.ts: Error: read ECONNRESET
-If you encounter this problem, maybe your NODE is too old, in version v10.13.0 it 
+If you encounter this problem, maybe your NODE is too old, in version v10.13.0 it
 can work well.
 or run "npm cache clean -force"
