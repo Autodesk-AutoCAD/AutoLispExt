@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.4.1",
+	"version": "1.5.1",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
@@ -13,7 +13,7 @@
 	},
 	"homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
 	"engines": {
-		"vscode": "^1.50.0"
+		"vscode": "^1.57.0"
 	},
 	"publisher": "Autodesk",
 	"keywords": [
@@ -56,6 +56,11 @@
 				"command": "autolisp.insertFoldingRegion",
 				"category": "AutoLISP",
 				"title": "%autolispext.regionsnippet.title%"
+			},
+			{
+				"command": "autolisp.generateDocumentation",
+				"category": "AutoLISP",
+				"title": "%autolispext.commentdefun.title%"
 			},
 			{
 				"command": "autolisp.createProject",
@@ -229,10 +234,16 @@
 						"2019",
 						"2020",
 						"2021",
-						"2022"
+						"2022",
+						"2023"
 					],
-					"default": "2022",
+					"default": "2023",
 					"description": "%autolispext.configuration.helptargetyear%"
+				},
+				"autolispext.completion.FilterMacOS": {
+					"type": "boolean",
+					"default": true,
+					"description": "%autolispext.configuration.macfilter.desc%"
 				}
 			}
 		},
@@ -359,29 +370,8 @@
 					"program": "${lispadapterpath}"
 				},
 				"languages": [
-					{
-						"id": "autolisp",
-						"aliases": [
-							"AutoLISP",
-							"autolisp"
-						],
-						"extensions": [
-							".lsp",
-							".mnl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration.json"
-					},
-					{
-						"id": "autolispdcl",
-						"aliases": [
-							"AutoLISPDCL",
-							"autolispdcl"
-						],
-						"extensions": [
-							".dcl"
-						],
-						"configuration": "./extension/smartBracket/language-configuration-dcl.json"
-					}
+					"autolisp",
+					"autolispdcl"
 				],
 				"configurationAttributes": {
 					"attach": {
@@ -608,6 +598,11 @@
 					"when": "resourceLangId == autolisp || resourceLangId == autolispdcl",
 					"command": "autolisp.insertFoldingRegion",
 					"group": "navigation@3"
+				},
+				{
+					"when": "resourceLangId == autolisp",
+					"command": "autolisp.generateDocumentation",
+					"group": "navigation@4"
 				}
 			],
 			"explorer/context": [
@@ -629,7 +624,8 @@
 		"watch": "tsc -p -watch ./",
 		"test": "npm run compile && node ./out/test/runTest.js",
 		"cc": "npm run compile && node ./out/test/runTest.js --codecoverage",
-		"e2etest": "npm run compile && extest setup-and-run -c 1.50.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js -u"
+		"e2etest": "npm run compile && extest setup-and-run -c 1.57.0 ./out/test/e2e/*.js -m ./out/test/e2e/config.js -u",
+		"preinstall": "npx npm-force-resolutions"
 	},
 	"devDependencies": {
 		"@istanbuljs/nyc-config-typescript": "^1.0.1",
@@ -637,7 +633,7 @@
 		"@types/fs-extra": "^8.1.0",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^14.14.6",
-		"@types/vscode": "^1.50.0",
+		"@types/vscode": "^1.57.0",
 		"chai": "^4.2.0",
 		"del": "^4.1.1",
 		"event-stream": "^4.0.1",
@@ -647,7 +643,7 @@
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
 		"mocha": "^6.1.4",
-		"mochawesome": "^6.2.2",
+		"mochawesome": "^7.0.1",
 		"nyc": "^15.1.0",
 		"run-sequence": "^2.2.1",
 		"source-map-resolve": "0.6.0",
@@ -655,8 +651,8 @@
 		"ts-node": "^9.1.1",
 		"ts-sinon": "^2.0.1",
 		"tslint": "5.11.0",
-		"typescript": "^3.9.9",
-		"vscode-extension-tester": "^4.0.2",
+		"typescript": "^4.5.5",
+		"vscode-extension-tester": "^4.2.4",
 		"vscode-nls-dev": "^3.2.6",
 		"vscode-test": "^1.4.1"
 	},
@@ -665,12 +661,13 @@
 		"fs-extra": "^8.1.0",
 		"jschardet": "2.1.1",
 		"os-locale": "5.0.0",
-		"vsce": "1.57.0",
+		"vsce": "^2.5.0",
 		"vscode-languageclient": "4.2.0",
 		"vscode-nls": "3.2.5",
 		"vscode-ripgrep": "1.5.8"
 	},
 	"resolutions": {
-		"yargs-parser": "^18.1.3"
+		"yargs-parser": "^18.1.3",
+		"glob-parent": "^6.0.1"
 	}
 }

@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import { Position } from 'vscode';
-import { LispAtom, LispContainer } from '../../format/sexpression';
+import { LispAtom } from '../../astObjects/lispAtom';
 
 const catom = new LispAtom(0, 0, '; I am a line comment');
 const satom = new LispAtom(32, 5, 'vl-princ-to-string');

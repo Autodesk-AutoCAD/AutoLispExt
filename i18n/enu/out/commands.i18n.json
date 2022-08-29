@@ -1,4 +1,6 @@
 {
   "autolispext.help.commands.openWebHelp": "Failed to load the webHelpAbstraction.json file",
-  "autolispext.commands.addFoldingRegion": "Failed to insert snippet"
+  "autolispext.commands.addFoldingRegion": "Failed to insert snippet",
+  "autolispext.help.commands.generateDocumentation": "A valid defun name could not be located",
+  "autolispext.providers.rename.failed": "The symbol was invalid for renaming operations"
 }

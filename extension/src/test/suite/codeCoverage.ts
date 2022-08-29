@@ -11,6 +11,11 @@ import 'source-map-support/register';
 const NYC = require('nyc');
 
 export async function run(): Promise<void> {
+	const reportingDir = path.resolve(__dirname, '../../../coverage');
+	if(fs.existsSync(reportingDir)) {
+		fs.removeSync(reportingDir);
+	}
+	
 	// Create the mocha test
 	const mocha = new Mocha({
 		ui: 'tdd',

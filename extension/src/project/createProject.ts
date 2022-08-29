@@ -7,7 +7,7 @@ import { ProjectNode, LspFileNode } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
 
 import * as nls from 'vscode-nls';
-const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
+const localize = nls.loadMessageBundle();
 
 export async function getNewProjectFilePath() {
     let label = localize("autolispext.project.createproject.createlabel", "Create");
@@ -23,7 +23,7 @@ export async function getNewProjectFilePath() {
         if (path.basename(fileUri.fsPath).indexOf(' ') === -1) {
             return Promise.resolve(fileUri);
         } else {
-            let msg = AutoLispExt.localize("autolispext.project.createproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
+            let msg = localize("autolispext.project.createproject.nospaces", "Legacy PRJ naming rules do not allow spaces");
             return Promise.reject(msg);
         }
     } else {

@@ -3,7 +3,7 @@
                        ) 
 
   (defun *error* (msg) 
-    (if (not (wcmatch (strcase msg t) "*break,*cancel*,*exit*") ) 
+    (if (not (wcmatch (strcase msg t) "*break,*cancel*,*exit*")) 
       (princ (strcat "\nError: " msg))
     )
     (princ)

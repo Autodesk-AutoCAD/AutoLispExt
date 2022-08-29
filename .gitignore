@@ -16,5 +16,12 @@ utils/HelpAbstractionGenerator/.vs
 utils/HelpAbstractionGenerator/obj
 utils/HelpAbstractionGenerator/packages
 
+utils/autolispext.i18.helper/**/*.pdb
+utils/autolispext.i18.helper/**/*.xml
+utils/autolispext.i18.helper/.vs
+utils/autolispext.i18.helper/obj
+utils/autolispext.i18.helper/packages
+
 extension/src/test/OutputFile
 
+*.vsix

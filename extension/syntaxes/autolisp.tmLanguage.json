@@ -26,7 +26,21 @@
 			"patterns": [
 				{
 					"name": "comment.line",
-					"match": ";[^\\|].*$"
+					"begin": ";[^|](.*?)",
+					"end": "(?=$)",
+					"patterns": [
+						{
+							"name": "string.regexp",							
+							"begin": "(?i)@GLOBAL",
+							"end": "(?=$)",
+							"patterns": [
+								{
+									"name": "comment.line",
+									"match": ".*"
+								}
+							]
+						}
+					]
 				}
 			]
 		},
@@ -36,7 +50,28 @@
 					"name": "comment.block",
 					"begin": ";\\|",
 					"end": "\\|;",
-					"patterns": []
+					"patterns": [
+						{
+							"name": "string.regexp",							
+							"begin": "^\\s*(?i)(@PARAM|@REMARKS|@DESCRIPTION|@RETURNS)(?=\\s.+)",
+							"end": "(\\n|\\s)"
+						},
+						{
+							"name": "keyword",							
+							"begin": "(?<=(?i)@PARAM\\s)\\S+",
+							"end": "(?=$)",
+							"patterns": [
+								{
+									"name": "comment.block",
+									"match": ".*"
+								}
+							]
+						}, 
+						{
+							"name": "string.regexp",							
+							"match": "(?i)@GLOBAL"
+						}
+					]
 				}
 			]
 		},

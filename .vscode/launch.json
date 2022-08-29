@@ -16,6 +16,21 @@
             "sourceMaps": true
         },
         {
+            "name": "Extension Client + Workspace",
+            "type": "extensionHost",
+            "request": "launch",
+            "preLaunchTask": "buildproject",
+            "runtimeExecutable": "${execPath}",
+			"args": [
+                "--extensionDevelopmentPath=${workspaceRoot}",
+                "-g", 
+                "${workspaceFolder}/extension/src/test/SourceFile/renaming",
+                "--disable-extensions"
+            ],
+			"outFiles": ["${workspaceRoot}/extension/out/**/*.js"],
+            "sourceMaps": true
+        },
+        {
             "name": "Extension Tests",
             "type": "extensionHost",
             "request": "launch",
@@ -23,7 +38,10 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
+                "--extensionTestsPath=${workspaceFolder}/out/test/suite/index",
+                "-g", 
+                "${workspaceFolder}/extension/src/test/SourceFile/renaming",
+                "--disable-extensions"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/test/**/*.js"
@@ -41,7 +59,10 @@
             "runtimeExecutable": "${execPath}",
             "args": [
                 "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test/suite/codeCoverage"
+                "--extensionTestsPath=${workspaceFolder}/out/test/suite/codeCoverage",
+                "-g", 
+                "${workspaceFolder}/extension/src/test/SourceFile/renaming",
+                "--disable-extensions"
             ],
             "outFiles": [
                 "${workspaceFolder}/out/test/**/*.js"

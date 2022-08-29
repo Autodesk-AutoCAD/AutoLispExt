@@ -1,4 +1,6 @@
 {
   "autolispext.help.commands.openWebHelp": "無法載入 webHelpAbstraction.json 檔",
-  "autolispext.commands.addFoldingRegion": "無法插入片段"
+  "autolispext.commands.addFoldingRegion": "無法插入片段",
+  "autolispext.help.commands.generateDocumentation": "找不到有效的 defun 名稱",
+  "autolispext.providers.rename.failed": ""
 }

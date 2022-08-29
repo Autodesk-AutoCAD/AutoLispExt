@@ -8,7 +8,7 @@ import { pathEqual } from '../utils';
 import { ReadonlyDocument } from './readOnlyDocument';
 import * as nls from 'vscode-nls';
 
-import {longListFormatAsSingleColum, resetLongListFormatAsSingleColum} from '../format/sexpression'
+import { longListFormatAsSingleColum, resetLongListFormatAsSingleColum } from '../astObjects/sexpression'
 
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 import * as vscode from 'vscode';

@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "は存在しません。launch.json ファイルで指定された製品のフォルダと同じフォルダにファイルが存在することを確認してください。",
+  "autolispext.debug.nodap": "は存在しません。AutoCAD 2020 以降のリリースを使用してください。デバッグする製品と同じフォルダにファイルが存在することを確認してください。",
   "autolispext.debug.noacad": "は存在しません。製品の実行ファイルへのフォルダ パスを確認して修正してください。",
   "autolispext.debug.acad.nosupport": "AutoCAD のこのインスタンスは AutoLISP ファイルのデバッグをサポートしていません。AutoCAD 2020 より後のリリースを使用してください。",
   "autolispext.debug.launchjson.path": "launch.json ファイルの Path 属性を使用して、製品への絶対パスを指定します。",

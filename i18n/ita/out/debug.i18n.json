@@ -1,5 +1,5 @@
 {
-  "autolispext.debug.nodap": "non esiste. Verificare che il file esista nella stessa cartella del prodotto specificato nel file launch.json.",
+  "autolispext.debug.nodap": "non esiste. Utilizzare una release successiva ad AutoCAD 2020. Verificare che il file esista nella stessa cartella del prodotto di cui eseguire il debug.",
   "autolispext.debug.noacad": "non esiste. Verificare e correggere il percorso della cartella del file eseguibile del prodotto.",
   "autolispext.debug.acad.nosupport": "Questa istanza di AutoCAD non supporta il debug di file AutoLISP. Utilizzare una release successiva ad AutoCAD 2020.",
   "autolispext.debug.launchjson.path": "Specificare il percorso assoluto del prodotto con l'attributo Path del file launch.json.",
