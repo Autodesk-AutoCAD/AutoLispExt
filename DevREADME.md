@@ -41,18 +41,6 @@ You have two ways to run the tests:
 npm run test
 ```
 
-## Sign Contributor License Agreement (CLA)
-If you're interested in this open source project and want to become a contributor, please read and sign the Contributor License Agreement(CLA).
-
-Once your PR is created, a CLA bot will automatically add a comment with links to our CLA documents, and explain how to sign CLA.
-
-If you are contributing on behalf of yourself, following the introduction in that comment, it can be done inside your PR.
-NOTE: please make sure that the 'git config user.name' and 'git config user.email' on your computer are identical with those you use to login in to GITHUB.
-
-Once signed, the CLA bot won't bother you in your future PRs.
-
------
-
 ### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
