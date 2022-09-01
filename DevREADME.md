@@ -51,6 +51,8 @@ NOTE: please make sure that the 'git config user.name' and 'git config user.emai
 
 Once signed, the CLA bot won't bother you in your future PRs.
 
+-----
+
 ### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
