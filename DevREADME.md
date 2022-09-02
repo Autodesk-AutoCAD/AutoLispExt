@@ -41,12 +41,6 @@ You have two ways to run the tests:
 npm run test
 ```
 
-## How to sign CLA
-
-Once your PR is created, a CLA bot will automatically add a comment to explain how to sign Contributor License Agreement.
-
-For Individual Contributor, following that comment, it can be done inside your PR; but make sure that the 'git config user.name' and 'git config user.email' on your computer are identical with those you use to login in to GITHUB. Once signed, the bot won't bother you in your future PRs.
-
 ### localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
