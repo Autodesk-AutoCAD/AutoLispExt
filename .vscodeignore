@@ -1,4 +1,5 @@
 .git/**
+.github/**
 .nyc_output/**
 .vscode/**
 .vscode-test/**
@@ -22,7 +23,9 @@ DevREADME.md
 Jenkinsfile
 pack.py
 winCompile.bat
+macCompile.sh
 package-lock.json
+publish.py
 tsconfig.json
 tslint.json
 utils/**
