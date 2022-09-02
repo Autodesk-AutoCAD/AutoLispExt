@@ -239,11 +239,6 @@
 					],
 					"default": "2023",
 					"description": "%autolispext.configuration.helptargetyear%"
-				},
-				"autolispext.completion.FilterMacOS": {
-					"type": "boolean",
-					"default": true,
-					"description": "%autolispext.configuration.macfilter.desc%"
 				}
 			}
 		},
