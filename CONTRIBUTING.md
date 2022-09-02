@@ -19,6 +19,6 @@ Once your PR is created, a CLA bot will automatically add a comment with links t
 
 ## Creating PRs and responding to comments
 Please fork the repo and create your PR from the fork. Please respond to the reviewer's comments.
-## Merging
-Once reviewers are satisfied we will merge your PR. Your changes will appear in the official
 
+## Merging
+Once reviewers are satisfied we will merge your PR. Your changes will appear in the official package.
