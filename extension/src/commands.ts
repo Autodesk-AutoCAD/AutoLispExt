@@ -7,6 +7,9 @@ import { AutoLispExtProvideDefinition } from './providers/gotoProvider';
 import { AutoLispExtProvideReferences } from './providers/referenceProvider';
 import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
 import { SymbolManager } from './symbols';
+import {ILispFragment} from "./astObjects/ILispFragment";
+import {SharedAtomic} from "./providers/providerShared";
+import {DocumentManager} from "./documents";
 
 const localize = nls.loadMessageBundle();
 
@@ -61,7 +64,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 			const doc = AutoLispExt.Documents.getDocument(vsDoc);
 			
 			// find the root LispContainer of the current cursor position
-			const exp = doc.atomsForest.find(p => p.contains(pos));
+			const exp = doc.documentContainer.atoms.find(p => p.contains(pos));
 
 			// Locate the Defun to decorate
 			const def = await getDefunAtPosition(exp, pos);
@@ -160,5 +163,17 @@ export function registerCommands(context: vscode.ExtensionContext){
 			}
 		}
 	}));
+
+	/*AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentManager.Selectors.lsp, DocumentManager.Selectors.dcl], {
+		provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
+			try {
+				// offload all meaningful work to something that can be tested.
+				const roDoc = AutoLispExt.Documents.getDocument(document);
+				return AutoLispExtProvideHover(roDoc, position);
+			} catch (err) {
+				return;	// No localized error since VSCode has a default "no results" response
+			}
+		}
+	}));*/
 
 }

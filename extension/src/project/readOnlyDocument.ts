@@ -108,32 +108,6 @@ export class ReadonlyDocument implements vscode.TextDocument {
         }
     }
 
-    
-    // Converted this from a constant data feature into an on-demand feature that once used is essentially cached for future queries.
-    get atomsForest(): Array<ILispFragment> {
-        if (this.languageId === DocumentManager.Selectors.lsp) {
-            if (this._documentContainer){
-                return this.documentContainer.atoms;
-            } else {
-                this.updateAtomsForest();
-                return this.documentContainer.atoms;
-            }
-        } else {
-            return [];
-        }
-    }
-    
-    // This was segregated from the atomsForest getter to support two primary use cases:
-    //      A force update that will be called on the workspace.onDidSaveTextDocument() saved event to keep the memory document in sync with the user input.
-    //      To recycle/update a memory document object currently being used with AutoLisp code fragments for enhanced data type detection.
-    updateAtomsForest(content?: string) {
-        if (this.languageId === DocumentManager.Selectors.lsp){
-            if (content) {
-                this.initialize(content, this.languageId);
-            }
-            this._documentContainer = LispParser.getDocumentContainer(this.fileContent);  
-        }
-    }
 
     fileContent: string;
     lines: string[];
@@ -275,20 +249,20 @@ export class ReadonlyDocument implements vscode.TextDocument {
     get documentContainer(): LispContainer {
         if (this.languageId !== DocumentManager.Selectors.lsp) {
             return null;
-        } else if (this._documentContainer instanceof LispContainer) {
-            return this._documentContainer;
-        } else {
-            return this._documentContainer = LispParser.getDocumentContainer(this.fileContent);
         }
+
+        return (this._documentContainer instanceof LispContainer)
+            ? this._documentContainer
+            : this._documentContainer = LispParser.getDocumentContainer(this.fileContent);
     }
 
     get documentDclContainer(): DclTile {
         if (this.languageId !== DocumentManager.Selectors.dcl) {
             return null;
-        } else if (this._documentContainer instanceof DclTile) {
-            return this._documentContainer;
-        } else {
-            return this._documentContainer = DclParser.getDocumentTileContainer(this.fileContent);
         }
+
+        return (this._documentContainer instanceof DclTile)
+            ? this._documentContainer
+            : this._documentContainer = DclParser.getDocumentTileContainer(this.fileContent);
     }
 }

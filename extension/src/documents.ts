@@ -146,40 +146,49 @@ export class DocumentManager{
 	}
 
 	private pathConsumeOrValidate(path: string, flag: Origins): string {
-		const key = this.normalizePath(path);		
-		if (fs.existsSync(key) && this.getSelectorType(key) === DocumentManager.Selectors.lsp) {
-			if (this._cached.has(key) === false) {
-				const sources = DocumentSources.create(flag, ReadonlyDocument.open(key));
-				this._cached.set(key, sources);
-			} else {
-				const sources = this._cached.get(key);				
-				this.tryUpdateInternal(sources);
-				sources.flags.add(flag);
-			}
-			return key;
-		} else {
+		const key = this.normalizePath(path);
+		if (!fs.existsSync(key)) {
 			return '';
 		}
+
+		const docType = this.getSelectorType(key);
+		const isAllowedType = docType === DocumentManager.Selectors.lsp || docType === DocumentManager.Selectors.dcl;
+		if (!isAllowedType) {
+			return '';
+		}
+
+		if (this._cached.has(key) === false) {
+			const sources = DocumentSources.create(flag, ReadonlyDocument.open(key));
+			this._cached.set(key, sources);
+		} else {
+			const sources = this._cached.get(key);
+			this.tryUpdateInternal(sources);
+			sources.flags.add(flag);
+		}
+		return key;
 	}
 
 	private documentConsumeOrValidate(doc: vscode.TextDocument, flag: Origins, key?: string): string {
 		if (!key){
 			key = this.normalizePath(doc.fileName);
 		}
-		if (this.getSelectorType(key) === DocumentManager.Selectors.lsp){
-			if (this._cached.has(key) === false) {
-				const sources = DocumentSources.create(flag, doc);
-				this._cached.set(key, sources);
-			} else {
-				const sources = this._cached.get(key);
-				sources.native = doc;
-				this.tryUpdateInternal(sources);
-				sources.flags.add(flag);
-			}
-			return key;
-		} else {
+
+		const docType = this.getSelectorType(key);
+		const isAllowedType = docType === DocumentManager.Selectors.lsp || docType === DocumentManager.Selectors.dcl;
+		if (!isAllowedType) {
 			return '';
 		}
+
+		if (this._cached.has(key) === false) {
+			const sources = DocumentSources.create(flag, doc);
+			this._cached.set(key, sources);
+		} else {
+			const sources = this._cached.get(key);
+			sources.native = doc;
+			this.tryUpdateInternal(sources);
+			sources.flags.add(flag);
+		}
+		return key;
 	}
 
 	getDocument(nDoc: vscode.TextDocument): ReadonlyDocument {
@@ -192,7 +201,7 @@ export class DocumentManager{
 		// ultimately, if the LSP file exists, it will return a document, but it may or may not be part
 		// of the "normal sources" and thats why the origin is unknown. More often than not, this will
 		// yield what it already processed in a production setting. However, while running tests this
-		// UNKNOWN version could be the only origin and won't be useable in any "non-testing operations"
+		// UNKNOWN version could be the only origin and won't be usable in any "non-testing operations"
 		const key = this.pathConsumeOrValidate(DocumentServices.normalizeFilePath(fsPath), Origins.UNKNOWN);
 		return this._cached.get(key)?.internal;
 	}
@@ -254,8 +263,11 @@ export class DocumentManager{
 		// Grab the opened document (if available) and add it as our first known opened document
 		//		It is important to start tracking this early because we can't actually see what is opened by VSCode during its internal workspace reload.
 		//		Our first opportunity to capture these previously opened documents is when they are activated. **Unavoidable Technical Debt that needs future resolution**
-		if (vscode.window.activeTextEditor && this.getSelectorType(vscode.window.activeTextEditor.document.fileName) === DocumentManager.Selectors.lsp) {
-			this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
+		if (vscode.window.activeTextEditor) {
+			const docType = this.getSelectorType(vscode.window.activeTextEditor.document.fileName);
+			if (docType == DocumentManager.Selectors.lsp || docType == DocumentManager.Selectors.dcl) {
+				this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
+			}
 		}
 
 		// This builds the '_workspace' *.LSP Memory Document placeholder set
