@@ -1,13 +1,13 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { WebHelpLibrary } from "./help/openWebHelp";
+import {WebHelpLibrarySingleton} from "./help/documentationLibrary";
 import * as vscode from 'vscode';
 
 export let internalLispFuncs: Array<string> = [];
 export let internalDclKeys: Array<string> = [];
 export let winOnlyListFuncPrefix: Array<string> = [];
 export let allCmdsAndSysvars: Array<string> = [];
-export let webHelpContainer: WebHelpLibrary = new WebHelpLibrary();
+export let WebHelpContainer: WebHelpLibrarySingleton = WebHelpLibrarySingleton.Instance;
 
 export function loadAllResources(){
 	 readDataFileByLine("../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items; });
@@ -19,7 +19,7 @@ export function loadAllResources(){
 			allCmdsAndSysvars.push(item);
 		}
 	});
-	readJsonDataFile("./help/webHelpAbstraction.json", webHelpContainer);
+	readJsonDataFile("./help/webHelpAbstraction.json", WebHelpContainer);
 }	
 
 

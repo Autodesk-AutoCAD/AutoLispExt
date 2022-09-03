@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import * as nls from 'vscode-nls';
 import { AutoLispExt } from './extension';
-import { openWebHelp } from './help/openWebHelp';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
 import { AutoLispExtProvideDefinition } from './providers/gotoProvider';
@@ -13,10 +12,20 @@ const localize = nls.loadMessageBundle();
 
 export function registerCommands(context: vscode.ExtensionContext){
 
-	// Associated with the right click "Open Online Help" menu item
 	context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', async () => {
+		// Note: this function is directly referenced by the package.json contributes (commands & menus) section.
+		// 		 Associated with the right click "Open Online Help" menu item.
 		try {
-			await openWebHelp();
+			const editor: vscode.TextEditor = vscode.window.activeTextEditor;
+			let selected: string = editor.document.getText(editor.selection);
+			if (selected === "") {
+				await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+				selected = editor.document.getText(editor.selection);
+			}
+			let urlPath: string = AutoLispExt.Resources.WebHelpContainer.getWebHelpUrlBySymbolName(selected, editor.document.fileName);
+			if (urlPath.trim() !== ""){
+				vscode.env.openExternal(vscode.Uri.parse(urlPath));
+			}
 		}
 		catch (err) {
 			if (err){

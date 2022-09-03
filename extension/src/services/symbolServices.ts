@@ -3,6 +3,7 @@ import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { ISymbolBase } from '../symbols';
 import { FlatContainerServices } from './flatContainerServices';
 import { ILispFragment } from '../astObjects/ILispFragment';
+import {WebHelpContainer} from "../resources";
 
 
 export namespace SymbolServices {
@@ -14,9 +15,9 @@ export namespace SymbolServices {
 	// This list of native keys is used to detect symbols we would not want to track
 	const _nativeKeys: Array<string> = [];
 	function generateNativeKeys() : void {
-		_nativeKeys.push(...new Set(Object.keys(AutoLispExt.Resources.webHelpContainer.functions)
-			.concat(Object.keys(AutoLispExt.Resources.webHelpContainer.ambiguousFunctions))
-			.concat(Object.keys(AutoLispExt.Resources.webHelpContainer.enumerators))
+		_nativeKeys.push(...new Set(Object.keys(AutoLispExt.Resources.WebHelpContainer.functions)
+			.concat(Object.keys(AutoLispExt.Resources.WebHelpContainer.ambiguousFunctions))
+			.concat(Object.keys(AutoLispExt.Resources.WebHelpContainer.enumerators))
 			.concat(AutoLispExt.Resources.internalLispFuncs)));
 		_nativeKeys.sort();
 	}
