@@ -34,7 +34,7 @@ export namespace DocumentServices {
 	}
 
 	function testDocumentKeysAndCollectIfUnused(roDoc: ReadonlyDocument, lowerKey: string, collected: Array<string>): boolean {
-		if (roDoc.documentContainer.body.userSymbols?.has(lowerKey)) {				
+		if (roDoc.documentContainer?.body.userSymbols?.has(lowerKey)) {				
 			const docKey = normalizeFilePath(roDoc.fileName);
 			if (!collected.includes(docKey)) {
 				collected.push(docKey);
@@ -48,6 +48,9 @@ export namespace DocumentServices {
 	
 
 	export function hasUnverifiedGlobalizers(roDoc: ReadonlyDocument, flatView?: Array<ILispFragment>): boolean {
+		if (!roDoc.isLSP) {
+			return false;
+		}
 		flatView = flatView ?? roDoc.documentContainer.flatten();
 		const basicSymbolMap = roDoc.documentContainer.userSymbols;
 		return hasUnverifiedGlobalizersWorker(flatView, basicSymbolMap);
@@ -90,7 +93,7 @@ export namespace DocumentServices {
 
 	export function getUnverifiedGlobalizerList(roDoc: ReadonlyDocument, lowerKey: string, flatView?: Array<ILispFragment>): Array<ILispFragment> {
 		if (!flatView) {
-			flatView = roDoc.documentContainer.flatten();
+			flatView = roDoc.documentContainer?.flatten();
 		}
 		const rawSymbolMap = roDoc.documentContainer.userSymbols?.get(lowerKey);
 		return rawSymbolMap?.filter(p => flatView[p].hasGlobalFlag)?.map(i => flatView[i]);

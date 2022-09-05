@@ -4,6 +4,7 @@ import { StringBuilder, } from '../utils';
 import { DclTile } from '../astObjects/dclTile';
 import { DclAtom } from '../astObjects/dclAtom';
 import { DclAttribute } from '../astObjects/dclAttribute';
+import { AutoLispExt } from '../extension';
 
 
 const lf = '\n'.charCodeAt(0); 
@@ -161,6 +162,21 @@ class DclDocContext implements vscode.Disposable {
 		return this;
 	}
 
+	saveFragmentsAsTileOrAttribute() : DclDocContext {
+		// This is only called on the semi-colon breakpoint. In most scenarios, this will be an attribute, but when
+		// there is only 2 atoms and the last one is the semi-colon, then we will assume it is "default" tile.
+
+		if (this.fragments.length === 2 
+			&& this.fragments[1].symbol === ';' 
+			&& AutoLispExt.Resources.WebHelpContainer.dclTiles.has(this.fragments[0].symbol.toLowerCase())) {
+			this.createNewTileScopeFromFragments();
+			this.closeActiveTileScope();
+		} else {
+			this.saveFragmentsAsAttribute();
+		}
+
+		return this;
+	}
 
 	saveFragmentsAsAttribute() : DclDocContext {
 		// Forces comments into the parent Tile Container and creates Attribute from remaining elements. This only 
@@ -237,10 +253,10 @@ function _getDclDocumentContainer(ctx: DclDocContext) {
 			   .saveCurrentCharToFragments()
 			   .moveNext()
 			   .closeActiveTileScope();
-		} else if (curr === semiColon) { // attribute/fragment breakpoint
+		} else if (curr === semiColon) { // tile/attribute/fragment breakpoint
 			ctx.saveTempDataAndCurrentCharToFragments()
 			   .moveNext()
-			   .saveFragmentsAsAttribute();
+			   .saveFragmentsAsTileOrAttribute();
 		} else if (curr === forwardSlash) { // attribute/fragment breakpoint
 			ctx.saveTempData()
 			   .saveFragmentsAsAttribute()

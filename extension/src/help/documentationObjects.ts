@@ -17,7 +17,7 @@ enum WebHelpCategory {
 
 // this "Type" representation is fundamental building block for objects that derive from WebHelpEntity and
 // will play an integral role to enhancing intellisense suggestions
-class WebHelpValueType {
+export class WebHelpValueType {
 	id: string;				// typically indicative of the "name" that was used in the signature area of the documentation
 	typeNames: string;		// Often equal to id, but could be the underlying type name of an enum or object
 	primitive: string;		// Always a lower case representation, but could also be a truly primitive type such as enum or object when the previous two held identifiers

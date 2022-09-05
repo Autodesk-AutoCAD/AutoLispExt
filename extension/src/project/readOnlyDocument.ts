@@ -265,4 +265,8 @@ export class ReadonlyDocument implements vscode.TextDocument {
             ? this._documentContainer
             : this._documentContainer = DclParser.getDocumentTileContainer(this.fileContent);
     }
+
+    get isLSP(): boolean {
+        return this.languageId === DocumentManager.Selectors.lsp;
+    }
 }

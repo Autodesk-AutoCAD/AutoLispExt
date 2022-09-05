@@ -104,11 +104,11 @@ namespace RenameProviderSupport {
 	}
 
 	export function getRenameTargetsFromParentScope(roDoc: ReadonlyDocument, targetScope: ISymbolHost, lowerKey: string): Array<ISourceRange> {
-		const flatView = roDoc.documentContainer.flatten();
+		const flatView = roDoc.documentContainer?.flatten();
 
 		// This handles renaming @Param declarations of Defun documentation
 		const commentTargets: Array<ISourceRange> = [];
-		if (targetScope?.hasId) {
+		if (roDoc.isLSP && targetScope?.hasId) {
 			const named = flatView[targetScope.asHost.named.flatIndex];
 			named.commentLinks?.forEach(commentIndex => {
 				const innerRange = getBlockCommentParamNameRange(flatView[commentIndex], lowerKey);

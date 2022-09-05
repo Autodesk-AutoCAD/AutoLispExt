@@ -10,6 +10,7 @@ import { SymbolManager } from './symbols';
 import {ILispFragment} from "./astObjects/ILispFragment";
 import {SharedAtomic} from "./providers/providerShared";
 import {DocumentManager} from "./documents";
+import {AutoLispExtProvideHover} from "./providers/hoverProvider";
 
 const localize = nls.loadMessageBundle();
 
@@ -62,6 +63,9 @@ export function registerCommands(context: vscode.ExtensionContext){
 			const vsDoc = vscode.window.activeTextEditor.document;
 			const lf = vsDoc.eol === vscode.EndOfLine.LF ? '\n' : '\r\n';
 			const doc = AutoLispExt.Documents.getDocument(vsDoc);
+			if (!doc.isLSP) {
+				return;
+			}
 			
 			// find the root LispContainer of the current cursor position
 			const exp = doc.documentContainer.atoms.find(p => p.contains(pos));
@@ -164,7 +168,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
-	/*AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentManager.Selectors.lsp, DocumentManager.Selectors.dcl], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentManager.Selectors.lsp, DocumentManager.Selectors.dcl], {
 		provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
 			try {
 				// offload all meaningful work to something that can be tested.
@@ -174,6 +178,6 @@ export function registerCommands(context: vscode.ExtensionContext){
 				return;	// No localized error since VSCode has a default "no results" response
 			}
 		}
-	}));*/
+	}));
 
 }

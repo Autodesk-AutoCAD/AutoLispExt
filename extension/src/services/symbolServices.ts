@@ -49,8 +49,11 @@ export namespace SymbolServices {
 
 	
 
-	export function hasGlobalFlag(source: ReadonlyDocument|Array<ILispFragment>, symbolRef: ISymbolBase): boolean {
-		source = Array.isArray(source) ? source : source.documentContainer.flatten();
+	export function hasGlobalFlag(source: ReadonlyDocument|Array<ILispFragment>, symbolRef: ISymbolBase): boolean {		
+		source = Array.isArray(source) ? source : source.documentContainer?.flatten();
+		if (!source) {
+			return false;
+		}
 		const thisAtom = source[symbolRef?.asReference?.flatIndex ?? -1];
 		if (!thisAtom 
 			|| symbolRef.asHost 
