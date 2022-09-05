@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import { IRootSymbolHost, ISymbolHost, ISymbolReference, SymbolManager } from '../symbols';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SharedAtomic } from './providerShared';

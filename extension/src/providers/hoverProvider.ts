@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { IDclContainer, IDclFragment } from '../astObjects/dclInterfaces';
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import {DocumentServices} from "../services/documentServices";
 import {ISymbolReference, SymbolManager} from "../symbols";
@@ -38,7 +38,7 @@ namespace handlersDCL {
 
 
     function processAttributeAtom(parent: IDclContainer, atom: IDclFragment): vscode.Hover {
-        const def = AutoLispExt.Resources.WebHelpContainer.dclAttributes.get(atom.symbol.toLowerCase());
+        const def = AutoLispExt.WebHelpLibrary.dclAttributes.get(atom.symbol.toLowerCase());
         if (!def || parent.firstAtom.flatIndex !== atom.flatIndex) {
             return null;
         }
@@ -46,7 +46,7 @@ namespace handlersDCL {
     }
 
     function processTileAtom(parent: IDclContainer, atom: IDclFragment): vscode.Hover {
-        const def = AutoLispExt.Resources.WebHelpContainer.dclTiles.get(atom.symbol.toLowerCase());
+        const def = AutoLispExt.WebHelpLibrary.dclTiles.get(atom.symbol.toLowerCase());
         if (def) {
             return new vscode.Hover(Annotation.asMarkdown(def));
         }
@@ -73,7 +73,7 @@ namespace handlersLSP {
 
 
     function getNativeResource(lowerKey: string) : vscode.MarkdownString|Array<vscode.MarkdownString> {
-        const webHelp = AutoLispExt.Resources.WebHelpContainer;
+        const webHelp = AutoLispExt.WebHelpLibrary;
 
         if (webHelp.ambiguousFunctions.has(lowerKey)) {
             return webHelp.ambiguousFunctions.get(lowerKey).map(x => Annotation.asMarkdown(x));
@@ -170,7 +170,7 @@ namespace handlersLSP {
     }
 
 
-    const breakables = ['nil', 't', '/', ')']
+    const breakables = ['nil', 't', '/', ')'];
     function getUserResourceMarkdown(source: ISymbolReference, flatView: LispAtom[], roDoc: ReadonlyDocument) : vscode.MarkdownString {
         const atom = flatView[source.flatIndex];
         const userData = atom.commentLinks ? parseDocumentation(flatView[atom.commentLinks[atom.commentLinks.length - 1]]) : null;

@@ -1,9 +1,10 @@
-import { DocumentManager } from '../documents';
+import { AutoLispExt } from '../context';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
-import { getExtensionSettingString, IJsonLoadable } from "../resources";
+import { IJsonLoadable } from "../resources";
 import { WebHelpDclAtt, WebHelpDclTile, WebHelpEntity, WebHelpFunction, WebHelpObject } from './documentationObjects';
+import {DocumentServices} from "../services/documentServices";
 
-let WebHelpLibrary: WebHelpLibrarySingleton;
+let _instance: WebHelpLibrarySingleton;
 
 // This container object represents all of the normalized data extracted from help.autodesk.com/view/OARX/
 export class WebHelpLibrarySingleton implements IJsonLoadable {
@@ -18,14 +19,14 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     private constructor() {}
 
     static get Instance(): WebHelpLibrarySingleton {
-        if (WebHelpLibrary instanceof WebHelpLibrarySingleton) {
-            return WebHelpLibrary;
+        if (_instance instanceof WebHelpLibrarySingleton) {
+            return _instance;
         }
-        return WebHelpLibrary = new WebHelpLibrarySingleton();
+        return _instance = new WebHelpLibrarySingleton();
     }
 
     get year(): string {
-        return getExtensionSettingString('help.TargetYear');
+        return AutoLispExt.Resources.getExtensionSettingString('help.TargetYear');
     }
 
     get jsonCreatedWithVersionYear(): string {
@@ -33,7 +34,7 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     }
 
 
-    // consumes a JSON converted object into the WebHelpLibrary
+    // consumes a JSON converted object into the _instance
     loadFromJsonObject(obj: object): void{
         // Issue #70, A user configured extension setting was requested by Issue #70 and deprecated the use of the embedded json year
         //            However, this was left available in case we would like to setup a unit test that insures the JSON isn't stale.
@@ -73,14 +74,14 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     // If found, yields help URL relevant to that symbol, but otherwise outputs a filetypes contextual default help URL.
     // Also removed all reference to ActiveEditor and added a filePath arg so the function would be easier
     // to test and then becomes recyclable for use in markdown generation.
-    getWebHelpUrlBySymbolName(item: string, file: string|ReadonlyDocument|DocumentManager.Selectors): string {
+    getWebHelpUrlBySymbolName(item: string, file: string|ReadonlyDocument|DocumentServices.Selectors): string {
         const lowerKey = item.toLowerCase().trim();
-        const selector = typeof file === 'string' ? DocumentManager.getSelectorType(file)
-            : file instanceof ReadonlyDocument ? DocumentManager.getSelectorType(file.fileName)
+        const selector = typeof file === 'string' ? DocumentServices.getSelectorType(file)
+            : file instanceof ReadonlyDocument ? DocumentServices.getSelectorType(file.fileName)
                 : file;
-        if (selector === DocumentManager.Selectors.lsp) {
+        if (selector === DocumentServices.Selectors.LSP) {
             return this.processLSP(lowerKey, selector);
-        } else if (selector === DocumentManager.Selectors.dcl) {
+        } else if (selector === DocumentServices.Selectors.DCL) {
             return this.processDCL(lowerKey);
         }
         return WebHelpEntity.getDefaultHelpLink(this.year);
@@ -95,7 +96,7 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
         return WebHelpEntity.createHelpLink("F8F5A79B-9A05-4E25-A6FC-9720216BA3E7", this.year); // DCL General Landing Page
     }
 
-    private processLSP(key: string, selector: DocumentManager.Selectors): string {
+    private processLSP(key: string, selector: DocumentServices.Selectors): string {
         if (this.objects.has(key)){
             return this.objects.get(key).getHelpLink(this.year);
         } else if (this.functions.has(key)){

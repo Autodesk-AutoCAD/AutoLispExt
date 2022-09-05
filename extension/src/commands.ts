@@ -1,16 +1,14 @@
 import * as vscode from "vscode";
 import * as nls from 'vscode-nls';
-import { AutoLispExt } from './extension';
+import { AutoLispExt } from './context';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
 import { AutoLispExtProvideDefinition } from './providers/gotoProvider';
 import { AutoLispExtProvideReferences } from './providers/referenceProvider';
 import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
 import { SymbolManager } from './symbols';
-import {ILispFragment} from "./astObjects/ILispFragment";
-import {SharedAtomic} from "./providers/providerShared";
-import {DocumentManager} from "./documents";
 import {AutoLispExtProvideHover} from "./providers/hoverProvider";
+import { DocumentServices } from './services/documentServices';
 
 const localize = nls.loadMessageBundle();
 
@@ -26,7 +24,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 				await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
 				selected = editor.document.getText(editor.selection);
 			}
-			let urlPath: string = AutoLispExt.Resources.WebHelpContainer.getWebHelpUrlBySymbolName(selected, editor.document.fileName);
+			let urlPath: string = AutoLispExt.WebHelpLibrary.getWebHelpUrlBySymbolName(selected, editor.document.fileName);
 			if (urlPath.trim() !== ""){
 				vscode.env.openExternal(vscode.Uri.parse(urlPath));
 			}
@@ -89,7 +87,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([DocumentServices.Selectors.LSP, 'lisp'], {
 		provideDefinition: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
 						 			: vscode.ProviderResult<vscode.Definition | vscode.LocationLink[]> {
 			// Purpose: locate potential source definitions of the underlying symbol
@@ -107,7 +105,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 	const msgRenameFail = localize("autolispext.providers.rename.failed", "The symbol was invalid for renaming operations");
-	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider(['autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider([DocumentServices.Selectors.LSP, 'lisp'], {
 		prepareRename: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
 							    : vscode.ProviderResult<vscode.Range | { range: vscode.Range; placeholder: string; }> 
 		{
@@ -149,7 +147,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerReferenceProvider([ 'autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerReferenceProvider([ DocumentServices.Selectors.LSP, 'lisp'], {
 		provideReferences: function (document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken)
 									: vscode.ProviderResult<vscode.Location[]> 
 		{
@@ -168,7 +166,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentManager.Selectors.lsp, DocumentManager.Selectors.dcl], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentServices.Selectors.LSP, DocumentServices.Selectors.DCL], {
 		provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
 			try {
 				// offload all meaningful work to something that can be tested.

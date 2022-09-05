@@ -2,9 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as nls from 'vscode-nls';
 import { LispParser } from '../parsing/lispParser';
-import { DocumentManager } from '../documents';
 import { DocumentServices } from '../services/documentServices';
-import { ILispFragment } from '../astObjects/ILispFragment';
 import { LispContainer } from '../astObjects/lispContainer';
 import { DclTile } from '../astObjects/dclTile';
 import * as DclParser from '../parsing/dclParser';
@@ -53,7 +51,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     static open(filePath: string): ReadonlyDocument {
-        const langId = DocumentManager.getSelectorType(filePath);
+        const langId = DocumentServices.getSelectorType(filePath);
         if (fs.existsSync(filePath) === false || langId === "") {
             return null;
         }
@@ -81,7 +79,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
         ret.eol = vscode.EndOfLine.CRLF;
         ret.eolLength = 2;
         ret.lineCount = doc.lineCount;
-        ret.languageId = DocumentManager.getSelectorType(doc.fileName);
+        ret.languageId = DocumentServices.getSelectorType(doc.fileName);
         ret.lines = [];        
         ret.fileName = doc.fileName;
         for (let i = 0; i < doc.lineCount; i++) {
@@ -247,7 +245,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
 
     
     get documentContainer(): LispContainer {
-        if (this.languageId !== DocumentManager.Selectors.lsp) {
+        if (this.languageId !== DocumentServices.Selectors.LSP) {
             return null;
         }
 
@@ -257,7 +255,7 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     get documentDclContainer(): DclTile {
-        if (this.languageId !== DocumentManager.Selectors.dcl) {
+        if (this.languageId !== DocumentServices.Selectors.DCL) {
             return null;
         }
 
@@ -267,6 +265,6 @@ export class ReadonlyDocument implements vscode.TextDocument {
     }
 
     get isLSP(): boolean {
-        return this.languageId === DocumentManager.Selectors.lsp;
+        return this.languageId === DocumentServices.Selectors.LSP;
     }
 }

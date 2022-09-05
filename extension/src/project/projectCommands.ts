@@ -14,7 +14,7 @@ import { replaceInProject } from './findReplace/replaceInProject';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
 import { clearSearchResults, clearSearchResultWithError, stopSearching, getWarnIsSearching } from './findReplace/clearResults';
 import { RefreshProject } from './refreshProject';
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import * as fs from 'fs-extra';
 
 import * as nls from 'vscode-nls';
@@ -110,14 +110,14 @@ export function registerProjectCommands(context: vscode.ExtensionContext) {
             let selectedDirs = selectedFiles.filter(f => fs.statSync(f.fsPath, { bigint: false}).isDirectory());
             selectedFiles = selectedFiles.filter(f => 
                 fs.statSync(f.fsPath, { bigint: false}).isFile() &&
-                AutoLispExt.Documents.getSelectorType(f.fsPath) === AutoLispExt.Selectors.lsp
+                AutoLispExt.Documents.getSelectorType(f.fsPath) === AutoLispExt.Selectors.LSP
             );
             
             selectedDirs.forEach(dir => {
                 fs.readdirSync(dir.fsPath).forEach(name => {
                     const fspath = dir.fsPath.replace(/[\/\\]$/, '') + '\\' + name;
                     if (fs.existsSync(fspath) && fs.statSync(fspath, { bigint: false}).isFile()) {
-                        if (AutoLispExt.Documents.getSelectorType(fspath) === AutoLispExt.Selectors.lsp){
+                        if (AutoLispExt.Documents.getSelectorType(fspath) === AutoLispExt.Selectors.LSP){
                             selectedFiles.push(vscode.Uri.file(fspath));
                         }
                     }

@@ -1,11 +1,11 @@
 
 import * as vscode from 'vscode';
 import { ReadonlyDocument } from "./project/readOnlyDocument";
-import { AutoLispExt } from './extension';
+import { AutoLispExt } from './context';
 import { ProjectTreeProvider  } from "./project/projectTree";
 import * as fs from	'fs-extra';
 import { glob } from 'glob';
-import { DocumentServices } from './services/documentServices';
+import {DocumentServices} from './services/documentServices';
 import { SymbolManager } from './symbols';
 
 
@@ -39,10 +39,19 @@ namespace DocumentSources{
 	}
 }
 
+let _instance: DocumentManager;
+
 export class DocumentManager{	
 	private _cached: Map<string, DocumentSources> = new Map();
 	private _watchers: vscode.FileSystemWatcher[] = [];
-	
+
+	static get Instance(): DocumentManager {
+		if (_instance) {
+			return _instance;
+		}
+		return _instance = new DocumentManager();
+	}
+
 	// The _delayedGlobEvent variable holds a function to be ran after a duration and having a value compensates for filewatcher actions firing
 	// multiple times before and after the internal contents have actually changed. The updateExcludes() function nulls this value on completion
 	private _delayedGlobEvent = null;
@@ -87,7 +96,7 @@ export class DocumentManager{
 		const result: string[] = [];
 		if (ProjectTreeProvider.hasProjectOpened()){
 			ProjectTreeProvider.instance().projectNode.sourceFiles.forEach(x => {
-				result.push(this.normalizePath(x.filePath));
+				result.push(DocumentServices.normalizeFilePath(x.filePath));
 			});
 		}
 		return result;
@@ -95,22 +104,9 @@ export class DocumentManager{
 
 	// General purpose methods for identifying the scope of work for a given document type
 	getSelectorType(fspath: string): string { 
-		return DocumentManager.getSelectorType(fspath); 
+		return DocumentServices.getSelectorType(fspath);
 	}
-	public static getSelectorType(fspath: string): string {
-		if (fspath) {
-			const ext: string = fspath.toUpperCase().slice(-4);
-			switch (ext) {
-				case ".LSP": return DocumentManager.Selectors.lsp;
-				case ".MNL": return DocumentManager.Selectors.lsp;
-				case ".PRJ": return DocumentManager.Selectors.prj;
-				case ".DCL": return DocumentManager.Selectors.dcl;
-				default: return "";
-			}
-		} else {
-			return "";
-		}
-	}
+
 	
 	// This function is called once on startup, but again by relevant workspace events using the bind(this) to maintain proper context
 	private updateExcludes() {
@@ -120,7 +116,7 @@ export class DocumentManager{
 			if (entry.excluded) {
 				glob(entry.glob, { cwd: entry.root, nocase: true, realpath: true }, (err, mlst) => {
 					if (!err) {
-						this._excludes.push(...mlst.map(p => this.normalizePath(p)));
+						this._excludes.push(...mlst.map(p => DocumentServices.normalizeFilePath(p)));
 					}
 				});
 			}
@@ -129,9 +125,6 @@ export class DocumentManager{
 		this._delayedGlobEvent = null;
 	}
 
-	private normalizePath(path: string): string {
-		return path.replace(/\\/g, '/');
-	}
 
 	private tryUpdateInternal(sources: DocumentSources){
 		if (sources.native && (!sources.internal || !sources.internal.equal(sources.native))) {
@@ -146,13 +139,13 @@ export class DocumentManager{
 	}
 
 	private pathConsumeOrValidate(path: string, flag: Origins): string {
-		const key = this.normalizePath(path);
+		const key = DocumentServices.normalizeFilePath(path);
 		if (!fs.existsSync(key)) {
 			return '';
 		}
 
 		const docType = this.getSelectorType(key);
-		const isAllowedType = docType === DocumentManager.Selectors.lsp || docType === DocumentManager.Selectors.dcl;
+		const isAllowedType = docType === DocumentServices.Selectors.LSP || docType === DocumentServices.Selectors.DCL;
 		if (!isAllowedType) {
 			return '';
 		}
@@ -170,11 +163,11 @@ export class DocumentManager{
 
 	private documentConsumeOrValidate(doc: vscode.TextDocument, flag: Origins, key?: string): string {
 		if (!key){
-			key = this.normalizePath(doc.fileName);
+			key = DocumentServices.normalizeFilePath(doc.fileName);
 		}
 
 		const docType = this.getSelectorType(key);
-		const isAllowedType = docType === DocumentManager.Selectors.lsp || docType === DocumentManager.Selectors.dcl;
+		const isAllowedType = docType === DocumentServices.Selectors.LSP || docType === DocumentServices.Selectors.DCL;
 		if (!isAllowedType) {
 			return '';
 		}
@@ -265,7 +258,7 @@ export class DocumentManager{
 		//		Our first opportunity to capture these previously opened documents is when they are activated. **Unavoidable Technical Debt that needs future resolution**
 		if (vscode.window.activeTextEditor) {
 			const docType = this.getSelectorType(vscode.window.activeTextEditor.document.fileName);
-			if (docType == DocumentManager.Selectors.lsp || docType == DocumentManager.Selectors.dcl) {
+			if (docType == DocumentServices.Selectors.LSP || docType == DocumentServices.Selectors.DCL) {
 				this.documentConsumeOrValidate(vscode.window.activeTextEditor.document, Origins.OPENED);
 			}
 		}
@@ -299,7 +292,7 @@ export class DocumentManager{
 			const watcher = vscode.workspace.createFileSystemWatcher(pattern, false, false, false);
 
 			AutoLispExt.Subscriptions.push(watcher.onDidDelete((e: vscode.Uri) => {
-				const key = this.normalizePath(e.fsPath);
+				const key = DocumentServices.normalizeFilePath(e.fsPath);
 				const prjs = this.projectKeys;
 				if (this._cached.has(key)){
 					const sources = this._cached.get(key);
@@ -313,7 +306,7 @@ export class DocumentManager{
 		
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidCreate((e: vscode.Uri) => {
-				const key = this.normalizePath(e.fsPath);
+				const key = DocumentServices.normalizeFilePath(e.fsPath);
 				this.pathConsumeOrValidate(key, Origins.WSPACE);
 				// New files require the file.exclude & search.exclude settings to be re-evaluated
 				if (this._delayedGlobEvent === null) {	
@@ -323,7 +316,7 @@ export class DocumentManager{
 			}));
 	
 			AutoLispExt.Subscriptions.push(watcher.onDidChange((e: vscode.Uri) => {
-				const key = this.normalizePath(e.fsPath);
+				const key = DocumentServices.normalizeFilePath(e.fsPath);
 				this.pathConsumeOrValidate(key, Origins.WSPACE);
 				if (e.fsPath.toUpperCase().endsWith('SETTINGS.JSON') && this._delayedGlobEvent === null) {	
 					this._delayedGlobEvent = this.updateExcludes;				
@@ -335,7 +328,7 @@ export class DocumentManager{
 		});
 	}
 
-	constructor() {
+	private constructor() {
 		// The following test analysis is out of date, but still excellent documentation for what/why/when something is firing. 
 		// For context, the original configuration used separate _opened and _workspace Map()'s to track documents and now we are using
 		// a single _cached Map() with a more complex object to track pairs of ReadonlyDocument's & vscode.TextDocument's with a set of contextual flags.
@@ -433,7 +426,7 @@ export class DocumentManager{
 		this.initialize();
 
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidCloseTextDocument((e: vscode.TextDocument) => {
-			const source = this._cached.get(this.normalizePath(e.fileName));
+			const source = this._cached.get(DocumentServices.normalizeFilePath(e.fileName));
 			source?.flags.delete(Origins.OPENED);
 		}));
 	
@@ -444,7 +437,7 @@ export class DocumentManager{
 		// Note: if the file is already opened and deleted through the workspace, it is deleted AND closed.
 		AutoLispExt.Subscriptions.push(vscode.workspace.onDidDeleteFiles((e: vscode.FileDeleteEvent) => {
 			e.files.forEach(file => {
-				const key = this.normalizePath(file.fsPath);
+				const key = DocumentServices.normalizeFilePath(file.fsPath);
 				if (this._cached.has(key)) {
 					this._cached.delete(key);
 				}
@@ -453,11 +446,3 @@ export class DocumentManager{
 	} // End of DocumentManger Constructor
 }
 
-
-export namespace DocumentManager{
-	export enum Selectors {
-		lsp = "autolisp",
-		dcl = "autolispdcl",
-		prj = "autolispprj"
-	}
-}

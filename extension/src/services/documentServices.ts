@@ -1,17 +1,32 @@
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { SymbolManager } from '../symbols';
 import { ILispFragment } from '../astObjects/ILispFragment';
 
 
-// This namespace should probably be renamed to LspDocumentServices once the new DCL AST Objects
-// find the need to for extended analytical functions. IE, avoid the namespace duality issue.
 export namespace DocumentServices {
+	export enum Selectors {
+		LSP = "autolisp",
+		DCL = "autolispdcl",
+		PRJ = "autolispprj"
+	}
 
-	// DRY Technical Debt
-	// 		Subsequent PR's will migrate various 'documents.ts' functions into the DocumentServices
-	//		The objective is to trim down that already bloated file, centralize some shared
-	//		functionality and create a specific place for extension that doesn't increase bloating.
+	export function getSelectorType(fspath: string): string {
+		if (fspath) {
+			const ext: string = fspath.toUpperCase().slice(-4);
+			switch (ext) {
+				case ".LSP": return Selectors.LSP;
+				case ".MNL": return Selectors.LSP;
+				case ".PRJ": return Selectors.PRJ;
+				case ".DCL": return Selectors.DCL;
+				default: return "";
+			}
+		} else {
+			return "";
+		}
+	}
+
+
 	export function normalizeFilePath(path: string): string {
 		return path.replace(/\\/g, '/');
 	}
@@ -24,7 +39,8 @@ export namespace DocumentServices {
 		// can happen because a document could contextually be "open", in a "PRJ" and in the "workspace"
 		const collected = [];
 		// this should be very fast since LispContainer constructors now aggrigates foreign symbols
-		return AutoLispExt.Documents.OpenedDocuments.filter(roDoc => {
+		const docs = AutoLispExt.Documents;
+		return docs.OpenedDocuments.filter(roDoc => {
 			return testDocumentKeysAndCollectIfUnused(roDoc, lowerKey, collected);
 		}).concat(AutoLispExt.Documents.ProjectDocuments.filter(roDoc => {
 			return testDocumentKeysAndCollectIfUnused(roDoc, lowerKey, collected);
@@ -34,7 +50,7 @@ export namespace DocumentServices {
 	}
 
 	function testDocumentKeysAndCollectIfUnused(roDoc: ReadonlyDocument, lowerKey: string, collected: Array<string>): boolean {
-		if (roDoc.documentContainer?.body.userSymbols?.has(lowerKey)) {				
+		if (roDoc.documentContainer?.body?.userSymbols?.has(lowerKey)) {				
 			const docKey = normalizeFilePath(roDoc.fileName);
 			if (!collected.includes(docKey)) {
 				collected.push(docKey);
