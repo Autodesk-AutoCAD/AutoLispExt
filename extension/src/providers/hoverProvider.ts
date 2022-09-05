@@ -16,9 +16,13 @@ export function AutoLispExtProvideHover(doc: ReadonlyDocument, position: vscode.
 {
     if (doc.documentDclContainer) {
         return handlersDCL.getHoverResults(doc, position);
-    } else {
+    }
+    
+    if (doc.documentContainer) {
         return handlersLSP.getHoverResults(doc, position);
     }
+    
+    return null;
 }
 
 

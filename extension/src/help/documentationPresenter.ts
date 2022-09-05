@@ -127,9 +127,8 @@ export namespace Annotation {
 			return UserMarkdown(source, paramIndex ?? -1, args ?? [], docs, path);
 		}
 
-		const typ = typeof source;
-		if (typ === 'string') {
-			return EnumMarkdown(source as string);
+		if (source) {
+			return EnumMarkdown(source.toString());
 		}
 
 		return null;
@@ -222,18 +221,13 @@ export namespace Annotation {
 
 
 	function EnumMarkdown(source: string) : vscode.MarkdownString {
-		if (!source) {
-			return null;
-		}
-		const result = new vscode.MarkdownString(`${AnnoIcon.MEMBER} ${MarkdownHelpers.bold(source)} [WIN|MAC?]\n\nEnumerated Value`);
+		const result = new vscode.MarkdownString(`${AnnoIcon.MEMBER} ${MarkdownHelpers.bold(source)} [WIN|?]\n\nEnumerated Value`);
 		result.isTrusted = true;
 		result.supportThemeIcons = true;
+		return result;
 	}
 
 
-
-
-// TODO: handle ACTIVE index
 	function UserMarkdown(source: LispAtom, index: number, args: LispAtom[], docs: ILispDocs, sourceFile: string): vscode.MarkdownString {
 		const lines = [];
 		lines.push(`${AnnoIcon.USER} ${MarkdownHelpers.fileLink(MarkdownHelpers.bold(source.symbol), sourceFile, source.line)} [?]\n`);
