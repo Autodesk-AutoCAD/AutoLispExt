@@ -135,13 +135,13 @@ suite("Providers: Hover", function () {
     test("UserDefined LSP - Markdown Verification", function () {
         try {
             const user1 = AutoLispExtProvideHover(lsp, new vscode.Position(7,5));      // LoadGlobalVariables
-            expect(normalize(fs.readFileSync(`${mdDir}/LoadGlobalVariables.md`, fileOps))).to.equal(user1['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/LoadGlobalVariables.md`, fileOps)).to.equal(user1['contents'][0].value);
             const user2 = AutoLispExtProvideHover(lsp, new vscode.Position(10,10));    // C:CText
-            expect(normalize(fs.readFileSync(`${mdDir}/CCText.md`, fileOps))).to.equal(user2['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/CCText.md`, fileOps)).to.equal(user2['contents'][0].value);
             const user3 = AutoLispExtProvideHover(lsp, new vscode.Position(11,11));    // settextstyle
-            expect(normalize(fs.readFileSync(`${mdDir}/settextstyle.md`, fileOps))).to.equal(user3['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/settextstyle.md`, fileOps)).to.equal(user3['contents'][0].value);
             const user4 = AutoLispExtProvideHover(lsp, new vscode.Position(36,10));    // LookBusy - local undocumented
-            expect(normalize(fs.readFileSync(`${mdDir}/LookBusy.md`, fileOps))).to.equal(user4['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/LookBusy.md`, fileOps)).to.equal(user4['contents'][0].value);
             const user5 = AutoLispExtProvideHover(lsp, new vscode.Position(17,7));     // expect null
             expect(user5).to.equal(null);
         }
@@ -154,22 +154,22 @@ suite("Providers: Hover", function () {
     test("Native LSP - Markdown Verification", function () {
         try {
             const native1 = AutoLispExtProvideHover(lsp, new vscode.Position(12,8));   // command
-            expect(normalize(fs.readFileSync(`${mdDir}/command.md`, fileOps))).to.equal(native1['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/command.md`, fileOps)).to.equal(native1['contents'][0].value);
             const native2 = AutoLispExtProvideHover(lsp, new vscode.Position(24,10));  // not
-            expect(normalize(fs.readFileSync(`${mdDir}/not.md`, fileOps))).to.equal(native2['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/not.md`, fileOps)).to.equal(native2['contents'][0].value);
             const native3 = AutoLispExtProvideHover(lsp, new vscode.Position(39,10));  // setq
-            expect(normalize(fs.readFileSync(`${mdDir}/setq.md`, fileOps))).to.equal(native3['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/setq.md`, fileOps)).to.equal(native3['contents'][0].value);
             const native4 = AutoLispExtProvideHover(lsp, new vscode.Position(39,14));  // expect null
             expect(native4).to.equal(null);
             const native5 = AutoLispExtProvideHover(lsp, new vscode.Position(45,28));  // vla-get-layers
-            expect(normalize(fs.readFileSync(`${mdDir}/vla-get-layers.md`, fileOps))).to.equal(native5['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/vla-get-layers.md`, fileOps)).to.equal(native5['contents'][0].value);
             const native6 = AutoLispExtProvideHover(lsp, new vscode.Position(54,5));   // vla-put-AttachmentPoint  (has Enums)
-            expect(normalize(fs.readFileSync(`${mdDir}/vla-put-attachmentpoint.md`, fileOps))).to.equal(native6['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/vla-put-attachmentpoint.md`, fileOps)).to.equal(native6['contents'][0].value);
             const native7 = AutoLispExtProvideHover(lsp, new vscode.Position(54,54));  // acAttachmentPointTopLeft (is Enum)
-            expect(normalize(fs.readFileSync(`${mdDir}/acAttachmentPointTopLeft.md`, fileOps))).to.equal(native7['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/acAttachmentPointTopLeft.md`, fileOps)).to.equal(native7['contents'][0].value);
             const native8 = AutoLispExtProvideHover(lsp, new vscode.Position(55,25));  // vlax-3d-point (ambiguous function)
-            expect(normalize(fs.readFileSync(`${mdDir}/vlax-3d-point-1.md`, fileOps))).to.equal(native8['contents'][0].value);
-            expect(normalize(fs.readFileSync(`${mdDir}/vlax-3d-point-2.md`, fileOps))).to.equal(native8['contents'][1].value);
+            expect(fs.readFileSync(`${mdDir}/vlax-3d-point-1.md`, fileOps)).to.equal(native8['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/vlax-3d-point-2.md`, fileOps)).to.equal(native8['contents'][1].value);
         }
         catch (err) {
             assert.fail(`One or more of the tracked Native LSP markdown representations drifted from expected results\n${err}`);
@@ -180,13 +180,13 @@ suite("Providers: Hover", function () {
     test("Native DCL Tiles - Markdown Verification", function () {
         try {
             const tile1 = AutoLispExtProvideHover(dcl, new vscode.Position(5,17));     // dialog
-            expect(normalize(fs.readFileSync(`${mdDir}/dialog.md`, fileOps))).to.equal(tile1['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/dialog.md`, fileOps)).to.equal(tile1['contents'][0].value);
             const tile2 = AutoLispExtProvideHover(dcl, new vscode.Position(11,11));    // boxed_row
-            expect(normalize(fs.readFileSync(`${mdDir}/boxed_row.md`, fileOps))).to.equal(tile2['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/boxed_row.md`, fileOps)).to.equal(tile2['contents'][0].value);
             const tile3 = AutoLispExtProvideHover(dcl, new vscode.Position(44,15));    // button
-            expect(normalize(fs.readFileSync(`${mdDir}/button.md`, fileOps))).to.equal(tile3['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/button.md`, fileOps)).to.equal(tile3['contents'][0].value);
             const tile4 = AutoLispExtProvideHover(dcl, new vscode.Position(47,10));    // ok_cancel
-            expect(normalize(fs.readFileSync(`${mdDir}/ok_cancel.md`, fileOps))).to.equal(tile4['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/ok_cancel.md`, fileOps)).to.equal(tile4['contents'][0].value);
         }
         catch (err) {
             assert.fail(`One or more of the tracked Native DCL markdown representations drifted from expected results\n${err}`);
@@ -197,13 +197,13 @@ suite("Providers: Hover", function () {
     test("Native DCL Attributes - Markdown Verification", function () {
         try {
             const att1 = AutoLispExtProvideHover(dcl, new vscode.Position(7,7));       // label
-            expect(normalize(fs.readFileSync(`${mdDir}/label.md`, fileOps))).to.equal(att1['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/label.md`, fileOps)).to.equal(att1['contents'][0].value);
             const att2 = AutoLispExtProvideHover(dcl, new vscode.Position(11,40));     // children_alignment (has Enum)
-            expect(normalize(fs.readFileSync(`${mdDir}/children_alignment.md`, fileOps))).to.equal(att2['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/children_alignment.md`, fileOps)).to.equal(att2['contents'][0].value);
             const att3 = AutoLispExtProvideHover(dcl, new vscode.Position(21,30));     // expect null (horizontal_margin: but doesn't have dedicated help page)
             expect(att3).to.equal(null);
             const att4 = AutoLispExtProvideHover(dcl, new vscode.Position(42,60));     // is_cancel
-            expect(normalize(fs.readFileSync(`${mdDir}/is_cancel.md`, fileOps))).to.equal(att4['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/is_cancel.md`, fileOps)).to.equal(att4['contents'][0].value);
         }
         catch (err) {
             assert.fail(`One or more of the tracked Native DCL markdown representations drifted from expected results\n${err}`);
@@ -214,7 +214,7 @@ suite("Providers: Hover", function () {
     test("UserDefined LSP Dynamic - Markdown Verification", function () {
         try {
             const dyn1 = AutoLispExtProvideHover(mock, new vscode.Position(6,2));        // dynamic (memory LSP document to create edge case scenario)
-            expect(normalize(fs.readFileSync(`${mdDir}/dynamic.md`, fileOps))).to.equal(dyn1['contents'][0].value);
+            expect(fs.readFileSync(`${mdDir}/dynamic.md`, fileOps)).to.equal(dyn1['contents'][0].value);
         }
         catch (err) {
             assert.fail(`One or more of the tracked UserDefined Dynamic markdown representations drifted from expected results\n${err}`);
@@ -231,7 +231,7 @@ suite("Providers: Hover", function () {
             const active3 = Annotation.asMarkdown(AutoLispExt.WebHelpLibrary.ambiguousFunctions.get('vlax-3d-point')[0], 2);
             expect(active3.value).to.include("**`z`**");
 
-            expect(normalize(fs.readFileSync(`${mdDir}/vlax-3d-point-ACTIVE.md`, fileOps))).to.equal(active2.value);
+            expect(fs.readFileSync(`${mdDir}/vlax-3d-point-ACTIVE.md`, fileOps)).to.equal(active2.value);
         }
         catch (err) {
             assert.fail(`One or more of the tracked Native DCL markdown representations drifted from expected results\n${err}`);

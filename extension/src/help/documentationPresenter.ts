@@ -154,9 +154,8 @@ export namespace Annotation {
 
 		lines.push(MarkdownHelpers.addReturn(source.returnType));
 
-		const result = new vscode.MarkdownString(lines.join('\n'));
+		const result = new vscode.MarkdownString(lines.join('\n'), true);
 		result.isTrusted = true;
-		result.supportThemeIcons = true;
 		return result;
 	}
 
@@ -177,9 +176,8 @@ export namespace Annotation {
 				lines.push(MarkdownHelpers.bullet(e));
 			});
 		}
-		const result = new vscode.MarkdownString(lines.join('\n'));
+		const result = new vscode.MarkdownString(lines.join('\n'), true);
 		result.isTrusted = true;
-		result.supportThemeIcons = true;
 		return result;
 	}
 
@@ -215,17 +213,15 @@ export namespace Annotation {
 			}
 			lines.push(text);
 		}
-		const result = new vscode.MarkdownString(lines.join('\n'));
+		const result = new vscode.MarkdownString(lines.join('\n'), true);
 		result.isTrusted = true;
-		result.supportThemeIcons = true;
 		return result;
 	}
 
 
 	function EnumMarkdown(source: string) : vscode.MarkdownString {
-		const result = new vscode.MarkdownString(`${AnnoIcon.MEMBER} ${MarkdownHelpers.bold(source)} [WIN|?]\n\nEnumerated Value`);
+		const result = new vscode.MarkdownString(`${AnnoIcon.MEMBER} ${MarkdownHelpers.bold(source)} [WIN|?]\n\nEnumerated Value`, true);
 		result.isTrusted = true;
-		result.supportThemeIcons = true;
 		return result;
 	}
 
@@ -265,9 +261,8 @@ export namespace Annotation {
 		lines.push(MarkdownHelpers.divider);
 		lines.push(`${MarkdownHelpers.italic('source')} — ${path.basename(sourceFile)}`);
 
-		const result = new vscode.MarkdownString(lines.join('\n'));
+		const result = new vscode.MarkdownString(lines.join('\n'), true);
 		result.isTrusted = true;
-		result.supportThemeIcons = true;
 		return result;
 	}
 
