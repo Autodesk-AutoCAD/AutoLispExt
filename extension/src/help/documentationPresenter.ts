@@ -28,17 +28,20 @@ namespace MarkdownHelpers {
         return `*${text}*`;
     }
 
+	export function emphasis(text: string): string {
+        return `\`${text}\``;
+    }
+
 	export function webLink(text: string, url: string): string {
         return `[${text}](${url})`;
     }
 
 	export function fileLink(text: string, filePath: string, line: number): string {
+		return text;
+
 		// TODO: there is a syntax for file links within vscode, but wasting far too much time trying to make it work;
 		//  	 possibly need newer VSCode target version & @Types update.
 		//return `[${text}](vscode://${filePath}:${line})`;
-
-		return text;
-
 
 		//// MISC Stuff I've Tried
 		//const normal = path.replace(/ /g, '%20');
@@ -53,11 +56,11 @@ namespace MarkdownHelpers {
 	}
 
 	export function addParam(source: LibObjects.WebHelpValueType, active: boolean): string {
-		return `${divider}\n${webHelpValueTypeHandler(source, 'Param', active)}`;
+		return `${divider}\n${webHelpValueTypeHandler(source, italic('param'), active)}`;
 	}
 
 	export function addReturn(source: LibObjects.WebHelpValueType): string {
-		return `${divider}\n${webHelpValueTypeHandler(source, 'Returns', false)}`;
+		return `${divider}\n${webHelpValueTypeHandler(source, italic('returns'), false)}`;
 	}
 
 	function webHelpValueTypeHandler(item: LibObjects.WebHelpValueType, label: string, active: boolean): string {
@@ -85,15 +88,17 @@ namespace MarkdownHelpers {
 
 		const enums = item.enums.filter(x => x.trim().length > 0);
 
-		if (active) {
+		if (label.includes('returns')) {
 			return enums.length >= 1
-				? `@${label}: **${item.id}**&lt;${item.primitive}&gt;\n\nTypes: ${typeString}\n\n - ${enums.join('\n - ')}`
-				: `@${label}: **${item.id}**&lt;${item.primitive}&gt;}\n\nTypes: ${typeString}`;
+			? `@${label} — &lt;${item.primitive}&gt;\n\nTypes: ${typeString}\n\n - ${enums.join('\n - ')}`
+			: `@${label} — &lt;${item.primitive}&gt;\n\nTypes: ${typeString}`;
 		}
 
+		const id = active ? MarkdownHelpers.bold(MarkdownHelpers.emphasis(item.id)) : MarkdownHelpers.emphasis(item.id);
+
 		return enums.length >= 1
-			? `@${label}: ${item.id}&lt;${item.primitive}&gt;\n\nTypes: ${typeString}\n\n - ${enums.join('\n - ')}`
-			: `@${label}: ${item.id}&lt;${item.primitive}&gt;\n\nTypes: ${typeString}`;
+			? `@${label} — ${id}&lt;${item.primitive}&gt;\n\nTypes: ${typeString}\n\n - ${enums.join('\n - ')}`
+			: `@${label} — ${id}&lt;${item.primitive}&gt;\n\nTypes: ${typeString}`;
 	}
 }
 
@@ -239,28 +244,26 @@ export namespace Annotation {
 		lines.push(sig);
 		lines.push(MarkdownHelpers.divider);
 
-		if (docs?.params) {
-			sig = extractDynamicSignature(source, args, index, docs, lines);
-		} else {
-			sig  = extractGenericSignature(source, args, index);
-		}
+		sig = docs?.params
+			? extractDynamicSignature(source, args, index, docs, lines)
+			: extractGenericSignature(source, args, index);
+
 		lines[sigIndex] = sig; // because extractDynamicSignature() adds additional lines
 
-		lines.push(MarkdownHelpers.divider);
-
-		if (docs?.remarks) {
-			lines.push(`@Remarks: ${docs.remarks.value}`);
-			lines.push(MarkdownHelpers.divider);
-		}
 
 		if (docs?.returns) {
-			lines.push(`@Returns: ${docs.returns.value}`);
+			lines.push(`@${MarkdownHelpers.italic('returns')} — ${docs.returns.value}`);
 		} else {
-			lines.push(`${AnnoIcon.WARNING} @Returns: Undocumented`);
+			lines.push(`@${MarkdownHelpers.italic('returns')} — ${AnnoIcon.WARNING} Undocumented`);
+		}
+
+		if (docs?.remarks) {
+			lines.push(MarkdownHelpers.divider);
+			lines.push(`@${MarkdownHelpers.italic('remarks')} — ${docs.remarks.value}`);
 		}
 
 		lines.push(MarkdownHelpers.divider);
-		lines.push(`Source: ${MarkdownHelpers.italic(path.basename(sourceFile))}`);
+		lines.push(`${MarkdownHelpers.italic('source')} — ${path.basename(sourceFile)}`);
 
 		const result = new vscode.MarkdownString(lines.join('\n'));
 		result.isTrusted = true;
@@ -278,31 +281,33 @@ export namespace Annotation {
 	}
 
 	function extractDynamicSignature(source: LispAtom, args: LispAtom[], index: number, docs: ILispDocs, lines: any[]) {
-		let sig = `(${source.symbol}`;
+		let sig = `(${source.symbol}`;		
 		const expect = args.map(x => x.symbol.toLowerCase());
 		for (let i = 0; i < docs.params.length; i++) {
 			const param = docs.params[i];
 
 			let id = args.length < i ? args[i].symbol : param.name;
-			if (i === index) {
-				id = MarkdownHelpers.bold(id);
-			}
+			const annoId = index === i ? MarkdownHelpers.bold(MarkdownHelpers.emphasis(id)) : MarkdownHelpers.emphasis(id);
+			const sigId = index === i ? MarkdownHelpers.bold(id) : id;
 
 			if (i >= expect.length || param.name.toLowerCase() !== expect[i]) {
-				lines.push(`${AnnoIcon.WARNING} @Param: ${id}\n\n${param.value}\n${MarkdownHelpers.divider}`);
+				lines.push(`@${MarkdownHelpers.italic('param')} — ${AnnoIcon.WARNING} ${annoId} ${param.value}\n${MarkdownHelpers.divider}`);
 			} else {
-				lines.push(`@Param: ${id}\n\n${param.value}\n${MarkdownHelpers.divider}`);
+				lines.push(`@${MarkdownHelpers.italic('param')} — ${annoId} ${param.value}\n${MarkdownHelpers.divider}`);
 			}
 
-			sig += ` ${id}`;
+			sig += ` ${sigId}`;
 		}
 		if (args.length > docs.params.length) {
 			for (let i = docs.params.length; i < args.length; i++) {
-				const id = index === i ? MarkdownHelpers.bold(args[i].symbol) : args[i].symbol;
-				lines.push(`${AnnoIcon.WARNING} @Param: ${id}\n\nUndocumented\n${MarkdownHelpers.divider}`);
-				sig += ` ${id}`;
+				const id = args[i].symbol;
+				const annoId = index === i ? MarkdownHelpers.bold(MarkdownHelpers.emphasis(id)) : MarkdownHelpers.bold(id);
+				const sigId = index === i ? MarkdownHelpers.bold(id) : id;
+				lines.push(`@${MarkdownHelpers.italic('param')} — ${AnnoIcon.WARNING} ${annoId} Undocumented\n${MarkdownHelpers.divider}`);
+				sig += ` ${sigId}`;
 			}
 		}
+		
 		sig += ')';
 		return sig;
 	}

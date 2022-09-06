@@ -76,8 +76,10 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     // to test and then becomes recyclable for use in markdown generation.
     getWebHelpUrlBySymbolName(item: string, file: string|ReadonlyDocument|DocumentServices.Selectors): string {
         const lowerKey = item.toLowerCase().trim();
-        const selector = typeof file === 'string' ? DocumentServices.getSelectorType(file)
-            : file instanceof ReadonlyDocument ? DocumentServices.getSelectorType(file.fileName)
+        const selector = typeof file === 'string' 
+            ? DocumentServices.getSelectorType(file)
+            : file instanceof ReadonlyDocument 
+                ? DocumentServices.getSelectorType(file.fileName)
                 : file;
         if (selector === DocumentServices.Selectors.LSP) {
             return this.processLSP(lowerKey, selector);

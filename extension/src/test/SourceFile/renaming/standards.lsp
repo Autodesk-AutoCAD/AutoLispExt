@@ -32,7 +32,7 @@
   Sets the specified text style if it exists
   @GLOBAL
   @Param sfc:style1 desired style name
-  @Returns void
+  @Remarks Style must be already defined in the drawing
 |;
 (defun SetTextStyle (sfc:style1 / testResult) ; re-used variable in localized context
   (setq testResult (tblsearch "STYLE" sfc:style1)) ; @Global invalid because of localization

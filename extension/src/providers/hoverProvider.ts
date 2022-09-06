@@ -109,27 +109,12 @@ namespace handlersLSP {
             return null;
         }
 
-        const flatView = roDoc.documentContainer.flatten();
-        
         if (defs.length === 1) {
-            return getUserResourceMarkdown(defs[0], flatView, roDoc);
-        }
-
-        for (let i = 0; i < defs.length; i++) {
-            const def = defs[i];
-            const localizer = def.findLocalizingParent();
-
-            if (pos && localizer.range.contains(pos)) {
-                return this.getUserResourceMarkdown(def, flatView, roDoc);
-            }
-
-            if (def.parent && def.range.contains(pos)) {
-                return this.getUserResourceMarkdown(def, flatView, roDoc);
-            }
+            return getUserResourceMarkdown(defs[0], roDoc.documentContainer.flatten(), roDoc);
         }
 
         // fallback, provide last defined; this assumes it will override prior definitions
-        return this.getUserResourceMarkdown(defs[defs.length - 1], flatView, roDoc);
+        return getUserResourceMarkdown(defs[defs.length - 1], roDoc.documentContainer.flatten(), roDoc);
     }
 
 
