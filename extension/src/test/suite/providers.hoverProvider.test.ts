@@ -26,7 +26,7 @@ suite("Providers: Hover", function () {
     
 
     suiteSetup(async () => {
-        AutoLispExt.Resources.setExtensionSettingString('help.TargetYear', '2021');
+        AutoLispExt.WebHelpLibrary.year = '2021';
         lsp = ReadonlyDocument.open(lspPath);
         dcl = ReadonlyDocument.open(dclPath);
         const hasDupes = ';Dynamic Def1\r\n(defun dynamic (x y / z) t)\r\n;Dynamic Def2\r\n(defun dynamic (x y) t)\r\n;Dynamic Def3\r\n(defun dynamic (x) t)\r\n(dynamic x)';

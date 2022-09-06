@@ -15,6 +15,7 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     ambiguousFunctions: Map<string, WebHelpFunction[]> = new Map();
     enumerators: Map<string, string> = new Map();
     private _jsonYear: string = '';
+    private _testYear: string = null;
 
     private constructor() {}
 
@@ -26,8 +27,13 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     }
 
     get year(): string {
-        return AutoLispExt.Resources.getExtensionSettingString('help.TargetYear');
+        return this._testYear ?? AutoLispExt.Resources.getExtensionSettingString('help.TargetYear');
     }
+
+    set year(value: string) {
+        this._testYear = value;
+    }
+    
 
     get jsonCreatedWithVersionYear(): string {
         return this._jsonYear;
