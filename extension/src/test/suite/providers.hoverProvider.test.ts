@@ -241,17 +241,25 @@ suite("Providers: Hover", function () {
 
 
     test("UserDefined LSP ActiveIndex - Markdown Verification", function () {
+        let passedCount = 0;
         try {
-            const doc = DocumentServices.findAllDocumentsWithCustomSymbolKey('settextstyle')[0];
-            const map = SymbolManager.getSymbolMap(doc);
-            const pointers = map.collectAllSymbols().get('settextstyle');
-            const flatView = doc.documentContainer.flatten();
-            const atom = flatView[pointers[0].flatIndex];
-            const arg = flatView[pointers[0].flatIndex + 2];
-            const userDocs = parseDocumentation(flatView[atom.commentLinks[atom.commentLinks.length - 1]]);
+            DocumentServices.findAllDocumentsWithCustomSymbolKey('settextstyle').forEach(doc => {
+                const flatView = doc.documentContainer.flatten();
+                const map = SymbolManager.getSymbolMap(doc);
+                const defs = map.collectAllSymbols().get('settextstyle').filter(x => x.isDefinition);
 
-            const active1 = Annotation.asMarkdown(atom, 0, [arg], userDocs, doc.fileName);
-            expect(active1.value).to.include("**`sfc:style1`**");
+                if (defs.length === 0 || !flatView[defs[0].flatIndex].commentLinks)  {
+                    return;
+                }
+                
+                const atom = flatView[defs[0].flatIndex];
+                const arg = flatView[defs[0].flatIndex + 2];
+                const userDocs = parseDocumentation(flatView[atom.commentLinks[atom.commentLinks.length - 1]]);
+                const active1 = Annotation.asMarkdown(atom, 0, [arg], userDocs, doc.fileName);
+                expect(active1.value).to.include("**`sfc:style1`**");
+                passedCount++;
+            });
+            expect(passedCount).to.equal(1);
         }
         catch (err) {
             assert.fail(`One or more of the tracked UserDefined LSP markdown representations drifted from expected results\n${err}`);
