@@ -1,15 +1,18 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { WebHelpLibrary } from "./help/openWebHelp";
+import {AutoLispExt} from "./context";
 import * as vscode from 'vscode';
 
 export let internalLispFuncs: Array<string> = [];
 export let internalDclKeys: Array<string> = [];
 export let winOnlyListFuncPrefix: Array<string> = [];
 export let allCmdsAndSysvars: Array<string> = [];
-export let webHelpContainer: WebHelpLibrary = new WebHelpLibrary();
+export let isLoaded = false;
 
 export function loadAllResources(){
+	 if (isLoaded) {
+		return;
+	 }
 	 readDataFileByLine("../extension/data/alllispkeys.txt", (items) => { internalLispFuncs = items; });
 	 readDataFileByLine("../extension/data/alldclkeys.txt", (items) => { internalDclKeys = items; });
 	 readDataFileByLine("../extension/data/winonlylispkeys_prefix.txt", (items) => { winOnlyListFuncPrefix = items; });
@@ -19,7 +22,8 @@ export function loadAllResources(){
 			allCmdsAndSysvars.push(item);
 		}
 	});
-	readJsonDataFile("./help/webHelpAbstraction.json", webHelpContainer);
+	readJsonDataFile("./help/webHelpAbstraction.json", AutoLispExt.WebHelpLibrary);
+	isLoaded = true;
 }	
 
 
@@ -93,6 +97,17 @@ export function getExtensionSettingString(settingName: string): string {
 	}
 
     return setting.toString().trim();
+}
+
+export function setExtensionSettingString(settingName: string, newValue: string): boolean {
+    let settingGroup = vscode.workspace.getConfiguration('autolispext');    
+
+	try {
+		settingGroup?.update(settingName, newValue);	
+		return true;
+	} catch (error) {
+		return false;
+	}
 }
 
 export function getExtensionSettingBoolean(settingName: string): boolean {

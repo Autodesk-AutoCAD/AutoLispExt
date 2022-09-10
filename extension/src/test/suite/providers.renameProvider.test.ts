@@ -6,7 +6,7 @@ import { Position } from 'vscode';
 import { ReadonlyDocument } from '../../project/readOnlyDocument';
 import { IRootSymbolHost, SymbolManager } from '../../symbols';
 import { TDD, AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from '../../providers/renameProvider';
-import { AutoLispExt } from '../../extension';
+import { AutoLispExt } from '../../context';
 
 let docSymbols: IRootSymbolHost;
 

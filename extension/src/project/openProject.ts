@@ -3,7 +3,7 @@ import { CursorPosition, ListReader } from '../format/listreader';
 import { Sexpression } from '../astObjects/sexpression';
 import { ProjectDefinition } from './projectDefinition';
 import { CheckUnsavedChanges } from './checkUnsavedChanges';
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import * as vscode from 'vscode'
 import * as path from 'path'
 import { ReadonlyDocument } from './readOnlyDocument';

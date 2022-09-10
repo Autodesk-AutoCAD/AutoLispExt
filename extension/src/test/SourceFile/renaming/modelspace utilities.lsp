@@ -51,3 +51,6 @@
   )
   (princ)
 )
+
+(vla-put-attachmentpoint mtext acAttachmentPointTopLeft)
+(setq vlaPoint (vlax-3d-point 1.0 2.0 3.0))

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { DocumentServices } from '../services/documentServices';
 import { FlatContainerServices } from '../services/flatContainerServices';

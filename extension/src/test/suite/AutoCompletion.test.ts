@@ -6,7 +6,7 @@ import * as os from 'os';
 import { getLispAndDclCompletions,
   getCmdAndVarsCompletionCandidates,
   getMatchingWord } from "../../completion/autocompletionProvider";
-import { allCmdsAndSysvars } from "../../resources";
+import { AutoLispExt } from "../../context";
 import { readFile2TextDocument } from "./helper";
 let assert = chai.assert;
 const testDir = path.join(__dirname + "/../../../extension/src/test");
@@ -223,7 +223,7 @@ suite("AutoCompletion Tests", function () {
     const inputword = "ci";
     try {
       const isupper = false;
-      let suggestLabel = getSuggestLabelCMD(allCmdsAndSysvars,inputword,isupper);
+      let suggestLabel = getSuggestLabelCMD(AutoLispExt.Resources.allCmdsAndSysvars,inputword,isupper);
       let expectedList = ['circle','circlerad'];
       chai.expect(suggestLabel).to.eql(expectedList);
     } catch (err) {
@@ -236,7 +236,7 @@ suite("AutoCompletion Tests", function () {
     const inputword = "CI";
     try {
       const isupper = true;
-      let suggestLabel = getSuggestLabelCMD(allCmdsAndSysvars,inputword,isupper);
+      let suggestLabel = getSuggestLabelCMD(AutoLispExt.Resources.allCmdsAndSysvars,inputword,isupper);
       let expectedList = ['CIRCLE','CIRCLERAD'];
       chai.expect(suggestLabel).to.eql(expectedList);
     } catch (err) {
@@ -249,7 +249,7 @@ suite("AutoCompletion Tests", function () {
     const inputword = "_pli";
     try {
       const isupper = false;
-      let suggestLabel = getSuggestLabelCMD(allCmdsAndSysvars,inputword,isupper);
+      let suggestLabel = getSuggestLabelCMD(AutoLispExt.Resources.allCmdsAndSysvars,inputword,isupper);
       let expectedList = ['_pline','_plineconvertmode','_plinegcenmax','_plinegen',
       '_plinereversewidths','_plinetype','_plinewid'];
       chai.expect(suggestLabel).to.eql(expectedList);
@@ -262,7 +262,7 @@ suite("AutoCompletion Tests", function () {
     const inputword = "-plo";
     try {
       const isupper = false;
-      let suggestLabel = getSuggestLabelCMD(allCmdsAndSysvars,inputword,isupper);
+      let suggestLabel = getSuggestLabelCMD(AutoLispExt.Resources.allCmdsAndSysvars,inputword,isupper);
       let expectedList = ['-plot','-plotstyle','-plotstamp'];
       chai.expect(suggestLabel).to.eql(expectedList);
     } catch (err) {

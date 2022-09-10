@@ -77,6 +77,7 @@ export interface ISymbolHost extends ISymbolBase {
 	readonly items: Array<ISymbolBase>;
 	readonly named: ISymbolReference|null;
 	readonly isValid: boolean;
+	readonly isRoot: boolean;
 	collectAllSymbols(allSymbols?: Map<string, Array<ISymbolReference>>): Map<string, Array<ISymbolReference>>;
 	findLocalizingParent(key: string): ISymbolHost;
 }
@@ -173,6 +174,7 @@ class AnonymousSymbolHost implements ISymbolHost {
 	get asHost() { return this; }
 	get asReference() { return null; }
 	get isValid() { return !this._disposed; }
+	get isRoot() { return false; }
 	
 	
 	constructor(owner: ISymbolHost, fsPath: string, source: LispContainer, isProcessedBySubClass = false) {
@@ -316,6 +318,7 @@ class RootSymbolMapHost extends AnonymousSymbolHost implements IRootSymbolHost {
 		super(null, DocumentServices.normalizeFilePath(fsPath), source, true);
 		this.aggregateContainer(source);
 	}
+	get isRoot() { return true; }
 
 	findLocalizingParent(key: string): ISymbolHost {
 		return this;
