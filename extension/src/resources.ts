@@ -99,16 +99,6 @@ export function getExtensionSettingString(settingName: string): string {
     return setting.toString().trim();
 }
 
-export function setExtensionSettingString(settingName: string, newValue: string): boolean {
-    let settingGroup = vscode.workspace.getConfiguration('autolispext');    
-
-	try {
-		settingGroup?.update(settingName, newValue);	
-		return true;
-	} catch (error) {
-		return false;
-	}
-}
 
 export function getExtensionSettingBoolean(settingName: string): boolean {
     let settingGroup = vscode.workspace.getConfiguration('autolispext');

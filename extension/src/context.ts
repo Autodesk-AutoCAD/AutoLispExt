@@ -58,10 +58,12 @@ export class ContextManager{
 	initialize(context: vscode.ExtensionContext): void {
 		if (!this._init) {
 			this._ctx = context;
+			this._init = true;
 		}
 		this._docManager = DocumentManager.Instance;
-		if (!resources.isLoaded)
+		if (!resources.isLoaded) {
 			resources.loadAllResources();
+		}
 	}
 }
 

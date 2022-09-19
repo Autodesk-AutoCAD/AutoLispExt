@@ -1,4 +1,10 @@
 import * as vscode from "vscode";
+import {
+	TextDocument, ProviderResult, CancellationToken,
+	Position, Range,
+	CompletionContext, CompletionItem, CompletionList
+} from "vscode";
+
 import * as nls from 'vscode-nls';
 import { AutoLispExt } from './context';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
@@ -9,6 +15,7 @@ import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './provi
 import { SymbolManager } from './symbols';
 import {AutoLispExtProvideHover} from "./providers/hoverProvider";
 import { DocumentServices } from './services/documentServices';
+import { invokeCompletionProviderDcl } from './completion/completionProviderDcl';
 
 const localize = nls.loadMessageBundle();
 
@@ -177,5 +184,14 @@ export function registerCommands(context: vscode.ExtensionContext){
 			}
 		}
 	}));
+
+	AutoLispExt.Subscriptions.push(vscode.languages.registerCompletionItemProvider([DocumentServices.Selectors.DCL], {
+
+		provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) : ProviderResult<CompletionItem[]|CompletionList> {
+			const roDoc = AutoLispExt.Documents.getDocument(document);
+			return invokeCompletionProviderDcl(roDoc, position, context);
+		}
+	}, ...[' ', ':', '=', ';', '/']));
+
 
 }
