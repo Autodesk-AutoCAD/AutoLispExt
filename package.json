@@ -293,7 +293,7 @@
 				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
 				"editor.suggest.localityBonus": false,
-				"editor.wordSeparators": "=;{}\":",
+				"editor.wordSeparators": "=;{}\";",				
 				"editor.suggestSelection": "first"
 			}
 		},

@@ -2,6 +2,7 @@ import {CompletionItem, CompletionItemKind, CompletionItemLabel, Position, Range
 import {IDclContainer, IDclFragment} from "../astObjects/dclInterfaces";
 import {DclTile} from "../astObjects/dclTile";
 import {DclAttribute} from "../astObjects/dclAttribute";
+import { parentPort } from 'worker_threads';
 
 // This file is mostly responsible for dynamic modifications to CompletionLibraryDcl default representations
 // This is where all the logic for adding new lines, spaces or special characters like ':' & '='
@@ -42,6 +43,7 @@ export class CompletionItemDcl extends CompletionItem {
     }
 
     public postProcess(pos: Position, atom: IDclFragment, directParent: IDclContainer, tile: DclTile): CompletionItemDcl {
+        // Currently doesn't handle ": *nothing* { }" but all the way back to the suggestion engine.
         if (this.kind === Kinds.ENUM || this.kind === Kinds.PRIMITIVE) {
             return this.postProcessEnum(pos, atom, directParent, tile);
         }
@@ -127,7 +129,7 @@ export class CompletionItemDcl extends CompletionItem {
         //         clone.insertText.value += ';';
         //     } else {
         //         clone.insertText += ';';
-        //     }
+        //     }7
         //     return clone;
         // }
         // return this;
@@ -138,19 +140,50 @@ export class CompletionItemDcl extends CompletionItem {
             if (!container.contains(pos)) {
                 // The parent container was a proximity hit, but not actually the parent to the active cursor context
                 const clone = new CompletionItemDcl(this);
-                const hasSharedLine = tile.atoms.some(x => x.line === pos.line || x.asContainer?.atoms.some(y => y.line === pos.line));
+
+                // this sharedLine test really needs to work differently for some situations like attribute prefix vs tile prefix
+                const hasSharedAttLine = tile.atoms.some(x => x instanceof DclAttribute && x.asContainer?.atoms.some(y => y.line === pos.line));
+                const hasSharedTileLine = tile.atoms.some(x => x instanceof DclTile && x.asContainer?.atoms.some(y => y.line === pos.line));
                 
                 if (container.atoms.length === 1 && container.firstAtom.symbol === ':') {
-                    if (hasSharedLine) {
+                    if (hasSharedTileLine && !hasSharedAttLine) {
+                        // this only has the ':' symbol on this line; IE, a tile (fragment)
                         clone.insertText = new SnippetString(`${this.label} {\n\t\t$0\n\t}\n`);
-                        clone.additionalTextEdits = [ new TextEdit(container.firstAtom.range, '\n\t: ')];
                         return clone;
                     }
-                    return this;
+                    if (hasSharedTileLine && hasSharedAttLine) {
+                        // has the ':' so the tile line will always be true, but also has an attribute from some tile somewhere
+                        clone.insertText = new SnippetString(`${this.label} { $0 }`);
+                        return clone;
+                    }
+                    // if (hasSharedLine) {
+                    //     // This is working fine for ': {invoke}' on a blank line, but if it is on shared (attributed) line 
+                    //     // Not working that bad if it is on a shared attribute line, but clearly not ideal; could ship this way.
+                    //     clone.insertText = new SnippetString(`${this.label} {\n\t\t$0\n\t}\n`);
+
+                    //     // this was removed because it there really needs to be a formatter trigger after the fact.
+                    //     ////clone.additionalTextEdits = [ new TextEdit(container.firstAtom.range, '\n\t: ')];
+                    //     return clone;
+                    // }
+
+                    // This triggers when a ':' exists on the same line as an attribute
+                    // however, I don't like the insertion of only the namne, it should really
+                    // add some brackets at the very least.
+
+                    if (hasSharedAttLine && container.asAttribute?.lastAtom.symbol === '}') {
+                        return this;
+                    }
+
+                    clone.insertText = new SnippetString(`${this.label} { $0 }`);
+                    return clone;
                 }
-                if (hasSharedLine) {
+                if (hasSharedAttLine || hasSharedTileLine) {
+                    // this is kind of an oddity for tiles with no : prefix, it actually
+                    // new lines exactly where you want it to. Apparently it is just the scenario
+                    // after the : already exists that is jacking everything up.
                     clone.insertText = new SnippetString(`\n\t: ${this.label} {\n\t\t$0\n\t}\n`);
                 } else {
+                    // This is working perfectly if its on a single line by itself for both : && blank
                     clone.insertText = new SnippetString(`: ${this.label} {\n\t$0\n}\n`);
                 }
                 return clone;
@@ -173,8 +206,12 @@ export class CompletionItemDcl extends CompletionItem {
             // proximity hit, position outside of Attribute or tile
             if (container.lastAtom.line === pos.line) {
                 if (atom.symbol === ':') { // malformed tile
-                    clone.range = atom.range;
-                    clone.insertText = new SnippetString(`: ${this.label} { $0 }`);
+                    // including the range from the : atom causes the entire suggestion to be kicked out
+                    //clone.range = atom.range; // Turning on is destructive
+
+                    //This is working on a blank line with a single ':' atom
+                    // However, when this tile is the only line, it is not getting the brackets with \r\n
+                    clone.insertText = new SnippetString(` ${this.label} { $0 }`);
                 } else if (container.firstAtom.symbol === ':' ) {
                     clone.insertText = atom.column === container.firstAtom.range.end.character
                                      ? new SnippetString(` ${this.label} { $0 }`)
