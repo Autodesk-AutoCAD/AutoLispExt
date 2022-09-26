@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import {AutoLispExt} from "./context";
+import { WebHelpLibrarySingleton } from "./help/documentationLibrary";
 import * as vscode from 'vscode';
 
 export let internalLispFuncs: Array<string> = [];
@@ -22,7 +22,7 @@ export function loadAllResources(){
 			allCmdsAndSysvars.push(item);
 		}
 	});
-	readJsonDataFile("./help/webHelpAbstraction.json", AutoLispExt.WebHelpLibrary);
+	readJsonDataFile("./help/webHelpAbstraction.json", WebHelpLibrarySingleton.Instance);
 	isLoaded = true;
 }	
 

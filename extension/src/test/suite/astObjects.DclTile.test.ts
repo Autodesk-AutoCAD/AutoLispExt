@@ -59,7 +59,7 @@ suite("AST Objects: DCL Tile", function () {
 				const frag = doc.documentDclContainer.getParentFrom(new Position(getLine, getColumn), true);
 				return frag === null ? false : frag.line === expectLine && frag.column === expectColumn;
 			   };
-			expect(sut(4, 0, 0, 0)).to.equal(false);
+			expect(sut(4, 0, 0, 0)).to.equal(true); // expect DocumentContainer
 			expect(sut(3, 22, 0, 0)).to.equal(true);
 			expect(sut(31, 16, 5, 0)).to.equal(true);
 			expect(sut(22, 22, 22, 16)).to.equal(true);
@@ -78,7 +78,7 @@ suite("AST Objects: DCL Tile", function () {
 				const frag = doc.documentDclContainer.getParentFrom(new Position(getLine, getColumn), false);
 				return frag === null ? false : frag.line === expectLine && frag.column === expectColumn;
 			   };
-			expect(sut(4, 0, 0, 0)).to.equal(false);
+			expect(sut(4, 0, 0, 0)).to.equal(true);  // expect DocumentContainer
 			expect(sut(3, 22, 0, 0)).to.equal(true);
 			expect(sut(31, 16, 5, 0)).to.equal(true);
 			expect(sut(22, 22, 22, 16)).to.equal(true);
