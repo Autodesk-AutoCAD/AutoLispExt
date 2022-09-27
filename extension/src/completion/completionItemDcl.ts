@@ -42,7 +42,11 @@ export class CompletionItemDcl extends CompletionItem {
         }
     }
 
-    //#region Helpers
+
+
+
+
+    // #region Helpers
     private getConsumeRange(startAtom: IDclFragment, pos: Position) {
         return new Range(new Position(startAtom.line, startAtom.column), pos);
     }
@@ -63,9 +67,12 @@ export class CompletionItemDcl extends CompletionItem {
         return this.kind === Kinds.TILE 
             && CompletionLibraryDcl.Instance.tilesWithChildren.includes(this.label.toString());
     }
-    //#endregion Helpers
+    // #endregion Helpers
 
 
+
+
+    // #region primary handlers
     public postProcess(pos: Position, atom: IDclFragment, directParent: IDclContainer, tile: DclTile): CompletionItemDcl {
         // Currently doesn't handle ": *nothing* { }" but all the way back to the suggestion engine.
         if (this.kind === Kinds.ENUM || this.kind === Kinds.PRIMITIVE) {
@@ -148,12 +155,12 @@ export class CompletionItemDcl extends CompletionItem {
 
         return this.postProcessTileWithAtom(pos, atom, container.asAttribute, tile);
     }
-
+    // #endregion primary handlers
     
 
     
 
-    // #region DDFD Tile with Atom
+    // #region Tile with Atom
     private postProcessTileWithAtom(pos: Position, atom: IDclFragment, container: IDclContainer, tile: DclTile) : CompletionItemDcl {
         if (atom.symbol === ':' || container.atoms.length === 1) {
             // Note that this responsible for handling any Tile or Attribute with just a single standalone word
@@ -163,14 +170,9 @@ export class CompletionItemDcl extends CompletionItem {
         }
 
         if (container.firstAtom.symbol !== ':') {
-            return this;
-            debugger; // I don't think this can be true, but if it is, then I need to know if the package.json is working else do commented out work
-            // const clone = new CompletionItemDcl(this);
-            // clone.range = atom.range;
-            // return clone;
+            return atom.symbol === ';' ? this.postProcessTileProximityParent(pos, container, tile) : this;
         }
 
-        //if (container.atoms.length === 2 && container.atoms.every(x => !x.isComment)) {
         if (container.atoms.length === 2 && container.atoms[1] === atom) {
             // Recycle the work from 1st atom processor by shifting the context left
             // The postProcessTileColonAtom() method has awareness of this potential scenario
@@ -222,7 +224,8 @@ export class CompletionItemDcl extends CompletionItem {
         }
 
         if (shared.length !== container.length) {
-            const indent = shared.some(x => x.symbol === '}' && x.flatIndex < atom.flatIndex) ? '' : '\t';
+            //const indent = shared.some(x => x.symbol === '}' && x.flatIndex < atom.flatIndex) ? '' : '\t';
+            const indent = shared.some(x => x.symbol === '{' && shared.every(y => y.symbol !== '}')) ? '\t' : '';
             clone.insertText = this.needsLF() 
                              ? new SnippetString(`\n${indent}: ${this.label} {\n\t${indent}$0\n${indent}}`)
                              : new SnippetString(`\n${indent}: ${this.label} { $0 }`);
@@ -251,60 +254,35 @@ export class CompletionItemDcl extends CompletionItem {
 
 
     private postProcessTileProximityParent(pos: Position, container: IDclContainer, tile: DclTile) : CompletionItemDcl { 
-        // Context = Position is NOT literally inside the container, but could may be touching it.
+        // Context = Position is NOT literally inside the container, but could may be touching a partial or well-formed container.
+        //           Entry into this method qualified by (container.lastAtom.rank < posRank)
 
         const shared = tile.flatten().filter(x => x.line === pos.line);
-        const lastRank = shared.length > 0 ? shared[shared.length - 1].rank : Number.MAX_VALUE;
-        const posRank = getPositionRank(pos);
         const clone = new CompletionItemDcl(this);
 
         if (shared.length === 0) {
             clone.insertText = this.needsLF()
                              ? new SnippetString(`: ${this.label} {\n\t$0\n}`)
                              : new SnippetString(`: ${this.label} { $0 }`);
-        } else if (shared.length === 1 && container.firstAtom === shared[0]) {
-            const edits = [new TextEdit(container.firstAtom.range, '')];
-            clone.insertText = this.needsLF()
-                             ? new SnippetString(`: ${this.label} {\n\t$0\n}`)
-                             : new SnippetString(`: ${this.label} { $0 }`);
-        } else if (lastRank < posRank) {
-            const indent = shared.some(x => x.symbol === '}' && x.rank < posRank) ? '' : '\t';
-            clone.insertText = this.needsLF()
-                             ? new SnippetString(`\n${indent}: ${this.label} {\n\t${indent}$0\n${indent}}`)
-                             : new SnippetString(`\n${indent}: ${this.label} { $0 }`);
-            if (container.lastAtom.symbol === ':') {
-                clone.additionalTextEdits = [new TextEdit(this.getConsumeRange(container.lastAtom, pos), '')];
-            }
-        } else {
-            const indent = shared.some(x => x.symbol === '}' && x.rank < posRank) ? '' : '\t';
-            clone.insertText = this.needsLF()
-                             ? new SnippetString(`\n${indent}: ${this.label} {\n\t${indent}$0\n${indent}}`)
-                             : new SnippetString(`\n${indent}: ${this.label} { $0 }`);
-            if (container.atoms.length === 2 && container.lastAtom.rank < posRank) {
-                clone.range = container.lastAtom.range;
-            }
+            return clone;
         }
 
+        if (container.length <= 2) {
+            if (container.firstAtom.symbol === ':') {
+                clone.additionalTextEdits = [new TextEdit(this.getConsumeRange(container.firstAtom, pos), '')];
+            } else {
+                clone.range = this.getConsumeRange(container.firstAtom, pos);
+            }    
+        }
+
+        const indent = shared.some(x => x.symbol === '{' && shared.every(y => y.symbol !== '}')) ? '\t' : '';
+        const leadLF = shared.length > container.length || container.isWellFormed || shared.some(x => x.symbol === '}') ? '\n' : '';
+
+        clone.insertText = this.needsLF()
+                         ? new SnippetString(`${leadLF}${indent}: ${this.label} {\n\t${indent}$0\n${indent}}`)
+                         : new SnippetString(`${leadLF}${indent}: ${this.label} { $0 }`);
+                 
         return clone;
-        
-        
-        // if (!container.atoms.some(x => x.line === pos.line)) {
-
-        //     clone.insertText = new SnippetString(`: ${this.label} {\n\t$0\n}\n`);
-        //     return clone;
-        // }
-
-        // // everything after the above condition means the cursor is on the same line as something else
-
-        // const openRank = container.openBracketAtom?.rank ?? Number.MAX_VALUE;
-        // const closeRank = container.closeBracketAtom?.rank ?? Number.MAX_VALUE;
-
-        // if (posRank <= closeRank && posRank > openRank) {
-        //     clone.insertText = new SnippetString(`\n\t: ${this.label} {\n\t\t$0\n\t}\n`);
-        //     return clone;
-        // }
-
-        // return this;
     }
 
     private postProcessTilePosition(pos: Position, container: IDclContainer, tile: DclTile) : CompletionItemDcl {
