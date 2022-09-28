@@ -35,16 +35,10 @@ suite("CompletionDclProvider: Tests", function () {
     let compLib: CompletionLibraryDcl;
     let boxColumnAtts: Array<string>;
     let allTiles: Array<string>;
-    const cmdLineTesting = false;
 
     //#region setup
     suiteSetup(async () => {
 		try {
-            if (cmdLineTesting) {
-                const filePath = path.resolve(__dirname, '../../../', './extension/src/test/SourceFile/test_case/comments.lsp');
-                await vscode.extensions.getExtension('Autodesk.autolispext').activate();
-                await vscode.commands.executeCommand('vscode.open', vscode.Uri.file(filePath), { 'preview': false, 'preserveFocus': true });            
-            }
             helpLib = WebHelpLibrarySingleton.Instance;
             compLib = CompletionLibraryDcl.Instance;
             boxColumnAtts = [...helpLib.dclTiles.get('boxed_column').attributes];

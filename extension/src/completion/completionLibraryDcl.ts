@@ -2,6 +2,7 @@ import {CompletionItemKind, SnippetString} from "vscode";
 import {AutoLispExt} from "../context";
 import {Annotation} from '../help/documentationPresenter';
 import {CompletionItemDcl, Kinds} from "./completionItemDcl";
+import * as nls from 'vscode-nls';
 
 // This file is responsible for pre-generating the default versions of all possible DCL completion items.
 // Doing this eliminates "some" of the extraneous processing; like documentation markdown generation.
@@ -11,6 +12,7 @@ import {CompletionItemDcl, Kinds} from "./completionItemDcl";
 
 
 let _instance: CompletionLibraryDcl = null;
+const localize = nls.loadMessageBundle();
 
 export enum SnippetKeys {
 	DIALOG = 'dialog',
@@ -74,33 +76,39 @@ export class CompletionLibraryDcl {
 
 
 	private generateDynamics() : void {
+		const localDialogStruct = localize("autolispext.commands.dclcompletion.primitive.dialog", "Generates a dialog structure");
 		this.dclSnippets.set(SnippetKeys.DIALOG,
-			this.makeSnippet('dialog', 'Generates a dialog structure', 'Snippet', `\${1:NAME} : dialog {\n\t$0\n}`, Kinds.SNIPPET)
+			this.makeSnippet('dialog', localDialogStruct, 'Tile', `\${1:NAME} : dialog {\n\t$0\n}`, Kinds.TILE)
 		);
 
+		const localPrimitive = localize("autolispext.commands.dclcompletion.primitive", "Primitive");
+		const localPrimStruct = localize("autolispext.commands.dclcompletion.primitive.structure", "structural primitive");
 
 		this.dclSnippets.set(SnippetKeys.EQUAL,
-			this.makeSnippet('=', 'structural primitive', 'Primitive', '=', Kinds.STRUCTURE)
+			this.makeSnippet('=', localPrimStruct, localPrimitive, '=', Kinds.STRUCTURE)
 		);
 		this.dclSnippets.set(SnippetKeys.BRACKET,
-			this.makeSnippet('{}', 'structural primitive', 'Primitive', '{ $0 }', Kinds.STRUCTURE)
+			this.makeSnippet('{}', localPrimStruct, localPrimitive, '{ $0 }', Kinds.STRUCTURE)
 		);
 		this.dclSnippets.set(SnippetKeys.BRACKETLF,
-			this.makeSnippet('{lf}', 'structural primitive', 'Primitive', '{ \n\t$0 \n}', Kinds.STRUCTURE)
+			this.makeSnippet('{lf}', localPrimStruct, localPrimitive, '{ \n\t$0 \n}', Kinds.STRUCTURE)
 		);
 		this.dclSnippets.set(SnippetKeys.COMMENTLF,
-			this.makeSnippet('/*lf*/', 'structural primitive', 'Primitive', '/*\n\t$0\n*/', Kinds.STRUCTURE)
+			this.makeSnippet('/*lf*/', localPrimStruct, localPrimitive, '/*\n\t$0\n*/', Kinds.STRUCTURE)
 		);
 
 
+		const localPrimString = localize("autolispext.commands.dclcompletion.primitive.string", "string structure");
 		this.dclSnippets.set(SnippetKeys.STRING,
-			this.makeSnippet('"?"', 'string structure', 'Primitive', '"$0"', Kinds.PRIMITIVE)
+			this.makeSnippet('"?"', localPrimString, localPrimitive, '"$0"', Kinds.PRIMITIVE)
 		);		
+
+		const localPrimBool = localize("autolispext.commands.dclcompletion.primitive.boolean", "boolean structure");
 		this.dclSnippets.set(SnippetKeys.TRUE,
-			this.makeSnippet('True', 'boolean structure', 'Primitive', 'true', Kinds.PRIMITIVE)
+			this.makeSnippet('True', localPrimBool, localPrimitive, 'true', Kinds.PRIMITIVE)
 		);
 		this.dclSnippets.set(SnippetKeys.FALSE,
-			this.makeSnippet('False', 'boolean structure', 'Primitive', 'false', Kinds.PRIMITIVE)
+			this.makeSnippet('False', localPrimBool, localPrimitive, 'false', Kinds.PRIMITIVE)
 		);
 	}
 

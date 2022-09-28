@@ -14,8 +14,7 @@ export const Kinds = {
     ATTRIBUTE: CompletionItemKind.Variable,
     PRIMITIVE: CompletionItemKind.Constant,
     STRUCTURE: CompletionItemKind.TypeParameter,
-    ENUM: CompletionItemKind.EnumMember,
-    SNIPPET: CompletionItemKind.Snippet
+    ENUM: CompletionItemKind.EnumMember
 };
 
 const getPositionRank = (pos: Position): number => pos.line * 1000 + pos.character;
