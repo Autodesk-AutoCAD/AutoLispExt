@@ -123,6 +123,8 @@ export class CompletionLibraryDcl {
 			if (def.attributes.some(x => x.toLowerCase().includes('children'))) {
 				this.tilesWithChildren.push(lowerKey);
 			}
+			this.tilesWithChildren.push('paragraph');
+			this.tilesWithChildren.push('concatenation');
         }
     }
 

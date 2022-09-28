@@ -23,6 +23,12 @@ suite("CompletionDclProvider: Tests", function () {
         '\t\t#AfterTile2#',
         '\t}',
         '}',
+        '',
+        'DynamicDlgName2 : dialog {',
+        '\t: boxed_column { ',
+        '\t\t',
+        '\t}',
+        '}',
     ];
     const context = {triggerKind: CompletionTriggerKind.Invoke, triggerCharacter: ' '};
     let helpLib: WebHelpLibrarySingleton;
@@ -53,6 +59,8 @@ suite("CompletionDclProvider: Tests", function () {
         Before2 = 3,
         After1 = 4,
         After2 = 5,
+        Blank1 = 8,
+        Blank2 = 11,
     }
     interface IInjections {
         before1?: string;
@@ -222,6 +230,20 @@ suite("CompletionDclProvider: Tests", function () {
         }
     });
 
+    test("Comment Suggestion - From '/' atom", function () {
+        try {
+            let doc = dynamicDoc({after2: '/'});
+            let sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.After2, 3), context);
+            expect(sut.length).to.equal(1, 'length check');
+            expect(getInsertText(sut[0])).to.equal('/*\n\t$0\n*/');
+            
+            sut = invokeCompletionProviderDcl(doc, new Position(0, 5), context);
+            expect(sut).to.equal(null); // should not make suggestions inside of a comment
+        }
+        catch (err) {
+            assert.fail(`${err}`);
+        }
+    });
 
     test("Hybrid Suggestions - Using position only", function () {
         try {
@@ -347,6 +369,96 @@ suite("CompletionDclProvider: Tests", function () {
             expect(sut.length).to.equal(allTiles.length, 'length check #4');
             sut.forEach(item => {
                 if (compLib.tilesWithChildren.includes(item.label.toString())) {
+                    expect(getInsertText(item)).to.equal(`: ${item.label} {\n\t$0\n}`);
+                } else {
+                    expect(getInsertText(item)).to.equal(`: ${item.label} { $0 }`);
+                }
+            });
+        }
+        catch (err) {
+            assert.fail(`${err}`);
+        }
+    });
+
+
+    test("Hybrid Suggestions - Using Position & Proximity Parent", function () {
+        // try {
+        //     let doc = dynamicDoc({before1: ': x'});
+        //     let sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.Before1, 48), context);
+        //     expect(sut.length).to.equal(allTiles.length, 'length check #1');
+        //     sut.forEach(item => {
+        //         if (compLib.tilesWithChildren.includes(item.label.toString())) {
+        //             expect(getInsertText(item)).to.equal(`\n\t: ${item.label} {\n\t\t$0\n\t}`);
+        //         } else {
+        //             expect(getInsertText(item)).to.equal(`\n\t: ${item.label} { $0 }`);
+        //         }
+        //     });
+            
+        //     doc = dynamicDoc({before2: ': x'});
+        //     sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.Before2, 4), context);
+        //     expect(sut.length).to.equal(allTiles.length, 'length check #2');
+        //     sut.forEach(item => {
+        //         if (compLib.tilesWithChildren.includes(item.label.toString())) {
+        //             expect(getInsertText(item)).to.equal(`: ${item.label} {\n\t$0\n}`);
+        //         } else {
+        //             expect(getInsertText(item)).to.equal(`: ${item.label} { $0 }`);
+        //         }
+        //     });
+
+        //     doc = dynamicDoc({after1: ': x'});
+        //     sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.After1, 37), context);
+        //     expect(sut.length).to.equal(allTiles.length, 'length check #3');
+        //     sut.forEach(item => {
+        //         if (compLib.tilesWithChildren.includes(item.label.toString())) {
+        //             expect(getInsertText(item)).to.equal(`\n: ${item.label} {\n\t$0\n}`);
+        //         } else {
+        //             expect(getInsertText(item)).to.equal(`\n: ${item.label} { $0 }`);
+        //         }
+        //     });
+
+        //     doc = dynamicDoc({after2: ': x'});
+        //     sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.After2, 4), context);
+        //     expect(sut.length).to.equal(allTiles.length, 'length check #4');
+        //     sut.forEach(item => {
+        //         if (compLib.tilesWithChildren.includes(item.label.toString())) {
+        //             expect(getInsertText(item)).to.equal(`: ${item.label} {\n\t$0\n}`);
+        //         } else {
+        //             expect(getInsertText(item)).to.equal(`: ${item.label} { $0 }`);
+        //         }
+        //     });
+        // }
+        // catch (err) {
+        //     assert.fail(`${err}`);
+        // }
+    });
+
+
+    test("Hybrid Suggestions - Using Position without association", function () {
+        try {
+            const allCount = allTiles.length + boxColumnAtts.length;
+            let doc = dynamicDoc({before1: ': x'});
+            let sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.Blank1, 0), context);
+            expect(sut.length).to.equal(2, 'length check #1');
+
+            sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.Blank2 - 1, 99), context);
+            expect(allCount).to.equal(sut.length, 'length check #2');
+            sut.forEach(item => {
+                if (item.kind === Kinds.ATTRIBUTE) {
+                    expect(getInsertText(item)).to.equal(item.label.toString());
+                } else if (compLib.tilesWithChildren.includes(item.label.toString())) {
+                    expect(getInsertText(item)).to.equal(`\n\t: ${item.label} {\n\t\t$0\n\t}`);
+                } else {
+                    expect(getInsertText(item)).to.equal(`\n\t: ${item.label} { $0 }`);
+                }
+            });
+
+
+            sut = invokeCompletionProviderDcl(doc, new Position(LineTarget.Blank2, 99), context);
+            expect(allCount).to.equal(sut.length, 'length check #3');
+            sut.forEach(item => {
+                if (item.kind === Kinds.ATTRIBUTE) {
+                    expect(getInsertText(item)).to.equal(item.label.toString());
+                } else if (compLib.tilesWithChildren.includes(item.label.toString())) {
                     expect(getInsertText(item)).to.equal(`: ${item.label} {\n\t$0\n}`);
                 } else {
                     expect(getInsertText(item)).to.equal(`: ${item.label} { $0 }`);

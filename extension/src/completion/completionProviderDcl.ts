@@ -68,6 +68,8 @@ function getTilesAndAttributes(tile: DclTile, pos: Position, skipAttributes: boo
 
     return lowerKey === 'dialog' || lib.tilesWithChildren.includes(lowerKey)
          ? result.concat(lib.allTiles)
+         : !lib.dclTiles.has(lowerKey) && !lib.dclAttributes.has(lowerKey)
+         ? result.concat(lib.allTiles)
          : result;
 }
 
@@ -109,7 +111,8 @@ function stringProcessing(atom: IDclFragment, directParent: IDclContainer, pos: 
         return [result];
     }
 
-    // TODO you could detect the ACTION strings and provide some degree of lisp auto completion
+    // TODO: It may be a nice feature to auto escape double quotes in the middle or close the string if at the end. 
+    // TODO: you could detect the ACTION strings and provide some degree of lisp auto completion
     return null;
 }
 
