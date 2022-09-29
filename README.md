@@ -31,7 +31,7 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Easy access to online documentation through the context menu (selection sensitive)
     * Go to definition
     * Insert code region
-    * Generate documentation for user defined functions
+    * Generate documentation for user defined function
     * Rename symbol
     * Go to references
     * Quick Help on mouse hover
