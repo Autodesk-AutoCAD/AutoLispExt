@@ -2,10 +2,5 @@
   "autolispext.help.commands.openWebHelp": "Failed to load the webHelpAbstraction.json file",
   "autolispext.commands.addFoldingRegion": "Failed to insert snippet",
   "autolispext.help.commands.generateDocumentation": "A valid defun name could not be located",
-  "autolispext.providers.rename.failed": "The symbol was invalid for renaming operations",
-  "autolispext.commands.dclcompletion.primitive": "Primitive",
-  "autolispext.commands.dclcompletion.primitive.dialog": "Generates a dialog structure",
-  "autolispext.commands.dclcompletion.primitive.structure": "structural primitive",
-  "autolispext.commands.dclcompletion.primitive.string": "string structure",
-  "autolispext.commands.dclcompletion.primitive.boolean": "boolean structure"
+  "autolispext.providers.rename.failed": "The symbol was invalid for renaming operations"
 }
