@@ -31,6 +31,11 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Easy access to online documentation through the context menu (selection sensitive)
     * Go to definition
     * Insert code region
+    * Generate documentation for user defined functions
+    * Rename symbol
+    * Go to references
+    * Quick Help on mouse hover
+    * Add @Global in comment to expose symbol to workspace aware operations
 
 3. AutoLISP Project
     * Open a project (.prj)
@@ -139,6 +144,11 @@ See [here](NOTICE.md).
    - 通过上下文菜单轻松访问在线文档（选择敏感）
    - 转到定义
    - 插入代码区域
+   - 为自定义函数生成注释
+   - 重命名符号
+   - 转到引用
+   - 鼠标悬停显示帮助
+   - 在符号注释中添加@Global，使其可在工作区内检索
 3. AutoLISP 项目
    - 打开项目（.prj）
    - 创建项目
