@@ -1,4 +1,4 @@
-import * as LibObjects from '../help/documentationObjects';
+import {WebHelpDclAtt, WebHelpEntity, WebHelpDclTile, WebHelpFunction, WebHelpObject, WebHelpValueType} from './documentationObjects';
 import {ILispDocs} from '../parsing/comments';
 import * as vscode from "vscode";
 import {AutoLispExt} from "../context";
@@ -55,15 +55,15 @@ namespace MarkdownHelpers {
 		return ` - ${text}`;
 	}
 
-	export function addParam(source: LibObjects.WebHelpValueType, active: boolean): string {
+	export function addParam(source: WebHelpValueType, active: boolean): string {
 		return `${divider}\n${webHelpValueTypeHandler(source, italic('param'), active)}`;
 	}
 
-	export function addReturn(source: LibObjects.WebHelpValueType): string {
+	export function addReturn(source: WebHelpValueType): string {
 		return `${divider}\n${webHelpValueTypeHandler(source, italic('returns'), false)}`;
 	}
 
-	function webHelpValueTypeHandler(item: LibObjects.WebHelpValueType, label: string, active: boolean): string {
+	function webHelpValueTypeHandler(item: WebHelpValueType, label: string, active: boolean): string {
 		let typeString = '';
 		const types = item.typeNames.split(/,| /g).filter(x => x.length > 0);
 		if (types.length >= 1) {
@@ -111,18 +111,19 @@ export namespace Annotation {
 
 	export function asMarkdown(source: string): vscode.MarkdownString;
     export function asMarkdown(source: LispAtom, paramIndex?: number, args?: LispAtom[], docs?: ILispDocs, path?: string): vscode.MarkdownString;
-    export function asMarkdown(source: LibObjects.WebHelpFunction, paramIndex?: number): vscode.MarkdownString;
-    export function asMarkdown(source: LibObjects.WebHelpDclAtt): vscode.MarkdownString;
-    export function asMarkdown(source: LibObjects.WebHelpDclTile): vscode.MarkdownString;
-    export function asMarkdown(source: string | LispAtom | LibObjects.WebHelpFunction | LibObjects.WebHelpObject | LibObjects.WebHelpDclAtt | LibObjects.WebHelpDclTile,
+    export function asMarkdown(source: WebHelpFunction, paramIndex?: number): vscode.MarkdownString;
+    export function asMarkdown(source: WebHelpDclAtt): vscode.MarkdownString;
+    export function asMarkdown(source: WebHelpDclTile): vscode.MarkdownString;
+	export function asMarkdown(source: WebHelpEntity): vscode.MarkdownString;
+    export function asMarkdown(source: string | LispAtom | WebHelpEntity,
 							   paramIndex?: number, args?: LispAtom[], docs?: ILispDocs, path?: string): vscode.MarkdownString {
-		if (source instanceof LibObjects.WebHelpFunction) {
+		if (source instanceof WebHelpFunction) {
 			return FunctionMarkdown(source, paramIndex ?? -1);
 		}
-		if (source instanceof LibObjects.WebHelpDclAtt) {
+		if (source instanceof WebHelpDclAtt) {
 			return DclAttMarkdown(source);
 		}
-		if (source instanceof LibObjects.WebHelpDclTile) {
+		if (source instanceof WebHelpDclTile) {
 			return DclTileMarkdown(source);
 		}
 		if (source instanceof LispAtom) {
@@ -136,7 +137,7 @@ export namespace Annotation {
 		return null;
     }
 
-	function FunctionMarkdown(source: LibObjects.WebHelpFunction, paramIndex: number): vscode.MarkdownString {
+	function FunctionMarkdown(source: WebHelpFunction, paramIndex: number): vscode.MarkdownString {
 		const lines = [];
 		let year = AutoLispExt.WebHelpLibrary.year;
 		let url = source.getHelpLink(year);
@@ -160,7 +161,7 @@ export namespace Annotation {
 	}
 
 
-	function DclAttMarkdown(source: LibObjects.WebHelpDclAtt) : vscode.MarkdownString {
+	function DclAttMarkdown(source: WebHelpDclAtt) : vscode.MarkdownString {
 		const lines = [];
 		let year = AutoLispExt.WebHelpLibrary.year;
 		let url = source.getHelpLink(year);		
@@ -182,7 +183,7 @@ export namespace Annotation {
 	}
 
 
-	function DclTileMarkdown(source: LibObjects.WebHelpDclTile) : vscode.MarkdownString {
+	function DclTileMarkdown(source: WebHelpDclTile) : vscode.MarkdownString {
 		const lines = [];
 		let year = AutoLispExt.WebHelpLibrary.year;
 		let url = source.getHelpLink(year);

@@ -34,10 +34,18 @@ export class DclTile implements IDclContainer {
         return false; 
     }
 
+    get isNumber(): boolean {
+        return false; 
+    }
+
     get range(): Range {
         const begin = this.firstAtom.range.start;
         const close = this.lastAtom.range.end;
         return new Range(begin, close);
+    }
+
+    get rank(): number {
+        return this.line * 1000 + this.column;
     }
 
     equal(atom: IDclFragment): boolean {
@@ -88,12 +96,27 @@ export class DclTile implements IDclContainer {
         return null;
     }
 
+    get isWellFormed(): boolean {
+        if (this.length === 2) {
+            return /^[a-z\_]+$/i.test(this.firstAtom.symbol) && this.lastAtom.symbol === ';';
+        }
+
+        const name = this.tileTypeAtom?.symbol.toLowerCase() ?? '';
+
+        return this.firstAtom?.symbol === ':'
+            && this.closeBracketAtom?.symbol === '}'
+            && /^[a-z\_]+$/i.test(name)
+            && this.openBracketAtom?.symbol === '{'; // doing this one last because it loops over all atoms
+    }
+
     getParentFrom(position: Position|IDclFragment, tilesOnly = false): IDclContainer {
         const pos = position instanceof Position ? position : position.range.start;
         if (this.contains(pos)) {
+            let failed = 0;
             for (let i = 0; i < this.length; i++) {
                 const dclObj = this.atoms[i];
                 if (!dclObj.contains(pos)) {
+                    failed++;
                     continue;
                 }
                 if (dclObj instanceof DclAttribute) {
@@ -104,7 +127,40 @@ export class DclTile implements IDclContainer {
                     return dclObj.asTile.getParentFrom(pos, tilesOnly) ?? this;
                 }
             }
+            if (failed === this.length) {
+                return this; // position is not at the location of an atom, but we only care about the parent anyway
+            }
         }
+        return null;
+    }
+
+    getImpliedParent(position: Position): IDclContainer {
+        // Note: attributes handle themselves, your challange is determining if an attribute is malformed and needs a force return.
+        let prev = 0;
+        const positionRank = position.line * 1000 + position.character;
+        for (let i = 0; i < this.atoms.length; i++) {
+            const atom = this.atoms[i];
+            if (prev > 0 && positionRank > prev && positionRank < atom.rank)  {
+                return this.atoms[i-1].asContainer ?? this;
+            }
+
+            const contains = atom.range.contains(position);
+            if (atom instanceof DclAtom) {
+                if (contains) {
+                    return this;
+                }
+                prev = atom.rank;
+                continue;
+            }
+
+            if (contains) {
+                // if the container is an attribute it will return itself, if its a tile it will keep digging for the best scenario
+                return atom.asContainer.getImpliedParent(position) ?? this;
+            }
+
+            prev = atom.rank;
+        }
+
         return null;
     }
     

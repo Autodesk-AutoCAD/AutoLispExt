@@ -1,4 +1,4 @@
-import { AutoLispExt } from '../context';
+import { getExtensionSettingString } from '../resources';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { IJsonLoadable } from "../resources";
 import { WebHelpDclAtt, WebHelpDclTile, WebHelpEntity, WebHelpFunction, WebHelpObject } from './documentationObjects';
@@ -27,7 +27,7 @@ export class WebHelpLibrarySingleton implements IJsonLoadable {
     }
 
     get year(): string {
-        return this._testYear ?? AutoLispExt.Resources.getExtensionSettingString('help.TargetYear');
+        return this._testYear ?? getExtensionSettingString('help.TargetYear');
     }
 
     set year(value: string) {

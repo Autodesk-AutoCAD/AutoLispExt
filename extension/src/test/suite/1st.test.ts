@@ -6,12 +6,13 @@ var assert = require('chai').assert;
 
 suite("Global Setup", function () {	
 	test("Artificial Invoke of AutoLispExt", async function () {	
-		try {			
+		try {
+			this.timeout(10000);
 			// For some reason, activating our extension from within a test is "better" than
 			// activating it passively by using arguments to auto-open an LSP file. The side
 			// effects of not doing it this way cause incomplete NYC code coverage.
 			await vscode.extensions.getExtension('Autodesk.autolispext').activate();
-			chai.assert(true);			
+			chai.assert(true);
 		}
 		catch (err) {
 			assert.fail("Failed to activate extension");

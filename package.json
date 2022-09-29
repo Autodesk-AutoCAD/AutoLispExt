@@ -286,12 +286,16 @@
 					"comments": false,
 					"strings": true
 				},
-				"editor.wordBasedSuggestions": true,
+				"editor.wordBasedSuggestions": false,
+				"editor.suggest.showWords": false,
+				"editor.suggest.showProperties": false,
 				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
-				"editor.suggest.localityBonus": true,
-				"editor.wordSeparators": "=;{}\":",
-				"editor.suggestSelection": "recentlyUsed"
+				"editor.suggest.localityBonus": false,
+				"editor.wordSeparators": "=;{}\":",				
+				"editor.suggestSelection": "first",
+				"editor.suggest.insertMode": "insert",
+				"editor.suggest.snippetsPreventQuickSuggestions": false
 			}
 		},
 		"breakpoints": [

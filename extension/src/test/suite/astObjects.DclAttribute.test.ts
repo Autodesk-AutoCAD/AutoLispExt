@@ -168,7 +168,7 @@ suite("AST Objects: DCL Attribute", function () {
 			mock.atoms.pop();
 			expect(mock.isWellFormed).to.equal(false);    // width =
 			mod(mock, 1, ';');
-			expect(mock.isWellFormed).to.equal(true);    // width ;
+			expect(mock.isWellFormed).to.equal(false);    // width ;
 			mock.atoms.pop();
 			expect(mock.isWellFormed).to.equal(false);    // width
 			
