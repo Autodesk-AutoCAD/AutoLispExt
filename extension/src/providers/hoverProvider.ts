@@ -151,7 +151,9 @@ namespace handlersLSP {
             return getUserResourceMarkdown(defs[0], flatView, roDoc);
         }
 
-        return new vscode.MarkdownString(`${AnnoIcon.ERROR} ${ambiguityError}`);
+        const errorResult = new vscode.MarkdownString(`${AnnoIcon.ERROR} ${ambiguityError}`);
+        errorResult.supportThemeIcons = true;
+        return errorResult;
     }
 
 
