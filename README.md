@@ -34,7 +34,7 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Generate documentation for user defined function
     * Rename symbol
     * Go to references
-    * Quick Help on mouse hover
+    * Quick help on mouse hover
     * Add @Global in comment to expose symbol to workspace aware operations
 
 3. AutoLISP Project
