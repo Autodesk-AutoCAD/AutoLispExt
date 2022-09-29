@@ -35,7 +35,7 @@ export class DclAtom implements IDclFragment {
     }
 
     get isNumber(): boolean {
-        return /^\d+\.*\d*"$/.test(this.symbol);
+        return /^\d+\.*\d*$/.test(this.symbol);
     }
 
     get range(): Range {

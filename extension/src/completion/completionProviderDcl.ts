@@ -54,7 +54,7 @@ export function invokeCompletionProviderDcl(doc: ReadonlyDocument, pos: Position
 
 function getTilesAndAttributes(tile: DclTile, pos: Position, skipAttributes: boolean = false) {
     const lib = CompletionLibraryDcl.Instance;
-    const lowerKey = tile.tileTypeAtom.symbol.toLowerCase();
+    const lowerKey = tile.tileTypeAtom?.symbol.toLowerCase() ?? '';
     const attributes = skipAttributes ? [] : getApplicableAttributes(tile, pos);
     const result = attributes.map(x => lib.dclAttributes.get(x)).filter(y => y);
 
@@ -74,6 +74,9 @@ function getTilesAndAttributes(tile: DclTile, pos: Position, skipAttributes: boo
 }
 
 function getApplicableAttributes(tile: DclTile, pos: Position) : Array<string> {
+    if (!tile.tileTypeAtom) {
+        return [];
+    }
     const posNormal = getPositionRank(pos);
     const lowerKey = tile.tileTypeAtom.symbol.toLowerCase();
     const helpLib = AutoLispExt.WebHelpLibrary;
@@ -146,10 +149,10 @@ function tileHandling(pos: Position, atom: IDclFragment, directParent: IDclConta
     }
 
     const wellFormed = directParent.firstAtom.symbol === ':' && directParent.asTile?.openBracketAtom?.symbol === '{';
-    if (wellFormed && posRank < directParent.asTile.openBracketAtom.rank) {
+    if (directParent.isWellFormed && posRank < directParent.asTile.openBracketAtom.rank) {
         return null; // tile is already well-formed and atom cannot be null
     }
-    if (!wellFormed && directParent.contains(pos)) {
+    if (!directParent.isWellFormed && directParent.contains(pos)) {
         return getTilesAndAttributes(directParent.asTile, pos);
     }
     return getTilesAndAttributes(tile, pos);
@@ -255,32 +258,16 @@ function attributeHandlerWithAtom(atom: IDclFragment, directParent: DclAttribute
         return null;
     }
 
-    if (atom.symbol === ':') {
-        // TODO verify this is even possible, I think this is wrapped into a tile only...
-        return malformedTileHandlerHasAtom(atom, pos, directParent, tile);
-        // if having problems, this was the old response was === return lib.allTiles;
+    if (atom.symbol === ';' && pos.character === atom.column) {
+        return lib.dclEnums.get(directParent.atoms[0].symbol.toLowerCase());
     }
-
-    if (atom.symbol === ';') {
-        if (directParent.delineator.symbol !== '=') {
-            return [lib.dclSnippets.get(SnippetKeys.EQUAL)];
-        }
-
-        if (pos.character === atom.column) {
-            return directParent.isWellFormed ? null : lib.dclEnums.get(directParent.atoms[0].symbol.toLowerCase());
-        }
-
+    
+    if (atom.symbol === ';' && pos.character > atom.column) {
         return getTilesAndAttributes(tile, pos);
     }
 
     if (atom.symbol === '=') {
-        const posRank = getPositionRank(pos);
-        if (posRank >= atom.rank) {
-            return null; // force them to hit the spacebar or explicitly invoke next trigger
-        }
-        
-        // we are ahead of the equals and need to suggest unsused attributes
-        return getApplicableAttributes(tile, pos).map(x => lib.dclAttributes.get(x)).filter(y => y);
+        return null; // force them to put a space between the setter symbol
     }
 
     if (directParent.asAttribute?.delineator?.symbol === '=' && directParent.asAttribute.delineator.range.end.character < pos.character) {

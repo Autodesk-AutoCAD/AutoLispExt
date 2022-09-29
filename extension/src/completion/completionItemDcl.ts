@@ -50,18 +50,6 @@ export class CompletionItemDcl extends CompletionItem {
         return new Range(new Position(startAtom.line, startAtom.column), pos);
     }
 
-    private getFragmentsOnLine(container: IDclContainer, targetLine: number) : Array<IDclFragment> {
-        const result: Array<IDclFragment> = [];
-        container.atoms.forEach(item => {
-            if (item.asContainer) {
-                result.push(...this.getFragmentsOnLine(item.asContainer, targetLine));
-            } else if (item.line === targetLine) {
-                result.push(item);
-            }
-        });
-        return result;
-    }
-
     private needsLF() : boolean {
         return this.kind === Kinds.TILE 
             && (CompletionLibraryDcl.Instance.tilesWithChildren.includes(this.label.toString()) 
@@ -86,6 +74,16 @@ export class CompletionItemDcl extends CompletionItem {
 
         if (this.kind === Kinds.ATTRIBUTE) {
             return this.postProcessAttribute(pos, atom, directParent, tile);
+        }
+
+        if (this.label.toString().startsWith('{') && directParent?.length === 2) {
+            const clone = new CompletionItemDcl(this);
+            const parentRange = directParent.atoms[1].range;
+            clone.range = new Range(pos.line, pos.character, parentRange.end.line, parentRange.end.character);
+            if (clone.insertText instanceof SnippetString) {
+                clone.insertText.value = `${directParent.atoms[1].symbol} ${clone.insertText.value}`;
+            }
+            return clone;
         }
 
         if (atom?.symbol === '/') {
@@ -276,7 +274,11 @@ export class CompletionItemDcl extends CompletionItem {
         }
 
         const indent = shared.some(x => x.symbol === '{' && shared.every(y => y.symbol !== '}')) ? '\t' : '';
-        const leadLF = shared.length > container.length || container.isWellFormed || shared.some(x => x.symbol === '}') ? '\n' : '';
+        const leadLF = shared.length > container.length 
+                    || container.isWellFormed 
+                    || shared.some(x => x.symbol === '}') 
+                    || (getPositionRank(container.lastAtom.range.end) === getPositionRank(pos) && container.lastAtom.symbol === ';')
+                    ? '\n' : '';
 
         clone.insertText = this.needsLF()
                          ? new SnippetString(`${leadLF}${indent}: ${this.label} {\n\t${indent}$0\n${indent}}`)
@@ -289,9 +291,13 @@ export class CompletionItemDcl extends CompletionItem {
         // Context = Position is actually inside the container and not just a proximity "touch" hit
         //           Could be the inner most portion of : tile { $0 } on its own or shared line
 
-        const clone = new CompletionItemDcl(this);
         const posRank = getPositionRank(pos);
         const shared = tile.flatten().filter(x => x.line === pos.line);
+        if (shared.length > 0 && container.asTile && container.asTile.openBracketAtom.rank > posRank) {
+            return this;
+        }
+
+        const clone = new CompletionItemDcl(this);
         if (shared.length === 0 || shared.some(x => x.rank > posRank)) {
             clone.insertText = this.needsLF()
                              ? new SnippetString(`: ${this.label} {\n\t$0\n}`)
