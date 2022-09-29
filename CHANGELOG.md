@@ -1,7 +1,16 @@
-## [1.5.0] - 2021-05-28
-a. Added the ability to generate a short comment above a user defined function for the programmer to complete.
+## [1.6.0] - 2022-10-10
+a.	Added quick help in VS Code editor on mouse hover.
 
-b. Fixed a few bugs.
+b.	Enhanced auto-completion for DCL files.
+
+c.	Bug fixes.
+
+
+## [1.5.0] - 2021-05-28
+a.	Added the ability to generate a short comment above a user defined function for the programmer to complete.
+
+b.	Fixed a few bugs.
+
 
 ## [1.4.0] - 2021-02-19
 a.	Added the ability to open the reference documentation of a built-in function or DCL tile/attribute when a LSP or DCL file is open. Select a function or DCL tile/attribute, and then right-click and choose "Open Online Help" to open the associated reference documentation.
@@ -12,8 +21,10 @@ c.	Added support to go to the definition of a user-defined function or variable.
 
 d.	Fixed an issue with DCL comments and some other minor issues.
 
+
 ## [1.3.2] - 2020-12-17
 Remove the call to the deprecated vscode APIs
+
 
 ## [1.3.0] - 2020-06-12
 a.	Support AutoLISP project editing. Support find and replace in the open project.
@@ -24,14 +35,18 @@ b.	Manage debug configuration with VS Code settings. The use of Launch.json for 
 ## [1.2.0] - 2020-03-23
 Support extension localization, support AutoCAD commands and sysvars in autocompletion within the string expression like (command "_line").
 
+
 ## [1.1.0] - 2020-01-19
 Refine lisp code formatter and auto indent
+
 
 ## [1.0.2] - 2020-01-02
 Initial release to VSCode marketplace
 
+
 ## [0.1.4] – 2019-09-18
 Initial preview release for Mac OS.
+
 
 ## [0.1.3] – 2019-07-10
 a.	Intellisense has been added for all native AutoLISP and Visual LISP symbols (functions and variables). This functionality is like that of the Apropos window feature of the Visual LISP IDE.
