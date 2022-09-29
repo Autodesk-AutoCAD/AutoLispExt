@@ -7,9 +7,9 @@ c.	Bug fixes.
 
 
 ## [1.5.0] - 2021-05-28
-a. Added the ability to generate a short comment above a user defined function for the programmer to complete.
+a.	Added the ability to generate a short comment above a user defined function for the programmer to complete.
 
-b. Fixed a few bugs.
+b.	Fixed a few bugs.
 
 
 ## [1.4.0] - 2021-02-19
