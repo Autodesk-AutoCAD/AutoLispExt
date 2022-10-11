@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Typ prosty",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Generuje strukturę okna dialogowego",
+  "autolispext.commands.dclcompletion.primitive.structure": "strukturalny typ prosty",
+  "autolispext.commands.dclcompletion.primitive.string": "struktura ciągu",
+  "autolispext.commands.dclcompletion.primitive.boolean": "struktura logiczna"
+}

@@ -1,0 +1,4 @@
+{
+  "autolispext.project.excludefile.openproject": "Aby bylo možné vyloučit soubor, musí být projekt otevřen.",
+  "autolispext.project.excludefile.filenotexist": "Soubor, který chcete vyloučit, v aktuálním projektu neexistuje."
+}

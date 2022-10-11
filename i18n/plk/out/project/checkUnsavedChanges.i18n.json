@@ -1,0 +1,5 @@
+{
+  "autolispext.project.checkunsavedchanges.message": "Znaleziono niezapisane zmiany w projekcie lub w plikach projektu.\nCzy chcesz zapisać te zmiany?",
+  "autolispext.project.checkunsavedchanges.save": "Zapisz",
+  "autolispext.project.checkunsavedchanges.dontsave": "Nie zapisuj"
+}

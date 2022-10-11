@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "基本型",
+  "autolispext.commands.dclcompletion.primitive.dialog": "產生對話方塊結構",
+  "autolispext.commands.dclcompletion.primitive.structure": "結構基本型",
+  "autolispext.commands.dclcompletion.primitive.string": "字串結構",
+  "autolispext.commands.dclcompletion.primitive.boolean": "布林結構"
+}

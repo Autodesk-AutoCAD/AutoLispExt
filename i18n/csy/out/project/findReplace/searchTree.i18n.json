@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " v ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nSoubor projektu: ",
+  "autolispext.project.findreplace.searchtree.replace": "Nahradit",
+  "autolispext.project.findreplace.searchtree.with": " s ",
+  "autolispext.project.findreplace.searchtree.find": "Najít ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nRozlišovat malá a velká: ZAP.",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nCelá slova: ZAP.",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nPoužít regulární výraz: ZAP."
+}

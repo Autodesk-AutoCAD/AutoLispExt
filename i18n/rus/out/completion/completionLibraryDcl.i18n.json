@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Примитив",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Создание структуры диалогового окна",
+  "autolispext.commands.dclcompletion.primitive.structure": "структурный примитив",
+  "autolispext.commands.dclcompletion.primitive.string": "строковая структура",
+  "autolispext.commands.dclcompletion.primitive.boolean": "логическая структура"
+}

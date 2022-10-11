@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "Načíst aktuální soubor",
+  "autolispext.loadlisp.title": "Načíst lisp",
+  "autolispext.loadlisp.attach": "Nejprve připojte nebo spusťte hostitelskou aplikaci před načtením tohoto souboru.",
+  "autolispext.loadlisp.fileformat.win": "Tento formát souboru není podporován. Aktivujte okno obsahující soubor DCL, LSP nebo MNL.",
+  "autolispext.loadlisp.fileformat.mac": "Tento formát souboru není podporován. Aktivujte okno obsahující soubor DCL nebo LSP."
+}

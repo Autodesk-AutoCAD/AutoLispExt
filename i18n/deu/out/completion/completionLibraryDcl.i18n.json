@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Grundkörper",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Erstellt eine Dialogfeldstruktur",
+  "autolispext.commands.dclcompletion.primitive.structure": "Struktur-Grundkörper",
+  "autolispext.commands.dclcompletion.primitive.string": "Zeichenfolgenstruktur",
+  "autolispext.commands.dclcompletion.primitive.boolean": "Boolesche Struktur"
+}

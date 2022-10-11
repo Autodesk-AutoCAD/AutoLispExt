@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Primitív",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Párbeszédpanel-szerkezetet hoz létre",
+  "autolispext.commands.dclcompletion.primitive.structure": "szerkezeti primitív",
+  "autolispext.commands.dclcompletion.primitive.string": "karakterlánc-szerkezet",
+  "autolispext.commands.dclcompletion.primitive.boolean": "logikai szerkezet"
+}

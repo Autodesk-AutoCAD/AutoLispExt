@@ -1,0 +1,21 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Utworzenie nowego projektu nie powiodło się.",
+  "autolispext.project.commands.openprojectfailed": "Otwarcie określonego projektu nie powiodło się.",
+  "autolispext.project.commands.addfilefailed": "Dodanie wybranych plików nie powiodło się.",
+  "autolispext.project.commands.removefilefailed": "Usunięcie wybranego pliku nie powiodło się.",
+  "autolispext.project.commands.projectsaved": "Plik projektu został zapisany.",
+  "autolispext.project.commands.allsaved": "Wszystkie pliki zostały zapisane.",
+  "autolispext.project.commands.saveprojectfailed": "Zapisanie projektu nie powiodło się.",
+  "autolispext.project.commands.saveallfailed": "Zapisanie wszystkich plików w projekcie nie powiodło się.",
+  "autolispext.project.commands.refreshfailed": "Odświeżenie projektu nie powiodło się.",
+  "autolispext.project.commands.openfilefailed": "Otwarcie pliku nie powiodło się.",
+  "autolispext.project.commands.findfailed": "Wyszukiwanie w projekcie nie powiodło się.",
+  "autolispext.project.commands.replacefailed": "Zastąpienie ciągu tekstowego w projekcie nie powiodło się.",
+  "autolispext.project.commands.openresultfailed": "Otwarcie wyników wyszukiwania nie powiodło się.",
+  "autolispext.project.commands.clearresultfailed": "Wyczyszczenie wyników wyszukiwania nie powiodło się.",
+  "autolispext.project.commands.initializefailed": "Zainicjowanie Menedżera projektów AutoLISP nie powiodło się.",
+  "autolispext.project.commands.closepromptmsg": "Potwierdź żądanie zamknięcia dotyczące: ",
+  "autolispext.project.commands.closepromptyes": "Tak",
+  "autolispext.project.commands.closepromptno": "Nie",
+  "autolispext.project.commands.addedworkspacefiles": "pliki LISP zostały dodane do"
+}

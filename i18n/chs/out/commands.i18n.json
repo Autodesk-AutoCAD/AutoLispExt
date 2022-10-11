@@ -2,5 +2,5 @@
   "autolispext.help.commands.openWebHelp": "无法加载 webHelpAbstraction.json 文件",
   "autolispext.commands.addFoldingRegion": "无法插入代码段",
   "autolispext.help.commands.generateDocumentation": "找不到有效的 defun 名称",
-  "autolispext.providers.rename.failed": ""
+  "autolispext.providers.rename.failed": "该符号对于重命名操作无效"
 }

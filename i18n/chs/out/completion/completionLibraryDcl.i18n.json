@@ -1,0 +1,7 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "图元",
+  "autolispext.commands.dclcompletion.primitive.dialog": "生成对话框结构",
+  "autolispext.commands.dclcompletion.primitive.structure": "结构图元",
+  "autolispext.commands.dclcompletion.primitive.string": "字符串结构",
+  "autolispext.commands.dclcompletion.primitive.boolean": "布尔结构"
+}

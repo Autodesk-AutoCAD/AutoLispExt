@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Aby bylo možné nahradit textový řetězec, musí být projekt otevřen.",
+  "autolispext.project.findreplace.replace.title": "Nahradit v projektu",
+  "autolispext.project.findreplace.replace.hint.keyword": "Zadejte textový řetězec, který chcete najít, a stiskněte klávesu Enter.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Zadejte textový řetězec, kterým chcete nahradit, a stiskněte klávesu Enter."
+}
