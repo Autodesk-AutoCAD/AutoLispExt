@@ -109,7 +109,7 @@ function getApplicableAttributes(tile: DclTile, pos: Position) : Array<string> {
 function stringProcessing(atom: IDclFragment, directParent: IDclContainer, pos: Position, context: CompletionContext): Array<CompletionItemDcl> {
     const index = directParent.atoms.indexOf(atom);
     if (directParent.atoms[index + 1]?.symbol !== ';' && pos.character === atom.range.end.character - 1) {
-        const localPrimitive = localize("autolispext.commands.dclcompletion.primitive.Primitive", "Primitive");
+        const localPrimitive = localize("autolispext.commands.dclcompletion.primitive", "Primitive");
         const localClosesStr = localize("autolispext.commands.dclcompletion.primitive.ClosesString", "Closes the string");
         const result = new CompletionItemDcl(`${atom.symbol};`);
         result.insertText = `${atom.symbol};`;

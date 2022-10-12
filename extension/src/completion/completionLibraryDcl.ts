@@ -114,9 +114,9 @@ export class CompletionLibraryDcl {
 	}
 
     private generateTiles() : void {
-		const localTile = localize("autolispext.commands.dclcompletion.primitive.Tile", "Tile");
+        const localTile = localize("autolispext.commands.dclcompletion.primitive.Tile", "Tile");
 
-		for (const key of AutoLispExt.WebHelpLibrary.dclTiles.keys()) {
+        for (const key of AutoLispExt.WebHelpLibrary.dclTiles.keys()) {
 			const lowerKey = key.toLowerCase();
 			if (lowerKey === 'dialog') {
 				continue;
