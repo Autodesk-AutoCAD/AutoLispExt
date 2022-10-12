@@ -6,6 +6,5 @@
   "autolispext.commands.dclcompletion.primitive.boolean": "boolean structure",
   "autolispext.commands.dclcompletion.primitive.Enum": "Enum",
   "autolispext.commands.dclcompletion.primitive.Attribute": "Attribute",
-  "autolispext.commands.dclcompletion.primitive.Tile": "Tile",
-  "autolispext.commands.dclcompletion.primitive.ClosesString": "Closes the string"
+  "autolispext.commands.dclcompletion.primitive.Tile": "Tile"
 }
