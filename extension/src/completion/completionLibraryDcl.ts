@@ -77,8 +77,9 @@ export class CompletionLibraryDcl {
 
 	private generateDynamics() : void {
 		const localDialogStruct = localize("autolispext.commands.dclcompletion.primitive.dialog", "Generates a dialog structure");
+		const localTile = localize("autolispext.commands.dclcompletion.primitive.Tile", "Tile");
 		this.dclSnippets.set(SnippetKeys.DIALOG,
-			this.makeSnippet('dialog', localDialogStruct, 'Tile', `\${1:NAME} : dialog {\n\t$0\n}`, Kinds.TILE)
+			this.makeSnippet('dialog', localDialogStruct, localTile, `\${1:NAME} : dialog {\n\t$0\n}`, Kinds.TILE)
 		);
 
 		const localPrimitive = localize("autolispext.commands.dclcompletion.primitive", "Primitive");
@@ -113,7 +114,9 @@ export class CompletionLibraryDcl {
 	}
 
     private generateTiles() : void {
-        for (const key of AutoLispExt.WebHelpLibrary.dclTiles.keys()) {
+		const localTile = localize("autolispext.commands.dclcompletion.primitive.Tile", "Tile");
+
+		for (const key of AutoLispExt.WebHelpLibrary.dclTiles.keys()) {
 			const lowerKey = key.toLowerCase();
 			if (lowerKey === 'dialog') {
 				continue;
@@ -122,7 +125,7 @@ export class CompletionLibraryDcl {
             const def = AutoLispExt.WebHelpLibrary.dclTiles.get(key);
             const item = new CompletionItemDcl(def.id);
             item.kind = Kinds.TILE;
-			item.detail = 'Tile';
+			item.detail = localTile;
             item.sortText = `!${lowerKey}`; // The '!' helps elevate suggestions
             item.documentation = Annotation.asMarkdown(def);
 			item.insertText = def.id;
@@ -140,12 +143,14 @@ export class CompletionLibraryDcl {
 		// TODO: OS Filtering Technical debt
 		//       After the Lisp AutoComplete gets updated, then we can turn on the new setting for both document types.
 
+		const localAttr = localize("autolispext.commands.dclcompletion.primitive.Attribute", "Attribute");
+
         for (const key of AutoLispExt.WebHelpLibrary.dclAttributes.keys()) {
             const def = AutoLispExt.WebHelpLibrary.dclAttributes.get(key);
             const lowerKey = key.toLowerCase();
             const item = new CompletionItemDcl(def.id);
             item.kind = Kinds.ATTRIBUTE;
-			item.detail = 'Attribute';			
+			item.detail = localAttr;			
             item.sortText = `!!${lowerKey}`; // The '!!' helps elevate Attribute suggestions above Tile suggestions
             item.documentation = Annotation.asMarkdown(def);
 			item.insertText = def.id;
@@ -154,6 +159,8 @@ export class CompletionLibraryDcl {
     }
 
 	private generateEnums() : void {
+		const localEnum = localize("autolispext.commands.dclcompletion.primitive.Enum", "Enum");
+
 		for (const key of AutoLispExt.WebHelpLibrary.dclAttributes.keys()) {
 			const def = AutoLispExt.WebHelpLibrary.dclAttributes.get(key);
 			const lowerKey = key.toLowerCase();
@@ -173,7 +180,7 @@ export class CompletionLibraryDcl {
 				def.valueType.enums.forEach(name => {
 					const item = new CompletionItemDcl(name);
 					item.kind = Kinds.ENUM;
-					item.detail = 'Enum';
+					item.detail = localEnum;
 					item.sortText = name;
 					item.insertText = name;
 					types.push(item);
