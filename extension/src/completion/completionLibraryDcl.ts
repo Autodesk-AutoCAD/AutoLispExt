@@ -143,7 +143,7 @@ export class CompletionLibraryDcl {
 		// TODO: OS Filtering Technical debt
 		//       After the Lisp AutoComplete gets updated, then we can turn on the new setting for both document types.
 
-		const localAttr = localize("autolispext.commands.dclcompletion.primitive.Attribute", "Attribute");
+        const localAttr = localize("autolispext.commands.dclcompletion.primitive.Attribute", "Attribute");
 
         for (const key of AutoLispExt.WebHelpLibrary.dclAttributes.keys()) {
             const def = AutoLispExt.WebHelpLibrary.dclAttributes.get(key);
