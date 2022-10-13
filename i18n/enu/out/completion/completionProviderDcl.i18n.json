@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "Primitive",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "Closes the string"
+}

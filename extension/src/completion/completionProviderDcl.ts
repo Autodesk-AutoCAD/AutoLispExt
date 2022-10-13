@@ -7,6 +7,10 @@ import {CompletionItemDcl} from "./completionItemDcl";
 import {AutoLispExt} from "../context";
 import {CompletionLibraryDcl, SnippetKeys} from "./completionLibraryDcl";
 import {Kinds} from './completionItemDcl';
+import * as nls from 'vscode-nls';
+
+const localize = nls.loadMessageBundle();
+
 
 // This file is responsible for determining what could potentially be suggested give the current context
 
@@ -105,10 +109,12 @@ function getApplicableAttributes(tile: DclTile, pos: Position) : Array<string> {
 function stringProcessing(atom: IDclFragment, directParent: IDclContainer, pos: Position, context: CompletionContext): Array<CompletionItemDcl> {
     const index = directParent.atoms.indexOf(atom);
     if (directParent.atoms[index + 1]?.symbol !== ';' && pos.character === atom.range.end.character - 1) {
+        const localPrimitive = localize("autolispext.commands.dclcompletion.provider.Primitive", "Primitive");
+        const localClosesStr = localize("autolispext.commands.dclcompletion.provider.ClosesString", "Closes the string");
         const result = new CompletionItemDcl(`${atom.symbol};`);
         result.insertText = `${atom.symbol};`;
-        result.detail = 'Primitive';
-        result.documentation = 'Closes the string';
+        result.detail = localPrimitive;
+        result.documentation = localClosesStr;
         result.range = atom.range;
         result.kind = Kinds.PRIMITIVE;
         return [result];

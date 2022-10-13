@@ -3,5 +3,8 @@
   "autolispext.commands.dclcompletion.primitive.dialog": "Generates a dialog structure",
   "autolispext.commands.dclcompletion.primitive.structure": "structural primitive",
   "autolispext.commands.dclcompletion.primitive.string": "string structure",
-  "autolispext.commands.dclcompletion.primitive.boolean": "boolean structure"
+  "autolispext.commands.dclcompletion.primitive.boolean": "boolean structure",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Enum",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Attribute",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Tile"
 }
