@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Primitive",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Génère une boîte de dialogue",
+  "autolispext.commands.dclcompletion.primitive.structure": "primitive structurelle",
+  "autolispext.commands.dclcompletion.primitive.string": "structure de chaîne",
+  "autolispext.commands.dclcompletion.primitive.boolean": "structure booléenne",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Enum",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Attribut",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Bloc"
+}

@@ -2,5 +2,5 @@
   "autolispext.help.commands.openWebHelp": "No se ha podido cargar el archivo webHelpAbstraction.json.",
   "autolispext.commands.addFoldingRegion": "No se ha podido insertar el fragmento.",
   "autolispext.help.commands.generateDocumentation": "No se ha podido encontrar un nombre de defun válido.",
-  "autolispext.providers.rename.failed": ""
+  "autolispext.providers.rename.failed": "El símbolo no era válido para las operaciones de cambio de nombre."
 }

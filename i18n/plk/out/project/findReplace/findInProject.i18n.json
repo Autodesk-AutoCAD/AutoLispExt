@@ -1,0 +1,13 @@
+{
+  "autolispext.project.find.openproject": "Projekt musi być otwarty, aby można było wyszukać ciąg tekstowy.",
+  "autolispext.project.find.title": "Znajdź w projekcie",
+  "autolispext.project.find.hint": "Wpisz ciąg tekstowy do wyszukania i naciśnij klawisz Enter.",
+  "autolispext.project.find.supportos": "Polecenie Znajdź i zastąp jest obsługiwane tylko w systemach 64-bitowych.",
+  "autolispext.project.find.inprogress": "W toku… ",
+  "autolispext.project.find.found": "Liczba znalezionych wyników - ",
+  "autolispext.project.find.results": " , liczba plików - ",
+  "autolispext.project.find.files": " :",
+  "autolispext.project.find.stopped": "Wyszukiwanie zatrzymane. ",
+  "autolispext.project.find.noresults": "Brak wyników.",
+  "autolispext.project.find.exceedmaxresults": "Przekroczono limit wyników wyszukiwania. Zawęź kryteria wyszukiwania, aby ograniczyć liczbę wyników. "
+}

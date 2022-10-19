@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Grundkörper",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Erstellt eine Dialogfeldstruktur",
+  "autolispext.commands.dclcompletion.primitive.structure": "Struktur-Grundbaustein",
+  "autolispext.commands.dclcompletion.primitive.string": "Zeichenfolgenstruktur",
+  "autolispext.commands.dclcompletion.primitive.boolean": "Boolesche Struktur",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Aufzählung",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Attribut",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Kachel"
+}

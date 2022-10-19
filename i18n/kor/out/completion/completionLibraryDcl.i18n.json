@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "기본체",
+  "autolispext.commands.dclcompletion.primitive.dialog": "대화상자 구조 생성",
+  "autolispext.commands.dclcompletion.primitive.structure": "구조 기본체",
+  "autolispext.commands.dclcompletion.primitive.string": "문자열 구조",
+  "autolispext.commands.dclcompletion.primitive.boolean": "부울 구조",
+  "autolispext.commands.dclcompletion.primitive.Enum": "열거",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "속성",
+  "autolispext.commands.dclcompletion.primitive.Tile": "타일"
+}

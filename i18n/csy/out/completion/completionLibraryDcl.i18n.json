@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Primitivum",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Generuje strukturu dialogu",
+  "autolispext.commands.dclcompletion.primitive.structure": "konstrukční primitivum",
+  "autolispext.commands.dclcompletion.primitive.string": "struktura řetězce",
+  "autolispext.commands.dclcompletion.primitive.boolean": "booleovská struktura",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Výčet",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Atribut",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Dlaždice"
+}

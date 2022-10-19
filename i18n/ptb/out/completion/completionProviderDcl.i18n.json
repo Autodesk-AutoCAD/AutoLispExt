@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "Primitivo",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "Termina a sequência de caracteres"
+}

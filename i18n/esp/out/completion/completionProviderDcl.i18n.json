@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "Primitiva",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "Cierra la cadena."
+}

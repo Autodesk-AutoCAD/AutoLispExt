@@ -1,0 +1,7 @@
+{
+  "autolispext.loadlisp.tooltip": "Wczytaj bieżący plik",
+  "autolispext.loadlisp.title": "Wczytaj LISP",
+  "autolispext.loadlisp.attach": "Przed wczytaniem tego pliku należy najpierw dołączyć do aplikacji nadrzędnej lub ją uruchomić.",
+  "autolispext.loadlisp.fileformat.win": "Ten format pliku nie jest obsługiwany. Aktywuj okno zawierające plik DCL, LSP lub MNL.",
+  "autolispext.loadlisp.fileformat.mac": "Ten format pliku nie jest obsługiwany. Aktywuj okno zawierające plik DCL lub LSP."
+}
