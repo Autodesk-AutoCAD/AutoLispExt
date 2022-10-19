@@ -12,6 +12,9 @@ The extension is open source and distributed under Apache License v2.0.
 
 Your feedback is highly appreciated! Should you have any suggestions, please create an issue [here](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues).
 
+## Recent Updates
+See the [change log](CHANGELOG.md) for recently added new features.
+
 ## Features
 1. AutoLISP Debugger
     * Launch/Attach Debug

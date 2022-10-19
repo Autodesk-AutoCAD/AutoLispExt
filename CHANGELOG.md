@@ -1,7 +1,9 @@
-## [1.6.0] - 2022-10-10
+## [1.6.0] - 2022-10-19
 a.	Added quick help in VS Code editor on mouse hover.
+See [Feature Demo](https://user-images.githubusercontent.com/51800232/188553502-db1ae887-53f2-453d-b0ff-0db86fc0d86c.mp4).
 
 b.	Enhanced auto-completion for DCL files.
+See [Feature Demo](https://user-images.githubusercontent.com/51800232/192707497-eeb4cc32-6cc0-4c43-b0c6-5d16d1b19999.mp4).
 
 c.	Bug fixes.
 
