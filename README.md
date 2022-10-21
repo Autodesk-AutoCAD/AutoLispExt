@@ -128,6 +128,9 @@ See [here](NOTICE.md).
 
 非常感谢您的反馈！如果您有任何建议，请在[此处](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues)创建一个 Issue。
 
+## 最近更新
+有关最近添加的新功能，请参阅 [更改日志](CHANGELOG.md)。
+
 ## 特性
 
 1. AutoLISP 调试
