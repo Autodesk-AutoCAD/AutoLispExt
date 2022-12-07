@@ -641,7 +641,7 @@
 		"gulp-filter": "^5.1.0",
 		"gulp-sourcemaps": "^2.6.5",
 		"gulp-typescript": "^5.0.1",
-		"mocha": "^6.1.4",
+		"mocha": "^10.1.0",
 		"mochawesome": "^7.0.1",
 		"nyc": "^15.1.0",
 		"run-sequence": "^2.2.1",
