@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "Примитив",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "Закрытие строки"
+}

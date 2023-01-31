@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.5.1",
+	"version": "1.6.0",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
@@ -239,11 +239,6 @@
 					],
 					"default": "2023",
 					"description": "%autolispext.configuration.helptargetyear%"
-				},
-				"autolispext.completion.FilterMacOS": {
-					"type": "boolean",
-					"default": true,
-					"description": "%autolispext.configuration.macfilter.desc%"
 				}
 			}
 		},
@@ -291,12 +286,16 @@
 					"comments": false,
 					"strings": true
 				},
-				"editor.wordBasedSuggestions": true,
+				"editor.wordBasedSuggestions": false,
+				"editor.suggest.showWords": false,
+				"editor.suggest.showProperties": false,
 				"editor.autoIndent": "brackets",
 				"files.encoding": "utf8",
-				"editor.suggest.localityBonus": true,
+				"editor.suggest.localityBonus": false,
 				"editor.wordSeparators": "=;{}\":",
-				"editor.suggestSelection": "recentlyUsed"
+				"editor.suggestSelection": "first",
+				"editor.suggest.insertMode": "insert",
+				"editor.suggest.snippetsPreventQuickSuggestions": false
 			}
 		},
 		"breakpoints": [

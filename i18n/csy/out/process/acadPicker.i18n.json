@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Vyberte proces, který chcete připojit. Ujistěte se, že je spuštěna aplikace AutoCAD nebo jedna ze specializovaných sad nástrojů. Zadejte acad a vyberte aplikaci ze seznamu.",
+  "autolispext.pickprocess.acad.osx": "Vyberte proces, který chcete připojit. Ujistěte se, že je spuštěna aplikace AutoCAD. Zadejte AutoCAD a vyberte aplikaci ze seznamu.",
+  "autolispext.pickprocess.acad.other": "Vyberte proces, který chcete připojit",
+  "autolispext.pickprocess.pickfailed": "Nepodařilo se vybrat proces ({0})",
+  "autolispext.pickprocess.process.id.port": "Id procesu: {0}, port ladění: {1}",
+  "autolispext.pickprocess.process.id.legacy": "Id procesu: {0}, port ladění: {1} (starší protokol)",
+  "autolispext.pickprocess.process.port.singal": "Id procesu: {0}, port ladění: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "Id procesu: {0} ({1})"
+}

@@ -32,16 +32,16 @@ suite("Help: UserDocumentation Tests", function () {
 	let snip3: vscode.SnippetString;
 	suiteSetup(async () => {
 		try {
-			let parent = doc.atomsForest.find(p => p.contains(pos1));
+			let parent = doc.documentContainer.atoms.find(p => p.contains(pos1));
 			def1 = await testing.getDefunAtPosition(parent, pos1);	
 			
-			parent = doc.atomsForest.find(p => p.contains(pos2));
+			parent = doc.documentContainer.atoms.find(p => p.contains(pos2));
 			def2 = await testing.getDefunAtPosition(parent, pos2);	
 
-			parent = doc.atomsForest.find(p => p.contains(pos3));
+			parent = doc.documentContainer.atoms.find(p => p.contains(pos3));
 			def3 = await testing.getDefunAtPosition(parent, pos3, 1);	
 
-			parent = doc.atomsForest.find(p => p.contains(pos4));
+			parent = doc.documentContainer.atoms.find(p => p.contains(pos4));
 			def4 = await testing.getDefunAtPosition(parent, pos4);	
 
 			args1 = testing.getDefunArguments(def1);

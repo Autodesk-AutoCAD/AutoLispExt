@@ -1,8 +1,8 @@
 # <span id="visual-studio-code-extension-for-autocad®-autolisp">Visual Studio Code Extension for AutoCAD® AutoLISP<span>
 
-[中文简体](#autocad®-autolisp-visual-studio-code-扩展)
+[简体中文](#autocad®-autolisp-visual-studio-code-扩展)
 
-This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your lisp programs with AutoCAD 2021.
+This extension adds support for AutoCAD AutoLISP source (LSP) files to Visual Studio Code. It allows you to edit and debug your lisp programs with AutoCAD 2021 and later.
 For information on creating lisp programs for AutoCAD with the AutoLISP programming language, see the:
    - AutoCAD AutoLISP: [Developer’s Guide](https://www.autodesk.com/autolisp-developers-guide)
    - AutoCAD AutoLISP: [Reference](https://www.autodesk.com/autolisp-reference)
@@ -11,6 +11,9 @@ For information on creating lisp programs for AutoCAD with the AutoLISP programm
 The extension is open source and distributed under Apache License v2.0.
 
 Your feedback is highly appreciated! Should you have any suggestions, please create an issue [here](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues).
+
+## Recent Updates
+See the [change log](CHANGELOG.md) for recently added new features.
 
 ## Features
 1. AutoLISP Debugger
@@ -31,6 +34,11 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Easy access to online documentation through the context menu (selection sensitive)
     * Go to definition
     * Insert code region
+    * Generate documentation for user defined function
+    * Rename symbol
+    * Go to references
+    * Quick help on mouse hover
+    * Add @Global in comment to expose symbol to workspace aware operations
 
 3. AutoLISP Project
     * Open a project (.prj)
@@ -40,7 +48,7 @@ Your feedback is highly appreciated! Should you have any suggestions, please cre
     * Find & Search in a project
 
 ## Getting started
-- Step 1. Install a supported AutoCAD release on your system. 
+- Step 1. Install a supported AutoCAD release on your system.
 - Step 2. Install this extension.
 - Step 3. Open a folder that contains the AutoLISP source (LSP) files you want to work on. Or open an Autolisp project file via VSCODE side bar.
 - Step 4. Open a LSP file to modify or debug.
@@ -59,7 +67,7 @@ Windows | Mac | Linux |
 ## How to use the extension
 To debug an AutoLISP source file:
 1.  Open a LSP file.
-2.  Click Run > Start Debugging (or press F5). 
+2.  Click Run > Start Debugging (or press F5).
 3.  Then choose one of the following debug configurations:
      * AutoLISP Debug: Launch – Launches a new instance of the AutoCAD application to debug the current LSP file.
      * AutoLISP Debug: Attach – Allows you to attach to a running instance of the AutoCAD application to debug the current LSP file.
@@ -87,16 +95,15 @@ Example (on Mac OS):
 For more information, see the [documentation online](https://www.autodesk.com/autolisp-extension).
 
 ## Notes
-
-1.	Other AutoLISP extensions may conflict with this extension. If you are unable to set a breakpoint in a LSP file or you can’t use the launch/attach debug configurations, you should disable or uninstall all other AutoLISP extensions.
-2.	When using this extension on Mac® OS, the "Launch Program" attribute in extension setting should be ".../AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD &lt;release&gt;.app.
-3.	For AutoCAD specialized toolsets or OEM-based products, the product name might not be the same as AutoCAD or acad.exe. To use this extension with those products, set the value of the "Launch Program" attribute in extension setting based on the product you want to debug with.
-4.	If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
+1.  Other AutoLISP extensions may conflict with this extension. If you are unable to set a breakpoint in a LSP file or you can’t use the launch/attach debug configurations, you should disable or uninstall all other AutoLISP extensions.
+2.  When using this extension on Mac® OS, the "Launch Program" attribute in extension setting should be ".../AutoCAD &lt;release&gt;.app/Contents/MacOS/AutoCAD" rather than the absolute path of AutoCAD &lt;release&gt;.app.
+3.  For AutoCAD specialized toolsets or OEM-based products, the product name might not be the same as AutoCAD or acad.exe. To use this extension with those products, set the value of the "Launch Program" attribute in extension setting based on the product you want to debug with.
+4.  If you launch AutoCAD as an administrator, you should start Microsoft Visual Studio Code as an administrator as well. Otherwise, Microsoft Visual Studio Code will be unable to locate the AutoCAD process for attach debug.
 
 ## Legal
 Visual Studio Code Extension for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
 
-### Privacy 
+### Privacy
 To learn more about Autodesk’s online and offline privacy practices, please see the [Autodesk Privacy Statement](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement).
 
 ### Trademarks
@@ -105,14 +112,13 @@ The license does not grant permission to use the trade names, trademarks, servic
 All other brand names, product names or trademarks belong to their respective holders.
 
 ### Third-Party Trademarks, Software Credits and Attributions
-
 See [here](NOTICE.md).
 
 # <span id="autocad®-autolisp-visual-studio-code-扩展">AutoCAD® AutoLISP Visual Studio Code 扩展</span>
 
 [English](#visual-studio-code-extension-for-autocad®-autolisp)
 
-这是一个 Visual Studio Code 扩展，用来支持在 VSCode 中编写 AutoCAD AutoLISP 源文件（LSP）。它允许您使用 AutoCAD 2021 编辑和调试 lisp 程序。有关使用 AutoLISP 编程语言为 AutoCAD 创建 lisp 程序的信息，请参见：
+这是一个 Visual Studio Code 扩展，用来支持在 VSCode 中编写 AutoCAD AutoLISP 源文件（LSP）。它允许您使用 AutoCAD 2021 及更高版本编辑和调试 lisp 程序。有关使用 AutoLISP 编程语言为 AutoCAD 创建 lisp 程序的信息，请参见：
 
 - AutoCAD AutoLISP: [Developer’s Guide](https://www.autodesk.com/autolisp-developers-guide)
 - AutoCAD AutoLISP: [Reference](https://www.autodesk.com/autolisp-reference)
@@ -121,6 +127,9 @@ See [here](NOTICE.md).
 该扩展开源，在 Apache License v2.0 下发布。
 
 非常感谢您的反馈！如果您有任何建议，请在[此处](https://github.com/Autodesk-AutoCAD/AutoLispExt/issues)创建一个 Issue。
+
+## 最近更新
+有关最近添加的新功能，请参阅 [更改日志](CHANGELOG.md)。
 
 ## 特性
 
@@ -141,6 +150,11 @@ See [here](NOTICE.md).
    - 通过上下文菜单轻松访问在线文档（选择敏感）
    - 转到定义
    - 插入代码区域
+   - 为自定义函数生成注释
+   - 重命名符号
+   - 转到引用
+   - 鼠标悬停显示帮助
+   - 在注释中添加 @Global 以将符号公开给工作区感知操作
 3. AutoLISP 项目
    - 打开项目（.prj）
    - 创建项目
@@ -206,13 +220,11 @@ See [here](NOTICE.md).
 3. 对于 AutoCAD 专用工具集或基于 OEM 的产品，产品名称可能与 AutoCAD 或 acad.exe 不同。要将此扩展用于这些产品，请根据要调试的产品在扩展设置中设置对应“Launch Program”的值。
 4. 如果以管理员身份启动 AutoCAD，则同样应以管理员身份启动 Microsoft Visual Studio Code。否则，Microsoft Visual Studio Code 将无法找到用于附加调试的 AutoCAD 进程。
 
-## 法律通告
+## Legal
+Visual Studio Code Extension for AutoCAD® AutoLISP © 2020 Autodesk, Inc. All rights reserved.
 
-Visual Studio Code Extension for AutoCAD® AutoLISP © 版权所有 2020 Autodesk Inc. 保留所有权利。
-
-### 隐私
-
-要了解有关 Autodesk 联机和脱机隐私文档的详细信息，请参见 [Autodesk 隐私声明](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement)。
+### Privacy
+To learn more about Autodesk’s online and offline privacy practices, please see the [Autodesk Privacy Statement](https://www.autodesk.com/company/legal-notices-trademarks/privacy-statement).
 
 ### Trademarks
 The license does not grant permission to use the trade names, trademarks, service marks, or product names of Autodesk, except as required for reasonable and customary use in describing the origin of the work and reproducing the content of any notice file. Autodesk, the Autodesk logo, AutoCAD and AutoLISP are registered trademarks or trademarks of Autodesk, Inc., and/or its subsidiaries and/or affiliates in the USA and/or other countries. All other brand names, product names, or trademarks belong to their respective holders. Autodesk is not responsible for typographical or graphical errors that may appear in this document.
@@ -220,5 +232,4 @@ The license does not grant permission to use the trade names, trademarks, servic
 All other brand names, product names or trademarks belong to their respective holders.
 
 ### Third-Party Trademarks, Software Credits and Attributions
-
 See [here](NOTICE.md).

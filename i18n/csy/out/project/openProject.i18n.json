@@ -1,0 +1,8 @@
+{
+  "autolispext.project.openproject.onlyprjallowed": "Povoleny jsou pouze soubory PRJ.",
+  "autolispext.project.openproject.readfailed": "Nelze číst soubor projektu: ",
+  "autolispext.project.openproject.malformedfile": "Poškozený projektový soubor: ",
+  "autolispext.project.openproject.label": "Otevřít projekt",
+  "autolispext.project.openproject.nospaces": "Starší pravidla pojmenování PRJ nepovolují prostory",
+  "autolispext.project.openproject.projectfilter": "Soubory projektů jazyka AutoLISP"
+}

@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Primitiva",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Genera la struttura di una finestra di dialogo",
+  "autolispext.commands.dclcompletion.primitive.structure": "primitiva strutturale",
+  "autolispext.commands.dclcompletion.primitive.string": "struttura di stringa",
+  "autolispext.commands.dclcompletion.primitive.boolean": "struttura booleana",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Enumerazione",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Attributo",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Riquadro"
+}

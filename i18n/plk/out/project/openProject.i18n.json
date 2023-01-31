@@ -1,0 +1,8 @@
+{
+  "autolispext.project.openproject.onlyprjallowed": "Dozwolone są tylko pliki PRJ.",
+  "autolispext.project.openproject.readfailed": "Nie można odczytać pliku projektu: ",
+  "autolispext.project.openproject.malformedfile": "Błędny plik projektu: ",
+  "autolispext.project.openproject.label": "Otwórz projekt",
+  "autolispext.project.openproject.nospaces": "Starsze reguły nazewnictwa plików PRJ nie zezwalają na używanie spacji",
+  "autolispext.project.openproject.projectfilter": "Pliki projektu AutoLISP"
+}

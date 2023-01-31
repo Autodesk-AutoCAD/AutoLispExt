@@ -1,0 +1,10 @@
+{
+  "autolispext.project.findreplace.searchtree.in": " w ",
+  "autolispext.project.findreplace.searchtree.prjfile": "\r\nPlik projektu: ",
+  "autolispext.project.findreplace.searchtree.replace": "Zastąp",
+  "autolispext.project.findreplace.searchtree.with": " ciągiem ",
+  "autolispext.project.findreplace.searchtree.find": "Znajdź ",
+  "autolispext.project.findreplace.searchtree.matchcaseon": "\r\nUwzględniaj wielkość liter: WŁ.",
+  "autolispext.project.findreplace.searchtree.matchwholewordon": "\r\nDopasuj całe wyrazy: WŁ.",
+  "autolispext.project.findreplace.searchtree.regexpon": "\r\nUżyj wyrażeń regularnych: WŁ."
+}

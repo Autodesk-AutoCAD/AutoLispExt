@@ -23,6 +23,7 @@ npm run compile
 2. add some breakpoints as needed.
 3. hit F5 and select "Extension Client", then it will start another Visual Studio Code instance with running the extension.
 4. Do some operations to invoke the codes which are added breakpoints, Visual Studio Code will stop in the first instance.
+4. Do some operations to invoke the codes which are added breakpoints, vscode will stop in the first instance.
 
 ## How to package the extension
 

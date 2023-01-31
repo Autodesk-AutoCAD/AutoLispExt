@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "Примитив",
+  "autolispext.commands.dclcompletion.primitive.dialog": "Создание структуры диалогового окна",
+  "autolispext.commands.dclcompletion.primitive.structure": "структурный примитив",
+  "autolispext.commands.dclcompletion.primitive.string": "строковая структура",
+  "autolispext.commands.dclcompletion.primitive.boolean": "логическая структура",
+  "autolispext.commands.dclcompletion.primitive.Enum": "Перечисление",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "Атрибут",
+  "autolispext.commands.dclcompletion.primitive.Tile": "Фрагмент"
+}

@@ -1,0 +1,10 @@
+{
+  "autolispext.pickprocess.acad.win": "Wskaż proces do dołączenia. Upewnij się, że jest uruchomiony program AutoCAD lub jeden ze specjalistycznych zestawów narzędzi. Wpisz „acad” i wybierz go z listy.",
+  "autolispext.pickprocess.acad.osx": "Wskaż proces do dołączenia. Upewnij się, że jest uruchomiony program AutoCAD. Wpisz „AutoCAD” i wybierz go z listy.",
+  "autolispext.pickprocess.acad.other": "Wskaż proces do dołączenia",
+  "autolispext.pickprocess.pickfailed": "Wskazanie procesu nie powiodło się ({0})",
+  "autolispext.pickprocess.process.id.port": "identyfikator procesu: {0}, port debugowania: {1}",
+  "autolispext.pickprocess.process.id.legacy": "identyfikator procesu: {0}, port debugowania: {1} (starszy protokół)",
+  "autolispext.pickprocess.process.port.singal": "identyfikator procesu: {0}, port debugowania: {1} ({2})",
+  "autolispext.pickprocess.process.id.singal": "identyfikator procesu: {0} ({1})"
+}

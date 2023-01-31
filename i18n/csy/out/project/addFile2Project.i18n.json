@@ -1,0 +1,8 @@
+{
+  "autolispext.project.addfile.openproject": "Před přidáním souboru je nutné otevřít projekt.",
+  "autolispext.project.addfile.onlylspallowed": "Povoleny jsou pouze soubory LSP.",
+  "autolispext.project.addfile.filealreadyexist": "Soubor již v tomto projektu existuje: ",
+  "autolispext.project.addfile.samenameexist": "Soubor se stejným názvem již v tomto projektu existuje: ",
+  "autolispext.project.addfile.openlabel": "Přidat do projektu",
+  "autolispext.project.addfile.sourcefilefilter": "Zdrojové soubory jazyka AutoLISP"
+}

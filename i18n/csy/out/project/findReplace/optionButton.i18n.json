@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.optionbutton.matchcase": "Rozlišovat malá a velká písmena",
+  "autolispext.project.findreplace.optionbutton.matchwholeword": "Celá slova",
+  "autolispext.project.findreplace.optionbutton.regexp": "Použít regulární výraz",
+  "autolispext.project.findreplace.optionbutton.close": "Zavřít"
+}

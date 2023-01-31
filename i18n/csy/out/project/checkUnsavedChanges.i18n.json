@@ -1,0 +1,5 @@
+{
+  "autolispext.project.checkunsavedchanges.message": "V projektu byly nalezeny neuložené změny nebo soubory v projektu.\nChcete změny uložit?",
+  "autolispext.project.checkunsavedchanges.save": "Uložit",
+  "autolispext.project.checkunsavedchanges.dontsave": "Neukládat"
+}

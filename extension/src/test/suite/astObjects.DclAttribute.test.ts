@@ -104,7 +104,7 @@ suite("AST Objects: DCL Attribute", function () {
 			expect(sut(21, 12, 21, 12)).to.equal(false); // reject tile atom
 			expect(sut(38, 40, 38, 8)).to.equal(true);   // accept attribute atom
 			expect(sut(42, 50, 42, 38)).to.equal(true);  // accept attribute atom
-			expect(sut(46, 8, 46, 4)).to.equal(true);    // accept attribute atom
+			expect(sut(38, 30, 38, 8)).to.equal(true);    // accept attribute atom
 		}
 		catch (err) {
 			assert.fail("A known atom position did not return the expected parent position");
@@ -129,15 +129,13 @@ suite("AST Objects: DCL Attribute", function () {
 	test("DclAttribute Positional Properties", function () {
 		try {
 			const sut1 = doc.documentDclContainer.getParentFrom(new Position(44, 30), false).asAttribute;
-			const sut2 = doc.documentDclContainer.getParentFrom(new Position(46, 7), false).asAttribute;
+			const sut2 = doc.documentDclContainer.getParentFrom(new Position(46, 7), false).asTile;
 			const sut3 = new DclAttribute([]);
 			expect(sut1.key.symbol).to.equal('key');
-			expect(sut2.key.symbol).to.equal('spacer');
+			expect(sut2.firstAtom.symbol).to.equal('spacer');
 			expect(sut3.key).to.equal(null);
 			expect(sut1.delineator.symbol).to.equal('=');
-			expect(sut2.delineator).to.equal(null);
 			expect(sut1.value.symbol).to.equal('"btnOkay"');
-			expect(sut2.value).to.equal(null);
 			expect(sut1.lastAtom.symbol).to.equal(';');
 			expect(sut2.lastAtom.symbol).to.equal(';');
 		}
@@ -170,7 +168,7 @@ suite("AST Objects: DCL Attribute", function () {
 			mock.atoms.pop();
 			expect(mock.isWellFormed).to.equal(false);    // width =
 			mod(mock, 1, ';');
-			expect(mock.isWellFormed).to.equal(true);    // width ;
+			expect(mock.isWellFormed).to.equal(false);    // width ;
 			mock.atoms.pop();
 			expect(mock.isWellFormed).to.equal(false);    // width
 			

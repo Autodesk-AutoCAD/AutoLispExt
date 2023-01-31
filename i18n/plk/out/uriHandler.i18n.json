@@ -1,0 +1,6 @@
+{
+  "autolispext.urihandler.invaid": "Nieprawidłowe wywołanie rozszerzenia AutoCAD AutoLISP.",
+  "autolispext.urihandler.activeddebugcfg": "Bieżąca konfiguracja debugowania: ",
+  "autolispext.urihandler.debug.start": "Na pasku menu kliknij kolejno opcje Uruchom > Rozpocznij debugowanie, aby debugować bieżący plik źródłowy AutoLISP.",
+  "autolispext.urihandler.debug.openfile": "Otwórz plik źródłowy AutoLISP i na pasku menu kliknij kolejno opcje Uruchom > Rozpocznij debugowanie, aby debugować plik."
+}

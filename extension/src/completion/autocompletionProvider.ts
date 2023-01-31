@@ -1,15 +1,15 @@
 import * as vscode from 'vscode';
 import * as os from 'os';
 import { isCursorInDoubleQuoteExpr } from "../format/autoIndent";
-import { allCmdsAndSysvars, internalDclKeys, internalLispFuncs, winOnlyListFuncPrefix  } from "../resources";
+import { AutoLispExt} from "../context";
 
 
 export function isInternalAutoLispOp(item: string): boolean {
     if (!item)
         return false;
 
-    for (let i = 0; i < internalLispFuncs.length; i++) {
-        if (internalLispFuncs[i] === item)
+    for (let i = 0; i < AutoLispExt.Resources.internalLispFuncs.length; i++) {
+        if (AutoLispExt.Resources.internalLispFuncs[i] === item)
             return true;
     }
     return false;
@@ -117,9 +117,9 @@ export function getMatchingWord(document: vscode.TextDocument, position: vscode.
 export function getLispAndDclCompletions(document: vscode.TextDocument, word: string, isupper: boolean): vscode.CompletionItem[] {
     let currentLSPDoc = document.fileName;
     let ext = currentLSPDoc.substring(currentLSPDoc.length - 4, currentLSPDoc.length).toUpperCase();
-    let candidatesItems = internalLispFuncs;
+    let candidatesItems = AutoLispExt.Resources.internalLispFuncs;
     if (ext === ".DCL") {
-        candidatesItems = internalDclKeys;
+        candidatesItems = AutoLispExt.Resources.internalDclKeys;
     }
     let allSuggestions: Array<vscode.CompletionItem> = [];
     allSuggestions = getCompletionCandidates(candidatesItems, word, isupper);
@@ -129,7 +129,7 @@ export function getLispAndDclCompletions(document: vscode.TextDocument, word: st
     }
     else {
         return allSuggestions.filter(function(suggestion) {
-            for (var prefix of winOnlyListFuncPrefix) {
+            for (var prefix of AutoLispExt.Resources.winOnlyListFuncPrefix) {
                 if (suggestion.label.toString().startsWith(prefix)) {
                     return false;
                 }
@@ -158,7 +158,7 @@ export function registerAutoCompletionProviders() {
 
                 var isInDoubleQuote = isCursorInDoubleQuoteExpr(document, position);
                 if (isInDoubleQuote) {
-                    var cmds = getCmdAndVarsCompletionCandidates(allCmdsAndSysvars, inputword, userInputIsUpper);
+                    var cmds = getCmdAndVarsCompletionCandidates(AutoLispExt.Resources.allCmdsAndSysvars, inputword, userInputIsUpper);
                     return cmds;
                 }
 

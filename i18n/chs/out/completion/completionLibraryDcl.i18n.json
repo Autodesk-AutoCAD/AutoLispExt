@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "基元",
+  "autolispext.commands.dclcompletion.primitive.dialog": "生成对话框结构",
+  "autolispext.commands.dclcompletion.primitive.structure": "结构基元",
+  "autolispext.commands.dclcompletion.primitive.string": "字符串结构",
+  "autolispext.commands.dclcompletion.primitive.boolean": "布尔结构",
+  "autolispext.commands.dclcompletion.primitive.Enum": "枚举",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "属性",
+  "autolispext.commands.dclcompletion.primitive.Tile": "块"
+}
