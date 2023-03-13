@@ -41,7 +41,7 @@ You have two ways to run the tests:
 npm run test
 ```
 
-### localization notices
+### Localization notices
 It uses the gulp to do localization to reference project https://github.com/microsoft/vscode-extension-samples/tree/master/i18n-sample
 And the codes in each ts file:
 ```
