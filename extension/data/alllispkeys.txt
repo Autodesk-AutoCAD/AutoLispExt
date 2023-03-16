@@ -2700,6 +2700,9 @@ acet-sys-wait
 acet-ui-message
 acet-ui-pickdir
 acet-ui-progress
+acet-ui-progress-init
+acet-ui-progress-safe
+acet-ui-progress-done
 acet-ui-status
 acet-ui-txted
 acet-util-ver
