@@ -2671,6 +2671,9 @@ acet-help
 acet-help-trap
 acet-ini-get
 acet-ini-set
+acet-laytrans
+acet-ms-to-ps
+acet-ps-to-ms
 acet-reg-del
 acet-reg-get
 acet-reg-prodkey
