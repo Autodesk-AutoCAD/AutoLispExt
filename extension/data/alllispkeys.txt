@@ -2656,6 +2656,8 @@ vlr-xref-reactor
 acet-layerp-mode
 acet-layerp-mark
 acet-ent-geomextents
+acet-error-init
+acet-error-restore
 acet-file-attr
 acet-file-chdir
 acet-file-copy
