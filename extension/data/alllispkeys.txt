@@ -2676,8 +2676,9 @@ acet-ms-to-ps
 acet-ps-to-ms
 acet-reg-del
 acet-reg-get
-acet-reg-prodkey
 acet-reg-put
+acet-reg-machine-prodkey
+acet-reg-user-prodkey
 acet-ss-drag-move
 acet-ss-drag-rotate
 acet-ss-drag-scale
