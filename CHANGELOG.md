@@ -1,5 +1,5 @@
 ## [1.6.1] - 2023-3-21
-Make it able to highlight acet-* functions.
+Make it able to highlight documented acet-* functions.
 
 ## [1.6.0] - 2022-10-19
 a.	Added quick help in VS Code editor on mouse hover.
