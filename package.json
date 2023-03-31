@@ -235,9 +235,10 @@
 						"2020",
 						"2021",
 						"2022",
-						"2023"
+						"2023",
+						"2024"
 					],
-					"default": "2023",
+					"default": "2024",
 					"description": "%autolispext.configuration.helptargetyear%"
 				}
 			}
