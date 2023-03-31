@@ -1,3 +1,8 @@
+## [1.6.2] - 2023-3-30
+a.	Added "2024" to the "Help: Target Year" setting and set it as the default value.
+
+b.	Added "Open Online Help" and syntax support for the _acet-*_ functions.
+
 ## [1.6.1] - 2023-3-21
 Make it able to highlight acet-* functions that are documented.
 
