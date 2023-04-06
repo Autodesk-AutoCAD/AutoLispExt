@@ -2,7 +2,7 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.1",
+	"version": "1.6.2",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
 		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
@@ -235,9 +235,10 @@
 						"2020",
 						"2021",
 						"2022",
-						"2023"
+						"2023",
+						"2024"
 					],
-					"default": "2023",
+					"default": "2024",
 					"description": "%autolispext.configuration.helptargetyear%"
 				}
 			}
