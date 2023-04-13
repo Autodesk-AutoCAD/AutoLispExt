@@ -93952,7 +93952,7 @@
         "id": "acet-ui-progress",
         "category": 4,
         "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
-        "description": "Displays a progress meter",
+        "description": "Closes the progress meter",
         "platforms": "WIN"
       }
     ],
