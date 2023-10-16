@@ -38,9 +38,9 @@ export async function findInProject() {
     //find in project
     let finder = new FindInProject();
     await finder.execute(opt, ProjectTreeProvider.instance().projectNode);
-
     //update the UI
     SearchTreeProvider.instance.reset(finder.resultByFile, finder.summaryNode, opt);
+  
 }
 
 export class FindInProject {
@@ -59,7 +59,7 @@ export class FindInProject {
                 return Promise.reject(msg);
             }
         }
-
+        
         this.timeStarted = Date.now();
 
         setIsSearching(true);
