@@ -11,6 +11,11 @@ import sys
 
 def init():
     print("===============================================")
+    print("             cleaning up ...")
+    os.system("git checkout . & git clean -xdf")
+    os.system("npm -v")
+
+    print("===============================================")
     print("             try to install gulp-cli")
     os.system("npm install gulp-cli --legacy-peer-deps") # nosec
 
