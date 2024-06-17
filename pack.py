@@ -17,7 +17,7 @@ def init():
 
     print("===============================================")
     print("             try to install gulp-cli")
-    #os.system("npm install gulp-cli --legacy-peer-deps") # nosec
+    os.system("npm install gulp-cli --legacy-peer-deps") # nosec
 
     #os.system("npm install --unsafe-perm --legacy-peer-deps") # nosec
 
