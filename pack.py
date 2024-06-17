@@ -17,9 +17,9 @@ def init():
 
     print("===============================================")
     print("             try to install gulp-cli")
-    os.system("npm install gulp-cli --legacy-peer-deps") # nosec
+    #os.system("npm install gulp-cli --legacy-peer-deps") # nosec
 
-    os.system("npm install --unsafe-perm --legacy-peer-deps") # nosec
+    #os.system("npm install --unsafe-perm --legacy-peer-deps") # nosec
 
     print("===============================================")
     print("             complete npm install")
@@ -27,9 +27,9 @@ def init():
     print("\n\n")
 
     # "build" means to generate i18n content
-    ret = os.system("gulp build") # nosec
-    if (ret != 0):
-        return ret
+    #ret = os.system("gulp build") # nosec
+    #if (ret != 0):
+    #    return ret
 
 
     print("===============================================")
@@ -37,10 +37,10 @@ def init():
     print("===============================================")
     print("\n\n")
 
-    copyAcadProcFinder()
-    copyWebHelpAbstraction()
+    #copyAcadProcFinder()
+    #copyWebHelpAbstraction()
 
-    copyRipGrep()
+    #copyRipGrep()
     return 0
 
 def copyRipGrep():
@@ -108,5 +108,5 @@ if __name__ == "__main__":
         print("      generate vsix package start")
         print("===============================================")
         print("\n\n")
-        ret= makepackage_vsix()
+        #ret= makepackage_vsix()
     sys.exit(ret)        
