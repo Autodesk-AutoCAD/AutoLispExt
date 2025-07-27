@@ -2,16 +2,16 @@
 	"name": "autolispext",
 	"displayName": "AutoCAD AutoLISP Extension",
 	"description": "This is a vscode extension for AutoCAD AutoLISP",
-	"version": "1.6.3",
+	"version": "1.6.3-1a",
 	"license": "SEE LICENSE IN LICENSE.md",
 	"bugs": {
-		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt/issues"
+		"url": "https://github.com/JimsTools/AutoLispExt/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Autodesk-AutoCAD/AutoLispExt"
+		"url": "https://github.com/JimsTools/AutoLispExt"
 	},
-	"homepage": "https://github.com/Autodesk-AutoCAD/AutoLispExt",
+	"homepage": "https://github.com/JimsTools/AutoLispExt",
 	"engines": {
 		"vscode": "^1.57.0"
 	},
@@ -254,7 +254,7 @@
 					"comments": false,
 					"strings": true
 				},
-				"editor.wordBasedSuggestions": true,
+				"editor.wordBasedSuggestions": "currentDocument",
 				"editor.autoIndent": "none",
 				"editor.formatOnType": true,
 				"files.encoding": "utf8",
@@ -265,7 +265,7 @@
 			"[autolisp]": {
 				"files.autoGuessEncoding": true,
 				"editor.tabSize": 2,
-				"editor.wordBasedSuggestions": true,
+				"editor.wordBasedSuggestions": "currentDocument",
 				"editor.detectIndentation": false,
 				"editor.quickSuggestions": {
 					"other": true,
@@ -288,7 +288,7 @@
 					"comments": false,
 					"strings": true
 				},
-				"editor.wordBasedSuggestions": false,
+				"editor.wordBasedSuggestions": "off",
 				"editor.suggest.showWords": false,
 				"editor.suggest.showProperties": false,
 				"editor.autoIndent": "brackets",
@@ -493,14 +493,16 @@
 		"views": {
 			"Autolisp-PMSideBar": [
 				{
+					"icon": "",
 					"id": "Autolisp-ProjectView",
 					"name": "%autolispext.project.projectview.name%",
-					"when": ""
+					"when": "false"
 				},
 				{
+					"icon": "",
 					"id": "Autolisp-FindReplaceView",
 					"name": "%autolispext.project.findreplaceview.name%",
-					"when": ""
+					"when": "false"
 				}
 			]
 		},
