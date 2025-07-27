@@ -29,9 +29,6 @@
 	],
 	"icon": "images/adsk_lisp.png",
 	"main": "./out/extension",
-	"files": [
-		"autolispext.vsix"
-	],
 	"activationEvents": [
 		"onDebug",
 		"onUri",
