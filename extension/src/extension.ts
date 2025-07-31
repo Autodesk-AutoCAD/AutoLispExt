@@ -19,7 +19,8 @@ import { registerProjectCommands } from "./project/projectCommands";
 import { registerCommands } from "./commands";
 import { AutoLispExt } from "./context";
 import * as nls from 'vscode-nls';
-import { AutoLispDocumentSymbolProvider } from './symbolProvider'; // Assuming you create this file
+import { AutoLispDocumentSymbolProvider } from './providers/lspSymbolProvider';
+import { DclDocumentSymbolProvider } from './providers/dclSymbolProvider';
 
 // The example uses the file message format.
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
@@ -70,6 +71,13 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.languages.registerDocumentSymbolProvider(
             { language: 'autolisp' },
             new AutoLispDocumentSymbolProvider()
+        )
+    );
+	// Register the symbol provider for DCL files
+    context.subscriptions.push(
+        vscode.languages.registerDocumentSymbolProvider(
+            { language: 'dcl' }, 
+            new DclDocumentSymbolProvider()
         )
     );
 }
