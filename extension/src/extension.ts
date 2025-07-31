@@ -19,7 +19,7 @@ import { registerProjectCommands } from "./project/projectCommands";
 import { registerCommands } from "./commands";
 import { AutoLispExt } from "./context";
 import * as nls from 'vscode-nls';
-import { AutoLispDocumentSymbolProvider } from './providers/lspSymbolProvider';
+import { AutoLispDocumentSymbolProvider } from './providers/autolispSymbolProvider';
 import { DclDocumentSymbolProvider } from './providers/dclSymbolProvider';
 
 // The example uses the file message format.
@@ -73,10 +73,11 @@ export function activate(context: vscode.ExtensionContext) {
             new AutoLispDocumentSymbolProvider()
         )
     );
+
 	// Register the symbol provider for DCL files
     context.subscriptions.push(
         vscode.languages.registerDocumentSymbolProvider(
-            { language: 'dcl' }, 
+            { language: 'autolispdcl' }, 
             new DclDocumentSymbolProvider()
         )
     );
