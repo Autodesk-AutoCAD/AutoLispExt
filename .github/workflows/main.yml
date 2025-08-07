@@ -41,7 +41,7 @@ jobs:
           python pack.py
 
       - name: Upload package-lock.json
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: localFile
           path: package-lock.json
