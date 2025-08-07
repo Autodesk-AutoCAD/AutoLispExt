@@ -1,3 +1,14 @@
+## [1.6.3] - 2023-6-24
+Added "2025" to the "Help: Target Year" setting, and fixed a bug.
+
+## [1.6.2] - 2023-3-30
+a.	Added "2024" to the "Help: Target Year" setting and set it as the default value.
+
+b.	Added "Open Online Help" and syntax support for the _acet-*_ functions.
+
+## [1.6.1] - 2023-3-21
+Make it able to highlight acet-* functions that are documented.
+
 ## [1.6.0] - 2022-10-19
 a.	Added quick help in VS Code editor on mouse hover.
 See [Feature Demo](https://user-images.githubusercontent.com/51800232/188553502-db1ae887-53f2-453d-b0ff-0db86fc0d86c.mp4).
