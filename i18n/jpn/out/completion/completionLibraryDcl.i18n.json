@@ -1,0 +1,10 @@
+{
+  "autolispext.commands.dclcompletion.primitive": "プリミティブ",
+  "autolispext.commands.dclcompletion.primitive.dialog": "ダイアログ構造を生成",
+  "autolispext.commands.dclcompletion.primitive.structure": "構造プリミティブ",
+  "autolispext.commands.dclcompletion.primitive.string": "文字列構造",
+  "autolispext.commands.dclcompletion.primitive.boolean": "ブール構造",
+  "autolispext.commands.dclcompletion.primitive.Enum": "列挙型",
+  "autolispext.commands.dclcompletion.primitive.Attribute": "属性",
+  "autolispext.commands.dclcompletion.primitive.Tile": "タイル"
+}

@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "プリミティブ",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "文字列を終了します"
+}

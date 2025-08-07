@@ -2,7 +2,6 @@
 import * as vscode from 'vscode'
 import * as fs from 'fs-extra';
 import * as path from 'path'
-import { AutoLispExt } from '../extension';
 import { ProjectNode, LspFileNode } from './projectTree';
 import { ProjectDefinition } from './projectDefinition';
 

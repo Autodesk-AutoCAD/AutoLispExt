@@ -13,7 +13,7 @@ export namespace SearchPatterns {
 
 export namespace SharedAtomic {
 	export function getNonPrimitiveAtomFromPosition(roDoc: ReadonlyDocument, pos: vscode.Position): ILispFragment {
-		const atom = roDoc.documentContainer.getAtomFromPos(pos);
+		const atom = roDoc.documentContainer?.getAtomFromPos(pos);
 		if (!atom || atom.isPrimitive()) {
 			return null;
 		}

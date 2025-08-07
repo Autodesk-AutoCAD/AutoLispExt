@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.replace.openproject": "Projekt musi być otwarty, aby można było zastąpić ciąg tekstowy.",
+  "autolispext.project.findreplace.replace.title": "Zastąp w projekcie",
+  "autolispext.project.findreplace.replace.hint.keyword": "Wpisz ciąg tekstowy do wyszukania i naciśnij klawisz Enter.",
+  "autolispext.project.findreplace.replace.hint.replacement": "Wpisz ciąg tekstowy, na który ma być wykonane zastąpienie, i naciśnij klawisz Enter."
+}

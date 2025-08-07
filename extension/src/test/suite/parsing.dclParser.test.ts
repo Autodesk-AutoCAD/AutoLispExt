@@ -79,7 +79,7 @@ suite("Parsing: DCL Content", function () {
 			
 			const baseline = sut1.flatten().length;
 			expect(sut2.flatten().length).to.equal(baseline - 1);
-			expect(sut2.atoms[0].asTile.atoms[4]).instanceOf(DclAttribute);
+			expect(sut2.atoms[0].asTile.atoms[4]).instanceOf(DclTile);
 
 			expect(sut4.flatten().length).to.equal(baseline + 1);
 			expect(sut4.length).to.equal(2);
@@ -87,7 +87,7 @@ suite("Parsing: DCL Content", function () {
 
 			expect(sut3.flatten().length).to.equal(10);
 			expect(sut3.atoms[0].asTile.atoms[4]).instanceOf(DclTile);
-			expect(sut3.atoms[0].asTile.atoms[5]).instanceOf(DclAttribute);
+			expect(sut3.atoms[0].asTile.atoms[5]).instanceOf(DclTile);
 		}
 		catch (err) {
 			assert.fail("At least one test case parsed incorrectly or aggregated unexpectedly");
@@ -105,7 +105,7 @@ suite("Parsing: DCL Content", function () {
 			
 			const baseline = sut1.flatten().length; // should be 19
 			expect(sut2.flatten().length).to.equal(baseline - 1);
-			expect(sut2.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(3);
+			expect(sut2.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(2);
 
 			expect(sut3.flatten().length).to.equal(baseline - 1);
 			expect(sut3.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(1);
@@ -114,7 +114,7 @@ suite("Parsing: DCL Content", function () {
 			expect(sut4.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(2);
 
 			expect(sut5.flatten().length).to.equal(baseline - 3);
-			expect(sut5.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(3);
+			expect(sut5.atoms[0].asTile.atoms[4].asTile.atoms.filter(p => p instanceof DclAttribute).length).to.equal(2);
 		}
 		catch (err) {
 			assert.fail("At least one test case parsed incorrectly or aggregated unexpectedly");

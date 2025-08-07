@@ -45,7 +45,7 @@ suite("ReadonlyDocument Tests", function () {
 
 	test("Generating: atomsForest", function () {
 		try {
-			assert.notEqual(doc.atomsForest.length, 0);
+			assert.notEqual(doc.documentContainer.atoms.length, 0);
 		}
 		catch (err) {
 			assert.fail("Could not get atomsForest value");

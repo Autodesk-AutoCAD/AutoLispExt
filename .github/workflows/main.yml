@@ -39,7 +39,13 @@ jobs:
       - name: Build
         run: |
           python pack.py
-        
+
+      - name: Upload package-lock.json
+        uses: actions/upload-artifact@v4
+        with:
+          name: localFile
+          path: package-lock.json
+
       # Keep this in case we switch to Linux OS someday
       # - name: Run tests on Linux OS
       #   run: xvfb-run -a npm test

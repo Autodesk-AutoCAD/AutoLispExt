@@ -1,4 +1,4 @@
-import { AutoLispExt } from '../extension';
+import { AutoLispExt } from '../context';
 import { ReadonlyDocument } from '../project/readOnlyDocument';
 import { ISymbolBase } from '../symbols';
 import { FlatContainerServices } from './flatContainerServices';
@@ -14,9 +14,9 @@ export namespace SymbolServices {
 	// This list of native keys is used to detect symbols we would not want to track
 	const _nativeKeys: Array<string> = [];
 	function generateNativeKeys() : void {
-		_nativeKeys.push(...new Set(Object.keys(AutoLispExt.Resources.webHelpContainer.functions)
-			.concat(Object.keys(AutoLispExt.Resources.webHelpContainer.ambiguousFunctions))
-			.concat(Object.keys(AutoLispExt.Resources.webHelpContainer.enumerators))
+		_nativeKeys.push(...new Set(Object.keys(AutoLispExt.WebHelpLibrary.functions)
+			.concat(Object.keys(AutoLispExt.WebHelpLibrary.ambiguousFunctions))
+			.concat(Object.keys(AutoLispExt.WebHelpLibrary.enumerators))
 			.concat(AutoLispExt.Resources.internalLispFuncs)));
 		_nativeKeys.sort();
 	}
@@ -48,8 +48,11 @@ export namespace SymbolServices {
 
 	
 
-	export function hasGlobalFlag(source: ReadonlyDocument|Array<ILispFragment>, symbolRef: ISymbolBase): boolean {
-		source = Array.isArray(source) ? source : source.documentContainer.flatten();
+	export function hasGlobalFlag(source: ReadonlyDocument|Array<ILispFragment>, symbolRef: ISymbolBase): boolean {		
+		source = Array.isArray(source) ? source : source.documentContainer?.flatten();
+		if (!source) {
+			return false;
+		}
 		const thisAtom = source[symbolRef?.asReference?.flatIndex ?? -1];
 		if (!thisAtom 
 			|| symbolRef.asHost 

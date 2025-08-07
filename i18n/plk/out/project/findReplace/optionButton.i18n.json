@@ -1,0 +1,6 @@
+{
+  "autolispext.project.findreplace.optionbutton.matchcase": "Uwzględniaj wielkość liter",
+  "autolispext.project.findreplace.optionbutton.matchwholeword": "Dopasuj całe wyrazy",
+  "autolispext.project.findreplace.optionbutton.regexp": "Użyj wyrażeń regularnych",
+  "autolispext.project.findreplace.optionbutton.close": "Zamknij"
+}

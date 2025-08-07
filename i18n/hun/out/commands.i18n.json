@@ -2,5 +2,5 @@
   "autolispext.help.commands.openWebHelp": "A webHelpAbstraction.json fájl betöltése nem sikerült",
   "autolispext.commands.addFoldingRegion": "A kódrészlet beillesztése nem sikerült",
   "autolispext.help.commands.generateDocumentation": "Nem található érvényes DEFUN-név",
-  "autolispext.providers.rename.failed": ""
+  "autolispext.providers.rename.failed": "A szimbólum érvénytelen volt az átnevezési műveletekhez"
 }

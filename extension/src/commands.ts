@@ -1,22 +1,40 @@
 import * as vscode from "vscode";
+import {
+	TextDocument, ProviderResult, CancellationToken,
+	Position, Range,
+	CompletionContext, CompletionItem, CompletionList
+} from "vscode";
+
 import * as nls from 'vscode-nls';
-import { AutoLispExt } from './extension';
-import { openWebHelp } from './help/openWebHelp';
+import { AutoLispExt } from './context';
 import { generateDocumentationSnippet, getDefunArguments, getDefunAtPosition } from './help/userDocumentation';
 import { showErrorMessage } from './project/projectCommands';
 import { AutoLispExtProvideDefinition } from './providers/gotoProvider';
 import { AutoLispExtProvideReferences } from './providers/referenceProvider';
 import { AutoLispExtPrepareRename, AutoLispExtProvideRenameEdits } from './providers/renameProvider';
 import { SymbolManager } from './symbols';
+import {AutoLispExtProvideHover} from "./providers/hoverProvider";
+import { DocumentServices } from './services/documentServices';
+import { invokeCompletionProviderDcl } from './completion/completionProviderDcl';
 
 const localize = nls.loadMessageBundle();
 
 export function registerCommands(context: vscode.ExtensionContext){
 
-	// Associated with the right click "Open Online Help" menu item
 	context.subscriptions.push(vscode.commands.registerCommand('autolisp.openWebHelp', async () => {
+		// Note: this function is directly referenced by the package.json contributes (commands & menus) section.
+		// 		 Associated with the right click "Open Online Help" menu item.
 		try {
-			await openWebHelp();
+			const editor: vscode.TextEditor = vscode.window.activeTextEditor;
+			let selected: string = editor.document.getText(editor.selection);
+			if (selected === "") {
+				await vscode.commands.executeCommand('editor.action.addSelectionToNextFindMatch');
+				selected = editor.document.getText(editor.selection);
+			}
+			let urlPath: string = AutoLispExt.WebHelpLibrary.getWebHelpUrlBySymbolName(selected, editor.document.fileName);
+			if (urlPath.trim() !== ""){
+				vscode.env.openExternal(vscode.Uri.parse(urlPath));
+			}
 		}
 		catch (err) {
 			if (err){
@@ -50,9 +68,12 @@ export function registerCommands(context: vscode.ExtensionContext){
 			const vsDoc = vscode.window.activeTextEditor.document;
 			const lf = vsDoc.eol === vscode.EndOfLine.LF ? '\n' : '\r\n';
 			const doc = AutoLispExt.Documents.getDocument(vsDoc);
+			if (!doc.isLSP) {
+				return;
+			}
 			
 			// find the root LispContainer of the current cursor position
-			const exp = doc.atomsForest.find(p => p.contains(pos));
+			const exp = doc.documentContainer.atoms.find(p => p.contains(pos));
 
 			// Locate the Defun to decorate
 			const def = await getDefunAtPosition(exp, pos);
@@ -73,7 +94,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 		}
 	}));
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([ 'autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerDefinitionProvider([DocumentServices.Selectors.LSP, 'lisp'], {
 		provideDefinition: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
 						 			: vscode.ProviderResult<vscode.Definition | vscode.LocationLink[]> {
 			// Purpose: locate potential source definitions of the underlying symbol
@@ -91,7 +112,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 	const msgRenameFail = localize("autolispext.providers.rename.failed", "The symbol was invalid for renaming operations");
-	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider(['autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerRenameProvider([DocumentServices.Selectors.LSP, 'lisp'], {
 		prepareRename: function (document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken)
 							    : vscode.ProviderResult<vscode.Range | { range: vscode.Range; placeholder: string; }> 
 		{
@@ -133,7 +154,7 @@ export function registerCommands(context: vscode.ExtensionContext){
 	}));
 
 
-	AutoLispExt.Subscriptions.push(vscode.languages.registerReferenceProvider([ 'autolisp', 'lisp'], {
+	AutoLispExt.Subscriptions.push(vscode.languages.registerReferenceProvider([ DocumentServices.Selectors.LSP, 'lisp'], {
 		provideReferences: function (document: vscode.TextDocument, position: vscode.Position, context: vscode.ReferenceContext, token: vscode.CancellationToken)
 									: vscode.ProviderResult<vscode.Location[]> 
 		{
@@ -151,5 +172,26 @@ export function registerCommands(context: vscode.ExtensionContext){
 			}
 		}
 	}));
+
+	AutoLispExt.Subscriptions.push(vscode.languages.registerHoverProvider([DocumentServices.Selectors.LSP, DocumentServices.Selectors.DCL], {
+		provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): vscode.ProviderResult<vscode.Hover> {
+			try {
+				// offload all meaningful work to something that can be tested.
+				const roDoc = AutoLispExt.Documents.getDocument(document);
+				return AutoLispExtProvideHover(roDoc, position);
+			} catch (err) {
+				return;	// No localized error since VSCode has a default "no results" response
+			}
+		}
+	}));
+
+	AutoLispExt.Subscriptions.push(vscode.languages.registerCompletionItemProvider([DocumentServices.Selectors.DCL], {
+
+		provideCompletionItems(document: TextDocument, position: Position, token: CancellationToken, context: CompletionContext) : ProviderResult<CompletionItem[]|CompletionList> {
+			const roDoc = AutoLispExt.Documents.getDocument(document);
+			return invokeCompletionProviderDcl(roDoc, position, context);
+		}
+	}, ...[' ', ':', '=', ';', '/']));
+
 
 }

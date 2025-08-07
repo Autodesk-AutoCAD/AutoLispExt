@@ -7999,6 +7999,423 @@
       "description": "Controls the automatic updating of associative dimensions",
       "platforms": "WIN|MAC"
     },
+    "acet-ent-geomextents": {
+      "arguments": [
+        {
+          "id": "ename",
+          "typeNames": "Ename",
+          "primitive": "ename",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "List",
+        "primitive": "list",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ent-geomextents ename<ename>)",
+      "id": "acet-ent-geomextents",
+      "category": 4,
+      "guid": "6AC9633F-4E62-4943-8B26-A6C741A064BE",
+      "description": "Returns the geometric extents of the given object",
+      "platforms": "WIN"
+    },
+    "acet-file-attr": {
+      "arguments": [
+        {
+          "id": "filename",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "attr",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "1",
+            "2",
+            "4",
+            "16",
+            "32"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-attr filename<string> attr?integer)",
+      "id": "acet-file-attr",
+      "category": 4,
+      "guid": "8FCBEB50-38D7-4A1C-A88D-A4ACA2B23292",
+      "description": "Gets or sets the protection attributes of a specified file or directory",
+      "platforms": "WIN"
+    },
+    "acet-file-chdir": {
+      "arguments": [
+        {
+          "id": "directory",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-chdir directory<string>)",
+      "id": "acet-file-chdir",
+      "category": 4,
+      "guid": "313B1F1C-17C9-48F0-A1F5-6EA40DF670C1",
+      "description": "Changes the current working directory",
+      "platforms": "WIN"
+    },
+    "acet-file-copy": {
+      "arguments": [
+        {
+          "id": "from",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "to",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "force",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-copy from<string> to<string> force?<boolean>)",
+      "id": "acet-file-copy",
+      "category": 4,
+      "guid": "4F5698AB-B364-4954-839C-90F2B15086A3",
+      "description": "Copies a file",
+      "platforms": "WIN"
+    },
+    "acet-file-cwd": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-cwd)",
+      "id": "acet-file-cwd",
+      "category": 4,
+      "guid": "A75F32DE-2468-41A2-9969-9BBB179ADD7A",
+      "description": "Returns the current working directory",
+      "platforms": "WIN"
+    },
+    "acet-file-dir": {
+      "arguments": [
+        {
+          "id": "pattern",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "attributes",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "1",
+            "2",
+            "4",
+            "16",
+            "32"
+          ]
+        },
+        {
+          "id": "starting-directory",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "List, nil",
+        "primitive": "list",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-dir pattern<string> attributes?<integer> starting-directory?<string>)",
+      "id": "acet-file-dir",
+      "category": 4,
+      "guid": "16E9081D-1447-4D37-8636-E7D39F3127EA",
+      "description": "Locate files",
+      "platforms": "WIN"
+    },
+    "acet-file-mkdir": {
+      "arguments": [
+        {
+          "id": "directory",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-mkdir directory<string>)",
+      "id": "acet-file-mkdir",
+      "category": 4,
+      "guid": "554F51D5-79DC-4BD3-A353-F47A9C9427A4",
+      "description": "Creates a new directory",
+      "platforms": "WIN"
+    },
+    "acet-file-move": {
+      "arguments": [
+        {
+          "id": "from",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "to",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-move from<string> to<string>)",
+      "id": "acet-file-move",
+      "category": 4,
+      "guid": "36B7DDBA-165D-4D92-9096-687F54463261",
+      "description": "Moves or renames files",
+      "platforms": "WIN"
+    },
+    "acet-file-remove": {
+      "arguments": [
+        {
+          "id": "filespec",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "force",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-remove filespec<string> force?<boolean>)",
+      "id": "acet-file-remove",
+      "category": 4,
+      "guid": "A029A084-6B4A-4480-B0FB-61A248EA5345",
+      "description": "Deletes one or more files",
+      "platforms": "WIN"
+    },
+    "acet-file-rmdir": {
+      "arguments": [
+        {
+          "id": "directory",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-file-rmdir directory<string>)",
+      "id": "acet-file-rmdir",
+      "category": 4,
+      "guid": "1B05ED29-9170-41AF-912B-78ADBAF32F0A",
+      "description": "Removes a directory",
+      "platforms": "WIN"
+    },
+    "acet-help": {
+      "arguments": [
+        {
+          "id": "topic",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "nil",
+        "primitive": "nil",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-help topic?<string>)",
+      "id": "acet-help",
+      "category": 4,
+      "guid": "206BF873-89CE-4776-B7C5-BA004BE72535",
+      "description": "Displays a help page",
+      "platforms": "WIN"
+    },
+    "acet-help-trap": {
+      "arguments": [
+        {
+          "id": "command",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "topic",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "file",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-help-trap command<string> topic?<string> file?<string>)",
+      "id": "acet-help-trap",
+      "category": 4,
+      "guid": "E543FBA8-06FD-4281-8389-C5783BC43D78",
+      "description": "Installs a F1 key monitor",
+      "platforms": "WIN"
+    },
+    "acet-ini-get": {
+      "arguments": [
+        {
+          "id": "inifile",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "section",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "key",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "default",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "List, string, nil",
+        "primitive": "list",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ini-get inifile<string> section?<string> key?<string> default?<string>)",
+      "id": "acet-ini-get",
+      "category": 4,
+      "guid": "62E63C98-26F9-45B4-986B-92EEFD9B7C00",
+      "description": "Retrieves data from an INI file",
+      "platforms": "WIN"
+    },
+    "acet-ini-set": {
+      "arguments": [
+        {
+          "id": "inifile",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "section",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "key",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "value",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ini-set inifile<string> section<string> key?<string> value?<string>)",
+      "id": "acet-ini-set",
+      "category": 4,
+      "guid": "AEEDF870-EFB9-4351-8EDB-322594AEC466",
+      "description": "Writes data to an INI file",
+      "platforms": "WIN"
+    },
     "acet-layerp-mark": {
       "arguments": [
         {
@@ -8136,6 +8553,938 @@
       "category": 4,
       "guid": "0B38CD6E-1A28-4029-B233-81DB17619F66",
       "description": "Converts a real value from paper space units to model space units",
+      "platforms": "WIN"
+    },
+    "acet-reg-del": {
+      "arguments": [
+        {
+          "id": "key",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "name",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-del key<string> name?<string>)",
+      "id": "acet-reg-del",
+      "category": 4,
+      "guid": "96876DCE-BF16-49BE-80CD-4BB93DD7694F",
+      "description": "Deletes a key or value from the Registry",
+      "platforms": "WIN"
+    },
+    "acet-reg-get": {
+      "arguments": [
+        {
+          "id": "key",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "name",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String, nil",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-get key<string> name?<string>)",
+      "id": "acet-reg-get",
+      "category": 4,
+      "guid": "9F515EB4-7983-4B1A-AB5C-F8E51F9AA4CD",
+      "description": "Returns a value from the Registry",
+      "platforms": "WIN"
+    },
+    "acet-reg-machine-prodkey": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-machine-prodkey)",
+      "id": "acet-reg-machine-prodkey",
+      "category": 4,
+      "guid": "B7A7AC96-D6D3-4409-909C-F8F69CF6EAE6",
+      "description": "Returns the AutoCAD Windows registry path in the HKLM (HKEY_LOCAL_MACHINE)",
+      "platforms": "WIN"
+    },
+    "acet-reg-prodkey": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-prodkey)",
+      "id": "acet-reg-prodkey",
+      "category": 4,
+      "guid": "05190A00-C181-4E77-8C03-33AD11A50A27",
+      "description": "(Obsolete) Returns the current product key from the Registry",
+      "platforms": "WIN"
+    },
+    "acet-reg-put": {
+      "arguments": [
+        {
+          "id": "key",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "name",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "value",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-put key<string> name?<string> value?<string>)",
+      "id": "acet-reg-put",
+      "category": 4,
+      "guid": "B192F7D3-4C5B-45DE-9F32-630B6FCB328F",
+      "description": "Writes a Registry key or value",
+      "platforms": "WIN"
+    },
+    "acet-reg-user-prodkey": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-reg-user-prodkey)",
+      "id": "acet-reg-user-prodkey",
+      "category": 4,
+      "guid": "8A1D3D8B-54C6-4693-ACF8-2B317EC11193",
+      "description": "Returns the AutoCAD Windows registry path",
+      "platforms": "WIN"
+    },
+    "acet-ss-drag-move": {
+      "arguments": [
+        {
+          "id": "ss",
+          "typeNames": "Pickset",
+          "primitive": "pickset",
+          "enums": []
+        },
+        {
+          "id": "pt",
+          "typeNames": "List",
+          "primitive": "list",
+          "enums": []
+        },
+        {
+          "id": "prompt",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "highlight",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "cursor",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "0",
+            "1",
+            "2"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "List, nil",
+        "primitive": "list",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ss-drag-move ss<pickset> pt<list> prompt?<string> highlight?<boolean> cursor?<integer>)",
+      "id": "acet-ss-drag-move",
+      "category": 4,
+      "guid": "9B95FAF4-D36C-4EAC-97A1-8083EF9D199C",
+      "description": "Drags a selection set to change location",
+      "platforms": "WIN"
+    },
+    "acet-ss-drag-rotate": {
+      "arguments": [
+        {
+          "id": "ss",
+          "typeNames": "Pickset",
+          "primitive": "pickset",
+          "enums": []
+        },
+        {
+          "id": "pt",
+          "typeNames": "List",
+          "primitive": "list",
+          "enums": []
+        },
+        {
+          "id": "prompt",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "highlight",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "cursor",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "0",
+            "1",
+            "2"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Real, nil",
+        "primitive": "real",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ss-drag-rotate ss<pickset> pt<list> prompt?<string> highlight?<boolean> cursor?<integer>)",
+      "id": "acet-ss-drag-rotate",
+      "category": 4,
+      "guid": "A9409309-949F-4F58-B5EE-F87E9A258339",
+      "description": "Drags a selection set to change rotation",
+      "platforms": "WIN"
+    },
+    "acet-ss-drag-scale": {
+      "arguments": [
+        {
+          "id": "ss",
+          "typeNames": "Pickset",
+          "primitive": "pickset",
+          "enums": []
+        },
+        {
+          "id": "pt",
+          "typeNames": "List",
+          "primitive": "list",
+          "enums": []
+        },
+        {
+          "id": "prompt",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "highlight",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "cursor",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "0",
+            "1",
+            "2"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Real, nil",
+        "primitive": "real",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ss-drag-scale ss<pickset> pt<list> prompt?<string> highlight?<boolean> cursor?<integer>)",
+      "id": "acet-ss-drag-scale",
+      "category": 4,
+      "guid": "E110D396-7ED4-47C3-A96A-D3039E4A43CD",
+      "description": "Drags a selection set to change scale",
+      "platforms": "WIN"
+    },
+    "acet-str-collate": {
+      "arguments": [
+        {
+          "id": "left",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "right",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "matchCase",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-collate left<string> right<string> matchCase?<boolean>)",
+      "id": "acet-str-collate",
+      "category": 4,
+      "guid": "9F0796B6-30A7-4790-B256-9DA7897967E7",
+      "description": "Compares for sort order",
+      "platforms": "WIN"
+    },
+    "acet-str-equal": {
+      "arguments": [
+        {
+          "id": "left",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "right",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "matchCase",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-equal left<string> right<string> matchCase?<boolean>)",
+      "id": "acet-str-equal",
+      "category": 4,
+      "guid": "985CC085-4400-447D-B93D-3DE49B25B395",
+      "description": "Compares strings for equality",
+      "platforms": "WIN"
+    },
+    "acet-str-find": {
+      "arguments": [
+        {
+          "id": "find",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "string",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "ignoreCase",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "useRegExp",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer, nil",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-find find<string> string<string> ignoreCase?<boolean> useRegExp?<boolean>)",
+      "id": "acet-str-find",
+      "category": 4,
+      "guid": "151611E9-0F2F-4D10-9960-696B186331FD",
+      "description": "Finds a substring in string",
+      "platforms": "WIN"
+    },
+    "acet-str-format": {
+      "arguments": [
+        {
+          "id": "format",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "args",
+          "typeNames": "Integer, Real, String",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-format format<string> args...?<integer,real,string>)",
+      "id": "acet-str-format",
+      "category": 4,
+      "guid": "962D39CD-7CBB-45EC-AD0E-AB5F7E69856D",
+      "description": "Formats a message with embedded arguments",
+      "platforms": "WIN"
+    },
+    "acet-str-replace": {
+      "arguments": [
+        {
+          "id": "find",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "replace",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "string",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "ignoreCase",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "useRegExp",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        {
+          "id": "count",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-replace find<string> replace<string> string<string> ignoreCase?<boolean> useRegExp?<boolean> count?<integer>)",
+      "id": "acet-str-replace",
+      "category": 4,
+      "guid": "B8B5C9B4-43CF-4089-B06C-BB4B4FFD8969",
+      "description": "Replaces one substring with another",
+      "platforms": "WIN"
+    },
+    "acet-str-wcmatch": {
+      "arguments": [
+        {
+          "id": "string",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "pattern",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "matchCase",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-str-wcmatch string<string> pattern<string> matchCase?<boolean>)",
+      "id": "acet-str-wcmatch",
+      "category": 4,
+      "guid": "341E0A7F-0E63-4100-B145-0A1D8CB5AC6B",
+      "description": "Performs a wild-card match similar to wcmatch, but allows control over case sensitivity",
+      "platforms": "WIN"
+    },
+    "acet-sys-beep": {
+      "arguments": [
+        {
+          "id": "sound",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "-1",
+            "0",
+            "16",
+            "32",
+            "48",
+            "64"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "nil",
+        "primitive": "nil",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-beep sound<integer>)",
+      "id": "acet-sys-beep",
+      "category": 4,
+      "guid": "093980D5-6B8A-44AB-B029-B0A3E1F06B63",
+      "description": "Makes a noise",
+      "platforms": "WIN"
+    },
+    "acet-sys-command": {
+      "arguments": [
+        {
+          "id": "shell-command",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-command shell-command<string>)",
+      "id": "acet-sys-command",
+      "category": 4,
+      "guid": "47B3A3A9-4F13-4065-A5C1-C6FF3774082C",
+      "description": "Runs a command in a shell and waits for the shell to complete execution before returning",
+      "platforms": "WIN"
+    },
+    "acet-sys-foreground": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "nil",
+        "primitive": "nil",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-foreground)",
+      "id": "acet-sys-foreground",
+      "category": 4,
+      "guid": "50DA7678-1804-43BA-8F04-9F199CF3D12E",
+      "description": "Forces AutoCAD's application window to be the topmost and receive focus",
+      "platforms": "WIN"
+    },
+    "acet-sys-keystate": {
+      "arguments": [
+        {
+          "id": "keycode",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-keystate keycode<integer>)",
+      "id": "acet-sys-keystate",
+      "category": 4,
+      "guid": "C3B4E2C8-6A82-4D27-85F2-3833E23466F6",
+      "description": "Checks the state of a virtual key",
+      "platforms": "WIN"
+    },
+    "acet-sys-lasterr": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-lasterr)",
+      "id": "acet-sys-lasterr",
+      "category": 4,
+      "guid": "CFEC3A77-ECA5-4810-9561-3EA9B6031145",
+      "description": "Reports the last error",
+      "platforms": "WIN"
+    },
+    "acet-sys-procid": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-procid)",
+      "id": "acet-sys-procid",
+      "category": 4,
+      "guid": "BEB20EA1-D440-47C1-8415-14F7956D8C82",
+      "description": "Returns the current process identifier",
+      "platforms": "WIN"
+    },
+    "acet-sys-sleep": {
+      "arguments": [
+        {
+          "id": "msecs",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "nil",
+        "primitive": "nil",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-sleep msecs<integer>)",
+      "id": "acet-sys-sleep",
+      "category": 4,
+      "guid": "50637050-D15B-4CA1-A255-35E8CE24AB82",
+      "description": "Delay to allow other processes to run",
+      "platforms": "WIN"
+    },
+    "acet-sys-spawn": {
+      "arguments": [
+        {
+          "id": "flags",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "1",
+            "2"
+          ]
+        },
+        {
+          "id": "command",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "argument",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-spawn flags<integer> command<string> argument...?<string>)",
+      "id": "acet-sys-spawn",
+      "category": 4,
+      "guid": "1225FAD3-59EC-4FB9-8DCA-8D06F52EF53D",
+      "description": "Executes an external program",
+      "platforms": "WIN"
+    },
+    "acet-sys-term": {
+      "arguments": [
+        {
+          "id": "processID",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Boolean, nil",
+        "primitive": "boolean",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-term processID<integer>)",
+      "id": "acet-sys-term",
+      "category": 4,
+      "guid": "F61B71EA-0485-4374-8B0E-F98F10FFC21E",
+      "description": "Terminates the given process",
+      "platforms": "WIN"
+    },
+    "acet-sys-wait": {
+      "arguments": [
+        {
+          "id": "processID",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        },
+        {
+          "id": "time",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-sys-wait processID<integer> time?<integer>)",
+      "id": "acet-sys-wait",
+      "category": 4,
+      "guid": "661EBED3-1A6C-4F1B-80EB-2F9B4F77147B",
+      "description": "Waits for a process to complete",
+      "platforms": "WIN"
+    },
+    "acet-ui-message": {
+      "arguments": [
+        {
+          "id": "message",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "caption",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "type",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "16",
+            "32",
+            "48",
+            "256",
+            "512",
+            "768"
+          ]
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Integer",
+        "primitive": "integer",
+        "enums": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9"
+        ]
+      },
+      "validObjects": [],
+      "signature": "(acet-ui-message message<string> caption?<string> type?<integer>)",
+      "id": "acet-ui-message",
+      "category": 4,
+      "guid": "1E38767D-88C3-48C2-A637-F495A3E1606E",
+      "description": "Displays a message box",
+      "platforms": "WIN"
+    },
+    "acet-ui-pickdir": {
+      "arguments": [
+        {
+          "id": "message",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "startDir",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "caption",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String, nil",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ui-pickdir message?<string> startDir?<string> caption?<string>)",
+      "id": "acet-ui-pickdir",
+      "category": 4,
+      "guid": "BBCD32E7-29A1-4978-ABF0-57C3A3AD0C6A",
+      "description": "Displays a directory selection dialog",
+      "platforms": "WIN"
+    },
+    "acet-ui-status": {
+      "arguments": [
+        {
+          "id": "message",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "caption",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "nil",
+        "primitive": "nil",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ui-status message?<string> caption?<string>)",
+      "id": "acet-ui-status",
+      "category": 4,
+      "guid": "0D8827BC-B108-417A-A5A0-DB8961F5B3FB",
+      "description": "Displays a modeless status dialog",
+      "platforms": "WIN"
+    },
+    "acet-ui-txted": {
+      "arguments": [
+        {
+          "id": "text",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "caption",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        },
+        {
+          "id": "note",
+          "typeNames": "String",
+          "primitive": "string",
+          "enums": []
+        }
+      ],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "String, nil",
+        "primitive": "string",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-ui-txted text?<string> caption?<string> note?<string>)",
+      "id": "acet-ui-txted",
+      "category": 4,
+      "guid": "6447EBCD-CF12-4408-B610-80A28887D42A",
+      "description": "Displays a multiline text editing dialog",
+      "platforms": "WIN"
+    },
+    "acet-util-ver": {
+      "arguments": [],
+      "returnType": {
+        "id": "Return",
+        "typeNames": "Real",
+        "primitive": "real",
+        "enums": []
+      },
+      "validObjects": [],
+      "signature": "(acet-util-ver)",
+      "id": "acet-util-ver",
+      "category": 4,
+      "guid": "2BB75233-5053-41C2-BEB2-3C8C2E2F7050",
+      "description": "Identify module version",
       "platforms": "WIN"
     },
     "alert": {
@@ -92537,6 +93886,76 @@
     }
   },
   "ambiguousFunctions": {
+    "acet-ui-progress": [
+      {
+        "arguments": [
+          {
+            "id": "label",
+            "typeNames": "String",
+            "primitive": "string",
+            "enums": []
+          },
+          {
+            "id": "max",
+            "typeNames": "Integer",
+            "primitive": "integer",
+            "enums": []
+          }
+        ],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress label?<string> max?<integer>)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Displays a progress meter",
+        "platforms": "WIN"
+      },
+      {
+        "arguments": [
+          {
+            "id": "current",
+            "typeNames": "Integer",
+            "primitive": "integer",
+            "enums": []
+          }
+        ],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress current<integer>)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Displays a progress meter",
+        "platforms": "WIN"
+      },
+      {
+        "arguments": [],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "nil",
+          "primitive": "nil",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Closes the progress meter",
+        "platforms": "WIN"
+      }
+    ],
     "getpropertyvalue": [
       {
         "arguments": [

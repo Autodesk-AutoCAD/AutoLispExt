@@ -1,0 +1,21 @@
+{
+  "autolispext.project.commands.createprojectfailed": "Nepodařilo se vytvořit nový projekt.",
+  "autolispext.project.commands.openprojectfailed": "Nepodařilo se otevřít zadaný projekt.",
+  "autolispext.project.commands.addfilefailed": "Nepodařilo se přidat vybrané soubory.",
+  "autolispext.project.commands.removefilefailed": "Nepodařilo se odstranit vybraný soubor.",
+  "autolispext.project.commands.projectsaved": "Soubor projektu byl uložen.",
+  "autolispext.project.commands.allsaved": "Všechny soubory byly uloženy.",
+  "autolispext.project.commands.saveprojectfailed": "Nepodařilo se uložit projekt.",
+  "autolispext.project.commands.saveallfailed": "Nepodařilo se uložit všechny soubory v projektu.",
+  "autolispext.project.commands.refreshfailed": "Nepodařilo se obnovit projekt.",
+  "autolispext.project.commands.openfilefailed": "Nepodařilo se otevřít soubor.",
+  "autolispext.project.commands.findfailed": "Nepodařilo se najít v projektu.",
+  "autolispext.project.commands.replacefailed": "Nepodařilo se nahradit textový řetězec v projektu.",
+  "autolispext.project.commands.openresultfailed": "Nepodařilo se otevřít výsledky vyhledávání.",
+  "autolispext.project.commands.clearresultfailed": "Nepodařilo se vymazat výsledky vyhledávání.",
+  "autolispext.project.commands.initializefailed": "Nepodařilo se inicializovat Správce projektu jazyka AutoLISP.",
+  "autolispext.project.commands.closepromptmsg": "Potvrdit požadavek na uzavření u: ",
+  "autolispext.project.commands.closepromptyes": "Ano",
+  "autolispext.project.commands.closepromptno": "Ne",
+  "autolispext.project.commands.addedworkspacefiles": "soubory lisp byly přidány do"
+}

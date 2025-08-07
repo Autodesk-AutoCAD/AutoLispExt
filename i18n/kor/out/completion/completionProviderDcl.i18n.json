@@ -1,0 +1,4 @@
+{
+  "autolispext.commands.dclcompletion.provider.Primitive": "기본체",
+  "autolispext.commands.dclcompletion.provider.ClosesString": "문자열 닫기"
+}

@@ -4,11 +4,11 @@ import { getDocumentContainer } from './containers';
 import { ILispFragment } from '../astObjects/ILispFragment';
 
 
-interface ILspDocPair {
+export interface ILspDocPair {
 	name: string;
 	value: string;
 }
-interface ILispDocs {
+export interface ILispDocs {
 	params?: Array<ILspDocPair>;
 	returns?: ILspDocPair;
 	description?: ILspDocPair;
@@ -39,10 +39,9 @@ export function parseDocumentation(value: ILispFragment): ILispDocs {
 	const facets = value.symbol.replace(/\r\n/g, '\n').split('\n');
 	for (let i = 0; i < facets.length; i++) {
 		const line = normalizeComment(facets[i]);
-		if (line === '') {
+		if (line === '' || line.toUpperCase().startsWith('@GLOBAL')) {
 			continue;
 		}
-
 		if (line.startsWith('@') && line.includes(' ')) {
 			const first = line.substring(0, line.indexOf(' ')).toUpperCase();
 			const content = line.substring(first.length).trim();

@@ -1,0 +1,6 @@
+{
+  "autolispext.urihandler.invaid": "Neplatné volání rozšíření AutoCAD AutoLISP Extension.",
+  "autolispext.urihandler.activeddebugcfg": "Aktuální konfigurace ladění: ",
+  "autolispext.urihandler.debug.start": "Na panelu nabídek klikněte na možnost Spustit > Spustit ladění, chcete-li ladit aktuální zdrojový soubor jazyka AutoLISP.",
+  "autolispext.urihandler.debug.openfile": "Otevřete zdrojový soubor jazyka AutoLISP a kliknutím na možnost Spustit > Spustit ladění na panelu nabídek laďte soubor."
+}

@@ -1,0 +1,13 @@
+{
+  "autolispext.project.find.openproject": "Aby bylo možné vyhledat textový řetězec, musí být projekt otevřen.",
+  "autolispext.project.find.title": "Najít v projektu",
+  "autolispext.project.find.hint": "Zadejte textový řetězec, který chcete najít, a stiskněte klávesu Enter.",
+  "autolispext.project.find.supportos": "Funkce Najít a nahradit je podporována pouze v 64bitových systémech.",
+  "autolispext.project.find.inprogress": "Probíhá... ",
+  "autolispext.project.find.found": "Nalezeno ",
+  "autolispext.project.find.results": " výsledek(y) v ",
+  "autolispext.project.find.files": " soubor(y):",
+  "autolispext.project.find.stopped": "Hledání bylo zastaveno. ",
+  "autolispext.project.find.noresults": "Nebyly nalezeny žádné výsledky.",
+  "autolispext.project.find.exceedmaxresults": "Byl překročen limit výsledků vyhledávání. Upřesněte vyhledávání, aby se zúžily výsledky. "
+}

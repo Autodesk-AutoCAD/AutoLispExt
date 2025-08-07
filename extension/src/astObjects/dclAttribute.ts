@@ -32,9 +32,17 @@ export class DclAttribute implements IDclContainer {
         return false; 
     }
 
+    get isNumber(): boolean {
+        return false; 
+    }
+
     get range(): Range {
         const lastAtom = this.atoms[this.length - 1];
         return new Range(this.firstAtom.range.start, lastAtom.range.end);
+    }
+
+    get rank(): number {
+        return this.line * 1000 + this.column;
     }
         
     equal(dclObject: IDclFragment): boolean {
@@ -83,6 +91,10 @@ export class DclAttribute implements IDclContainer {
         return null;
     }
 
+    getImpliedParent(position: Position): IDclContainer {
+        return this.contains(position) ? this : null;
+    }
+
     flatten(into?: Array<DclAtom>): Array<DclAtom> {
         if (!into) {
             into = [];
@@ -112,15 +124,12 @@ export class DclAttribute implements IDclContainer {
         return this.length < 3 ? null : this.atoms[2];
     }
 
-    // Context: DCL Attributes are valid in 2 arrangements: "Key = Value;" OR "key;"
-    //          Any other arrangement should be considered a malformed syntax error.
+
     get isWellFormed(): boolean {
-        const invalid = this.length < 2              // probably has key, but missing semi-colon
-                     || this.length === 3            // probably missing equal or semi-colon
-                     || this.length > 4              // exceeds possible key-value-pair structure
-                     || this.lastAtom.symbol !== ';' // invalid attribute termination
-                     || this.firstAtom.isString      // strings are invalid keys
-                     || (this.length === 4 && this.atoms[1].symbol !== '=');
+        const invalid = this.length !== 4              // exceeds possible key-value-pair structure
+                     || this.lastAtom.symbol !== ';'   // invalid attribute termination
+                     || this.firstAtom.isString        // strings are invalid keys
+                     || this.atoms[1].symbol !== '=';  // Unexpected delineator
         return !invalid;
     }
     
