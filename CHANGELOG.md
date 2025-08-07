@@ -1,3 +1,6 @@
+## [1.6.3] - 2023-6-24
+Added "2025" to the "Help: Target Year" setting, and fixed a bug.
+
 ## [1.6.2] - 2023-3-30
 a.	Added "2024" to the "Help: Target Year" setting and set it as the default value.
 

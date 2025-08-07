@@ -361,7 +361,7 @@
 	"write-line": {
 		"prefix": "writeline",
 		"body": [
-			"(setq ${1:f} (open \"${2:fp\" \"${3:mode}\"))",
+			"(setq ${1:f} (open \"${2:fp}\" \"${3:mode}\"))",
 			"(write-line \"${4:str}\" \"${1:f}\")"	
 		],
 		"description": "Writes a string to the screen or to an open file"

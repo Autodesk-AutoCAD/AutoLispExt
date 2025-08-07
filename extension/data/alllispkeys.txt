@@ -17,7 +17,6 @@ command
 cond
 defun
 foreach
-vlax-for
 if
 lambda
 or
@@ -276,9 +275,6 @@ pi
 :constants-prefix
 :prog-id
 :tlb-filename
-:vlax-true
-:vlax-false
-:vlax-null
 acrx_cmd_modal
 acrx_cmd_transparent
 acrx_cmd_usepickset
@@ -358,8 +354,6 @@ vl-catch-all-apply
 vl-catch-all-error-p
 vl-catch-all-error-message
 _vl-balance-parenthesis
-vlax-add-cmd
-vlax-remove-cmd
 vla-activate
 vla-add
 vla-add3dface

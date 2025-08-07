@@ -9407,41 +9407,6 @@
       "description": "Displays a directory selection dialog",
       "platforms": "WIN"
     },
-    "acet-ui-progress": {
-      "arguments": [
-        {
-          "id": "label",
-          "typeNames": "String",
-          "primitive": "string",
-          "enums": []
-        },
-        {
-          "id": "max",
-          "typeNames": "Integer",
-          "primitive": "integer",
-          "enums": []
-        },
-        {
-          "id": "current",
-          "typeNames": "Integer",
-          "primitive": "integer",
-          "enums": []
-        }
-      ],
-      "returnType": {
-        "id": "Return",
-        "typeNames": "Integer, Boolean, nil",
-        "primitive": "integer",
-        "enums": []
-      },
-      "validObjects": [],
-      "signature": "(acet-ui-progress label?<string> max?<integer>) and (acet-ui-progress current<integer>)",
-      "id": "acet-ui-progress",
-      "category": 4,
-      "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
-      "description": "Displays a progress meter",
-      "platforms": "WIN"
-    },
     "acet-ui-status": {
       "arguments": [
         {
@@ -93921,6 +93886,76 @@
     }
   },
   "ambiguousFunctions": {
+    "acet-ui-progress": [
+      {
+        "arguments": [
+          {
+            "id": "label",
+            "typeNames": "String",
+            "primitive": "string",
+            "enums": []
+          },
+          {
+            "id": "max",
+            "typeNames": "Integer",
+            "primitive": "integer",
+            "enums": []
+          }
+        ],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "Boolean, nil",
+          "primitive": "boolean",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress label?<string> max?<integer>)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Displays a progress meter",
+        "platforms": "WIN"
+      },
+      {
+        "arguments": [
+          {
+            "id": "current",
+            "typeNames": "Integer",
+            "primitive": "integer",
+            "enums": []
+          }
+        ],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "Integer",
+          "primitive": "integer",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress current<integer>)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Displays a progress meter",
+        "platforms": "WIN"
+      },
+      {
+        "arguments": [],
+        "returnType": {
+          "id": "Return",
+          "typeNames": "nil",
+          "primitive": "nil",
+          "enums": []
+        },
+        "validObjects": [],
+        "signature": "(acet-ui-progress)",
+        "id": "acet-ui-progress",
+        "category": 4,
+        "guid": "177D04DD-7822-4DFE-B9B6-92FC2B7A0697",
+        "description": "Closes the progress meter",
+        "platforms": "WIN"
+      }
+    ],
     "getpropertyvalue": [
       {
         "arguments": [
