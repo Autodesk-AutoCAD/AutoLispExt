@@ -25,12 +25,8 @@ function normalizeComment(str: string) : string {
 }
 
 function normalizeExampleLine(str: string): string {
-	if (/^\s*[|;]/.test(str)) {
-		// Line starts with comment delimiters — strip them and the optional trailing space
-		return str.replace(/^\s*[|;]+\s?/, '');
-	}
-	// No comment delimiters — strip up to 4 spaces of block-comment indentation
-	// while preserving relative indentation within code blocks
+	// Strip up to 4 spaces of block-comment indentation while preserving all content,
+	// including legitimate AutoLISP comment characters (;) inside example code.
 	return str.replace(/^ {1,4}/, '');
 }
 

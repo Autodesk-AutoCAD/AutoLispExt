@@ -134,6 +134,13 @@ suite("Parsing: Comments Tests", function () {
 		expect(doc.examples[0].value).to.equal('call it like `(f 2)`');
 	});
 
+	test("@Example preserves leading semicolons in example code", function () {
+		const src = ';|\n    @Example usage\n    ; this is a lisp comment\n    (f 2) ; inline comment\n|;';
+		const doc = parseDocumentation(memDoc(src).documentContainer.atoms[0]);
+		expect(doc.examples[0].value).to.include('; this is a lisp comment');
+		expect(doc.examples[0].value).to.include('(f 2) ; inline comment');
+	});
+
 	test("@Example with @ inside code fence is not treated as a tag", function () {
 		const src = ';|\n    @Example code with at-sign\n    ```lisp\n    @somevar\n    ```\n|;';
 		const doc = parseDocumentation(memDoc(src).documentContainer.atoms[0]);
