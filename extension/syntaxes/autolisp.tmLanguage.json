@@ -53,7 +53,7 @@
 					"patterns": [
 						{
 							"name": "string.regexp",							
-							"begin": "^\\s*(?i)(@PARAM|@REMARKS|@DESCRIPTION|@RETURNS)(?=\\s.+)",
+							"begin": "^\\s*(?i)(@PARAM|@REMARKS|@DESCRIPTION|@RETURNS|@EXAMPLES?)(?=\\s|$)",
 							"end": "(\\n|\\s)"
 						},
 						{

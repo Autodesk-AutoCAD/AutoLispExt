@@ -13,6 +13,7 @@ export interface ILispDocs {
 	returns?: ILspDocPair;
 	description?: ILspDocPair;
 	remarks?: ILspDocPair;
+	examples?: Array<ILspDocPair>;
 }
 
 function normalizeComment(str: string) : string {
@@ -23,6 +24,16 @@ function normalizeComment(str: string) : string {
 			  .trim();
 }
 
+function normalizeExampleLine(str: string): string {
+	if (/^\s*[|;]/.test(str)) {
+		// Line starts with comment delimiters — strip them and the optional trailing space
+		return str.replace(/^\s*[|;]+\s?/, '');
+	}
+	// No comment delimiters — strip up to 4 spaces of block-comment indentation
+	// while preserving relative indentation within code blocks
+	return str.replace(/^ {1,4}/, '');
+}
+
 /**
  * This function extracts the user documentation into a basic structure for completion data
  * @param value This should be a LispAtom that represents a comment or comment block
@@ -31,20 +42,34 @@ function normalizeComment(str: string) : string {
 export function parseDocumentation(value: ILispFragment): ILispDocs {
 	const result: ILispDocs = { };
 	let active: ILspDocPair = null;
+	let inExample = false;
+	let inCodeFence = false;
 
 	if (!value.isComment()) {
 		return result;
 	}
-	
+
 	const facets = value.symbol.replace(/\r\n/g, '\n').split('\n');
 	for (let i = 0; i < facets.length; i++) {
 		const line = normalizeComment(facets[i]);
+
+		// Track fenced code blocks to avoid mis-treating @ inside code as tags
+		if (inExample && normalizeExampleLine(facets[i]).trimStart().startsWith('```')) {
+			inCodeFence = !inCodeFence;
+		}
+
 		if (line === '' || line.toUpperCase().startsWith('@GLOBAL')) {
+			// Preserve blank lines within example content (but not comment delimiters like |;)
+			if (inExample && active && line === '' && facets[i].trim() === '') {
+				active.value += '\n';
+			}
 			continue;
 		}
-		if (line.startsWith('@') && line.includes(' ')) {
-			const first = line.substring(0, line.indexOf(' ')).toUpperCase();
-			const content = line.substring(first.length).trim();
+		if (!inCodeFence && line.startsWith('@') && (line.includes(' ') || line.toUpperCase().startsWith('@EXAMPLE'))) {
+			inExample = false;
+			const spaceIdx = line.indexOf(' ');
+			const first = spaceIdx >= 0 ? line.substring(0, spaceIdx).toUpperCase() : line.toUpperCase();
+			const content = spaceIdx >= 0 ? line.substring(first.length).trim() : '';
 			if (first.startsWith('@REMARK')) {
 				result['remarks'] = active = { name: 'Remarks', value: content };
 			} else if (first.startsWith('@DESC')) {
@@ -54,8 +79,15 @@ export function parseDocumentation(value: ILispFragment): ILispDocs {
 			} else if (first.startsWith('@PARAM')) {
 				if (!result['params']) {
 					result['params'] = [];
-				}                    
+				}
 				result['params'].push(active = { name: 'Param', value: content });
+			} else if (first.startsWith('@EXAMPLE')) {
+				if (!result['examples']) {
+					result['examples'] = [];
+				}
+				result['examples'].push(active = { name: 'Example', value: content });
+				inExample = true;
+				inCodeFence = false;
 			} else {
 				// if it started with @ and its not roughly a predesignated @TYPE, then
 				// do nothing and stop the process that assembles the previous @TYPE
@@ -63,7 +95,11 @@ export function parseDocumentation(value: ILispFragment): ILispDocs {
 			}
 		} else {
 			if (active) {
-				active.value += ' ' + line;
+				if (inExample) {
+					active.value += '\n' + normalizeExampleLine(facets[i]);
+				} else {
+					active.value += ' ' + line;
+				}
 			} else if (!result['description']) {
 				// this handles implied short descriptions as the first available content
 				result['description'] = active = { name: 'Description', value: line };

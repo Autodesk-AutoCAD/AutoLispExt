@@ -259,6 +259,33 @@ export namespace Annotation {
 			lines.push(`@${MarkdownHelpers.italic('remarks')} — ${docs.remarks.value}`);
 		}
 
+		if (docs?.examples?.length > 0) {
+			for (const example of docs.examples) {
+				lines.push(MarkdownHelpers.divider);
+				const header = `@${MarkdownHelpers.italic('example')}`;
+				const nlIdx = example.value.indexOf('\n');
+				if (nlIdx < 0) {
+					lines.push(example.value ? `${header} — ${example.value}` : header);
+				} else {
+					const inlineDesc = example.value.substring(0, nlIdx);
+					const rest = example.value.substring(nlIdx + 1);
+					lines.push(inlineDesc ? `${header} — ${inlineDesc}` : header);
+					if (rest) {
+						lines.push('');
+						if (rest.trimStart().startsWith('```')) {
+							// Normalize only the opening fence line to use the autolisp language ID
+							const eol = rest.indexOf('\n');
+							const openLine = eol >= 0 ? rest.substring(0, eol) : rest;
+							const body    = eol >= 0 ? rest.substring(eol) : '';
+							lines.push(openLine.replace(/^(\s*)```\w*/, '$1```autolisp') + body);
+						} else {
+							lines.push(`\`\`\`autolisp\n${rest}\n\`\`\``);
+						}
+					}
+				}
+			}
+		}
+
 		lines.push(MarkdownHelpers.divider);
 		lines.push(`${MarkdownHelpers.italic('source')} — ${path.basename(sourceFile)}`);
 
