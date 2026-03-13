@@ -240,6 +240,46 @@ suite("Providers: Hover", function () {
     });
 
 
+    test("UserDefined LSP @Example one-liner - Markdown Verification", function () {
+        try {
+            const src = ';|\n    @Returns int\n    @Example call it like `(double 5)`\n|;\n(defun double (x) (* 2 x))';
+            const exDoc = ReadonlyDocument.createMemoryDocument(src, DocumentServices.Selectors.LSP);
+            const docs = parseDocumentation(exDoc.documentContainer.atoms[0]);
+            const flatView = exDoc.documentContainer.flatten();
+            const defunAtom = flatView.find(a => a.symbol === 'double');
+            const md = Annotation.asMarkdown(defunAtom, -1, [], docs, 'test.lsp');
+            expect(md.value).to.include('@*example*');
+            expect(md.value).to.include('call it like `(double 5)`');
+            // one-liner: no code block should be injected
+            expect(md.value).to.not.include('```autolisp');
+        }
+        catch (err) {
+            assert.fail(`@Example one-liner hover rendering failed: ${err}`);
+        }
+    });
+
+
+    test("UserDefined LSP @Example - Markdown Verification", function () {
+        try {
+            const src = ';|\n    A documented function\n    @Param x int: the input\n    @Returns int\n    @Example Double the input\n    ```lisp\n    (double 5)\n    ```\n|;\n(defun double (x) (* 2 x))';
+            const exDoc = ReadonlyDocument.createMemoryDocument(src, DocumentServices.Selectors.LSP);
+            const commentAtom = exDoc.documentContainer.atoms[0];
+            const docs = parseDocumentation(commentAtom);
+            const flatView = exDoc.documentContainer.flatten();
+            const defunAtom = flatView.find(a => a.symbol === 'double');
+            expect(defunAtom).to.not.be.undefined;
+            const md = Annotation.asMarkdown(defunAtom, -1, [], docs, 'test.lsp');
+            expect(md.value).to.include('@*example*');
+            expect(md.value).to.include('Double the input');
+            expect(md.value).to.include('```autolisp');
+            expect(md.value).to.include('(double 5)');
+        }
+        catch (err) {
+            assert.fail(`@Example hover rendering failed: ${err}`);
+        }
+    });
+
+
     test("UserDefined LSP ActiveIndex - Markdown Verification", function () {
         let passedCount = 0;
         try {
