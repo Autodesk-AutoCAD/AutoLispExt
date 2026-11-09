@@ -280,6 +280,21 @@ suite("Providers: Hover", function () {
     });
 
 
+    test("UserDefined LSP Markdown - Not Trusted", function () {
+        try {
+            const src = ';| @description Official reference: [AutoLISP docs](command:workbench.action.openSettings)\n@PARAM a first argument\n|;\n(defun my-func (a b) (+ a b))';
+            const exDoc = ReadonlyDocument.createMemoryDocument(src, DocumentServices.Selectors.LSP);
+            const docs = parseDocumentation(exDoc.documentContainer.atoms[0]);
+            const defunAtom = exDoc.documentContainer.flatten().find(a => a.symbol === 'my-func');
+            const md = Annotation.asMarkdown(defunAtom, -1, [], docs, 'test.lsp');
+            expect(md.isTrusted).to.not.be.ok;
+        }
+        catch (err) {
+            assert.fail(`User-defined markdown must not be trusted: ${err}`);
+        }
+    });
+
+
     test("UserDefined LSP ActiveIndex - Markdown Verification", function () {
         let passedCount = 0;
         try {
