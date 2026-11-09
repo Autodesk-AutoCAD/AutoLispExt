@@ -289,9 +289,8 @@ export namespace Annotation {
 		lines.push(MarkdownHelpers.divider);
 		lines.push(`${MarkdownHelpers.italic('source')} — ${path.basename(sourceFile)}`);
 
-		const result = new vscode.MarkdownString(lines.join('\n'), true);
-		result.isTrusted = true;
-		return result;
+		// Content comes from workspace files, so it must never be trusted: trusted markdown executes command: links.
+		return new vscode.MarkdownString(lines.join('\n'), true);
 	}
 
 	function extractGenericSignature(source: LispAtom, args: LispAtom[], index: number) {
